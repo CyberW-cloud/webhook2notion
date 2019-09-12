@@ -12,6 +12,8 @@ def trackWeather(token, URL, weather):
     client = NotionClient(token)
     block = client.get_block(URL)
     block.title = weather
+    
+    
 
 def createTweet(token, collectionURL, tweet, author, followers):
     # notion
