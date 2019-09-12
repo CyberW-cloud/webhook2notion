@@ -12,8 +12,6 @@ def trackWeather(token, URL, weather):
     client = NotionClient(token)
     block = client.get_block(URL)
     block.title = weather
-    
-    
 
 def createTweet(token, collectionURL, tweet, author, followers):
     # notion
@@ -42,6 +40,15 @@ def createReceipt(token, collectionURL, product, content, url, date):
     row.content = content
     row.url = url
     row.date = date
+
+def createInvite(token, collectionURL, fl, subject, content):
+    # notion
+    client = NotionClient(token)
+    cv = client.get_collection_view(collectionURL)
+    row = cv.collection.add_row()
+    row.subject = subject
+    row.content = content
+    row.fl = fl
 
 
 def createEmail(token, collectionURL, sender, subject, message_url):
@@ -85,6 +92,15 @@ def gmailReceipt():
     createReceipt(token_v2, url, product, content, message_url, date)
     return f'added {product} receipt to Notion'
 
+@app.route('/invites', methods=['GET'])
+def gmailReceipt():
+    fl = request.args.get('fl')
+    content = request.args.get('content')
+    subject = request.args.get('subject')
+    token_v2 = os.environ.get("TOKEN")
+    url = os.environ.get("URL")
+    createInvite(token_v2, collectionURL, fl, subject, content)
+    return f'added {product} receipt to Notion'
 
 @app.route('/createemail', methods=['GET'])
 def gmailUrgentEmail():
