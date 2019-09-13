@@ -60,7 +60,7 @@ def createInvite(token, collectionURL, subject, description, inviteto):
     row.name = subject
     row.description = description
     row.status = "New"
-    row.to = inviteto
+  #  row.to = inviteto
     row.url = url
  
 
