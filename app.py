@@ -55,10 +55,10 @@ def createInvite(token, collectionURL, subject, description, date):
     client = NotionClient(token)
     cv = client.get_collection_view(collectionURL)
     row = cv.collection.add_row()
-    row.Subject = subject
+    row.Name = subject
     row.Description = description
-    row.Date = date
     row.Status = "New"
+    row.Date = date
 
 
 @app.route('/invites', methods=['GET'])
