@@ -50,7 +50,7 @@ def createEmail(token, collectionURL, sender, subject, message_url):
     row.subject = subject
     row.message_url = message_url
 
-def createInvite(token, collectionURL, fl, subject, description, date):
+def createInvite(token, collectionURL, subject, description, date):
     # notion
     client = NotionClient(token)
     cv = client.get_collection_view(collectionURL)
