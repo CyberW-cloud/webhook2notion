@@ -68,7 +68,7 @@ def createInvite(token, collectionURL, subject, description, inviteto):
  
 def createPCJ(token, collectionURL, subject, description, inviteto, link):
     # notion
-    id = re.search('%7E\d+', link)
+    id = re.search('(?<=\%)(.*?)(?=\?)', link)
     client = NotionClient(token)
     cv = client.get_collection_view(collectionURL)
     row = cv.collection.add_row()
