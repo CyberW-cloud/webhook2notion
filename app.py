@@ -3,6 +3,7 @@ import os
 from notion.client import NotionClient
 from flask import Flask
 from flask import request
+import re
 
 
 app = Flask(__name__)
@@ -50,15 +51,17 @@ def createEmail(token, collectionURL, sender, subject, message_url):
     row.subject = subject
     row.message_url = message_url
 
-def createInvite(token, collectionURL, subject, description, intiteto):
+def createInvite(token, collectionURL, subject, description, inviteto):
     # notion
+    url = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', description)
     client = NotionClient(token)
     cv = client.get_collection_view(collectionURL)
     row = cv.collection.add_row()
     row.name = subject
     row.description = description
     row.status = "New"
-    row.to = intiteto
+    row.to = inviteto
+    row.url = url
  
 
 @app.route('/invites', methods=['GET'])
@@ -67,8 +70,8 @@ def invites():
     description = request.args.get('description')
     subject = request.args.get('subject')
     token_v2 = os.environ.get("TOKEN")
-    intiteto = request.args.get('inviteto')
-    createInvite(token_v2, collectionURL, subject, description, intiteto)
+    inviteto = request.args.get('inviteto')
+    createInvite(token_v2, collectionURL, subject, description, inviteto)
     return f'added {subject} receipt to Notion'
 
 @app.route('/twitter', methods=['GET'])
