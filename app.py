@@ -58,7 +58,7 @@ def createInvite(token, collectionURL, subject, description, intiteto):
     row.name = subject
     row.description = description
     row.status = "New"
-    row.inviteto = intiteto
+    row.to = intiteto
  
 
 @app.route('/invites', methods=['GET'])
