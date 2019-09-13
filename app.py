@@ -50,7 +50,7 @@ def createEmail(token, collectionURL, sender, subject, message_url):
     row.subject = subject
     row.message_url = message_url
 
-def createInvite(token, collectionURL, subject, description, date):
+def createInvite(token, collectionURL, subject, description, date, intiteto):
     # notion
     client = NotionClient(token)
     cv = client.get_collection_view(collectionURL)
@@ -59,7 +59,8 @@ def createInvite(token, collectionURL, subject, description, date):
     row.description = description
     row.status = "New"
     row.date = date
-
+    row.inviteto = intiteto
+ 
 
 @app.route('/invites', methods=['GET'])
 def invites():
@@ -68,7 +69,8 @@ def invites():
     subject = request.args.get('subject')
     token_v2 = os.environ.get("TOKEN")
     date = request.args.get('date')
-    createInvite(token_v2, collectionURL, subject, description, date)
+    intiteto = request.args.get('inviteto')
+    createInvite(token_v2, collectionURL, subject, description, date, intiteto)
     return f'added {subject} receipt to Notion'
 
 @app.route('/twitter', methods=['GET'])
