@@ -63,7 +63,7 @@ def createInvite(token, collectionURL, subject, description, date):
 
 @app.route('/invites', methods=['GET'])
 def invites():
-    collectionURL = request.args.get('collectionURL')
+    collectionURL = request.args.get("collectionURL")
     description = request.args.get('description')
     subject = request.args.get('subject')
     token_v2 = os.environ.get("TOKEN")
