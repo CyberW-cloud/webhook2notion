@@ -50,23 +50,23 @@ def createEmail(token, collectionURL, sender, subject, message_url):
     row.subject = subject
     row.message_url = message_url
 
-def createInvite(token, collectionURL, fl, subject, content):
+def createInvite(token, collectionURL, fl, subject, description):
     # notion
     client = NotionClient(token)
     cv = client.get_collection_view(collectionURL)
     row = cv.collection.add_row()
     row.Subject = subject
-    row.Description = content
+    row.Description = description
     row.Status = "New"
 
 
 @app.route('/invites', methods=['GET'])
-def gmailReceipt():
+def invites():
     collectionURL = request.args.get('collectionURL')
     description = request.args.get('description')
     subject = request.args.get('subject')
     token_v2 = os.environ.get("TOKEN")
-    createInvite(token_v2, collectionURL, subject, content)
+    createInvite(token_v2, collectionURL, subject, description)
     return f'added {subject} receipt to Notion'
 
 @app.route('/twitter', methods=['GET'])
