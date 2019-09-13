@@ -55,7 +55,7 @@ def createInvite(token, collectionURL, subject, description, intiteto):
     client = NotionClient(token)
     cv = client.get_collection_view(collectionURL)
     row = cv.collection.add_row()
-    row.Name = subject
+    row.name = subject
     row.description = description
     row.status = "New"
     row.inviteto = intiteto
