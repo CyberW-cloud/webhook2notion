@@ -66,18 +66,18 @@ def createInvite(token, collectionURL, subject, description, inviteto):
     row.link = url
     row.id = id.group()
  
- def createPCJ(token, collectionURL, subject, description, inviteto, link):
-    # notion
-    id = re.search('_%7E\d+', link)
-    client = NotionClient(token)
-    cv = client.get_collection_view(collectionURL)
-    row = cv.collection.add_row()
-    row.name = subject
-    row.description = description
-    row.status = "New"
-    row.to = inviteto
-    row.link = link
-    row.id = id.group()
+# def createPCJ(token, collectionURL, subject, description, inviteto, link):
+#    # notion
+#    id = re.search('_%7E\d+', link)
+#    client = NotionClient(token)
+#    cv = client.get_collection_view(collectionURL)
+#    row = cv.collection.add_row()
+#    row.name = subject
+#    row.description = description
+#    row.status = "New"
+#    row.to = inviteto
+#    row.link = link
+#    row.id = id.group()
 
 # @app.route('/pcj', methods=['GET'])
 #def pcj():
