@@ -80,7 +80,7 @@ def createInvite(token, collectionURL, subject, description, inviteto):
     row.id = id.group()
 
 @app.route('/pcj', methods=['GET'])
-def invites():
+def pcj():
     collectionURL = request.args.get("collectionURL")
     description = request.args.get('description')
     subject = request.args.get('subject')
