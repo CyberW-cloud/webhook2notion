@@ -53,8 +53,9 @@ def createEmail(token, collectionURL, sender, subject, message_url):
 
 def createInvite(token, collectionURL, subject, description, inviteto):
     # notion
-    url = re.search('https://upwork.com/applications/\d+', description) 
-    id = re.search('\d+', url.group())
+    match = re.search('https://upwork.com/applications/\d+', description) 
+    url = match.group()
+    id = re.search('\d+', url)
     client = NotionClient(token)
     cv = client.get_collection_view(collectionURL)
     row = cv.collection.add_row()
@@ -62,8 +63,8 @@ def createInvite(token, collectionURL, subject, description, inviteto):
     row.description = description
     row.status = "New"
     row.to = inviteto
-    row.link = url.group()
-    row.id = id.group()
+    row.link = url
+    row.id = id
  
 
 @app.route('/invites', methods=['GET'])
