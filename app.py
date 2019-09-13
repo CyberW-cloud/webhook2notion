@@ -79,16 +79,16 @@ def createInvite(token, collectionURL, subject, description, inviteto):
 #    row.link = link
 #    row.id = id.group()
 
-# @app.route('/pcj', methods=['GET'])
-#def pcj():
-#    collectionURL = request.args.get("collectionURL")
-#    description = request.args.get('description')
-#    subject = request.args.get('subject')
-#    token_v2 = os.environ.get("TOKEN")
-#    inviteto = request.args.get('inviteto')
-#    link = request.args.get('link')
-#    createPCJ(token_v2, collectionURL, subject, description, inviteto, link)
-#    return f'added {subject} receipt to Notion'
+@app.route('/pcj', methods=['GET'])
+def pcj():
+    collectionURL = request.args.get("collectionURL")
+    description = request.args.get('description')
+    subject = request.args.get('subject')
+    token_v2 = os.environ.get("TOKEN")
+    inviteto = request.args.get('inviteto')
+    link = request.args.get('link')
+    createPCJ(token_v2, collectionURL, subject, description, inviteto, link)
+    return f'added {subject} receipt to Notion'
 
 @app.route('/invites', methods=['GET'])
 def invites():
