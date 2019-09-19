@@ -77,7 +77,7 @@ def createPCJ(token, collectionURL, subject, description, inviteto, link):
     row.status = "New"
     row.to = inviteto
     row.link = link
-    row.id = id.group()
+    row.id = id.group()[3:]
 
 @app.route('/pcj', methods=['GET'])
 def pcj():
