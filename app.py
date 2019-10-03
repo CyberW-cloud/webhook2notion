@@ -80,22 +80,22 @@ def createPCJ(token, collectionURL, subject, description, inviteto, link):
     row.link = link
     row.id = id.group()[3:]
     
-def todoCC(token, parent_page_url):
-    # notion
-    today = datetime.date.today()
-    thursday = today + datetime.timedelta(days=4)
-    page = client.get_block(parent_page_url)
+# def todoCC(token, parent_page_url):
+#    # notion
+#    today = datetime.date.today()
+#    thursday = today + datetime.timedelta(days=4)
+#    page = client.get_block(parent_page_url)
     
-    for child in page.children:
-    if (child.title.find(today) != -1)
-       thu = child.title
-    else: 
+#    for child in page.children:
+#    if (child.title.find(today) != -1)
+#       thu = child.title
+#    else: 
        thu = page.children.add_new(HeaderBlock, title="{}".format(thursday.strftime("%Y-%m-%d"))
     	
-    a=page.children.add_new(TodoBlock, title="Написать апдейты клиентам")
-    b=page.children.add_new(TodoBlock, title="Написать апдейты контрактам")
-    a.move_to(thu, "first-child")
-    b.move_to(thu, "last-child")
+#    a=page.children.add_new(TodoBlock, title="Написать апдейты клиентам")
+#    b=page.children.add_new(TodoBlock, title="Написать апдейты контрактам")
+#    a.move_to(thu, "first-child")
+#    b.move_to(thu, "last-child")
     
 def message(token, parent_page_url, message):
     # notion
