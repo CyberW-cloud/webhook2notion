@@ -97,32 +97,32 @@ def createPCJ(token, collectionURL, subject, description, inviteto, link):
 #    a.move_to(thu, "first-child")
 #    b.move_to(thu, "last-child")
     
-def message(token, parent_page_url, message):
-    # notion
-    page = client.get_block(parent_page_url)
-    page.children.add_new(DividerBlock)
-    page.children.add_new(BasicBlock, title="[{} {message}]").format(datetime.date.today().strftime("%Y-%m-%d"))
-    page.children.add_new(DividerBlock)
+#def message(token, parent_page_url, message):
+#    # notion
+#    page = client.get_block(parent_page_url)
+#    page.children.add_new(DividerBlock)
+#    page.children.add_new(BasicBlock, title="[{} {message}]").format(datetime.date.today().strftime("%Y-%m-%d"))
+#   page.children.add_new(DividerBlock)
     
  # title="Clicking [here]({}) should take you to the same place...".format(
  #           page.parent.get_browseable_url()
 
 
 
-@app.route('/message', methods=['GET'])
-def message():
-    parent_page_url = request.args.get("parent_page_url")
-    token_v2 = os.environ.get("TOKEN")
-    message = request.args.get("message")
-    message(token_v2, parent_page_url, message)
-    return f'added {subject} receipt to Notion'
+#@app.route('/message', methods=['GET'])
+#def message():
+#    parent_page_url = request.args.get("parent_page_url")
+#    token_v2 = os.environ.get("TOKEN")
+#    message = request.args.get("message")
+#    message(token_v2, parent_page_url, message)
+#    return f'added {subject} receipt to Notion'
 
-@app.route('/todoCC', methods=['GET'])
-def todoСС():
-    parent_page_url = request.args.get("parent_page_url")
-    token_v2 = os.environ.get("TOKEN")
-    todoCC(token_v2, parent_page_url)
-    return f'added {subject} receipt to Notion'
+#@app.route('/todoCC', methods=['GET'])
+#def todoСС():
+#    parent_page_url = request.args.get("parent_page_url")
+#    token_v2 = os.environ.get("TOKEN")
+#    todoCC(token_v2, parent_page_url)
+#    return f'added {subject} receipt to Notion'
     
     
 @app.route('/pcj', methods=['GET'])
