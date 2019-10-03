@@ -80,8 +80,20 @@ def createPCJ(token, collectionURL, subject, description, inviteto, link):
     row.link = link
     row.id = id.group()[3:]
     
-
+def createMessage(token, parent_page_url, message):
+    # notion
+    page = client.get_block(parent_page_url)
+    page.children.add_new(DividerBlock)
+    page.children.add_new(BasicBlock, title="[{} {message}]").format(datetime.date.today().strftime("%Y-%m-%d"))
+    page.children.add_new(DividerBlock)
     
+@app.route('/message', methods=['GET'])
+def message():
+    parent_page_url = request.args.get("parent_page_url")
+    token_v2 = os.environ.get("TOKEN")
+    message = request.args.get("message")
+    createMessage(token_v2, parent_page_url, message)
+    return f'added {subject} receipt to Notion'    
     
 @app.route('/pcj', methods=['GET'])
 def pcj():
