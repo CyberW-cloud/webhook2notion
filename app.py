@@ -85,7 +85,7 @@ def createMessage(token, parent_page_url, message):
     client = NotionClient(token)
     page = client.get_block(parent_page_url)
     page.children.add_new(DividerBlock)
-    page.children.add_new(BasicBlock, title="[{} {message}]").format(datetime.date.today().strftime("%Y-%m-%d"))
+    page.children.add_new(TextBlock, title="[{} {message}]").format(datetime.date.today().strftime("%Y-%m-%d"))
     page.children.add_new(DividerBlock)
     
 @app.route('/message', methods=['GET'])
