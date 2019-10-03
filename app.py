@@ -1,6 +1,7 @@
 
 import os
 from notion.client import NotionClient
+from notion.client import Block
 import datetime 
 from flask import Flask
 from flask import request
