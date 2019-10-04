@@ -1,5 +1,6 @@
 
 import os
+import sys
 from notion.client import NotionClient
 from notion.block import *
 from notion.collection import *
@@ -127,7 +128,8 @@ def createMessageDATE(token, parent_page_url, message):
                if part[0] == '‣':
                    if part[1][0][0] == 'd':  # date
                        dateblock = part[1][0][1]
-                       Print(dateblock)                   
+                       print (dateblock)
+                       sys.stdout.flush()                   
 #    mon = page.children.add_new(HeaderBlock, title="")
 #    mon.move_to(dateblock, "before")
 #    mon.title= dateblock.get().get('properties').get('title')
