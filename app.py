@@ -58,21 +58,13 @@ class NotionDate(object):
             self.start, self.end = sorted([self.start, self.end])
 
         start_date, start_time = self._format_datetime(self.start)
-        end_date, end_time = self._format_datetime(self.end)
 
         if not start_date:
             return []
 
         data = {"type": self.type(), "start_date": start_date, "date_format": "relative" }
 
-        if end_date:
-            data["end_date"] = end_date
-
-        if "time" in data["type"]:
-            data["time_zone"] = "Etc/UTC"
-            data["start_time"] = start_time or "00:00"
-            if end_date:
-                data["end_time"] = end_time or "00:00"
+        
 
         return [["‣", [["d", data]]]]
 
@@ -175,7 +167,7 @@ def createMessageDATE(token, parent_page_url, message):
     date = datetime.now()
     page = client.get_block(parent_page_url)
     a = page.children.add_new(TextBlock, title=" ")
-    b = page.children.add_new(TextBlock, title = "{data} {msg}".format(data = NotionDate.to_notion('2019-10-04',None,None), msg = message))
+    b = page.children.add_new(TextBlock, title = "{data} {msg}".format(data = NotionDate.to_notion('2019-10-04'), msg = message))
     a.move_to(page, "first-child")
     b.move_to(a, "after")
 
