@@ -96,10 +96,10 @@ def createMessage(token, parent_page_url, message):
     page = client.get_block(parent_page_url)
     a = page.children.add_new(DividerBlock)
     b = page.children.add_new(TextBlock, title = "{data} {msg}".format(data = date.to_notion(), msg = message)
-	c = page.children.add_new(DividerBlock)
-	a.move_to(page, "first-child")
-	b.move_to(a, "after")
-	c.move_to(b, "after")
+    c = page.children.add_new(DividerBlock)
+    a.move_to(page, "first-child")
+    b.move_to(a, "after")
+    c.move_to(b, "after")
      
      
      
