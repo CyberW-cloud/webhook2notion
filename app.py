@@ -3,7 +3,7 @@ import os
 from notion.client import NotionClient
 from notion.block import DividerBlock, TextBlock
 from notion.collection import NotionDate
-import datetime 
+from datetime import datetime 
 from flask import Flask
 from flask import request
 import re
@@ -94,12 +94,12 @@ def createMessage(token, parent_page_url, message):
     client = NotionClient(token)
     date = NotionDate(datetime.now())
     page = client.get_block(parent_page_url)
-#    a=page.children.add_new(DividerBlock)
-#    b=page.children.add_new(TextBlock, title=date.toNotion + " " + message)
-#    c=page.children.add_new(DividerBlock)
-#    a.move_to(page, "first-child")
-#    b.move_to(a, "after")
-#    c.move_to(b, "after")
+    a=page.children.add_new(DividerBlock)
+    b=page.children.add_new(TextBlock, title=date.toNotion + " " + message)
+    c=page.children.add_new(DividerBlock)
+    a.move_to(page, "first-child")
+    b.move_to(a, "after")
+    c.move_to(b, "after")
      
 @app.route('/message', methods=['GET'])
 def message():
