@@ -1,7 +1,7 @@
 
 import os
 from notion.client import NotionClient
-from notion.block import DividerBlock, TextBlock
+from notion.block import DividerBlock, TextBlock, HeaderBlock
 from notion.collection import NotionDate
 from datetime import datetime 
 from flask import Flask
