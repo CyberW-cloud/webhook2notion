@@ -101,9 +101,7 @@ def createMessage(token, parent_page_url, message):
     b.move_to(a, "after")
     c.move_to(b, "after")
     d.move_to(c, "after")
-     
-     
-     
+         
 
 
 @app.route('/message', methods=['GET'])
