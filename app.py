@@ -20,7 +20,6 @@ class NotionDate(object):
 
     def __init__(self, start, end=None, timezone=None):
         self.start = start
-        self.end = end
         self.timezone = timezone
 
     
@@ -48,15 +47,11 @@ class NotionDate(object):
         name = "date"
         if isinstance(self.start, datetime):
             name += "time"
-        if self.end:
-            name += "range"
         return name
 
     def to_notion(self):
 
-        if self.end:
-            self.start, self.end = sorted([self.start, self.end])
-
+ 
         start_date, start_time = self._format_datetime(self.start)
 
         if not start_date:
