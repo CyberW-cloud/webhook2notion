@@ -84,11 +84,15 @@ def createPCJ(token, collectionURL, subject, description, inviteto, link):
 def createMessage(token, parent_page_url, message):
     # notion
     client = NotionClient(token)
+    date = NotionDate(datetime.now())
     page = client.get_block(parent_page_url)
-    page.children.add_new(DividerBlock)
-    page.children.add_new(TextBlock, title=datetime.now().toNotion+" "+message)
-    page.children.add_new(DividerBlock)
-    
+    a=page.children.add_new(DividerBlock)
+    b=page.children.add_new(TextBlock, title=date.toNotion + " " + message)
+    c=page.children.add_new(DividerBlock)
+    a.move_to(page, "first-child")
+    b.move_to(a, "after")
+    c.move_to(b, "after")
+     
 @app.route('/message', methods=['GET'])
 def message():
     parent_page_url = request.args.get("parent_page_url")
