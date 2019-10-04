@@ -104,26 +104,9 @@ def createMessage(token, parent_page_url, message):
     d.move_to(c, "after")
     e.move_to(d, "after")
      
-def createMessageDATE(token, parent_page_url, message):
-    # notion
-    client = NotionClient(token)
-    date = NotionDate(datetime.now())
-    page = client.get_block(parent_page_url)
-    a = page.children.add_new(DividerBlock)
-    b = page.children.add_new(TextBlock, title = "{data} {msg}".format(data = NotionDate(datetime.today(), None, 'Etc/UTC'), msg = message))
-    c = page.children.add_new(DividerBlock)
-    a.move_to(page, "first-child")
-    b.move_to(a, "after")
-    c.move_to(b, "after")     
      
      
-@app.route('/messageDATE', methods=['GET'])
-def message():
-    parent_page_url = request.args.get("parent_page_url")
-    token_v2 = os.environ.get("TOKEN")
-    message = request.args.get("message")
-    createMessageDATE(token_v2, parent_page_url, message)
-    return f'added {message} receipt to Notion'    
+
 
 @app.route('/message', methods=['GET'])
 def message():
