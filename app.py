@@ -2,7 +2,7 @@
 import os
 from notion.client import NotionClient
 from notion.block import DividerBlock, TextBlock, HeaderBlock
-from notion.collection import NotionDate
+# from notion.collection import NotionDate
 from datetime import datetime, date
 from flask import Flask
 from flask import request
@@ -23,19 +23,7 @@ class NotionDate(object):
         self.end = end
         self.timezone = timezone
 
-    @classmethod
-    def from_notion(cls, obj):
-        if isinstance(obj, dict):
-            data = obj
-        elif isinstance(obj, list):
-            data = obj[0][1][0][1]
-        else:
-            return None
-        start = cls._parse_datetime(data.get("start_date"), data.get("start_time"))
-        end = cls._parse_datetime(data.get("end_date"), data.get("end_time"))
-        timezone = data.get("timezone")
-        return cls(start, end=end, timezone=timezone)
-
+    
     @classmethod
     def _parse_datetime(cls, date_str, time_str):
         if not date_str:
@@ -187,7 +175,7 @@ def createMessageDATE(token, parent_page_url, message):
     date = datetime.now()
     page = client.get_block(parent_page_url)
     a = page.children.add_new(TextBlock, title=" ")
-    b = page.children.add_new(TextBlock, title = "{data} {msg}".format(data = NotionDate(date.today()), msg = message))
+    b = page.children.add_new(TextBlock, title = "{data} {msg}".format(data = NotionDate('2019-10-04'), msg = message))
     a.move_to(page, "first-child")
     b.move_to(a, "after")
 
