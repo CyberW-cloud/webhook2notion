@@ -8,6 +8,7 @@ from flask import Flask
 from flask import request
 import re
 
+dateblock = None
 
 app = Flask(__name__)
 
@@ -126,6 +127,7 @@ def createMessageDATE(token, parent_page_url, message):
                if part[0] == '‣':
                    if part[1][0][0] == 'd':  # date
                        dateblock = part[1][0][1]
+    return dateblock                   
 #    mon = page.children.add_new(HeaderBlock, title="")
 #    mon.move_to(dateblock, "before")
 #    mon.title= dateblock.get().get('properties').get('title')
