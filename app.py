@@ -97,12 +97,10 @@ def createMessage(token, parent_page_url, message):
     b = page.children.add_new(DividerBlock)
     c = page.children.add_new(TextBlock, title="**{data}** {msg}".format(data = datetime.now().strftime("%d-%m-%Y %H:%M"), msg = message))
     d = page.children.add_new(DividerBlock)
-    e = page.children.add_new(TextBlock, title=" ")
     a.move_to(page, "first-child")
     b.move_to(a, "after")
     c.move_to(b, "after")
     d.move_to(c, "after")
-    e.move_to(d, "after")
      
      
      
