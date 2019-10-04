@@ -104,6 +104,29 @@ def createMessage(token, parent_page_url, message):
          
 
 
+def createMessageDATE(token, parent_page_url, message):
+    # notion
+    client = NotionClient(token)
+    date = datetime.now()
+    page = client.get_block(parent_page_url)
+    a = page.children.add_new(TextBlock, title=" ")
+#   c = page.children.add_new(TextBlock, title = "{data} {msg}".format(data = NotionDate(datetime.today(), None, 'Etc/UTC'), msg = message))
+    b = page.children.add_new(TextBlock, title = "{start}{data}{end} {msg}".format(start = "[['‣', [['d', {'type': 'date', 'start_date': '", data = datetime.now().strftime("%Y-%m-%d"), end = "', 'date_format': 'relative'}]]]]" , msg = message))
+    a.move_to(page, "first-child")
+    b.move_to(a, "after")
+
+
+@app.route('/message-date', methods=['GET'])
+def message():
+    parent_page_url = request.args.get("parent_page_url")
+    token_v2 = os.environ.get("TOKEN")
+    message = request.args.get("message")
+    createMessageDATE(token_v2, parent_page_url, message)
+    return f'added {message} receipt to Notion'    
+
+
+
+
 @app.route('/message', methods=['GET'])
 def message():
     parent_page_url = request.args.get("parent_page_url")
