@@ -95,7 +95,7 @@ def createMessage(token, parent_page_url, message):
     page = client.get_block(parent_page_url)
     a = page.children.add_new(TextBlock, title=" ")
     b = page.children.add_new(DividerBlock)
-    c = page.children.add_new(TextBlock, title="{data} {msg}".format(data = datetime.now().strftime("%Y-%m-%d %H:%M:%S"), msg = message))
+    c = page.children.add_new(TextBlock, title="{data} {msg}".format(data = datetime.now().strftime("%Y-%m-%d %H:%M"), msg = message))
     d = page.children.add_new(DividerBlock)
     e = page.children.add_new(TextBlock, title=" ")
     a.move_to(page, "first-child")
