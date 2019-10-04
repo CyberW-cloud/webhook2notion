@@ -54,6 +54,13 @@ def createEmail(token, collectionURL, sender, subject, message_url):
     row.subject = subject
     row.message_url = message_url
 
+
+
+
+
+
+
+
 def createInvite(token, collectionURL, subject, description, inviteto):
     # notion
     match = re.search('https://upwork.com/applications/\d+', description) 
@@ -87,12 +94,12 @@ def createMessage(token, parent_page_url, message):
     client = NotionClient(token)
     date = NotionDate(datetime.now())
     page = client.get_block(parent_page_url)
-    a=page.children.add_new(DividerBlock)
-    b=page.children.add_new(TextBlock, title=date.toNotion + " " + message)
-    c=page.children.add_new(DividerBlock)
-    a.move_to(page, "first-child")
-    b.move_to(a, "after")
-    c.move_to(b, "after")
+#    a=page.children.add_new(DividerBlock)
+#    b=page.children.add_new(TextBlock, title=date.toNotion + " " + message)
+#    c=page.children.add_new(DividerBlock)
+#    a.move_to(page, "first-child")
+#    b.move_to(a, "after")
+#    c.move_to(b, "after")
      
 @app.route('/message', methods=['GET'])
 def message():
@@ -122,6 +129,17 @@ def invites():
     inviteto = request.args.get('inviteto')
     createInvite(token_v2, collectionURL, subject, description, inviteto)
     return f'added {subject} receipt to Notion'
+
+
+
+
+
+
+
+
+
+
+
 
 @app.route('/twitter', methods=['GET'])
 def twitter():
