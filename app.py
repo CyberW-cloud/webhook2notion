@@ -95,11 +95,14 @@ def createMessage(token, parent_page_url, message):
     date = NotionDate(datetime.now())
     page = client.get_block(parent_page_url)
     a=page.children.add_new(DividerBlock)
-    b=page.children.add_new(TextBlock, title=date.toNotion + " " + message)
+    b=page.children.add_new(TextBlock, title=date.to_notion + " " + message)
     c=page.children.add_new(DividerBlock)
     a.move_to(page, "first-child")
     b.move_to(a, "after")
     c.move_to(b, "after")
+     
+     
+     
      
 @app.route('/message', methods=['GET'])
 def message():
