@@ -1,8 +1,8 @@
 
 import os
 from notion.client import NotionClient
-from notion.block import DividerBlock, TextBlock, HeaderBlock
-# from notion.collection import NotionDate
+from notion.block import *
+from notion.collection import *
 from datetime import datetime, date
 from flask import Flask
 from flask import request
@@ -12,56 +12,6 @@ import re
 app = Flask(__name__)
 
 
-class NotionDate(object):
-
-    start = None
-    end = None
-    timezone = None
-
-    def __init__(self, start, end=None, timezone=None):
-        self.start = start
-        self.timezone = timezone
-
-    
-    @classmethod
-    def _parse_datetime(cls, date_str, time_str):
-        if not date_str:
-            return None
-        if time_str:
-            return datetime.strptime(date_str + " " + time_str, "%Y-%m-%d %H:%M")
-        else:
-            return datetime.strptime(date_str, "%Y-%m-%d").date()
-
-    def _format_datetime(self, date_or_datetime):
-        if not date_or_datetime:
-            return None, None
-        if isinstance(date_or_datetime, datetime):
-            return (
-                date_or_datetime.strftime("%Y-%m-%d"),
-                date_or_datetime.strftime("%H:%M"),
-            )
-        else:
-            return date_or_datetime.strftime("%Y-%m-%d"), None
-
-    def type(self):
-        name = "date"
-        if isinstance(self.start, datetime):
-            name += "time"
-        return name
-
-    def to_notion(self):
-
- 
-        start_date, start_time = self._format_datetime(self.start)
-
-        if not start_date:
-            return []
-
-        data = {"type": self.type(), "start_date": start_date, "date_format": "relative" }
-
-        
-
-        return [["‣", [["d", data]]]]
 
 def trackWeather(token, URL, weather):
     # notion
@@ -159,12 +109,37 @@ def createMessage(token, parent_page_url, message):
 def createMessageDATE(token, parent_page_url, message):
     # notion
     client = NotionClient(token)
-    date = datetime.now()
+    
+#    monday = datetime.date.now()
+#    tuesday = moday + datetime.timedelta(days=1)
+#    wednesday = tuesday + datetime.timedelta(days=1)
+#    thursday = wednesday + datetime.timedelta(days=1)
+#    friday = thursday + datetime.timedelta(days=1)
+#    saturday = friday + datetime.timedelta(days=1)
+#    sunday = saturday + datetime.timedelta(days=1)
+    
     page = client.get_block(parent_page_url)
-    a = page.children.add_new(TextBlock, title=" ")
-    b = page.children.add_new(TextBlock, title = "{data} {msg}".format(data = NotionDate.to_notion('2019-10-04'), msg = message))
-    a.move_to(page, "first-child")
-    b.move_to(a, "after")
+    dateblock = None
+    
+    for part in page.get().get('properties').get('title'):
+           if len(part) > 1:
+               if part[0] == '‣':
+                   if part[1][0][0] == 'd':  # date
+                       dateblock = part[1][0][1]
+#    mon = page.children.add_new(HeaderBlock, title="")
+#    mon.move_to(dateblock, "before")
+#    mon.title= dateblock.get().get('properties').get('title')
+#    mon.title[1][0][1].set('start_date')=monday
+#    a = page.children.add_new(ToDoBlock, title=" ")
+#    a.move_to(mon, "after")
+                
+#    
+#    a = page.children.add_new(TextBlock, title=" ")
+#    b = page.children.add_new(TextBlock, title = "{data} {msg}".format(data = NotionDate.to_notion('2019-10-04'), msg = message))
+#    b = page.children.add_new(TextBlock, title = "{start}{data}{end} {msg}".format(start = '[["‣", [["d", {"type": "date", "start_date": "', data = datetime.now().strftime("%Y-%m-%d"), end = '", "date_format": "relative"}]]]]' , msg = message))
+#    a.move_to(page, "first-child")
+#    b.move_to(a, "after")
+    
 
 
 @app.route('/messagedate', methods=['GET'])
@@ -173,7 +148,7 @@ def messagedate():
     token_v2 = os.environ.get("TOKEN")
     message = request.args.get("message")
     createMessageDATE(token_v2, parent_page_url, message)
-    return f'added {message} receipt to Notion'    
+    return f'added {dateblock} receipt to Notion'    
 
 
 
