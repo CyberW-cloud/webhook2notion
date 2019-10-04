@@ -116,7 +116,7 @@ def createMessageDATE(token, parent_page_url, message):
     b.move_to(a, "after")
 
 
-@app.route('/message-date', methods=['GET'])
+@app.route('/messagedate', methods=['GET'])
 def message():
     parent_page_url = request.args.get("parent_page_url")
     token_v2 = os.environ.get("TOKEN")
