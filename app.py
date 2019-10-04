@@ -11,6 +11,9 @@ import re
 
 app = Flask(__name__)
 
+
+
+
 def trackWeather(token, URL, weather):
     # notion
     client = NotionClient(token)
@@ -111,7 +114,7 @@ def createMessageDATE(token, parent_page_url, message):
     page = client.get_block(parent_page_url)
     a = page.children.add_new(TextBlock, title=" ")
 #   c = page.children.add_new(TextBlock, title = "{data} {msg}".format(data = NotionDate(datetime.today(), None, 'Etc/UTC'), msg = message))
-    b = page.children.add_new(HeaderBlock, title = "{start}{data}{end} {msg}".format(start = "[['‣', [['d', {'type': 'date', 'start_date': '", data = datetime.now().strftime("%Y-%m-%d"), end = "', 'date_format': 'relative'}]]]]" , msg = message))
+    b = page.children.add_new(TextBlock, title = "{start}{data}{end} {msg}".format(start = '[["‣", [["d", {"type": "date", "start_date": "', data = datetime.now().strftime("%Y-%m-%d"), end = '", "date_format": "relative"}]]]]' , msg = message))
     a.move_to(page, "first-child")
     b.move_to(a, "after")
 
