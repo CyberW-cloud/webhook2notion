@@ -175,7 +175,7 @@ def createMessageDATE(token, parent_page_url, message):
     date = datetime.now()
     page = client.get_block(parent_page_url)
     a = page.children.add_new(TextBlock, title=" ")
-    b = page.children.add_new(TextBlock, title = "{data} {msg}".format(data = NotionDate.to_notion('2019-10-04'), msg = message))
+    b = page.children.add_new(TextBlock, title = "{data} {msg}".format(data = NotionDate.to_notion('2019-10-04',,), msg = message))
     a.move_to(page, "first-child")
     b.move_to(a, "after")
 
