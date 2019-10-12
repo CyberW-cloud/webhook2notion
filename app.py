@@ -167,22 +167,22 @@ def message():
     
 @app.route('/pcj', methods=['POST'])
 def pcj():
-    collectionURL = request.form.get("collectionURL")
-    description = request.form.get('description')
-    subject = request.form.get('subject')
+    collectionURL = request.args.get("collectionURL")
+    description = request.args.get('description')
+    subject = request.args.get('subject')
     token_v2 = os.environ.get("TOKEN")
-    inviteto = request.form.get('inviteto')
-    link = request.form.get('link')
+    inviteto = request.args.get('inviteto')
+    link = request.args.get('link')
     createPCJ(token_v2, collectionURL, subject, description, inviteto, link)
     return f'added {subject} receipt to Notion'
 
 @app.route('/invites', methods=['POST'])
 def invites():
-    collectionURL = request.form.get("collectionURL")
-    description = request.form.get('description')
-    subject = request.form.get('subject')
+    collectionURL = request.args.get("collectionURL")
+    description = request.args.get('description')
+    subject = request.args.get('subject')
     token_v2 = os.environ.get("TOKEN")
-    inviteto = request.form.get('inviteto')
+    inviteto = request.args.get('inviteto')
     createInvite(token_v2, collectionURL, subject, description, inviteto)
     return f'added {subject} receipt to Notion'
 
