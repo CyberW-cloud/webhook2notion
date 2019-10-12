@@ -6,7 +6,8 @@ from notion.block import *
 from notion.collection import *
 from datetime import datetime, date
 from flask import Flask
-from flask import request
+from flask import request, jsonify
+from app import app
 import re
 
 dateblock = None
