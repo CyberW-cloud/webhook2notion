@@ -108,7 +108,7 @@ def createMessage(token, parent_page_url, message):
          
 
 
-def createMessageDATE(token, parent_page_url, message):
+def createMessageTODO(token, parent_page_url, message):
     # notion
     client = NotionClient(token)
     
@@ -128,8 +128,7 @@ def createMessageDATE(token, parent_page_url, message):
                if part[0] == '‣':
                    if part[1][0][0] == 'd':  # date
                        dateblock = part[1][0][1]
-                       print (dateblock)
-                       sys.stdout.flush()                   
+                       
 #    mon = page.children.add_new(HeaderBlock, title="")
 #    mon.move_to(dateblock, "before")
 #    mon.title= dateblock.get().get('properties').get('title')
@@ -137,7 +136,6 @@ def createMessageDATE(token, parent_page_url, message):
 #    a = page.children.add_new(ToDoBlock, title=" ")
 #    a.move_to(mon, "after")
                 
-#    
 #    a = page.children.add_new(TextBlock, title=" ")
 #    b = page.children.add_new(TextBlock, title = "{data} {msg}".format(data = NotionDate.to_notion('2019-10-04'), msg = message))
 #    b = page.children.add_new(TextBlock, title = "{start}{data}{end} {msg}".format(start = '[["‣", [["d", {"type": "date", "start_date": "', data = datetime.now().strftime("%Y-%m-%d"), end = '", "date_format": "relative"}]]]]' , msg = message))
@@ -146,13 +144,13 @@ def createMessageDATE(token, parent_page_url, message):
     
 
 
-@app.route('/messagedate', methods=['GET'])
-def messagedate():
+@app.route('/messagetodo', methods=['GET'])
+def messagetodo():
     parent_page_url = request.args.get("parent_page_url")
     token_v2 = os.environ.get("TOKEN")
     message = request.args.get("message")
-    createMessageDATE(token_v2, parent_page_url, message)
-    return f'added {dateblock} receipt to Notion'    
+    createMessageTODO(token_v2, parent_page_url, message)
+    return f'added {message} receipt to Notion'    
 
 
 
@@ -167,24 +165,24 @@ def message():
 
 
     
-@app.route('/pcj', methods=['GET'])
+@app.route('/pcj', methods=['POST'])
 def pcj():
-    collectionURL = request.args.get("collectionURL")
-    description = request.args.get('description')
-    subject = request.args.get('subject')
+    collectionURL = request.form.get("collectionURL")
+    description = request.form.get('description')
+    subject = request.form.get('subject')
     token_v2 = os.environ.get("TOKEN")
-    inviteto = request.args.get('inviteto')
-    link = request.args.get('link')
+    inviteto = request.form.get('inviteto')
+    link = request.form.get('link')
     createPCJ(token_v2, collectionURL, subject, description, inviteto, link)
     return f'added {subject} receipt to Notion'
 
-@app.route('/invites', methods=['GET'])
+@app.route('/invites', methods=['POST'])
 def invites():
-    collectionURL = request.args.get("collectionURL")
-    description = request.args.get('description')
-    subject = request.args.get('subject')
+    collectionURL = request.form.get("collectionURL")
+    description = request.form.get('description')
+    subject = request.form.get('subject')
     token_v2 = os.environ.get("TOKEN")
-    inviteto = request.args.get('inviteto')
+    inviteto = request.form.get('inviteto')
     createInvite(token_v2, collectionURL, subject, description, inviteto)
     return f'added {subject} receipt to Notion'
 
