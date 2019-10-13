@@ -15,6 +15,7 @@ from todo import *
 
 
 timezone = "Europe/Kiev"
+text = None
 
 app = Flask(__name__)
 
@@ -118,6 +119,7 @@ def createTODOone(token, date, member, todo, text):
     page = client.get_block(members[member]['todo'])
     if date: today = datetime.datetime(date).date() 
     tasks = request.args.get("todo").split("||")
+    
     header = None
     # place to do in right date
     create_new_task(page, header, text=text,
@@ -131,7 +133,7 @@ def onetodo():
     token_v2 = os.environ.get("TOKEN")
     todo = request.args.get("todo")
     text = request.args.get("text") 
-    createTODOone(token_v2, parent_page_url, todo, text)
+    createTODOone(token_v2, date, member, todo, text)
     return f'added {message} receipt to Notion' 
 
 @app.route('/todorole', methods=['GET'])
