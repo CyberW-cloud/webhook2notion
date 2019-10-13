@@ -1,8 +1,8 @@
-    # looking next monday
-    today = datetime.datetime.now().date()
+# looking next monday
+today = datetime.datetime.now().date()
 
  # calculate days date
-    dates = {
+dates = {
         "mon": today + timedelta(0),
         "tue": today + timedelta(1),
         "wed": today + timedelta(2),
