@@ -137,10 +137,9 @@ def onetodo():
 def todorole():
     parent_page_url = request.args.get("member")
     role = request.args.get("role")
-    token_v2 = os.environ.get("TOKEN")
-    tmp = request.args.get("whom")
-    whom = tmp.split()
-    if role = "pa" :
+    token_v2 = os.environ.get("TOKEN")   
+    whom = request.args.get("whom").split()
+    if role == "pa" :
         createTODOPA(token_v2, member, role, whom)
     else:  
         createTODO(token_v2, member, role)
