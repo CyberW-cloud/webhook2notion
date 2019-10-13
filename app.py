@@ -118,11 +118,12 @@ def createTODOone(token, date, member, todo, text):
     page = client.get_block(members[member]['todo'])
     if date: today = datetime.datetime(date).date() 
     tasks = request.args.get("todo").split("||")
-    
+    header = None
     # place to do in right date
-    create_new_task(page, text,
+    create_new_task(page, header, text,
                     date=today, timezone=timezone,
-                    tasks)                            
+                    tasks
+                    )                            
                             
                             
 @app.route('/todoone', methods=['GET'])
