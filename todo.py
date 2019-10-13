@@ -15,7 +15,7 @@ dates = {
 
 to_do = {
     "cc": {
-    "mon": {"Header": "Block header or empty",
+       "mon": {"Header": "Block header or empty",
             "text": "Some text or empty",
             "to_do": [
                         "Do some work 1",
@@ -24,7 +24,7 @@ to_do = {
                       ]
             },
 
-    "tue": {"Header": "",
+       "tue": {"Header": "",
             "text": "",
             "to_do": [
                 "just to do 1",
@@ -33,40 +33,40 @@ to_do = {
                       ]
             },
 
-    "wed": {"Header": "",
+       "wed": {"Header": "",
             "text": "",
             "to_do": [
                       ]
             },
 
-    "thu": {"Header": "",
+       "thu": {"Header": "",
             "text": "Just text",
             "to_do": [
                 "Написать апдейты по ведомым контрактам и проектам",
                       ]
             },
 
-    "fri": {"Header": "",
+       "fri": {"Header": "",
             "text": "",
             "to_do": [
                       ]
             },
 
-    "sat": {"Header": "",
+       "sat": {"Header": "",
             "text": "",
             "to_do": [
                       ]
             },
 
-    "sun": {"Header": "",
+       "sun": {"Header": "",
             "text": "",
             "to_do": [
                       ]
             },
    }
 
-   "bidder" : {
-    "mon": {"Header": "Block header or empty",
+   "bidder": {
+      "mon": {"Header": "Block header or empty",
             "text": "Some text or empty",
             "to_do": [
                         "Do some work 1",
@@ -75,7 +75,7 @@ to_do = {
                       ]
             },
 
-    "tue": {"Header": "",
+      "tue": {"Header": "",
             "text": "",
             "to_do": [
                 "just to do 1",
@@ -84,31 +84,31 @@ to_do = {
                       ]
             },
 
-    "wed": {"Header": "Just header",
+      "wed": {"Header": "Just header",
             "text": "",
             "to_do": [
                       ]
             },
 
-    "thu": {"Header": "",
+      "thu": {"Header": "",
             "text": "Just text",
             "to_do": [
                       ]
             },
 
-    "fri": {"Header": "",
+      "fri": {"Header": "",
             "text": "",
             "to_do": [
                       ]
             },
 
-    "sat": {"Header": "",
+      "sat": {"Header": "",
             "text": "",
             "to_do": [
                       ]
             },
 
-    "sun": {"Header": "",
+      "sun": {"Header": "",
             "text": "",
             "to_do": [
                       ]
@@ -116,45 +116,45 @@ to_do = {
     }
 
    "pa": {
-    "mon": {"Header": "",
+       "mon": {"Header": "",
             "text": "",
             "to_do": [ ""
                        
                       ]
             },
 
-    "tue": {"Header": "",
+       "tue": {"Header": "",
             "text": "",
             "to_do": [
                
                       ]
             },
 
-    "wed": {"Header": "",
+       "wed": {"Header": "",
             "text": "",
             "to_do": [
                       ]
             },
 
-    "thu": {"Header": "",
+       "thu": {"Header": "",
             "text": "",
             "to_do": [
                       ]
             },
 
-    "fri": {"Header": "",
+       "fri": {"Header": "",
             "text": "",
             "to_do": [ "Проверить у кого должен быть 1-1 на этой неделе и запланировать звонки, инфо внести в календарь"
                       ]
             },
 
-    "sat": {"Header": "",
+       "sat": {"Header": "",
             "text": "",
             "to_do": [
                       ]
             },
 
-    "sun": {"Header": "",
+       "sun": {"Header": "",
             "text": "",
             "to_do": [
                       ]
