@@ -4,7 +4,7 @@ import sys
 from notion.client import NotionClient
 from notion.block import *
 from notion.collection import *
-from datetime import datetime, date, timedelta
+from datetime import datetime, date
 from flask import Flask
 from flask import request, jsonify
 from notion_helpers import *
