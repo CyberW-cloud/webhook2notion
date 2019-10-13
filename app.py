@@ -10,6 +10,8 @@ from flask import request, jsonify
 from notion_helpers import *
 import re
 from members import *
+from todo import *
+
 
 
 timezone = "Europe/Kiev"
@@ -66,7 +68,6 @@ def createMessage(token, parent_page_url, message):
     
 def createTODO(token, member, role):
     # notion
-    from todo import *
     to_do = to_do[role]
     
     client = NotionClient(token)
@@ -85,7 +86,6 @@ def createTODO(token, member, role):
                             
 def createTODOPA(token, member, role, whom):
     # notion
-    from todo import *
     to_do = to_do[role]    
     
     client = NotionClient(token)
@@ -112,11 +112,12 @@ def createTODOPA(token, member, role, whom):
 
 
                             
-def createTODOone(token, parent_page_url, todo, text):
+def createTODOone(token, date, member, todo, text):
     # notion
     client = NotionClient(token)
-    page = client.get_block(parent_page_url)
-    today = datetime.datetime.now().date()
+    page = client.get_block(members[member]['todo'])
+    if date: today = datetime.datetime(date).date() 
+    else: today = datetime.datetime.now().date()
     
     # place to do in right date
     create_new_task(page, text,
