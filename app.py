@@ -129,7 +129,7 @@ def createTODOone(token, date, member, todo, text):
                             
 @app.route('/todoone', methods=['GET'])
 def onetodo():
-    parent_page_url = request.args.get("member")
+    member = request.args.get("member")
     token_v2 = os.environ.get("TOKEN")
     todo = request.args.get("todo")
     text = request.args.get("text") 
@@ -138,7 +138,7 @@ def onetodo():
 
 @app.route('/todorole', methods=['GET'])
 def todorole():
-    parent_page_url = request.args.get("member")
+    member = request.args.get("member")
     role = request.args.get("role")
     token_v2 = os.environ.get("TOKEN")   
     whom = request.args.get("whom").split()
