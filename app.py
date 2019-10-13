@@ -4,63 +4,17 @@ import sys
 from notion.client import NotionClient
 from notion.block import *
 from notion.collection import *
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from flask import Flask
 from flask import request, jsonify
+from notion_helpers import *
 import re
+from members import *
 
-dateblock = None
+
+timezone = "Europe/Kiev"
 
 app = Flask(__name__)
-
-
-
-def trackWeather(token, URL, weather):
-    # notion
-    client = NotionClient(token)
-    block = client.get_block(URL)
-    block.title = weather
-
-def createTweet(token, collectionURL, tweet, author, followers):
-    # notion
-    client = NotionClient(token)
-    cv = client.get_collection_view(collectionURL)
-    row = cv.collection.add_row()
-    row.tweet = tweet
-    row.author = author
-    row.followers = followers
-
-
-def createTask(token, collectionURL, content):
-    # notion
-    client = NotionClient(token)
-    cv = client.get_collection_view(collectionURL)
-    row = cv.collection.add_row()
-    row.task = content
-
-
-def createReceipt(token, collectionURL, product, content, url, date):
-    # notion
-    client = NotionClient(token)
-    cv = client.get_collection_view(collectionURL)
-    row = cv.collection.add_row()
-    row.product = product
-    row.content = content
-    row.url = url
-    row.date = date
-
-def createEmail(token, collectionURL, sender, subject, message_url):
-    # notion
-    client = NotionClient(token)
-    cv = client.get_collection_view(collectionURL)
-    row = cv.collection.add_row()
-    row.sender = sender
-    row.subject = subject
-    row.message_url = message_url
-
-
-
-
 
 
 
@@ -108,52 +62,92 @@ def createMessage(token, parent_page_url, message):
          
 
 
-def createMessageTODO(token, parent_page_url, message):
+
+    
+def createTODO(token, member, role):
+    # notion
+    from todo import *
+    to_do = to_do[role]
+    
+    client = NotionClient(token)
+    page = client.get_block(members[member]['todo'])
+    
+
+    
+    # place to do in right date
+    for todo in to_do:
+        if to_do[todo]['Header'] != "" or  to_do[todo]['text'] != "" or  to_do[todo]['to_do'] != []:
+            create_new_task(page, header=to_do[todo]['Header'],
+                            text=to_do[todo]['text'],
+                            date=dates[todo], timezone=timezone,
+                            tasks=to_do[todo]['to_do'])
+            
+                            
+def createTODOPA(token, member, role, whom):
+    # notion
+    from todo import *
+    to_do = to_do[role]    
+    
+    client = NotionClient(token)
+    page = client.get_block(members[member]['todo'])
+
+            
+    for fl in whom : 
+        to_do["mon"]['to_do'].append = "Сделать скрины myStats и загрузить на pcloud по ({name})[{link}]".format(name = members[whom], link = members[whom]["profiles"] )    
+        to_do["tue"]['to_do'].append = "Обновить профиль ({name})[{link}]".format(name = members[whom], link = members[whom]["profiles"] )
+        to_do["wed"]['to_do'].append = "Проверить обновление профиля ({name})[{link}]".format(name = members[whom], link = members[whom]["profiles"] )
+    
+    to_do["mon"]['to_do'].append = "Запросить инфо об отпусках и day-off по {name} и внести в календарь инфо".format(name=whom)        
+    to_do["mon"]['to_do'].append = "Запросить статусы по планируемой загрузке и заполнить планируемую и фактическую загрузку в (Workload)[https://www.notion.so/Workload-ef6a6d4e3bbb41d8b4286b339f603aba] по {name}".format(name=whom)    
+ 
+        
+    
+    # place to do in right date
+    for todo in to_do:
+        if to_do[todo]['Header'] != "" or  to_do[todo]['text'] != "" or  to_do[todo]['to_do'] != []:
+            create_new_task(page, header=to_do[todo]['Header'],
+                            text=to_do[todo]['text'],
+                            date=dates[todo], timezone=timezone,
+                            tasks=to_do[todo]['to_do'])                            
+
+
+                            
+def createTODOone(token, parent_page_url, todo, text):
     # notion
     client = NotionClient(token)
-    
-#    monday = datetime.date.now()
-#    tuesday = moday + datetime.timedelta(days=1)
-#    wednesday = tuesday + datetime.timedelta(days=1)
-#    thursday = wednesday + datetime.timedelta(days=1)
-#    friday = thursday + datetime.timedelta(days=1)
-#    saturday = friday + datetime.timedelta(days=1)
-#    sunday = saturday + datetime.timedelta(days=1)
-    
     page = client.get_block(parent_page_url)
-    dateblock = None
+    today = datetime.datetime.now().date()
     
-    for part in page.get().get('properties').get('title'):
-           if len(part) > 1:
-               if part[0] == '‣':
-                   if part[1][0][0] == 'd':  # date
-                       dateblock = part[1][0][1]
-                       
-#    mon = page.children.add_new(HeaderBlock, title="")
-#    mon.move_to(dateblock, "before")
-#    mon.title= dateblock.get().get('properties').get('title')
-#    mon.title[1][0][1].set('start_date')=monday
-#    a = page.children.add_new(ToDoBlock, title=" ")
-#    a.move_to(mon, "after")
-                
-#    a = page.children.add_new(TextBlock, title=" ")
-#    b = page.children.add_new(TextBlock, title = "{data} {msg}".format(data = NotionDate.to_notion('2019-10-04'), msg = message))
-#    b = page.children.add_new(TextBlock, title = "{start}{data}{end} {msg}".format(start = '[["‣", [["d", {"type": "date", "start_date": "', data = datetime.now().strftime("%Y-%m-%d"), end = '", "date_format": "relative"}]]]]' , msg = message))
-#    a.move_to(page, "first-child")
-#    b.move_to(a, "after")
-    
-
-
-@app.route('/messagetodo', methods=['GET'])
-def messagetodo():
-    parent_page_url = request.args.get("parent_page_url")
+    # place to do in right date
+    create_new_task(page, text,
+                    date=today, timezone=timezone,
+                    tasks=todo)                            
+                            
+                            
+@app.route('/todoone', methods=['GET'])
+def onetodo():
+    parent_page_url = request.args.get("member")
     token_v2 = os.environ.get("TOKEN")
-    message = request.args.get("message")
-    createMessageTODO(token_v2, parent_page_url, message)
+    todo = request.args.get("todo")
+    text = request.args.get("text") 
+    createTODOone(token_v2, parent_page_url, todo, text)
+    return f'added {message} receipt to Notion' 
+
+@app.route('/todorole', methods=['GET'])
+def todorole():
+    parent_page_url = request.args.get("member")
+    role = request.args.get("role")
+    token_v2 = os.environ.get("TOKEN")
+    tmp = request.args.get("whom")
+    whom = tmp.split()
+    if role = "pa" :
+        createTODOPA(token_v2, member, role, whom)
+    else:  
+        createTODO(token_v2, member, role)
     return f'added {message} receipt to Notion'    
 
-
-
+   
+    
 
 @app.route('/message', methods=['GET'])
 def message():
@@ -189,64 +183,6 @@ def invites():
 
 
 
-
-
-
-
-
-
-
-
-@app.route('/twitter', methods=['GET'])
-def twitter():
-    tweet = request.args.get('tweet')
-    author = request.args.get('author')
-    followers = request.args.get('followers')
-    token_v2 = os.environ.get("TOKEN")
-    url = os.environ.get("URL")
-    createTweet(token_v2, url, tweet, author, followers)
-    return f'added {tweet} to Notion'
-
-
-@app.route('/tasks', methods=['GET'])
-def tasks():
-    todo = request.args.get('task')
-    token_v2 = os.environ.get("TOKEN")
-    url = os.environ.get("URL")
-    createTask(token_v2, url, todo)
-    return f'added {todo} to Notion'
-
-
-@app.route('/gmailreceipts', methods=['GET'])
-def gmailReceipt():
-    product = request.args.get('product')
-    content = request.args.get('content')
-    message_url = request.args.get('url')
-    date = request.args.get('date')
-    token_v2 = os.environ.get("TOKEN")
-    url = os.environ.get("URL")
-    createReceipt(token_v2, url, product, content, message_url, date)
-    return f'added {product} receipt to Notion'
-
-
-
-@app.route('/createemail', methods=['GET'])
-def gmailUrgentEmail():
-    sender = request.args.get('sender')
-    subject = request.args.get('subject')
-    message_url = request.args.get('url')
-    token_v2 = os.environ.get("TOKEN")
-    url = os.environ.get("URL")
-    createEmail(token_v2, url, sender, subject, message_url)
-    return f'added email from {sender} to Notion'
-
-@app.route('/getweather', methods=['GET'])
-def getWeather():
-    weather = str(request.args.get('weather'))
-    token_v2 = os.environ.get("TOKEN")
-    url = os.environ.get("URL")
-    trackWeather(token_v2, url, weather)
-    return f'added {weather} to Notion'
 
 
 if __name__ == '__main__':
