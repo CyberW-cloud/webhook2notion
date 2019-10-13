@@ -120,11 +120,10 @@ def createTODOone(token, date, member, todo, text):
     tasks = request.args.get("todo").split("||")
     header = None
     # place to do in right date
-    create_new_task(page, header, text,
+    create_new_task(page, header, text=text,
                     date=today, timezone=timezone,
-                    tasks
+                    tasks=tasks
                     )                            
-                            
                             
 @app.route('/todoone', methods=['GET'])
 def onetodo():
