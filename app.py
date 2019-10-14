@@ -120,8 +120,9 @@ def createTODOone(token, date, member, todo, text):
     client = NotionClient(token)
     page = client.get_block(members[member]['todo'])
     date = urllib.parse.unquote("{}".format(date))
+    print (date)
     today = datetime.strptime(date, "%Y-%m-%dT%H:%M:%S.%fZ").date() 
-    tasks = request.args.get("todo").split("||")
+    tasks = request.args.get("todo").split("..")
     
     header = None
     # place to do in right date
