@@ -1,17 +1,17 @@
-import datetime
+from datetime import timedelta
 
 # looking next monday
 today = datetime.datetime.now().date()
 
  # calculate days date
 dates = {
-        "mon": today + datetime.timedelta(0),
-        "tue": today + datetime.timedelta(1),
-        "wed": today + datetime.timedelta(2),
-        "thu": today + datetime.timedelta(3),
-        "fri": today + datetime.timedelta(4),
-        "sat": today + datetime.timedelta(5),
-        "sun": today + datetime.timedelta(6)
+        "mon": today + timedelta(0),
+        "tue": today + timedelta(1),
+        "wed": today + timedelta(2),
+        "thu": today + timedelta(3),
+        "fri": today + timedelta(4),
+        "sat": today + timedelta(5),
+        "sun": today + timedelta(6)
     }
 
 
