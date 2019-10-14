@@ -117,7 +117,7 @@ def createTODOone(token, date, member, todo, text):
     # notion
     client = NotionClient(token)
     page = client.get_block(members[member]['todo'])
-    today = datetime.datetime.strptime(date, "%Y-%m-%dT%H:%M:%S.%fZ").date() 
+    today = datetime.strptime(date, "%Y-%m-%dT%H:%M:%S.%fZ").date() 
     tasks = request.args.get("todo").split("||")
     
     header = None
