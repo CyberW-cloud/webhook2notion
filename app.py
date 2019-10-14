@@ -11,6 +11,8 @@ from notion_helpers import *
 import re
 from members import *
 from todo import *
+import urllib.parse
+
 
 
 
@@ -117,6 +119,7 @@ def createTODOone(token, date, member, todo, text):
     # notion
     client = NotionClient(token)
     page = client.get_block(members[member]['todo'])
+    date=urllib.parse.unquote(date)
     today = datetime.strptime(date, "%Y-%m-%dT%H:%M:%S.%fZ").date() 
     tasks = request.args.get("todo").split("||")
     
