@@ -1,7 +1,7 @@
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 # looking next monday
-today = datetime.datetime.now().date()
+today = datetime.now().date()
 
  # calculate days date
 dates = {
