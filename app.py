@@ -74,9 +74,8 @@ def createRSS(token, collectionURL, subject, description, link):
     row.name = subject
     row.description = description
     row.link = link
-    if link.find("https://www.upwork.com/blog/"): row.label = "upwork blog"
-    if link.find("https://community.upwork.com/t5/Announcements/"): row.label = "upwork community announcements"
-    
+    if link.find("https://www.upwork.com/blog/"): row.label = 'upwok blog'
+    if link.find("https://community.upwork.com/t5/Announcements/"): row.label = 'upwork community announcements'
    
 
 @app.route('/rss', methods=['POST'])
