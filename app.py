@@ -66,94 +66,28 @@ def createMessage(token, parent_page_url, message):
     d.move_to(c, "after")
          
 
-
-
-    
-def createTODO(token, member, role):
-    # notion
-    to_do = to_do[role]
-    
-    client = NotionClient(token)
-    page = client.get_block(members[member]['todo'])
-    
-
-    
-    # place to do in right date
-    for todo in to_do:
-        if to_do[todo]['Header'] != "" or  to_do[todo]['text'] != "" or  to_do[todo]['to_do'] != []:
-            create_new_task(page, header=to_do[todo]['Header'],
-                            text=to_do[todo]['text'],
-                            date=dates[todo], timezone=timezone,
-                            tasks=to_do[todo]['to_do'])
-            
-                            
-def createTODOPA(token, member, role, whom):
-    # notion
-    to_do = to_do[role]    
-    
-    client = NotionClient(token)
-    page = client.get_block(members[member]['todo'])
-
-            
-    for fl in whom : 
-        to_do["mon"]['to_do'].append = "Сделать скрины myStats и загрузить на pcloud по ({name})[{link}]".format(name = members[whom], link = members[whom]["profiles"] )    
-        to_do["tue"]['to_do'].append = "Обновить профиль ({name})[{link}]".format(name = members[whom], link = members[whom]["profiles"] )
-        to_do["wed"]['to_do'].append = "Проверить обновление профиля ({name})[{link}]".format(name = members[whom], link = members[whom]["profiles"] )
-    
-    to_do["mon"]['to_do'].append = "Запросить инфо об отпусках и day-off по {name} и внести в календарь инфо".format(name=whom)        
-    to_do["mon"]['to_do'].append = "Запросить статусы по планируемой загрузке и заполнить планируемую и фактическую загрузку в (Workload)[https://www.notion.so/Workload-ef6a6d4e3bbb41d8b4286b339f603aba] по {name}".format(name=whom)    
- 
-        
-    
-    # place to do in right date
-    for todo in to_do:
-        if to_do[todo]['Header'] != "" or  to_do[todo]['text'] != "" or  to_do[todo]['to_do'] != []:
-            create_new_task(page, header=to_do[todo]['Header'],
-                            text=to_do[todo]['text'],
-                            date=dates[todo], timezone=timezone,
-                            tasks=to_do[todo]['to_do'])                            
-
-
-                            
-def createTODOone(token, date, member, todo, text):
+def createRSS(token, collectionURL, subject, description, link):
     # notion
     client = NotionClient(token)
-    page = client.get_block(members[member]['todo'])
-    date = urllib.parse.unquote("{}".format(date))
-    print (date)
-    today = datetime.strptime(date, "%Y-%m-%dT%H:%M:%S.%fZ").date() 
-    tasks = request.args.get("todo").split("..")
+    cv = client.get_collection_view(collectionURL)
+    row = cv.collection.add_row()
+    row.name = subject
+    row.description = description
+    row.link = link
+    if link.find("https://www.upwork.com/blog/"): row.label = "Upwork Blog"
+    if link.find("https://community.upwork.com/t5/Announcements/"): row.label = "Upwork Community Announcements"
     
-    header = None
-    # place to do in right date
-    create_new_task(page, header, text=text,
-                    date=today, timezone=timezone,
-                    tasks=tasks
-                    )                            
-                            
-@app.route('/todoone', methods=['GET'])
-def onetodo():
-    member = request.args.get("member")
-    token_v2 = os.environ.get("TOKEN")
-    todo = request.args.get("todo")
-    text = request.args.get("text") 
-    createTODOone(token_v2, date, member, todo, text)
-    return f'added {message} receipt to Notion' 
-
-@app.route('/todorole', methods=['GET'])
-def todorole():
-    member = request.args.get("member")
-    role = request.args.get("role")
-    token_v2 = os.environ.get("TOKEN")   
-    whom = request.args.get("whom").split()
-    if role == "pa" :
-        createTODOPA(token_v2, member, role, whom)
-    else:  
-        createTODO(token_v2, member, role)
-    return f'added {message} receipt to Notion'    
-
    
-    
+
+@app.route('/rss', methods=['POST'])
+def rss():
+    collectionURL = request.args.get("collectionURL")
+    description = request.args.get('description')
+    subject = request.args.get('subject')
+    token_v2 = os.environ.get("TOKEN")
+    link = request.args.get('link')
+    createRSS(token_v2, collectionURL, subject, description, link)
+    return f'added {subject} receipt to Notion'    
 
 @app.route('/message', methods=['GET'])
 def message():
@@ -162,7 +96,6 @@ def message():
     message = request.args.get("message")
     createMessage(token_v2, parent_page_url, message)
     return f'added {message} receipt to Notion'    
-
 
     
 @app.route('/pcj', methods=['POST'])
