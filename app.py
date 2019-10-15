@@ -66,26 +66,24 @@ def createMessage(token, parent_page_url, message):
     d.move_to(c, "after")
          
 
-def createRSS(token, collectionURL, subject, description, link):
+def createRSS(token, collectionURL, subject, link):
     # notion
     client = NotionClient(token)
     cv = client.get_collection_view(collectionURL)
     row = cv.collection.add_row()
     row.name = subject
-    row.description = description
     row.link = link
-    if link.find("https://www.upwork.com/blog/"): row.label = 'upwok blog'
-    if link.find("https://community.upwork.com/t5/Announcements/"): row.label = 'upwork community announcements'
+    if link.find("https://www.upwork.com/blog/") != -1: row.label = 'upwok blog'
+    if link.find("https://community.upwork.com/t5/Announcements/") != -1: row.label = 'upwork community announcements'
    
 
 @app.route('/rss', methods=['POST'])
 def rss():
     collectionURL = request.args.get("collectionURL")
-    description = request.args.get('description')
     subject = request.args.get('subject')
     token_v2 = os.environ.get("TOKEN")
     link = request.args.get('link')
-    createRSS(token_v2, collectionURL, subject, description, link)
+    createRSS(token_v2, collectionURL, subject, link)
     return f'added {subject} receipt to Notion'    
 
 @app.route('/message', methods=['GET'])
