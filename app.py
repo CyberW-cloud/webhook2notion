@@ -13,52 +13,51 @@ from members import *
 from todo import *
 import urllib.parse
 
-
-
-
 timezone = "Europe/Kiev"
 text = None
 
 app = Flask(__name__)
 
 
-
-
-def createInvite(token, collectionURL, subject, description, inviteto):
+def create_invite(token, collection_url, subject, description, invite_to):
     # notion
     match = re.search('https://upwork.com/applications/\d+', description) 
     url = match.group()
-    id = re.search('\d+', url)
+    item_id = re.search('\d+', url)
     client = NotionClient(token)
-    cv = client.get_collection_view(collectionURL)
+    cv = client.get_collection_view(collection_url)
     row = cv.collection.add_row()
     row.name = subject
     row.description = description
     row.status = "New"
-    row.to = inviteto
+    row.to = invite_to
     row.link = url
-    row.id = id.group()
- 
-def createPCJ(token, collectionURL, subject, description, inviteto, link):
+    row.id = item_id.group()
+
+
+def create_pcj(token, collection_url, subject, description, invite_to, link):
     # notion
-    id = re.search('%7E[\w]+', link)
+    item_id = re.search('%7E[\w]+', link)
     client = NotionClient(token)
-    cv = client.get_collection_view(collectionURL)
+    cv = client.get_collection_view(collection_url)
     row = cv.collection.add_row()
     row.name = subject
     row.description = description
     row.status = "New"
-    row.to = inviteto
+    row.to = invite_to
     row.link = link
-    row.id = id.group()[3:]
-    
-def createMessage(token, parent_page_url, message):
+    row.id = item_id.group()[3:]
+
+
+def create_message(token, parent_page_url, message_content):
     # notion
     client = NotionClient(token)
     page = client.get_block(parent_page_url)
     a = page.children.add_new(TextBlock, title=" ")
     b = page.children.add_new(DividerBlock)
-    c = page.children.add_new(TextBlock, title="**{data}** {msg}".format(data = datetime.now().strftime("%d-%m-%Y %H:%M"), msg = message))
+    c = page.children.add_new(TextBlock,
+                              title="**{data}** {msg}".format(data=datetime.now().strftime("%d-%m-%Y %H:%M"),
+                                                              msg=message_content))
     d = page.children.add_new(DividerBlock)
     a.move_to(page, "first-child")
     b.move_to(a, "after")
@@ -66,59 +65,59 @@ def createMessage(token, parent_page_url, message):
     d.move_to(c, "after")
          
 
-def createRSS(token, collectionURL, subject, link):
+def create_rss(token, collection_url, subject, link):
     # notion
     client = NotionClient(token)
-    cv = client.get_collection_view(collectionURL)
+    cv = client.get_collection_view(collection_url)
     row = cv.collection.add_row()
     row.name = subject
     row.link = link
-    if link.find("https://www.upwork.com/blog/") != -1: row.label = 'upwok blog'
-    if link.find("https://community.upwork.com/t5/Announcements/") != -1: row.label = 'upwork community announcements'
+    if link.find("https://www.upwork.com/blog/") != -1:
+        row.label = 'upwok blog'
+    if link.find("https://community.upwork.com/t5/Announcements/") != -1:
+        row.label = 'upwork community announcements'
    
 
 @app.route('/rss', methods=['POST'])
 def rss():
-    collectionURL = request.args.get("collectionURL")
+    collection_url = request.args.get("collectionURL")
     subject = request.args.get('subject')
     token_v2 = os.environ.get("TOKEN")
     link = request.args.get('link')
-    createRSS(token_v2, collectionURL, subject, link)
+    create_rss(token_v2, collection_url, subject, link)
     return f'added {subject} receipt to Notion'    
+
 
 @app.route('/message', methods=['GET'])
 def message():
     parent_page_url = request.args.get("parent_page_url")
     token_v2 = os.environ.get("TOKEN")
-    message = request.args.get("message")
-    createMessage(token_v2, parent_page_url, message)
-    return f'added {message} receipt to Notion'    
+    message_content = request.args.get("message")
+    create_message(token_v2, parent_page_url, message_content)
+    return f'added {message_content} receipt to Notion'
 
     
 @app.route('/pcj', methods=['POST'])
 def pcj():
-    collectionURL = request.args.get("collectionURL")
+    collection_url = request.args.get("collectionURL")
     description = request.args.get('description')
     subject = request.args.get('subject')
     token_v2 = os.environ.get("TOKEN")
-    inviteto = request.args.get('inviteto')
+    invite_to = request.args.get('inviteto')
     link = request.args.get('link')
-    createPCJ(token_v2, collectionURL, subject, description, inviteto, link)
+    create_pcj(token_v2, collection_url, subject, description, invite_to, link)
     return f'added {subject} receipt to Notion'
+
 
 @app.route('/invites', methods=['POST'])
 def invites():
-    collectionURL = request.args.get("collectionURL")
+    collection_url = request.args.get("collectionURL")
     description = request.args.get('description')
     subject = request.args.get('subject')
     token_v2 = os.environ.get("TOKEN")
-    inviteto = request.args.get('inviteto')
-    createInvite(token_v2, collectionURL, subject, description, inviteto)
+    invite_to = request.args.get('inviteto')
+    create_invite(token_v2, collection_url, subject, description, invite_to)
     return f'added {subject} receipt to Notion'
-
-
-
-
 
 
 if __name__ == '__main__':
