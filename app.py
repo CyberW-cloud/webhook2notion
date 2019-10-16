@@ -45,11 +45,11 @@ def createPCJ(token, collectionURL, subject, description, inviteto, link):
     client = NotionClient(token)
     cv = client.get_collection_view(collectionURL)
     row = cv.collection.add_row()
-    row.name = subject
+    row.name = subject[:-9]
     row.description = description
     row.status = "New"
     row.to = inviteto
-    row.link = link
+    row.link = urllib.parse.quote("https://www.upwork.com/ab/jobs/search/?previous_clients=all&q={}&sort=recency".format(subject[:-9]))
     row.id = id.group()[3:]
     
 def createMessage(token, parent_page_url, message):
@@ -65,6 +65,7 @@ def createMessage(token, parent_page_url, message):
     c.move_to(b, "after")
     d.move_to(c, "after")
          
+
 
 def createRSS(token, collectionURL, subject, link):
     # notion
