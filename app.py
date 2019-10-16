@@ -49,7 +49,7 @@ def createPCJ(token, collectionURL, subject, description, inviteto, link):
     row.description = description
     row.status = "New"
     row.to = inviteto
-    row.link = urllib.parse.quote("https://www.upwork.com/ab/jobs/search/?previous_clients=all&q={}&sort=recency".format(subject[:-9]))
+    row.link = "https://www.upwork.com/ab/jobs/search/?previous_clients=all&q={}&sort=recency".format(urllib.parse.quote(subject[:-9]))
     row.id = id.group()[3:]
     
 def createMessage(token, parent_page_url, message):
