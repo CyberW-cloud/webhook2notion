@@ -1,12 +1,7 @@
-
-import os
-import sys
 from notion.client import NotionClient
 from notion.block import *
-from notion.collection import *
-from datetime import datetime, date
 from flask import Flask
-from flask import request, jsonify
+from flask import request
 from notion_helpers import *
 import re
 from members import *
@@ -14,7 +9,6 @@ from todo import *
 import urllib.parse
 
 timezone = "Europe/Kiev"
-text = None
 
 app = Flask(__name__)
 
@@ -77,7 +71,32 @@ def create_rss(token, collection_url, subject, link):
         row.label = 'upwok blog'
     if link.find("https://community.upwork.com/t5/Announcements/") != -1:
         row.label = 'upwork community announcements'
-   
+
+
+def create_todo_one(token, date, member, todo, text):
+    # notion
+    date = datetime.strptime(urllib.parse.unquote("{}".format(date)), "%Y-%m-%dT%H:%M:%S.%fZ").date()
+    client = NotionClient(token)
+    page = client.get_block(members[member]['todo'])
+    tasks = todo
+
+    # place to do in right date
+    create_new_task(page, "", text=text,
+                    date=date, timezone=timezone,
+                    tasks=tasks
+                    )
+
+
+@app.route('/todoone', methods=['GET'])
+def todo_one():
+    member = request.args.get("member")
+    token_v2 = os.environ.get("TOKEN")
+    todo = "{}".format(request.args.get("todo")).split("||")
+    text = request.args.get("text")
+    date = request.args.get("date")
+    create_todo_one(token_v2, date, member, todo, text)
+    return f'added to {member} {text if text else ""} {todo}  to Notion'
+
 
 @app.route('/rss', methods=['POST'])
 def rss():
