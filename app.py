@@ -41,11 +41,12 @@ def create_pcj(token, collection_url, subject, description, invite_to, link):
     client = NotionClient(token)
     cv = client.get_collection_view(collection_url)
     row = cv.collection.add_row()
-    row.name = subject
+    row.name = subject[:9]
     row.description = description
     row.status = "New"
     row.to = invite_to
-    row.link = link
+    row.link = "https://www.upwork.com/ab/jobs/search/?previous_clients=all&q={}&sort=recency".format(
+        urllib.parse.quote(subject[:-9]))
     row.id = item_id.group()[3:]
 
 
