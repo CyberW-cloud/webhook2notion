@@ -7,6 +7,8 @@ import re
 from members import *
 from todo import *
 import urllib.parse
+import pytz
+import datetime
 
 timezone = "Europe/Kiev"
 
@@ -74,7 +76,7 @@ def create_rss(token, collection_url, subject, link, description):
         row.label = 'upwork community announcements'
 
 
-def create_todo_one(token, date, member, todo, text):
+def create_todo(token, date, member, todo, text):
     # notion
     date = datetime.strptime(urllib.parse.unquote("{}".format(date)), "%Y-%m-%dT%H:%M:%S.%fZ").date()
     client = NotionClient(token)
@@ -88,6 +90,50 @@ def create_todo_one(token, date, member, todo, text):
                     )
 
 
+def get_contracts(token, days_before):
+    client = NotionClient(token)
+    cv = client.get_collection_view(
+        "https://www.notion.so/5a95fb63129242a5b5b48f18e16ef19a?v=48599e7a184a4f32be2469e696367949")
+    # 48599e7a184a4f32be2469e696367949 - no_filters_view
+    # 02929acd595a48dda28cb9e2ff6ae210 - python_view
+    n = datetime.datetime.now(pytz.timezone("Europe/Kiev"))
+    n = n.replace(hour=12, minute=0, second=0, microsecond=0) - datetime.timedelta(days=days_before)
+
+    filter_params = [{
+        "property": "Status",
+        "comparator": "enum_is",
+        "value": "In Progress",
+        },
+        {
+            "property": "Updated",
+            "comparator": "date_is_on_or_before",
+            "value_type": 'exact_date',
+            "value": int(n.timestamp())*1000,
+        }
+        ]
+    result = cv.build_query(filter=filter_params).execute()
+    res = []
+    for row in result:
+        contract = dict()
+        contract['coordinator'] = row.Coordinator[0] if row.Coordinator else None
+        if contract['coordinator']:
+            contract['coordinator_name'] = contract['coordinator'].name.replace(u'\xa0', u'')
+        contract['freelancer'] = row.freelancer[0] if row.freelancer else None
+        if contract['freelancer']:
+            contract['freelancer_name'] = contract['freelancer'].name.replace(u'\xa0', u'')
+        contract['client'] = row.client_name[0] if row.client_name else None
+        contract['contract_url'] = row.get_browseable_url()
+        res.append(contract)
+    return res
+
+
+@app.route('/kick_staff', methods=['GET'])
+def kick_staff():
+    token_v2 = os.environ.get("TOKEN")
+    contracts = get_contracts(token_v2, 7)
+    return f'{contracts}'
+
+
 @app.route('/todoone', methods=['GET'])
 def todo_one():
     member = request.args.get("member")
@@ -95,7 +141,7 @@ def todo_one():
     todo = "{}".format(request.args.get("todo")).split("||")
     text = request.args.get("text")
     date = request.args.get("date")
-    create_todo_one(token_v2, date, member, todo, text)
+    create_todo(token_v2, date, member, todo, text)
     return f'added to {member} {text if text else ""} {todo}  to Notion'
 
 
