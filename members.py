@@ -64,7 +64,7 @@ members = {
              },  
     "Aleksej Korzhenevskij": {"todo": "https://www.notion.so/To-Do-AleksejK-9655ef96b94d4e8399b151e29f3d87a5",
             "profiles": "https://www.notion.so/Aleksej-Korzhenevskij-7ae6f74ee3db41fa9f5d7e13a8270ecd"
-             }                            
+             },                            
     "Tatiana Serdiuk": {"todo": "https://www.notion.so/ToDo-5bc1e2a4d70b4edd9d2db7255553fbe8",
             "profiles": "https://www.notion.so/Tatiana-Serdiuk-d6112d236c8244c0ab9948967c2e6d8d"
              }                                     
