@@ -100,10 +100,10 @@ def todo_one():
 
 @app.route('/rss', methods=['POST'])
 def rss():
-    collection_url = request.args.get("collectionURL")
-    subject = request.args.get('subject')
+    collection_url = request.form.get("collectionURL")
+    subject = request.form.get('subject')
     token_v2 = os.environ.get("TOKEN")
-    link = request.args.get('link')
+    link = request.form.get('link')
     create_rss(token_v2, collection_url, subject, link)
     return f'added {subject} receipt to Notion'    
 
