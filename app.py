@@ -92,7 +92,7 @@ def create_todo_one(token, date, member, todo, text):
 def todo_one():
     member = request.args.get("member")
     token_v2 = os.environ.get("TOKEN")
-    todo = request.args.get("todo"))
+    todo = request.args.get("todo")
 #    todo = "{}".format(request.args.get("todo")).split("||")
     text = request.args.get("text")
     date = request.args.get("date")
