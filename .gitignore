@@ -52,3 +52,6 @@ docs/_build/
 
 #virtual enviroment
 /.env/
+
+#IDE
+/.idea/

@@ -123,14 +123,54 @@ def get_contracts(token, days_before):
             contract['freelancer_name'] = contract['freelancer'].name.replace(u'\xa0', u'')
         contract['client'] = row.client_name[0] if row.client_name else None
         contract['contract_url'] = row.get_browseable_url()
-        res.append(contract)
+        if contract['coordinator'] is None:
+            continue
+        else:
+            res.append(contract)
+    return res
+
+
+def get_projects(token, days_before):
+    client = NotionClient(token)
+    cv = client.get_collection_view(
+        "https://www.notion.so/addccbcaf545405292db498941c9538a?v=e86f54933acc461ca413afa6a2958cdc")
+    # e86f54933acc461ca413afa6a2958cdc - no_filters_view
+    # 1ed5f8ce4e834f1382ffb447976e944f - python_view
+    n = datetime.datetime.now(pytz.timezone("Europe/Kiev"))
+    n = n.replace(hour=12, minute=0, second=0, microsecond=0) - datetime.timedelta(days=days_before)
+    filter_params = [{
+        "property": "Status",
+        "comparator": "enum_is",
+        "value": "inProgress",
+    },
+    {
+        "property": "Updated",
+        "comparator": "date_is_on_or_before",
+        "value_type": 'exact_date',
+        "value": int(n.timestamp()) * 1000,
+    }
+    ]
+    cv = cv.build_query(filter=filter_params)
+    result = cv.execute()
+    res = []
+    for row in result:
+        project = dict()
+        project['pm'] = row.PM[0] if row.PM else None
+        if project['pm']:
+            project['pm_name'] = project['pm'].name.replace(u'\xa0', u'')
+        project['client'] = row.client_name[0] if row.client_name else None
+        project['project_url'] = row.get_browseable_url()
+        if project['pm'] is None:
+            continue
+        else:
+            res.append(project)
     return res
 
 
 @app.route('/kick_staff', methods=['GET'])
 def kick_staff():
     token_v2 = os.environ.get("TOKEN")
-    contracts = get_contracts(token_v2, 7)
+    contracts = get_projects(token_v2, 7)
     return f'{contracts}'
 
 
