@@ -1,3 +1,5 @@
+from time import sleep
+
 from notion.collection import NotionDate
 from notion.block import TodoBlock, HeaderBlock, TextBlock
 import datetime
@@ -89,15 +91,24 @@ def create_new_task(page, header, date, text, timezone, tasks):
             td.move_to(parent,"after")
             parent = td
     else:
-        new_child = page.children.add_new(HeaderBlock, title=" ")
         title = NotionDate(date, timezone=timezone).to_notion()
         if header:
             title.append([' '])
             title.append([header])
-        prop = new_child.get('properties')
-        prop['title'] = title
-        new_child.set('properties', prop)
-        ret = {'header': new_child, 'to-do':list()}
+        prop = None
+        i = 0
+        ret = dict()
+        while prop is None:
+            print('iteration', i)
+            new_child = page.children.add_new(HeaderBlock, title=" ")
+            prop = new_child.get('properties')
+            prop['title'] = title
+            new_child.set('properties', prop)
+            ret = {'header': new_child, 'to-do': list()}
+            sleep(0.5)
+            i += 1
+            if i > 5:
+                return False
         if text:
             tx = page.children.add_new(TextBlock, title=text)
             ret['text'] = tx

@@ -76,18 +76,22 @@ def create_rss(token, collection_url, subject, link, description):
         row.label = 'upwork community announcements'
 
 
-def create_todo(token, date, member, todo, text):
+def create_todo(token, date, link, todo, text):
     # notion
-    date = datetime.strptime(urllib.parse.unquote("{}".format(date)), "%Y-%m-%dT%H:%M:%S.%fZ").date()
+    if date is not None:
+        date = datetime.strptime(urllib.parse.unquote("{}".format(date)), "%Y-%m-%dT%H:%M:%S.%fZ").date()
+    else:
+        date = datetime.datetime.now().date()
+
     client = NotionClient(token)
-    page = client.get_block(members[member]['todo'])
+    page = client.get_block(link)
     tasks = todo
 
     # place to do in right date
-    create_new_task(page, "", text=text,
-                    date=date, timezone=timezone,
-                    tasks=tasks
-                    )
+    return create_new_task(page, "", text=text,
+                           date=date, timezone=timezone,
+                           tasks=tasks
+                           )
 
 
 def get_contracts(token, days_before):
@@ -115,18 +119,18 @@ def get_contracts(token, days_before):
     res = []
     for row in result:
         contract = dict()
-        contract['coordinator'] = row.Coordinator[0] if row.Coordinator else None
-        if contract['coordinator']:
-            contract['coordinator_name'] = contract['coordinator'].name.replace(u'\xa0', u'')
-        contract['freelancer'] = row.freelancer[0] if row.freelancer else None
-        if contract['freelancer']:
-            contract['freelancer_name'] = contract['freelancer'].name.replace(u'\xa0', u'')
-        contract['client'] = row.client_name[0] if row.client_name else None
-        contract['contract_url'] = row.get_browseable_url()
-        if contract['coordinator'] is None:
+        contract['person'] = row.Coordinator[0] if row.Coordinator else None
+        if contract['person'] is None:
             continue
         else:
-            res.append(contract)
+            contract['person_name'] = contract['person'].name.replace(u'\xa0', u'')
+        if contract['person_name'] == 'selfCC':
+            contract['person'] = row.freelancer[0] if row.freelancer else None
+            if contract['person']:
+                contract['person_name'] = contract['person'].name.replace(u'\xa0', u'')
+        contract['client'] = row.client_name[0] if row.client_name else None
+        contract['url'] = row.get_browseable_url()
+        res.append(contract)
     return res
 
 
@@ -155,23 +159,77 @@ def get_projects(token, days_before):
     res = []
     for row in result:
         project = dict()
-        project['pm'] = row.PM[0] if row.PM else None
-        if project['pm']:
-            project['pm_name'] = project['pm'].name.replace(u'\xa0', u'')
+        project['person'] = row.PM[0] if row.PM else None
+        if project['person']:
+            project['person_name'] = project['person'].name.replace(u'\xa0', u'')
         project['client'] = row.client_name[0] if row.client_name else None
-        project['project_url'] = row.get_browseable_url()
-        if project['pm'] is None:
+        project['url'] = row.get_browseable_url()
+        if project['person'] is None:
             continue
         else:
             res.append(project)
     return res
 
 
+def parse_staff(todo, table, obj, client_days_before):
+    test_date = datetime.datetime.now()
+    test_date = test_date.replace(hour=12,
+                                  minute=0,
+                                  second=0,
+                                  microsecond=0) - datetime.timedelta(days=client_days_before)
+    for row in table:
+        person = row['person_name']
+        if person not in todo:
+            todo[person] = dict()
+            todo[person]['todo_url'] = row['person'].todo
+            todo[person]['projects'] = set()
+            todo[person]['contracts'] = set()
+            todo[person]['clients'] = set()
+        todo[person][obj].add(row['url'])
+        if row['client'] is not None:
+            if row['client'].Modified <= test_date:
+                todo[person]['clients'].add((row['client'].name.replace(u'\xa0', u''),
+                                             row['client'].get_browseable_url()))
+    return todo
+
+
 @app.route('/kick_staff', methods=['GET'])
 def kick_staff():
     token_v2 = os.environ.get("TOKEN")
-    contracts = get_projects(token_v2, 7)
-    return f'{contracts}'
+    date = request.args.get("date", None)
+
+    cc = True
+    pm = True
+    if cc:
+        contracts = get_contracts(token_v2, 7)
+    else:
+        contracts = []
+    if pm:
+        projects = get_projects(token_v2, 7)
+    else:
+        projects = []
+
+    todo = dict()
+    todo = parse_staff(todo, contracts, 'contracts', 0)
+    todo = parse_staff(todo, projects, 'projects', 0)
+
+    task = todo['Denys Safonov']
+    a = set()
+    if task['contracts']:
+        create_todo(token_v2, date, task['todo_url'], task['contracts'],
+                    "Контракты не получали обновления на прошлой неделе")
+    if task['projects']:
+        create_todo(token_v2, date, task['todo_url'], task['projects'],
+                    "Проекты не получали обновления на прошлой неделе")
+
+    if task['clients']:
+        create_todo(token_v2, date, task['todo_url'], map(' -> '.join, [x for x in task['clients']]),
+                    "Занеси новую информацию которую ты узнал про клиента:")
+
+    sep = '\n'
+    return f"Contracts: {sep}{sep.join(contract['url'] for contract in contracts)} " \
+           f"{sep}Projects: {sep}{sep.join(project['url'] for project in projects)}" \
+           f"{sep}TODO: {sep}{todo}"
 
 
 @app.route('/todoone', methods=['GET'])
@@ -180,8 +238,8 @@ def todo_one():
     token_v2 = os.environ.get("TOKEN")
     todo = "{}".format(request.args.get("todo")).split("||")
     text = request.args.get("text")
-    date = request.args.get("date")
-    create_todo(token_v2, date, member, todo, text)
+    date = request.args.get("date", None)
+    create_todo(token_v2, date, members[member]['todo'], todo, text)
     return f'added to {member} {text if text else ""} {todo}  to Notion'
 
 
