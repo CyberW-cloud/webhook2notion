@@ -42,6 +42,14 @@ def create_pcj(token, collection_url, subject, description, invite_to, link):
     row.link = "https://www.upwork.com/ab/jobs/search/?previous_clients=all&q={}&sort=recency".format(
         urllib.parse.quote(subject[:-9]))
     row.id = item_id.group()[3:]
+    
+# Найти клиента в базе данных    
+#    Access a database using the URL of the database page or the inline block
+#    cv = client.get_collection_view("https://www.notion.so/0ce71695159145aa84ab4371cc1e094a?v=7a36cd9d16254d34ae7b1dddeff124c7")
+#    get client name from row.link open in browser and get <span data-ng-bind="::jsuJobPreviousClientInfoController.client.companyName" class="ng-binding">Webster Pacific LLC</span> 
+#    List all the records with "Bob" in them
+#    for rowcl in cv.collection.get_rows(search=client.companyName):
+#    row.clien=rowcl.link
 
 
 def create_message(token, parent_page_url, message_content):
