@@ -129,7 +129,7 @@ def get_contracts(token, days_before):
             if contract['person']:
                 contract['person_name'] = contract['person'].name.replace(u'\xa0', u'')
         contract['client'] = row.client_name[0] if row.client_name else None
-        contract['url'] = row.get_browseable_url()
+        contract['url'] = row.contract_name.replace(u'\xa0', u''), row.get_browseable_url()
         res.append(contract)
     return res
 
@@ -163,7 +163,7 @@ def get_projects(token, days_before):
         if project['person']:
             project['person_name'] = project['person'].name.replace(u'\xa0', u'')
         project['client'] = row.client_name[0] if row.client_name else None
-        project['url'] = row.get_browseable_url()
+        project['url'] = row.name.replace(u'\xa0', u''), row.get_browseable_url()
         if project['person'] is None:
             continue
         else:
@@ -211,25 +211,26 @@ def kick_staff():
 
     todo = dict()
     todo = parse_staff(todo, contracts, 'contracts', 0)
+    print('contracts done')
     todo = parse_staff(todo, projects, 'projects', 0)
-
+    print('projects done')
     task = todo['Denys Safonov']
     a = set()
+    print('start todo')
     if task['contracts']:
-        create_todo(token_v2, date, task['todo_url'], task['contracts'],
+        create_todo(token_v2, date, task['todo_url'], map(lambda c: '[{}]({})'.format(c[0], c[1]), task['contracts']),
                     "Контракты не получали обновления на прошлой неделе")
+
     if task['projects']:
-        create_todo(token_v2, date, task['todo_url'], task['projects'],
+        create_todo(token_v2, date, task['todo_url'], map(lambda p: '[{}]({})'.format(p[0], p[1]), task['projects']),
                     "Проекты не получали обновления на прошлой неделе")
 
     if task['clients']:
-        create_todo(token_v2, date, task['todo_url'], map(' -> '.join, [x for x in task['clients']]),
+        create_todo(token_v2, date, task['todo_url'], map(lambda t: '[{}]({})'.format(t[0], t[1]), task['clients']),
                     "Занеси новую информацию которую ты узнал про клиента:")
 
     sep = '\n'
-    return f"Contracts: {sep}{sep.join(contract['url'] for contract in contracts)} " \
-           f"{sep}Projects: {sep}{sep.join(project['url'] for project in projects)}" \
-           f"{sep}TODO: {sep}{todo}"
+    return "Done!"
 
 
 @app.route('/todoone', methods=['GET'])

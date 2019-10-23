@@ -1,5 +1,5 @@
 members = {
-    "Denys Safonov": {"todo": "https://www.notion.so/ToDo-ae67ac3cf26c4222a672388a55b34267",
+    "Denys Safonov": {"todo": "https://www.notion.so/ToDo-v2-473c33a2308d464bbe8ea86e1a926fc8",
             "profiles": "https://www.notion.so/Denys-Safonov-0f72b4d50a464364aba3ffb96a2ecd23"
              },             
     "Oleksandra Prysiazhna": {"todo": "https://www.notion.so/ToDo-9a8c63e90f1349a5ac50e3ddc99103e0",

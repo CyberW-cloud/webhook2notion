@@ -42,6 +42,8 @@ def get_previous_or_target_headers(page, target_date):
         block_type = child.get('type')
         if 'header' in block_type:
             prop = child.get('properties')
+            if prop is None:
+                continue
             title = prop['title']
             date = get_date_from_title(title)
             if date:
@@ -64,11 +66,11 @@ def move_task_before(task, block):
     try:
         if task['text']:
             task['text'].move_to(task['header'], "after")
-            task['to-do'][0].move_to(task['text'], "after")
+            #task['to-do'][0].move_to(task['text'], "after")
         else:
             task['to-do'][0].move_to(task['header'], "after")
-        for num, td in enumerate(task['to-do'][1:]):
-            td.move_to(task['to-do'][num], "after")
+            for num, td in enumerate(task['to-do'][1:]):
+                td.move_to(task['to-do'][num], "after")
     except IndexError:
         pass
 
@@ -86,36 +88,33 @@ def create_new_task(page, header, date, text, timezone, tasks):
             tx.move_to(parent, "after")
             parent = tx
         for task in tasks:
-            td = page.children.add_new(TodoBlock, title=task)
+            td = parent.children.add_new(TodoBlock, title=task)
             td.checked = False
-            td.move_to(parent,"after")
+            if not text:
+                td.move_to(parent, "after")
             parent = td
+
     else:
         title = NotionDate(date, timezone=timezone).to_notion()
         if header:
             title.append([' '])
             title.append([header])
-        prop = None
-        i = 0
-        ret = dict()
-        while prop is None:
-            print('iteration', i)
-            new_child = page.children.add_new(HeaderBlock, title=" ")
-            prop = new_child.get('properties')
-            prop['title'] = title
-            new_child.set('properties', prop)
-            ret = {'header': new_child, 'to-do': list()}
-            sleep(0.5)
-            i += 1
-            if i > 5:
-                return False
+        new_child = page.children.add_new(HeaderBlock, title=".")
+        prop = new_child.get('properties')
+        prop['title'] = title
+        new_child.set('properties', prop)
+        ret = {'header': new_child, 'to-do': list()}
         if text:
             tx = page.children.add_new(TextBlock, title=text)
             ret['text'] = tx
         else:
             ret['text'] = None
         for task in tasks:
-            td = page.children.add_new(TodoBlock, title=task)
+            if ret['text'] is not None:
+                obj = ret['text']
+            else:
+                obj = page
+            td = obj.children.add_new(TodoBlock, title=task)
             td.checked = False
             ret['to-do'].append(td)
         move_task_before(ret, parent)
