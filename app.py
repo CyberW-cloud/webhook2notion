@@ -121,10 +121,16 @@ def get_contracts(token, days_before):
             "comparator": "date_is_on_or_before",
             "value_type": 'exact_date',
             "value": int(n.timestamp())*1000,
-        }
+        },
+     #   {
+     #       "property": "Project",
+     #       "comparator": "in_not_empty",
+     #   }
         ]
+    print(cv.get("query"))
     result = cv.build_query(filter=filter_params).execute()
     res = []
+    print(len(res))
     for row in result:
         contract = dict()
         contract['person'] = row.Coordinator[0] if row.Coordinator else None
@@ -167,7 +173,10 @@ def get_projects(token, days_before):
     res = []
     for row in result:
         project = dict()
-        project['person'] = row.PM[0] if row.PM else None
+        if row.PM:
+            project['person'] = row.PM[0]
+        else:
+            project['person'] = row.contracts[0].Coordinator[0] if row.contracts[0].Coordinator[0] else None
         if project['person']:
             project['person_name'] = project['person'].name.replace(u'\xa0', u'')
         project['client'] = row.client_name[0] if row.client_name else None
@@ -205,23 +214,28 @@ def parse_staff(todo, table, obj, client_days_before):
 def kick_staff():
     token_v2 = os.environ.get("TOKEN")
     date = request.args.get("date", None)
+    contracts_day = request.args.get("contracts_day", 7)
+    projects_day = request.args.get("projects_day", contracts_day)
+    client_days_before = request.args.get("client_day", 14)
+    cc_tag = request.args.get("no_contracts", None)
+    pm_tag = request.args.get("no_projects", None)
+    cc = True if cc_tag is None else False
+    pm = True if pm_tag is None else False
 
-    cc = True
-    pm = True
     if cc:
-        contracts = get_contracts(token_v2, 7)
+        contracts = get_contracts(token_v2, contracts_day)
+        print('contracts done')
     else:
         contracts = []
     if pm:
-        projects = get_projects(token_v2, 7)
+        projects = get_projects(token_v2, projects_day)
+        print('projects done')
     else:
         projects = []
 
     todo = dict()
-    todo = parse_staff(todo, contracts, 'contracts', 0)
-    print('contracts done')
-    todo = parse_staff(todo, projects, 'projects', 0)
-    print('projects done')
+    todo = parse_staff(todo, contracts, 'contracts', client_days_before)
+    todo = parse_staff(todo, projects, 'projects', client_days_before)
     task = todo['Denys Safonov']
     a = set()
     print('start todo')
@@ -236,8 +250,6 @@ def kick_staff():
     if task['clients']:
         create_todo(token_v2, date, task['todo_url'], map(lambda t: '[{}]({})'.format(t[0], t[1]), task['clients']),
                     "Занеси новую информацию которую ты узнал про клиента:")
-
-    sep = '\n'
     return "Done!"
 
 
