@@ -44,14 +44,6 @@ def create_pcj(token, collection_url, subject, description, invite_to, link):
     row.link = "https://www.upwork.com/ab/jobs/search/?previous_clients=all&q={}&sort=recency".format(
         urllib.parse.quote(subject[:-9]))
     row.id = item_id.group()[3:]
-    
-# Найти клиента в базе данных    
-#    Access a database using the URL of the database page or the inline block
-#    cv = client.get_collection_view("https://www.notion.so/0ce71695159145aa84ab4371cc1e094a?v=7a36cd9d16254d34ae7b1dddeff124c7")
-#    get client name from row.link open in browser and get <span data-ng-bind="::jsuJobPreviousClientInfoController.client.companyName" class="ng-binding">Webster Pacific LLC</span> 
-#    List all the records with "Bob" in them
-#    for rowcl in cv.collection.get_rows(search=client.companyName):
-#    row.clien=rowcl.link
 
 
 def create_message(token, parent_page_url, message_content):
@@ -110,7 +102,6 @@ def get_contracts(token, days_before):
     # 02929acd595a48dda28cb9e2ff6ae210 - python_view
     n = datetime.datetime.now(pytz.timezone("Europe/Kiev"))
     n = n.replace(hour=12, minute=0, second=0, microsecond=0) - datetime.timedelta(days=days_before)
-
     filter_params = [{
         "property": "Status",
         "comparator": "enum_is",
@@ -122,15 +113,13 @@ def get_contracts(token, days_before):
             "value_type": 'exact_date',
             "value": int(n.timestamp())*1000,
         },
-     #   {
-     #       "property": "Project",
-     #       "comparator": "in_not_empty",
-     #   }
+        {
+            "property": "Project",
+            "comparator": "is_empty",
+        }
         ]
-    print(cv.get("query"))
     result = cv.build_query(filter=filter_params).execute()
     res = []
-    print(len(res))
     for row in result:
         contract = dict()
         contract['person'] = row.Coordinator[0] if row.Coordinator else None
@@ -221,7 +210,6 @@ def kick_staff():
     pm_tag = request.args.get("no_projects", None)
     cc = True if cc_tag is None else False
     pm = True if pm_tag is None else False
-
     if cc:
         contracts = get_contracts(token_v2, contracts_day)
         print('contracts done')
