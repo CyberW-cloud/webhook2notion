@@ -4,11 +4,10 @@ from flask import Flask
 from flask import request
 from notion_helpers import *
 import re
-from members import *
-from todo import *
 import urllib.parse
 import pytz
 import datetime
+from datetime import timedelta
 
 timezone = "Europe/Kiev"
 
@@ -17,7 +16,7 @@ app = Flask(__name__)
 
 def create_invite(token, collection_url, subject, description, invite_to):
     # notion
-    match = re.search('https://upwork.com/applications/\d+', description) 
+    match = re.search('https://upwork.com/applications/\d+', description)
     url = match.group()
     item_id = re.search('\d+', url)
     client = NotionClient(token)
@@ -60,7 +59,7 @@ def create_message(token, parent_page_url, message_content):
     b.move_to(a, "after")
     c.move_to(b, "after")
     d.move_to(c, "after")
-         
+
 
 def create_rss(token, collection_url, subject, link, description):
     # notion
@@ -76,10 +75,23 @@ def create_rss(token, collection_url, subject, link, description):
         row.label = 'upwork community announcements'
 
 
+def get_toto_url_by_name(token, name):
+    client = NotionClient(token)
+    stats = client.get_collection_view(
+        "https://www.notion.so/e4d36149b9d8476e9985a2c658d4a873?v=3238ddee2ea04d5ea302d99fc2a2d5cc")
+    filter_params = [{
+        "property": "title",
+        "comparator": "string_contains",
+        "value": name,
+    }]
+    person_stat = stats.build_query(filter=filter_params).execute()
+    return person_stat[0].todo if person_stat else None
+
+
 def create_todo(token, date, link, todo, text):
     # notion
     if date is not None:
-        date = datetime.strptime(urllib.parse.unquote("{}".format(date)), "%Y-%m-%dT%H:%M:%S.%fZ").date()
+        date = datetime.datetime.strptime(urllib.parse.unquote("{}".format(date)), "%Y-%m-%dT%H:%M:%S.%fZ").date()
     else:
         date = datetime.datetime.now().date()
 
@@ -106,18 +118,18 @@ def get_contracts(token, days_before):
         "property": "Status",
         "comparator": "enum_is",
         "value": "In Progress",
-        },
+    },
         {
             "property": "Updated",
             "comparator": "date_is_on_or_before",
             "value_type": 'exact_date',
-            "value": int(n.timestamp())*1000,
+            "value": int(n.timestamp()) * 1000,
         },
         {
             "property": "Project",
             "comparator": "is_empty",
         }
-        ]
+    ]
     result = cv.build_query(filter=filter_params).execute()
     res = []
     for row in result:
@@ -150,12 +162,12 @@ def get_projects(token, days_before):
         "comparator": "enum_is",
         "value": "inProgress",
     },
-    {
-        "property": "Updated",
-        "comparator": "date_is_on_or_before",
-        "value_type": 'exact_date',
-        "value": int(n.timestamp()) * 1000,
-    }
+        {
+            "property": "Updated",
+            "comparator": "date_is_on_or_before",
+            "value_type": 'exact_date',
+            "value": int(n.timestamp()) * 1000,
+        }
     ]
     cv = cv.build_query(filter=filter_params)
     result = cv.execute()
@@ -199,13 +211,147 @@ def parse_staff(todo, table, obj, client_days_before):
     return todo
 
 
+def get_todo_list_by_role(token, roles):
+    client = NotionClient(token)
+    team = client.get_collection_view(
+        "https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=536bcc489f93433ab19d697490b00525")
+    # python 536bcc489f93433ab19d697490b00525
+    # no_filters 375e91212fc4482c815f0b4419cbf5e3
+    stats = client.get_collection_view(
+        "https://www.notion.so/e4d36149b9d8476e9985a2c658d4a873?v=3238ddee2ea04d5ea302d99fc2a2d5cc")
+    todo_list = dict()
+    for role in roles:
+        filter_params = [{
+            "property": "Roles",
+            "comparator": "enum_contains",
+            "value": role,
+        },
+            {
+                "property": "out of Team now",
+                "comparator": "checkbox_is",
+                "value": "No",
+            }
+        ]
+        people = team.build_query(filter=filter_params).execute()
+        todo_list[role] = []
+        for person in people:
+            d = dict()
+            filter_params = [{
+                "property": "title",
+                "comparator": "string_contains",
+                "value": person.name.replace(u'\xa0', u''),
+            }]
+            person_stat = stats.build_query(filter=filter_params).execute()
+            if person_stat:
+                d['stats'] = person_stat[0]
+                d['todo_url'] = person_stat[0].todo
+                d['team'] = person
+                d['name'] = person.name.replace(u'\xa0', u'')
+                d['pa_for'] = []
+                d['bidder_for'] = []
+                for f in person_stat[0].pa_role:
+                    d['pa_for'].append((f.name.replace(u'\xa0', u''), f.get_browseable_url()))
+                for f in person_stat[0].bidder_role_for:
+                    d['bidder_for'].append((f.name.replace(u'\xa0', u''), f.get_browseable_url()))
+            else:
+                print(d['name'], 'not found in stats')
+            todo_list[role].append(d)
+    return todo_list
+
+
+def weekly_todo_pa(token, staff, calendar):
+    for pa in staff:
+        # Monday
+        todo = list()
+        if pa['name'] != 'Denys Safonov':
+            continue
+        todo.append('Memo - проверить наличие и адекватность [https://www.upwork.com/reports/pc/timelogs]'
+                    '(https://www.upwork.com/reports/pc/timelogs)')
+        freelancers = ', '.join(map(lambda c: '[{}]({})'.format(c[0], c[1]), pa['pa_for']))
+        todo.append(f'Запросить available and planned hours у {freelancers}')
+        todo.append(f'Заполнить fact в [Workload]'
+                    f'(https://www.notion.so/bd59fed23f2a43b9b5fec15a57537790#2443ef0be64f4d559532f35233002959) по '
+                    f'{freelancers}')
+        todo.append(f'Собрать Stats из Upwork по {freelancers}')
+        todo.append(f'Загрузить Stats на pCLoud (линка на папку статы ) по {freelancers}')
+        create_todo(token, calendar['mon'], pa['todo_url'], todo, text='')
+
+        # Tuesday
+        todo = list()
+        for f in map(lambda c: '[{}]({})'.format(c[0], c[1]), pa['pa_for']):
+            todo.append(f'Обновить профиль {f}')
+        todo.append('Проверить наличие апдейтов в pcloud по активным контрактам')
+        create_todo(token, calendar['tue'], pa['todo_url'], todo, text='')
+
+        # Wednesday
+        todo = list()
+        todo.append('Ревизия профилей [https://www.upwork.com/freelancers/agency/roster#/]'
+                    '(https://www.upwork.com/freelancers/agency/roster#/)')
+        todo.append('Сказать, если set to private '
+                    '[https://support.upwork.com/hc/en-us/articles/115003975967-Profile-Changed-to-Private-]'
+                    '(https://support.upwork.com/hc/en-us/articles/115003975967-Profile-Changed-to-Private-)'
+                    'волшебная ссылка активации профиля: '
+                    '[https://support.upwork.com/hc/en-us?request=t_private_profile]'
+                    '(https://support.upwork.com/hc/en-us?request=t_private_profile)')
+        for f in map(lambda c: '[{}]({})'.format(c[0], c[1]), pa['pa_for']):
+            todo.append(f'Проконтролировать выполнение Обновления профиля {f}')
+        create_todo(token, calendar['wed'], pa['todo_url'], todo, text='')
+
+        # Thursday
+        todo = list()
+        todo.append('Проверить заливку рабочих материалов на pCloud/Github')
+        create_todo(token, calendar['wed'], pa['todo_url'], todo, text='')
+
+        # Friday
+        todo = list()
+        todo.append(f'Проверить ДР своих фрилансеров на следующей неделе {freelancers}')
+        for f in map(lambda c: '[{}]({})'.format(c[0], c[1]), pa['pa_for']):
+            todo.append(f'Запросить информацию по отпускам и day-off {f}')
+        for f in map(lambda c: '[{}]({})'.format(c[0], c[1]), pa['pa_for']):
+            todo.append(f'Занести информацию по отпускам и day-off {f} в Календарь')
+        create_todo(token, calendar['fri'], pa['todo_url'], todo, text='')
+
+
+@app.route('/weekly_todo', methods=['GET'])
+def weekly_todo():
+    token_v2 = os.environ.get("TOKEN")
+    date = request.args.get("date", None)
+    roles = request.args.get("roles", '')
+    roles = re.split('[, ;|\\\\/|.]', roles)
+    staff = get_todo_list_by_role(token_v2, roles)
+    # looking next monday
+    d = datetime.datetime.now().date()
+    if d.weekday() == 0:
+        today = d
+    else:
+        today = d + timedelta(7 - d.weekday())
+    # calculate days date
+    dates = {
+        "mon": today + timedelta(0),
+        "tue": today + timedelta(1),
+        "wed": today + timedelta(2),
+        "thu": today + timedelta(3),
+        "fri": today + timedelta(4),
+        "sat": today + timedelta(5),
+        "sun": today + timedelta(6)
+    }
+    todo_workers = dict()
+    todo_workers['PA'] = weekly_todo_pa
+    for role in roles:
+        try:
+            todo_workers[role](token_v2, staff[role], dates)
+        except KeyError:
+            return f"Can't find Function for role {role}"
+    return str(dates)
+
+
 @app.route('/kick_staff', methods=['GET'])
 def kick_staff():
     token_v2 = os.environ.get("TOKEN")
     date = request.args.get("date", None)
-    contracts_day = request.args.get("contracts_day", 7)
-    projects_day = request.args.get("projects_day", contracts_day)
-    client_days_before = request.args.get("client_day", 14)
+    contracts_day = request.args.get("contracts_day", 7, type=int)
+    projects_day = request.args.get("projects_day", contracts_day, type=int)
+    client_days_before = request.args.get("client_day", 14, type=int)
     cc_tag = request.args.get("no_contracts", None)
     pm_tag = request.args.get("no_projects", None)
     cc = True if cc_tag is None else False
@@ -248,8 +394,12 @@ def todo_one():
     todo = "{}".format(request.args.get("todo")).split("||")
     text = request.args.get("text")
     date = request.args.get("date", None)
-    create_todo(token_v2, date, members[member]['todo'], todo, text)
-    return f'added to {member} {text if text else ""} {todo}  to Notion'
+    todo_url = get_toto_url_by_name(token_v2, member)
+    if todo_url is not None:
+        create_todo(token_v2, date, todo_url, todo, text)
+        return f'added to {member} {text if text else ""} {todo}  to Notion'
+    else:
+        return f'{member} not found in StatsDB in Notion'
 
 
 @app.route('/rss', methods=['POST'])
@@ -260,7 +410,7 @@ def rss():
     link = request.form.get('link')
     description = request.form.get('description')
     create_rss(token_v2, collection_url, subject, link, description)
-    return f'added {subject} receipt to Notion'    
+    return f'added {subject} receipt to Notion'
 
 
 @app.route('/message', methods=['GET'])
@@ -271,7 +421,7 @@ def message():
     create_message(token_v2, parent_page_url, message_content)
     return f'added {message_content} receipt to Notion'
 
-    
+
 @app.route('/pcj', methods=['POST'])
 def pcj():
     collection_url = request.args.get("collectionURL")
