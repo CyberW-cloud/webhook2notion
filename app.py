@@ -262,8 +262,8 @@ def get_todo_list_by_role(token, roles):
 
 def weekly_todo_pa(token, staff, calendar):
     for pa in staff:
-        if pa['name'] != 'Denys Safonov':
-            continue
+#        if pa['name'] != 'Denys Safonov':
+#            continue
         freelancers = ', '.join(map(lambda c: '[{}]({})'.format(c[0], c[1]), pa['pa_for']))
 
         # Monday
@@ -274,15 +274,15 @@ def weekly_todo_pa(token, staff, calendar):
         todo.append(f'Заполнить fact в [Workload]'
                     f'(https://www.notion.so/bd59fed23f2a43b9b5fec15a57537790#2443ef0be64f4d559532f35233002959) по '
                     f'{freelancers}')
-        todo.append(f'Собрать Stats из Upwork и Загрузить на pCLoudпо {freelancers}')
-        create_todo(token, calendar['mon'], pa['todo_url'], todo, text='Еженедельные задачи')
+        todo.append(f'Собрать Stats из Upwork и Загрузить на pCLoud по {freelancers}')
+        create_todo(token, calendar['mon'], pa['todo_url'], todo, text='')
 
         # Tuesday
         todo = list()
         for f in map(lambda c: '[{}]({})'.format(c[0], c[1]), pa['pa_for']):
             todo.append(f'Обновить профиль {f}')
         todo.append('Проверить наличие апдейтов в pcloud по активным контрактам')
-        create_todo(token, calendar['tue'], pa['todo_url'], todo, text='Еженедельные задачи')
+        create_todo(token, calendar['tue'], pa['todo_url'], todo, text='')
 
         # Wednesday
         todo = list()
@@ -296,25 +296,25 @@ def weekly_todo_pa(token, staff, calendar):
                     '(https://support.upwork.com/hc/en-us?request=t_private_profile)')
         for f in map(lambda c: '[{}]({})'.format(c[0], c[1]), pa['pa_for']):
             todo.append(f'Проконтролировать выполнение Обновления профиля {f}')
-        create_todo(token, calendar['wed'], pa['todo_url'], todo, text='Еженедельные задачи')
+        create_todo(token, calendar['wed'], pa['todo_url'], todo, text='')
 
         # Thursday
         todo = list()
         todo.append('Проверить заливку рабочих материалов на pCloud/Github')
-        create_todo(token, calendar['wed'], pa['todo_url'], todo, text='Еженедельные задачи')
+        create_todo(token, calendar['wed'], pa['todo_url'], todo, text='')
 
         # Friday
         todo = list()
         todo.append(f'Проверить ДР своих фрилансеров на следующей неделе {freelancers}')
         todo.append(f'Запросить информацию по отпускам и day-off {freelancers}')
         todo.append(f'Занести информацию по отпускам и day-off {freelancers} в Календарь')
-        create_todo(token, calendar['fri'], pa['todo_url'], todo, text='Еженедельные задачи')
+        create_todo(token, calendar['fri'], pa['todo_url'], todo, text='')
 
 
 def weekly_todo_cc(token, staff, calendar):
     for cc in staff:
-        if cc['name'] != 'Denys Safonov':
-            continue
+#        if cc['name'] != 'Denys Safonov':
+#           continue
 
         # Monday
         todo = list()
@@ -340,8 +340,8 @@ def weekly_todo_cc(token, staff, calendar):
 
 def weekly_todo_bidder(token, staff, calendar):
     for bidder in staff:
-        if bidder['name'] != 'Denys Safonov':
-            continue
+#        if bidder['name'] != 'Denys Safonov':
+#            continue
 
         # Monday
         todo = list()
@@ -359,14 +359,14 @@ def weekly_todo_bidder(token, staff, calendar):
         # Thursday
         todo = list()
         todo.append('Проанализировать Product Updates Upwork')
-        create_todo(token, calendar['thu'], bidder['todo_url'], todo, text='Еженедельные задачи')
+        create_todo(token, calendar['thu'], bidder['todo_url'], todo, text='')
 
         # Friday
         todo = list()
         todo.append('Расчистить [Invites and Jobs]'
                     '(https://www.notion.so/Invites-and-Jobs-1378d59f909a408faa2974d74f65d98f) '
                     'перед выходными')
-        create_todo(token, calendar['fri'], bidder['todo_url'], todo, text='Еженедельные задачи')
+        create_todo(token, calendar['fri'], bidder['todo_url'], todo, text='')
 
 
 @app.route('/weekly_todo', methods=['GET'])
