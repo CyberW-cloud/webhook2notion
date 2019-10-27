@@ -351,7 +351,7 @@ def weekly_todo_bidder(token, staff, calendar):
         todo.append('Обработать входящие инвайты и PCJ за выходные')
         todo.append('Проверить статус комнат UAMS')
         for f in map(lambda c: '[{}]({})'.format(c[0], c[1]), bidder['bidder_for']):
-            todo.append(f'Передать PA запрос по бновлению профиля {f}')
+            todo.append(f'Передать PA запрос по обновлению профиля {f}')
         create_todo(token, calendar['mon'], bidder['todo_url'], todo, text='Автоматические задачи')
 
         # Wednesday
