@@ -91,7 +91,8 @@ def get_toto_url_by_name(token, name):
 def create_todo(token, date, link, todo, text):
     # notion
     if date is not None:
-        date = datetime.datetime.strptime(urllib.parse.unquote("{}".format(date)), "%Y-%m-%dT%H:%M:%S.%fZ").date()
+        if isinstance(date, str):
+            date = datetime.datetime.strptime(urllib.parse.unquote("{}".format(date)), "%Y-%m-%dT%H:%M:%S.%fZ").date()
     else:
         date = datetime.datetime.now().date()
 
@@ -253,35 +254,36 @@ def get_todo_list_by_role(token, roles):
                     d['pa_for'].append((f.name.replace(u'\xa0', u''), f.get_browseable_url()))
                 for f in person_stat[0].bidder_role_for:
                     d['bidder_for'].append((f.name.replace(u'\xa0', u''), f.get_browseable_url()))
+                todo_list[role].append(d)
             else:
-                print(d['name'], 'not found in stats')
-            todo_list[role].append(d)
+                print(person.name.replace(u'\xa0', u''), 'not found in stats')
     return todo_list
 
 
 def weekly_todo_pa(token, staff, calendar):
     for pa in staff:
-        # Monday
-        todo = list()
         if pa['name'] != 'Denys Safonov':
             continue
+        freelancers = ', '.join(map(lambda c: '[{}]({})'.format(c[0], c[1]), pa['pa_for']))
+
+        # Monday
+        todo = list()
         todo.append('Memo - проверить наличие и адекватность [https://www.upwork.com/reports/pc/timelogs]'
                     '(https://www.upwork.com/reports/pc/timelogs)')
-        freelancers = ', '.join(map(lambda c: '[{}]({})'.format(c[0], c[1]), pa['pa_for']))
         todo.append(f'Запросить available and planned hours у {freelancers}')
         todo.append(f'Заполнить fact в [Workload]'
                     f'(https://www.notion.so/bd59fed23f2a43b9b5fec15a57537790#2443ef0be64f4d559532f35233002959) по '
                     f'{freelancers}')
         todo.append(f'Собрать Stats из Upwork по {freelancers}')
         todo.append(f'Загрузить Stats на pCLoud (линка на папку статы ) по {freelancers}')
-        create_todo(token, calendar['mon'], pa['todo_url'], todo, text='')
+        create_todo(token, calendar['mon'], pa['todo_url'], todo, text='Автоматические задачи')
 
         # Tuesday
         todo = list()
         for f in map(lambda c: '[{}]({})'.format(c[0], c[1]), pa['pa_for']):
             todo.append(f'Обновить профиль {f}')
         todo.append('Проверить наличие апдейтов в pcloud по активным контрактам')
-        create_todo(token, calendar['tue'], pa['todo_url'], todo, text='')
+        create_todo(token, calendar['tue'], pa['todo_url'], todo, text='Автоматические задачи')
 
         # Wednesday
         todo = list()
@@ -295,12 +297,12 @@ def weekly_todo_pa(token, staff, calendar):
                     '(https://support.upwork.com/hc/en-us?request=t_private_profile)')
         for f in map(lambda c: '[{}]({})'.format(c[0], c[1]), pa['pa_for']):
             todo.append(f'Проконтролировать выполнение Обновления профиля {f}')
-        create_todo(token, calendar['wed'], pa['todo_url'], todo, text='')
+        create_todo(token, calendar['wed'], pa['todo_url'], todo, text='Автоматические задачи')
 
         # Thursday
         todo = list()
         todo.append('Проверить заливку рабочих материалов на pCloud/Github')
-        create_todo(token, calendar['wed'], pa['todo_url'], todo, text='')
+        create_todo(token, calendar['wed'], pa['todo_url'], todo, text='Автоматические задачи')
 
         # Friday
         todo = list()
@@ -309,7 +311,69 @@ def weekly_todo_pa(token, staff, calendar):
             todo.append(f'Запросить информацию по отпускам и day-off {f}')
         for f in map(lambda c: '[{}]({})'.format(c[0], c[1]), pa['pa_for']):
             todo.append(f'Занести информацию по отпускам и day-off {f} в Календарь')
-        create_todo(token, calendar['fri'], pa['todo_url'], todo, text='')
+        create_todo(token, calendar['fri'], pa['todo_url'], todo, text='Автоматические задачи')
+
+
+def weekly_todo_cc(token, staff, calendar):
+    for cc in staff:
+        if cc['name'] != 'Denys Safonov':
+            continue
+
+        # Monday
+        todo = list()
+        todo.append('Ping клиентов с открытыми контрактами, которые пропали')
+        create_todo(token, calendar['mon'], cc['todo_url'], todo, text='Автоматические задачи')
+
+        # Tuesday
+        todo = list()
+        todo.append('Проверить заливку рабочих материалов на pCloud/Github')
+        create_todo(token, calendar['tue'], cc['todo_url'], todo, text='Автоматические задачи')
+
+        # Thursday
+        todo = list()
+        todo.append('Апдейт по всем открытым контрактам в [Contracts]'
+                    '(https://www.notion.so/bd59fed23f2a43b9b5fec15a57537790#fe3f6f286ee54565b1c4b8a9fed7d36b)')
+        create_todo(token, calendar['thu'], cc['todo_url'], todo, text='Автоматические задачи')
+
+        # Friday
+        todo = list()
+        todo.append('Проверить,что фрилансер сообщил клиентам о day-off или отпуске на следующей неделе')
+        create_todo(token, calendar['fri'], cc['todo_url'], todo, text='Автоматические задачи')
+
+
+def weekly_todo_bidder(token, staff, calendar):
+    for bidder in staff:
+        if bidder['name'] != 'Denys Safonov':
+            continue
+
+        # Monday
+        todo = list()
+        todo.append('Обработать входящие инвайты и PCJ за выходные')
+        todo.append('Проверить статус комнат UAMS')
+        for f in map(lambda c: '[{}]({})'.format(c[0], c[1]), bidder['bidder_for']):
+            todo.append(f'Передать PA запрос по бновлению профиля {f}')
+        create_todo(token, calendar['mon'], bidder['todo_url'], todo, text='Автоматические задачи')
+
+        # Wednesday
+        todo = list()
+        todo.append('Cross-review [Untitled]'
+                    '(https://www.notion.so/bd59fed23f2a43b9b5fec15a57537790#e6fbccb3e8df4abbbf4fe73b2d48ad3d)')
+        todo.append('Добавить и структурировать шаблоны в [Proposal templates]'
+                    '(https://www.notion.so/bd59fed23f2a43b9b5fec15a57537790#2f798130e8ca44cba913a5c645fe33fc) '
+                    'по итогам Cross-review')
+        create_todo(token, calendar['wed'], bidder['todo_url'], todo, text='Автоматические задачи')
+
+        # Thursday
+        todo = list()
+        todo.append('Проанализировать Product Updates Upwork')
+        create_todo(token, calendar['thu'], bidder['todo_url'], todo, text='Автоматические задачи')
+
+        # Friday
+        todo = list()
+        todo.append('Расчистить [Untitled]'
+                    '(https://www.notion.so/bd59fed23f2a43b9b5fec15a57537790#dfc8587e1f8d49e798f6d3967a871e4e) '
+                    'перед выходными')
+        create_todo(token, calendar['fri'], bidder['todo_url'], todo, text='Автоматические задачи')
 
 
 @app.route('/weekly_todo', methods=['GET'])
@@ -337,12 +401,18 @@ def weekly_todo():
     }
     todo_workers = dict()
     todo_workers['PA'] = weekly_todo_pa
+    todo_workers['CC'] = weekly_todo_cc
+
     for role in roles:
-        try:
-            todo_workers[role](token_v2, staff[role], dates)
-        except KeyError:
+        if role == 'PA':
+            weekly_todo_pa(token_v2, staff[role], dates)
+        elif role == 'CC':
+            weekly_todo_cc(token_v2, staff[role], dates)
+        elif role == 'Bidder':
+            weekly_todo_bidder(token_v2, staff[role], dates)
+        else:
             return f"Can't find Function for role {role}"
-    return str(dates)
+    return 'Done!'
 
 
 @app.route('/kick_staff', methods=['GET'])
