@@ -274,8 +274,7 @@ def weekly_todo_pa(token, staff, calendar):
         todo.append(f'Заполнить fact в [Workload]'
                     f'(https://www.notion.so/bd59fed23f2a43b9b5fec15a57537790#2443ef0be64f4d559532f35233002959) по '
                     f'{freelancers}')
-        todo.append(f'Собрать Stats из Upwork по {freelancers}')
-        todo.append(f'Загрузить Stats на pCLoud по {freelancers}')
+        todo.append(f'Собрать Stats из Upwork и Загрузить на pCLoudпо {freelancers}')
         create_todo(token, calendar['mon'], pa['todo_url'], todo, text='Еженедельные задачи')
 
         # Tuesday
