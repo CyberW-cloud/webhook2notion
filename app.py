@@ -433,20 +433,23 @@ def kick_staff():
     todo = dict()
     todo = parse_staff(todo, contracts, 'contracts', client_days_before)
     todo = parse_staff(todo, projects, 'projects', client_days_before)
-    task = todo['Denys Safonov']
-    a = set()
-    print('start todo')
-    if task['contracts']:
-        create_todo(token_v2, date, task['todo_url'], map(lambda c: '[{}]({})'.format(c[0], c[1]), task['contracts']),
-                    "Контракты не получали обновления на прошлой неделе")
+    for key in todo:
+        task = todo[key]
+        print('start todo')
+        if task['contracts']:
+            create_todo(token_v2, date, task['todo_url'], map(lambda c: '[{}]({})'.format(c[0], c[1]),
+                                                              task['contracts']),
+                        "Контракты не получали обновления на прошлой неделе")
 
-    if task['projects']:
-        create_todo(token_v2, date, task['todo_url'], map(lambda p: '[{}]({})'.format(p[0], p[1]), task['projects']),
-                    "Проекты не получали обновления на прошлой неделе")
+        if task['projects']:
+            create_todo(token_v2, date, task['todo_url'], map(lambda p: '[{}]({})'.format(p[0], p[1]),
+                                                              task['projects']),
+                        "Проекты не получали обновления на прошлой неделе")
 
-    if task['clients']:
-        create_todo(token_v2, date, task['todo_url'], map(lambda t: '[{}]({})'.format(t[0], t[1]), task['clients']),
-                    "Занеси новую информацию которую ты узнал про клиента:")
+        if task['clients']:
+            create_todo(token_v2, date, task['todo_url'], map(lambda t: '[{}]({})'.format(t[0], t[1]),
+                                                              task['clients']),
+                        "Занеси новую информацию которую ты узнал про клиента:")
     return "Done!"
 
 
