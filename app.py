@@ -268,14 +268,14 @@ def weekly_todo_pa(token, staff, calendar):
 
         # Monday
         todo = list()
-        todo.append('Memo - проверить наличие и адекватность [https://www.upwork.com/reports/pc/timelogs]'
+        todo.append('Memo - проверить наличие и адекватность [Timelogs]'
                     '(https://www.upwork.com/reports/pc/timelogs)')
         todo.append(f'Запросить available and planned hours у {freelancers}')
         todo.append(f'Заполнить fact в [Workload]'
                     f'(https://www.notion.so/bd59fed23f2a43b9b5fec15a57537790#2443ef0be64f4d559532f35233002959) по '
                     f'{freelancers}')
         todo.append(f'Собрать Stats из Upwork по {freelancers}')
-        todo.append(f'Загрузить Stats на pCLoud (линка на папку статы ) по {freelancers}')
+        todo.append(f'Загрузить Stats на pCLoud по {freelancers}')
         create_todo(token, calendar['mon'], pa['todo_url'], todo, text='Еженедельные задачи')
 
         # Tuesday
@@ -320,23 +320,23 @@ def weekly_todo_cc(token, staff, calendar):
         # Monday
         todo = list()
         todo.append('Ping клиентов с открытыми контрактами, которые пропали')
-        create_todo(token, calendar['mon'], cc['todo_url'], todo, text='Еженедельные задачи')
+        create_todo(token, calendar['mon'], cc['todo_url'], todo, text='')
 
         # Tuesday
         todo = list()
         todo.append('Проверить заливку рабочих материалов на pCloud/Github')
-        create_todo(token, calendar['tue'], cc['todo_url'], todo, text='Еженедельные задачи')
+        create_todo(token, calendar['tue'], cc['todo_url'], todo, text='')
 
         # Thursday
         todo = list()
         todo.append('Апдейт по всем открытым контрактам в [Contracts]'
                     '(https://www.notion.so/bd59fed23f2a43b9b5fec15a57537790#fe3f6f286ee54565b1c4b8a9fed7d36b)')
-        create_todo(token, calendar['thu'], cc['todo_url'], todo, text='Еженедельные задачи')
+        create_todo(token, calendar['thu'], cc['todo_url'], todo, text='')
 
         # Friday
         todo = list()
         todo.append('Проверить,что фрилансер сообщил клиентам о day-off или отпуске на следующей неделе')
-        create_todo(token, calendar['fri'], cc['todo_url'], todo, text='Еженедельные задачи')
+        create_todo(token, calendar['fri'], cc['todo_url'], todo, text='')
 
 
 def weekly_todo_bidder(token, staff, calendar):
@@ -348,18 +348,14 @@ def weekly_todo_bidder(token, staff, calendar):
         todo = list()
         todo.append('Обработать входящие инвайты и PCJ за выходные')
         todo.append('Проверить статус комнат UAMS')
-        for f in map(lambda c: '[{}]({})'.format(c[0], c[1]), bidder['bidder_for']):
-            todo.append(f'Передать PA запрос по обновлению профиля {f}')
-        create_todo(token, calendar['mon'], bidder['todo_url'], todo, text='Еженедельные задачи')
+        create_todo(token, calendar['mon'], bidder['todo_url'], todo, text='')
 
         # Wednesday
-        todo = list()
-        todo.append('Cross-review [Untitled]'
-                    '(https://www.notion.so/bd59fed23f2a43b9b5fec15a57537790#e6fbccb3e8df4abbbf4fe73b2d48ad3d)')
-        todo.append('Добавить и структурировать шаблоны в [Proposal templates]'
-                    '(https://www.notion.so/bd59fed23f2a43b9b5fec15a57537790#2f798130e8ca44cba913a5c645fe33fc) '
-                    'по итогам Cross-review')
-        create_todo(token, calendar['wed'], bidder['todo_url'], todo, text='Еженедельные задачи')
+#        todo = list()
+#        todo.append('Добавить и структурировать шаблоны в [Proposal templates]'
+#                    '(https://www.notion.so/bd59fed23f2a43b9b5fec15a57537790#2f798130e8ca44cba913a5c645fe33fc) '
+#                    'по итогам Cross-review')
+#        create_todo(token, calendar['wed'], bidder['todo_url'], todo, text='Еженедельные задачи')
 
         # Thursday
         todo = list()
@@ -368,8 +364,8 @@ def weekly_todo_bidder(token, staff, calendar):
 
         # Friday
         todo = list()
-        todo.append('Расчистить [Untitled]'
-                    '(https://www.notion.so/bd59fed23f2a43b9b5fec15a57537790#dfc8587e1f8d49e798f6d3967a871e4e) '
+        todo.append('Расчистить [Invites and Jobs]'
+                    '(https://www.notion.so/Invites-and-Jobs-1378d59f909a408faa2974d74f65d98f) '
                     'перед выходными')
         create_todo(token, calendar['fri'], bidder['todo_url'], todo, text='Еженедельные задачи')
 
