@@ -262,8 +262,8 @@ def get_todo_list_by_role(token, roles):
 
 def weekly_todo_pa(token, staff, calendar):
     for pa in staff:
-#        if pa['name'] != 'Denys Safonov':
-#            continue
+        if pa['name'] != 'Denys Safonov':
+            continue
         freelancers = ', '.join(map(lambda c: '[{}]({})'.format(c[0], c[1]), pa['pa_for']))
 
         # Monday
@@ -272,7 +272,7 @@ def weekly_todo_pa(token, staff, calendar):
                     '(https://www.upwork.com/reports/pc/timelogs)')
         todo.append(f'Запросить available and planned hours у {freelancers}')
         todo.append(f'Заполнить fact в [Workload]'
-                    f'(https://www.notion.so/bd59fed23f2a43b9b5fec15a57537790#2443ef0be64f4d559532f35233002959) по '
+                    f'(https://www.notion.so/Workload-ef6a6d4e3bbb41d8b4286b339f603aba) по '
                     f'{freelancers}')
         todo.append(f'Собрать Stats из Upwork и Загрузить на pCLoud по {freelancers}')
         create_todo(token, calendar['mon'], pa['todo_url'], todo, text='')
@@ -313,8 +313,8 @@ def weekly_todo_pa(token, staff, calendar):
 
 def weekly_todo_cc(token, staff, calendar):
     for cc in staff:
-#        if cc['name'] != 'Denys Safonov':
-#           continue
+        if cc['name'] != 'Denys Safonov':
+           continue
 
         # Monday
         todo = list()
