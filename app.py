@@ -276,7 +276,7 @@ def weekly_todo_pa(token, staff, calendar):
                     f'{freelancers}')
         todo.append(f'Собрать Stats из Upwork по {freelancers}')
         todo.append(f'Загрузить Stats на pCLoud (линка на папку статы ) по {freelancers}')
-        create_todo(token, calendar['mon'], pa['todo_url'], todo, text='Автоматические задачи')
+        create_todo(token, calendar['mon'], pa['todo_url'], todo, text='Еженедельные задачи')
 
         # Tuesday
         todo = list()
