@@ -352,7 +352,7 @@ def weekly_todo_bidder(token, staff, calendar):
         todo.append('Проверить статус комнат UAMS')
         for f in map(lambda c: '[{}]({})'.format(c[0], c[1]), bidder['bidder_for']):
             todo.append(f'Передать PA запрос по обновлению профиля {f}')
-        create_todo(token, calendar['mon'], bidder['todo_url'], todo, text='Автоматические задачи')
+        create_todo(token, calendar['mon'], bidder['todo_url'], todo, text='Еженедельные задачи')
 
         # Wednesday
         todo = list()
@@ -361,19 +361,19 @@ def weekly_todo_bidder(token, staff, calendar):
         todo.append('Добавить и структурировать шаблоны в [Proposal templates]'
                     '(https://www.notion.so/bd59fed23f2a43b9b5fec15a57537790#2f798130e8ca44cba913a5c645fe33fc) '
                     'по итогам Cross-review')
-        create_todo(token, calendar['wed'], bidder['todo_url'], todo, text='Автоматические задачи')
+        create_todo(token, calendar['wed'], bidder['todo_url'], todo, text='Еженедельные задачи')
 
         # Thursday
         todo = list()
         todo.append('Проанализировать Product Updates Upwork')
-        create_todo(token, calendar['thu'], bidder['todo_url'], todo, text='Автоматические задачи')
+        create_todo(token, calendar['thu'], bidder['todo_url'], todo, text='Еженедельные задачи')
 
         # Friday
         todo = list()
         todo.append('Расчистить [Untitled]'
                     '(https://www.notion.so/bd59fed23f2a43b9b5fec15a57537790#dfc8587e1f8d49e798f6d3967a871e4e) '
                     'перед выходными')
-        create_todo(token, calendar['fri'], bidder['todo_url'], todo, text='Автоматические задачи')
+        create_todo(token, calendar['fri'], bidder['todo_url'], todo, text='Еженедельные задачи')
 
 
 @app.route('/weekly_todo', methods=['GET'])
