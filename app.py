@@ -340,8 +340,8 @@ def weekly_todo_cc(token, staff, calendar):
 
 def weekly_todo_bidder(token, staff, calendar):
     for bidder in staff:
-#        if bidder['name'] != 'Denys Safonov':
-#            continue
+        if bidder['name'] != 'Denys Safonov':
+            continue
 
         # Monday
         todo = list()
