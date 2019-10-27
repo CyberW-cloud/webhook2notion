@@ -297,12 +297,12 @@ def weekly_todo_pa(token, staff, calendar):
                     '(https://support.upwork.com/hc/en-us?request=t_private_profile)')
         for f in map(lambda c: '[{}]({})'.format(c[0], c[1]), pa['pa_for']):
             todo.append(f'Проконтролировать выполнение Обновления профиля {f}')
-        create_todo(token, calendar['wed'], pa['todo_url'], todo, text='Автоматические задачи')
+        create_todo(token, calendar['wed'], pa['todo_url'], todo, text='Еженедельные задачи')
 
         # Thursday
         todo = list()
         todo.append('Проверить заливку рабочих материалов на pCloud/Github')
-        create_todo(token, calendar['wed'], pa['todo_url'], todo, text='Автоматические задачи')
+        create_todo(token, calendar['wed'], pa['todo_url'], todo, text='Еженедельные задачи')
 
         # Friday
         todo = list()
@@ -311,7 +311,7 @@ def weekly_todo_pa(token, staff, calendar):
             todo.append(f'Запросить информацию по отпускам и day-off {f}')
         for f in map(lambda c: '[{}]({})'.format(c[0], c[1]), pa['pa_for']):
             todo.append(f'Занести информацию по отпускам и day-off {f} в Календарь')
-        create_todo(token, calendar['fri'], pa['todo_url'], todo, text='Автоматические задачи')
+        create_todo(token, calendar['fri'], pa['todo_url'], todo, text='Еженедельные задачи')
 
 
 def weekly_todo_cc(token, staff, calendar):
@@ -322,23 +322,23 @@ def weekly_todo_cc(token, staff, calendar):
         # Monday
         todo = list()
         todo.append('Ping клиентов с открытыми контрактами, которые пропали')
-        create_todo(token, calendar['mon'], cc['todo_url'], todo, text='Автоматические задачи')
+        create_todo(token, calendar['mon'], cc['todo_url'], todo, text='Еженедельные задачи')
 
         # Tuesday
         todo = list()
         todo.append('Проверить заливку рабочих материалов на pCloud/Github')
-        create_todo(token, calendar['tue'], cc['todo_url'], todo, text='Автоматические задачи')
+        create_todo(token, calendar['tue'], cc['todo_url'], todo, text='Еженедельные задачи')
 
         # Thursday
         todo = list()
         todo.append('Апдейт по всем открытым контрактам в [Contracts]'
                     '(https://www.notion.so/bd59fed23f2a43b9b5fec15a57537790#fe3f6f286ee54565b1c4b8a9fed7d36b)')
-        create_todo(token, calendar['thu'], cc['todo_url'], todo, text='Автоматические задачи')
+        create_todo(token, calendar['thu'], cc['todo_url'], todo, text='Еженедельные задачи')
 
         # Friday
         todo = list()
         todo.append('Проверить,что фрилансер сообщил клиентам о day-off или отпуске на следующей неделе')
-        create_todo(token, calendar['fri'], cc['todo_url'], todo, text='Автоматические задачи')
+        create_todo(token, calendar['fri'], cc['todo_url'], todo, text='Еженедельные задачи')
 
 
 def weekly_todo_bidder(token, staff, calendar):
