@@ -262,8 +262,8 @@ def get_todo_list_by_role(token, roles):
 
 def weekly_todo_pa(token, staff, calendar):
     for pa in staff:
-        if pa['name'] != 'Denys Safonov':
-            continue
+#        if pa['name'] != 'Denys Safonov':
+#            continue
         freelancers = ', '.join(map(lambda c: '[{}]({})'.format(c[0], c[1]), pa['pa_for']))
 
         # Monday
@@ -313,8 +313,8 @@ def weekly_todo_pa(token, staff, calendar):
 
 def weekly_todo_cc(token, staff, calendar):
     for cc in staff:
-        if cc['name'] != 'Denys Safonov':
-           continue
+#        if cc['name'] != 'Denys Safonov':
+#           continue
 
         # Monday
         todo = list()
@@ -340,8 +340,8 @@ def weekly_todo_cc(token, staff, calendar):
 
 def weekly_todo_bidder(token, staff, calendar):
     for bidder in staff:
-        if bidder['name'] != 'Denys Safonov':
-            continue
+#        if bidder['name'] != 'Denys Safonov':
+#            continue
 
         # Monday
         todo = list()
