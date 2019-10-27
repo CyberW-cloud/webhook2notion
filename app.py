@@ -283,7 +283,7 @@ def weekly_todo_pa(token, staff, calendar):
         for f in map(lambda c: '[{}]({})'.format(c[0], c[1]), pa['pa_for']):
             todo.append(f'Обновить профиль {f}')
         todo.append('Проверить наличие апдейтов в pcloud по активным контрактам')
-        create_todo(token, calendar['tue'], pa['todo_url'], todo, text='Автоматические задачи')
+        create_todo(token, calendar['tue'], pa['todo_url'], todo, text='Еженедельные задачи')
 
         # Wednesday
         todo = list()
@@ -307,10 +307,8 @@ def weekly_todo_pa(token, staff, calendar):
         # Friday
         todo = list()
         todo.append(f'Проверить ДР своих фрилансеров на следующей неделе {freelancers}')
-        for f in map(lambda c: '[{}]({})'.format(c[0], c[1]), pa['pa_for']):
-            todo.append(f'Запросить информацию по отпускам и day-off {f}')
-        for f in map(lambda c: '[{}]({})'.format(c[0], c[1]), pa['pa_for']):
-            todo.append(f'Занести информацию по отпускам и day-off {f} в Календарь')
+        todo.append(f'Запросить информацию по отпускам и day-off {freelancers}')
+        todo.append(f'Занести информацию по отпускам и day-off {freelancers} в Календарь')
         create_todo(token, calendar['fri'], pa['todo_url'], todo, text='Еженедельные задачи')
 
 
