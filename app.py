@@ -412,7 +412,7 @@ def weekly_todo():
 def kick_staff():
     token_v2 = os.environ.get("TOKEN")
     date = request.args.get("date", None)
-    contracts_day = request.args.get("contracts_day", 7, type=int)
+    contracts_day = request.args.get("contracts_day", 9, type=int)
     projects_day = request.args.get("projects_day", contracts_day, type=int)
     client_days_before = request.args.get("client_day", 14, type=int)
     cc_tag = request.args.get("no_contracts", None)
