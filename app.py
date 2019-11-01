@@ -49,7 +49,7 @@ def create_message(token, parent_page_url, message_content):
     # notion
     client = NotionClient(token)
     page = client.get_block(parent_page_url)
-    a = page.children.add_new(TextBlock, title=" ")
+    a = page.children.add_new(TextBlock, title=" . ")
     b = page.children.add_new(DividerBlock)
     c = page.children.add_new(TextBlock,
                               title="**{data}** {msg}".format(data=datetime.now().strftime("%d-%m-%Y %H:%M"),
