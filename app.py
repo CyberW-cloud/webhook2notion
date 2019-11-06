@@ -281,7 +281,7 @@ def weekly_todo_pa(token, staff, calendar):
         todo = list()
         for f in map(lambda c: '[{}]({})'.format(c[0], c[1]), pa['pa_for']):
             todo.append(f'Обновить профиль {f}')
-        todo.append('Проверить наличие апдейтов в pcloud по активным контрактам')
+        todo.append('Проверить наличие апдейтов в pcloud по активным контрактам ')
         create_todo(token, calendar['tue'], pa['todo_url'], todo, text='')
 
         # Wednesday
