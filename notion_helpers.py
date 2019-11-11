@@ -94,8 +94,7 @@ def create_new_task(page, header, date, text, timezone, tasks):
             for task in tasks:
                 td = parent.children.add_new(TodoBlock, title=task)
                 td.checked = False
-                td.move_to(parent, "after")
-            #parent = td
+                td.move_to(parent, "first-child")
 
     else:
         title = NotionDate(date, timezone=timezone).to_notion()
