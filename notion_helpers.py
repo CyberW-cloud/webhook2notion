@@ -93,7 +93,7 @@ def create_new_task(page, header, date, text, timezone, tasks):
             if not text: 
                td.move_to(tx, "first-child") 
             td.move_to(parent, "after")                    
-            parent = td
+            #parent = td
 
     else:
         title = NotionDate(date, timezone=timezone).to_notion()
