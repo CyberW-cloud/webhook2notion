@@ -462,7 +462,8 @@ def todo_one():
     date = request.args.get("date", None)
     if urllib.parse.unquote(member).find("https://www.notion.so") != -1: 
         todo_url = urllib.parse.unquote(member)
-    else todo_url = get_toto_url_by_name(token_v2, member)
+    else: 
+        todo_url = get_toto_url_by_name(token_v2, member)
     if todo_url is not None:
         create_todo(token_v2, date, todo_url, todo, text)
         return f'added to {member} {text if text else ""} {todo}  to Notion'
