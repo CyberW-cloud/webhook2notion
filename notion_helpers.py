@@ -94,7 +94,7 @@ def create_new_task(page, header, date, text, timezone, tasks):
             for task in tasks:
                 td = parent.children.add_new(TodoBlock, title=task)
                 td.checked = False
-            td.move_to(parent, "after")
+                td.move_to(parent, "after")
             #parent = td
 
     else:
