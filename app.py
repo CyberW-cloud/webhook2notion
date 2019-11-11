@@ -460,12 +460,13 @@ def todo_one():
     todo = "{}".format(request.args.get("todo")).split("||")
     text = request.args.get("text")
     date = request.args.get("date", None)
-    todo_url = get_toto_url_by_name(token_v2, member)
+    if todo_url.find("https://www.notion.so") == -1: 
+        todo_url = get_toto_url_by_name(token_v2, member)
     if todo_url is not None:
         create_todo(token_v2, date, todo_url, todo, text)
         return f'added to {member} {text if text else ""} {todo}  to Notion'
     else:
-        return f'{member} not found in StatsDB in Notion'
+        return f'{member} not found in StatsDB in Notion or not Notion URL'
 
 
 @app.route('/rss', methods=['POST'])
