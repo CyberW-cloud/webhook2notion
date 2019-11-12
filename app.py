@@ -385,7 +385,7 @@ def create_recruit(token_v2, collection_url, name, upw_link, title, description,
     
 
 @app.route('/recruit', methods=['POST'])
-def rss():
+def recruit():
     collection_url = request.form.get("collectionURL")
     name = request.form.get('name')
     token_v2 = os.environ.get("TOKEN")
