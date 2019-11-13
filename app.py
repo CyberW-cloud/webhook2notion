@@ -8,6 +8,7 @@ import urllib.parse
 import pytz
 import datetime
 from datetime import timedelta
+from notion.collection import NotionDate
 
 timezone = "Europe/Kiev"
 
