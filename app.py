@@ -382,6 +382,7 @@ def create_recruit(token, collection_url, name, upw_link, title, description, co
     row.portfolio_items = pf_items
     row.member_since = since
     row.skills = skills
+    row.since = NotionDate(since, timezone=timezone).to_notion()
     
 
 @app.route('/recruit', methods=['POST'])
@@ -392,8 +393,8 @@ def recruit():
     upw_link = request.form.get('upw_link')
     title = request.form.get('title')
     country = request.form.get('country')
-    rate = request.form.get('rate')
-    pf_items = request.form.get('pf_items')
+    rate = request.form.get('rate', type = int)
+    pf_items = request.form.get('pf_items', type=int)
     skills = request.form.get('skills')
     since = request.form.get('since')
     description = request.form.get('description')
