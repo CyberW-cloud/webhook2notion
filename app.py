@@ -368,7 +368,7 @@ def weekly_todo_bidder(token, staff, calendar):
                     'перед выходными')
         create_todo(token, calendar['fri'], bidder['todo_url'], todo, text='')
 
-def create_recruit(token_v2, collection_url, name, upw_link, title, description, country, rate, pf_items, skills, since):
+def create_recruit(token, collection_url, name, upw_link, title, description, country, rate, pf_items, skills, since):
     # notion
     client = NotionClient(token)
     cv = client.get_collection_view(collection_url)
