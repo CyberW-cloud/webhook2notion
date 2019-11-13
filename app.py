@@ -510,6 +510,7 @@ def rss():
     token_v2 = os.environ.get("TOKEN")
     link = request.form.get('link')
     description = request.form.get('description')
+    print(f'add {subject} {link})
     create_rss(token_v2, collection_url, subject, link, description)
     return f'added {subject} receipt to Notion'
 
@@ -531,6 +532,7 @@ def pcj():
     token_v2 = os.environ.get("TOKEN")
     invite_to = request.form.get('inviteto')
     link = request.form.get('link')
+    print(f'add {subject} {link})
     create_pcj(token_v2, collection_url, subject, description, invite_to, link)
     return f'added {subject} receipt to Notion'
 
@@ -542,6 +544,7 @@ def invites():
     subject = request.form.get('subject')
     token_v2 = os.environ.get("TOKEN")
     invite_to = request.form.get('inviteto')
+    print(f'add {subject})
     create_invite(token_v2, collection_url, subject, description, invite_to)
     return f'added {subject} receipt to Notion'
 
