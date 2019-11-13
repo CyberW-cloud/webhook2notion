@@ -374,7 +374,7 @@ def create_recruit(token, collection_url, name, upw_link, title, description, co
     cv = client.get_collection_view(collection_url)
     row = cv.collection.add_row()
     row.name = name
-    row.upwork_profile = upw_linklink
+    row.upwork_profile = upw_link
     row.description = description
     row.title = title
     row.country = country
