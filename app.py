@@ -8,7 +8,6 @@ import urllib.parse
 import pytz
 import datetime
 from datetime import timedelta
-from notion.collection import NotionDate
 
 timezone = "Europe/Kiev"
 
@@ -375,7 +374,7 @@ def create_recruit(token, collection_url, name, upw_link, title, description, co
     cv = client.get_collection_view(collection_url)
     row = cv.collection.add_row()
     row.name = name
-    row.upwork_profile = upw_link
+    row.upwork = upw_link
     row.description = description
     row.title = title
     row.country = country
@@ -383,7 +382,7 @@ def create_recruit(token, collection_url, name, upw_link, title, description, co
     row.portfolio_items = pf_items
     row.member_since = since
     row.skills = skills
-    row.since = NotionDate(since, timezone=timezone).to_notion()
+    row.since = since
     
 
 @app.route('/recruit', methods=['POST'])
