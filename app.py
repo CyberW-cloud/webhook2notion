@@ -393,12 +393,12 @@ def recruit():
     title = request.form.get('title')
     country = request.form.get('country')
     rate = request.form.get('rate', type = int)
-    pf_items = request.form.get('pf_items', type=int)
+    pf_items = request.form.get('pf_items', type = int)
     skills = request.form.get('skills')
     since = request.form.get('since')
     description = request.form.get('description')
     create_recruit(token_v2, collection_url, name, upw_link, title, description, country, rate, pf_items, skills, since)
-    return f'added {subject} recruit to Notion'
+    return f'added {upw_link} recruit to Notion'
 
 
 @app.route('/weekly_todo', methods=['GET'])
