@@ -382,7 +382,6 @@ def create_recruit(token, collection_url, name, upw_link, title, description, co
     row.portfolio_items = pf_items
     row.member_since = since
     row.skills = skills
-    row.since = since
     
 
 @app.route('/recruit', methods=['POST'])
