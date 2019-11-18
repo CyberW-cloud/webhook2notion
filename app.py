@@ -90,7 +90,7 @@ def get_toto_url_by_name(token, name):
 
 def create_todo(token, date, link, todo, text):
     # notion
-    if date is not None:
+    if date is not None:  # if date not provided use now()
         if isinstance(date, str):
             date = datetime.datetime.strptime(urllib.parse.unquote("{}".format(date)), "%Y-%m-%dT%H:%M:%S.%fZ").date()
     else:
@@ -100,7 +100,6 @@ def create_todo(token, date, link, todo, text):
     page = client.get_block(link)
     tasks = todo
 
-    # place to do in right date
     return create_new_task(page, "", text=text,
                            date=date, timezone=timezone,
                            tasks=tasks
@@ -113,8 +112,12 @@ def get_contracts(token, days_before):
         "https://www.notion.so/5a95fb63129242a5b5b48f18e16ef19a?v=48599e7a184a4f32be2469e696367949")
     # 48599e7a184a4f32be2469e696367949 - no_filters_view
     # 02929acd595a48dda28cb9e2ff6ae210 - python_view
+
+    # calculate date for filter now() - days_before. Stupid notion starts new day at 12:00 a.m.
     n = datetime.datetime.now(pytz.timezone("Europe/Kiev"))
     n = n.replace(hour=12, minute=0, second=0, microsecond=0) - datetime.timedelta(days=days_before)
+
+    # get contracts In Progress with date less when now()-days before and w/o project
     filter_params = [{
         "property": "Status",
         "comparator": "enum_is",
@@ -133,6 +136,7 @@ def get_contracts(token, days_before):
     ]
     result = cv.build_query(filter=filter_params).execute()
     res = []
+    # for every contract get person (how care this about contract and client for next check
     for row in result:
         contract = dict()
         contract['person'] = row.Coordinator[0] if row.Coordinator else None
@@ -140,7 +144,7 @@ def get_contracts(token, days_before):
             continue
         else:
             contract['person_name'] = contract['person'].name.replace(u'\xa0', u'')
-        if contract['person_name'] == 'selfCC':
+        if contract['person_name'] == 'selfCC':  # if selfCC get a freelancer name
             contract['person'] = row.freelancer[0] if row.freelancer else None
             if contract['person']:
                 contract['person_name'] = contract['person'].name.replace(u'\xa0', u'')
@@ -156,8 +160,12 @@ def get_projects(token, days_before):
         "https://www.notion.so/addccbcaf545405292db498941c9538a?v=e86f54933acc461ca413afa6a2958cdc")
     # e86f54933acc461ca413afa6a2958cdc - no_filters_view
     # 1ed5f8ce4e834f1382ffb447976e944f - python_view
+
+    # calculate date for filter now() - days_before. Stupid notion starts new day at 12:00 a.m.
     n = datetime.datetime.now(pytz.timezone("Europe/Kiev"))
     n = n.replace(hour=12, minute=0, second=0, microsecond=0) - datetime.timedelta(days=days_before)
+
+    # get projects InProgress with date less when now()-days before
     filter_params = [{
         "property": "Status",
         "comparator": "enum_is",
@@ -173,6 +181,8 @@ def get_projects(token, days_before):
     cv = cv.build_query(filter=filter_params)
     result = cv.execute()
     res = []
+
+    # for every project get person and client
     for row in result:
         project = dict()
         if row.PM:
@@ -196,6 +206,8 @@ def parse_staff(todo, table, obj, client_days_before):
                                   minute=0,
                                   second=0,
                                   microsecond=0) - datetime.timedelta(days=client_days_before)
+    # Preparing data to make task in Notion.
+    # group and clarify (by set behavior) data by person_name
     for row in table:
         person = row['person_name']
         if person not in todo:
@@ -205,6 +217,7 @@ def parse_staff(todo, table, obj, client_days_before):
             todo[person]['contracts'] = set()
             todo[person]['clients'] = set()
         todo[person][obj].add(row['url'])
+        # check updates of client and add to task if it's need
         if row['client'] is not None:
             if row['client'].Modified <= test_date:
                 todo[person]['clients'].add((row['client'].name.replace(u'\xa0', u''),
@@ -368,6 +381,7 @@ def weekly_todo_bidder(token, staff, calendar):
                     'перед выходными')
         create_todo(token, calendar['fri'], bidder['todo_url'], todo, text='')
 
+
 def create_recruit(token, collection_url, name, upw_link, title, description, country, rate, pf_items, skills, since):
     # notion
     client = NotionClient(token)
@@ -404,12 +418,12 @@ def recruit():
 @app.route('/weekly_todo', methods=['GET'])
 def weekly_todo():
     token_v2 = os.environ.get("TOKEN")
-    date = request.args.get("date", None)
+    d = request.args.get("date", datetime.datetime.now().date())
     roles = request.args.get("roles", '')
-    roles = re.split('[, ;|\\\\/|.]', roles)
+    roles = re.split('[, ;|\\\\/|.]', roles)  # get role list from arguments
     staff = get_todo_list_by_role(token_v2, roles)
+
     # looking next monday
-    d = datetime.datetime.now().date()
     if d.weekday() == 0:
         today = d
     else:
@@ -424,9 +438,6 @@ def weekly_todo():
         "sat": today + timedelta(5),
         "sun": today + timedelta(6)
     }
-    todo_workers = dict()
-    todo_workers['PA'] = weekly_todo_pa
-    todo_workers['CC'] = weekly_todo_cc
 
     for role in roles:
         if role == 'PA':
