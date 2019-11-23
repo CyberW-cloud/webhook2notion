@@ -533,7 +533,7 @@ def kick_staff():
 def proposals_check():
     token_v2 = os.environ.get("TOKEN")
     date = request.args.get("date", None)
-    days = request.args.get("days_before", 9, type=int)
+    days = request.args.get("days_before", 5, type=int)
     proposals = get_proposals(token_v2, days)
     todo = dict()
     todo = parse_staff(todo, proposals, 'proposals', 0)
