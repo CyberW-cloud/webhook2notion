@@ -537,7 +537,13 @@ def proposals_check():
     proposals = get_proposals(token_v2, days)
     todo = dict()
     todo = parse_staff(todo, proposals, 'proposals', 0)
-    print(todo)             #TODO make a todo for this dataset
+    for key in todo:
+        task = todo[key]
+        print('start todo')
+        if task['proposals']:
+            create_todo(token_v2, date, task['todo_url'], map(lambda p: '[{}]({})'.format(p[0], p[1]),
+                                                              task['proposals']),
+                        "Проверь Proposal, давно не было апдейтов :")
     return "Done!"
 
 
