@@ -200,6 +200,70 @@ def get_projects(token, days_before):
     return res
 
 
+def get_proposals(token, days_before):
+    client = NotionClient(token)
+    cv = client.get_collection_view(
+        "https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
+
+    # calculate date for filter now() - days_before. Stupid notion starts new day at 12:00 a.m.
+    n = datetime.datetime.now(pytz.timezone("Europe/Kiev"))
+    n = n.replace(hour=12, minute=0, second=0, microsecond=0) - datetime.timedelta(days=days_before)
+    stats = client.get_collection_view(
+        "https://www.notion.so/e4d36149b9d8476e9985a2c658d4a873?v=3238ddee2ea04d5ea302d99fc2a2d5cc")
+    # get proposal replied, not declined and with empty contract field
+    filter_params = [{
+        "property": "Reply",
+        "comparator": "checkbox_is",
+        "value": "Yes",
+    },
+    {
+        "property": "Declined",
+        "comparator": "checkbox_is",
+        "value": "No",
+    },
+    {
+        "property": "Contract",
+        "comparator": "is_not_empty",
+    },
+    {
+        "property": "Modified",
+        "comparator": "date_is_on_or_before",
+        "value_type": 'exact_date',
+        "value": int(n.timestamp()) * 1000,
+    }
+    ]
+    cv = cv.build_query(filter=filter_params)
+    result = cv.execute()
+    res = []
+    # for every proposal get person
+    for row in result:
+        proposal = dict()
+        if row.CC:
+            proposal['person'] = row.CC[0]
+        else:
+            proposal['person'] = row.Sent_by if row.Sent_by else None
+        if proposal['person']:
+            proposal['person_name'] = proposal['person'].full_name.replace(u'\xa0', u'')
+        # person field is class User, so we need linked it to stats DB. Try to Find person in stats DB
+            filter_params = [{
+                "property": "title",
+                "comparator": "string_contains",
+                "value": proposal['person_name'],
+            }]
+            person_stat = stats.build_query(filter=filter_params).execute()
+            if person_stat:
+                proposal['person'] = person_stat[0]
+            else:
+                print(proposal['person_name'], 'not found in stats')
+        proposal['url'] = str(row.Proposal_ID).replace(u'\xa0', u''), row.get_browseable_url()
+        proposal['client'] = None
+        if proposal['person'] is None:
+            continue
+        else:
+            res.append(proposal)
+    return res
+
+
 def parse_staff(todo, table, obj, client_days_before):
     test_date = datetime.datetime.now()
     test_date = test_date.replace(hour=12,
@@ -216,6 +280,7 @@ def parse_staff(todo, table, obj, client_days_before):
             todo[person]['projects'] = set()
             todo[person]['contracts'] = set()
             todo[person]['clients'] = set()
+            todo[person]['proposals'] = set()
         todo[person][obj].add(row['url'])
         # check updates of client and add to task if it's need
         if row['client'] is not None:
@@ -462,7 +527,19 @@ def kick_staff():
                                                               task['clients']),
                         "Занеси новую информацию которую ты узнал про клиентов:")
     return "Done!"
-    
+
+
+@app.route('/proposals_check', methods=['GET'])
+def proposals_check():
+    token_v2 = os.environ.get("TOKEN")
+    date = request.args.get("date", None)
+    days = request.args.get("days_before", 9, type=int)
+    proposals = get_proposals(token_v2, days)
+    todo = dict()
+    todo = parse_staff(todo, proposals, 'proposals', 0)
+    print(todo)             #TODO make a todo for this dataset
+    return "Done!"
+
 
 @app.route('/todoone', methods=['GET'])
 def todo_one():
