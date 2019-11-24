@@ -533,7 +533,7 @@ def kick_staff():
 def proposals_check():
     token_v2 = os.environ.get("TOKEN")
     date = request.args.get("date", None)
-    days = request.args.get("days_before", 5, type=int)
+    days = request.args.get("days_before", 7, type=int)
     proposals = get_proposals(token_v2, days)
     todo = dict()
     todo = parse_staff(todo, proposals, 'proposals', 0)
@@ -543,7 +543,7 @@ def proposals_check():
         if task['proposals']:
             create_todo(token_v2, date, task['todo_url'], map(lambda p: '[{}]({})'.format(p[0], p[1]),
                                                               task['proposals']),
-                        "Проверь Proposal, давно не было апдейтов :")
+                        "Теплый клиент остывает, нужно срочно что то делать. Проверь:")
     return "Done!"
 
 
