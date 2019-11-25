@@ -339,7 +339,7 @@ def get_todo_list_by_role(token, roles):
 
 
 def weekly_todo_pa(token, staff, calendar):
-	print('pa start')
+    print('pa start')
     for pa in staff:
 #        if pa['name'] != 'Denys Safonov':
 #            continue
@@ -388,7 +388,7 @@ def weekly_todo_pa(token, staff, calendar):
         todo.append(f'Запросить информацию по отпускам и day-off {freelancers}')
         todo.append(f'Занести информацию по отпускам и day-off {freelancers} в Календарь')
         create_todo(token, calendar['fri'], pa['todo_url'], todo, text='')
-	print('pa done')
+    print('pa done')
 
 def weekly_todo_cc(token, staff, calendar):
     print('CC start')
