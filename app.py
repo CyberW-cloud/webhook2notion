@@ -339,6 +339,7 @@ def get_todo_list_by_role(token, roles):
 
 
 def weekly_todo_pa(token, staff, calendar):
+	print('pa start')
     for pa in staff:
 #        if pa['name'] != 'Denys Safonov':
 #            continue
@@ -387,9 +388,10 @@ def weekly_todo_pa(token, staff, calendar):
         todo.append(f'Запросить информацию по отпускам и day-off {freelancers}')
         todo.append(f'Занести информацию по отпускам и day-off {freelancers} в Календарь')
         create_todo(token, calendar['fri'], pa['todo_url'], todo, text='')
-
+	print('pa done')
 
 def weekly_todo_cc(token, staff, calendar):
+    print('CC start')
     for cc in staff:
 #        if cc['name'] != 'Denys Safonov':
 #           continue
@@ -414,9 +416,10 @@ def weekly_todo_cc(token, staff, calendar):
         todo = list()
         todo.append('Проверить,что фрилансер сообщил клиентам о day-off или отпуске на следующей неделе')
         create_todo(token, calendar['fri'], cc['todo_url'], todo, text='')
-
+    print('CC done')
 
 def weekly_todo_bidder(token, staff, calendar):
+    print('bidder start')
     for bidder in staff:
 #        if bidder['name'] != 'Denys Safonov':
 #            continue
@@ -445,7 +448,7 @@ def weekly_todo_bidder(token, staff, calendar):
                     '(https://www.notion.so/Invites-and-Jobs-1378d59f909a408faa2974d74f65d98f) '
                     'перед выходными')
         create_todo(token, calendar['fri'], bidder['todo_url'], todo, text='')
-
+    print('bidder done')
 
 
 @app.route('/weekly_todo', methods=['GET'])
@@ -455,7 +458,8 @@ def weekly_todo():
     roles = request.args.get("roles", '')
     roles = re.split('[, ;|\\\\/|.]', roles)  # get role list from arguments
     staff = get_todo_list_by_role(token_v2, roles)
-
+    print('roles get done')
+    
     # looking next monday
     if d.weekday() == 0:
         today = d
