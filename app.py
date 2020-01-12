@@ -49,7 +49,6 @@ def create_message(token, parent_page_url, message_content):
     # notion
     client = NotionClient(token)
     page = client.get_block(parent_page_url)
-#    a = page.children.add_new(TextBlock, title=" . ")
     a = page.children.add_new(DividerBlock)
     b = page.children.add_new(TextBlock,
                               title="**{data}** {msg}".format(data=datetime.datetime.now().strftime("%d-%m-%Y %H:%M"),
@@ -58,8 +57,6 @@ def create_message(token, parent_page_url, message_content):
     a.move_to(page, "first-child")
     b.move_to(a, "after")
     c.move_to(b, "after")
-#    d.move_to(c, "after")
-#    a.remove()
 
 
 def create_rss(token, collection_url, subject, link, description):
