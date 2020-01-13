@@ -426,7 +426,7 @@ def weekly_todo_bidder(token, staff, calendar):
     for bidder in staff:
 #        if bidder['name'] != 'Denys Safonov':
 #            continue
-        print(f"bidder {bidder ['name'] start}")
+        print(f"{bidder {bidder ['name'] start}")
 
         # Monday
         todo = list()
