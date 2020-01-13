@@ -222,7 +222,7 @@ def get_proposals(token, days_before):
     },
     {
         "property": "Contract",
-        "comparator": "isget_empty",
+        "comparator": "is_empty",
     },
     {
         "property": "Modified",
