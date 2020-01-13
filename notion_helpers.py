@@ -103,6 +103,7 @@ def create_new_task(page, header, date, text, timezone, tasks):
             title.append([' '])
             title.append([header])
         new_child = page.children.add_new(HeaderBlock, title=" . ")
+        time.sleep(3)
         prop = new_child.get('properties')
         prop['title'] = title
         new_child.set('properties', prop)
