@@ -334,7 +334,7 @@ def get_todo_list_by_role(token, roles):
                 todo_list[role].append(d)
             else:
                 print(person.name.replace(u'\xa0', u''), 'not found in stats')
-    print todo_list
+    print(*todo_list.items(), sep='\n')
     return todo_list
 
 
