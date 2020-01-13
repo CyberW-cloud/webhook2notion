@@ -107,6 +107,7 @@ def create_new_task(page, header, date, text, timezone, tasks):
 #        time.sleep(3)
         prop = new_child.get('properties')
 #       if prop is None:  
+#           time.sleep(3)
 #           prop = new_child.get('properties') 
         prop['title'] = title
         new_child.set('properties', prop)
