@@ -9,6 +9,7 @@ import pytz
 import datetime
 from datetime import timedelta
 
+
 timezone = "Europe/Kiev"
 
 app = Flask(__name__)
@@ -333,6 +334,7 @@ def get_todo_list_by_role(token, roles):
                 todo_list[role].append(d)
             else:
                 print(person.name.replace(u'\xa0', u''), 'not found in stats')
+    print todo_list
     return todo_list
 
 
@@ -342,7 +344,7 @@ def weekly_todo_pa(token, staff, calendar):
 #        if pa['name'] != 'Denys Safonov':
 #            continue
         freelancers = ', '.join(map(lambda c: '[{}]({})'.format(c[0], c[1]), pa['pa_for']))
-        print(f"{pa['name']} start")
+        print(f"PA {pa['name']} start")
 
         # Monday
         todo = list()
@@ -387,7 +389,7 @@ def weekly_todo_pa(token, staff, calendar):
         todo.append(f'Запросить информацию по отпускам и day-off {freelancers}')
         todo.append(f'Занести информацию по отпускам и day-off {freelancers} в Календарь')
         create_todo(token, calendar['fri'], pa['todo_url'], todo, text='')
-        print(f"{pa['name']} done")
+        print(f"PA {pa['name']} done")
     print('pa done')
 
 def weekly_todo_cc(token, staff, calendar):
@@ -395,7 +397,7 @@ def weekly_todo_cc(token, staff, calendar):
     for cc in staff:
 #        if cc['name'] != 'Denys Safonov':
 #           continue
-        print(f"{cc['name']} start")
+        print(f"CC {cc['name']} start")
         # Monday
         todo = list()
         todo.append('Ping клиентов с открытыми контрактами, которые пропали')
@@ -416,7 +418,7 @@ def weekly_todo_cc(token, staff, calendar):
         todo = list()
         todo.append('Проверить,что фрилансер сообщил клиентам о day-off или отпуске на следующей неделе')
         create_todo(token, calendar['fri'], cc['todo_url'], todo, text='')
-        print(f"{cc['name']} done")
+        print(f"CC {cc['name']} done")
     print('CC done')
 
 def weekly_todo_bidder(token, staff, calendar):
@@ -424,7 +426,7 @@ def weekly_todo_bidder(token, staff, calendar):
     for bidder in staff:
 #        if bidder['name'] != 'Denys Safonov':
 #            continue
-        print(f"{bidder['name']} start")
+        print(f"bidder {bidder ['name'] start}")
 
         # Monday
         todo = list()
@@ -450,7 +452,7 @@ def weekly_todo_bidder(token, staff, calendar):
                     '(https://www.notion.so/Invites-and-Jobs-1378d59f909a408faa2974d74f65d98f) '
                     'перед выходными')
         create_todo(token, calendar['fri'], bidder['todo_url'], todo, text='')
-        print(f"{bidder['name']} done")
+        print(f"bidder {bidder['name']} done")
     print('bidder done')
 
 

@@ -3,6 +3,7 @@ from time import sleep
 from notion.collection import NotionDate
 from notion.block import TodoBlock, HeaderBlock, TextBlock
 import datetime
+import time
 
 
 def get_date_from_title(title):
