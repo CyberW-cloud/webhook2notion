@@ -50,14 +50,49 @@ def create_message(token, parent_page_url, message_content):
     # notion
     client = NotionClient(token)
     page = client.get_block(parent_page_url)
-    a = page.children.add_new(DividerBlock)
-    b = page.children.add_new(TextBlock,
-                              title="**{data}** {msg}".format(data=datetime.datetime.now().strftime("%d-%m-%Y %H:%M"),
-                                                              msg=message_content))
-    c = page.children.add_new(DividerBlock)
-    a.move_to(page, "first-child")
+    
+    patern = '#"(?$0'
+    insert_after = None
+    div = 0
+    divs = 0
+    client = NotionClient(token)
+    page = client.get_block(parent_page_url)
+    for child in page.children:
+        if child.type == 'factory':
+            insert_after = child
+            break
+        if child.type == 'text' and child.title == patern:
+            insert_after = child
+            break
+        if child.type == 'divider':
+            if div == 1:
+                divs += 1
+            else:
+                div = 1
+                divs = 1
+            if divs == 3:
+                insert_after = child
+                break
+            else:
+                continue
+        div = 0
+
+    a = page.children.add_new(TextBlock, title=" . ")
+    b = page.children.add_new(DividerBlock)
+    c = page.children.add_new(TextBlock,
+                              title="{data} {msg}".format(data=datetime.datetime.now().strftime("%d-%m-%Y %H:%M"),
+                                                          msg=message_content))
+    d = page.children.add_new(DividerBlock)
+
+    if insert_after is None:
+        a.move_to(page, "first-child")
+    else:
+        a.move_to(insert_after, "after")
     b.move_to(a, "after")
     c.move_to(b, "after")
+    d.move_to(c, "after")
+    
+
 
 
 def create_rss(token, collection_url, subject, link, description):
