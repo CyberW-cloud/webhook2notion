@@ -654,7 +654,7 @@ def create_response(res_type, data):
     client = NotionClient(token)
     cv = client.get_collection_view(collection_url)
     row = cv.collection.add_row()
-    print(row)
+    print(f"row =  {row}")
     row.Date = str(datetime.datetime.now().date())
     row.Name = str(data["Name"])
     row.Gender = str(data["Gender"][0])

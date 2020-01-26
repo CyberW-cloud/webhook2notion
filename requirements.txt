@@ -1,3 +1,3 @@
 Flask==1.1.1
-notion
+notion==0.0.25
 pytz
