@@ -655,9 +655,10 @@ def create_response(res_type, data):
     client = NotionClient(token)
     cv = client.get_collection_view(collection_url)
     row = cv.collection.add_row()
-    row.Date = str(datetime.datetime.now().date())
+    row.Date = str(datetime.datetime.strptime(data["timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ").date())
     row.Name = str(data["Name"])
-    row.Gender = str(data["Gender"][0])
+    if "Gender" in data:
+        row.Gender = str(data["Gender"][0])
     row.Email = str(data["Email"])
     row.Mobile_telephone = str(data["Mobile telephone"])
     row.Skype_ID = str(data["Skype ID"])
@@ -668,29 +669,46 @@ def create_response(res_type, data):
     row.About_yourself = str(data["About yourself"])
     row.Work_Experience = str(data["Work Experience"])
     row.Skills_and_specialization = str(data["Skills and specialization"])
-    row.Availability = ", ".join(data["Availability"])
-    row.Why_freelance = str(data["Why freelance?"])
+    if "Availability" in data:
+        row.Availability = ", ".join(data["Availability"])
+    if "Why freelance?" in data:
+        row.Why_freelance = str(data["Why freelance?"])
     row.Are_you_a_fulltime_freelancer = str(data["Are you a fulltime freelancer?"])
-    row.Q1 = ", ".join(data["Q1: В какой период времени ты на связи в Skype?"])
-    row.Q2 = ", ".join(data["Q2: Как быстро ты отвечаешь в Skype?"])
-    row.Q3 = str(
-        data[
-            "Q3: Сегодня понедельник. У клиента дедлайн по запуску сайта среду 12 pm EDT. Какое с твоей точки зрения оптимальное расписание согласований последних изменений?"
-        ]
-    )
-    row.Q4 = str(
-        data[
-            'Q4: Ты пообещал клиенту отправить работу завтра без указания точного времени. Какие приемлемые сроки этого "завтра"?'
-        ]
-    )
-    row.Q5 = str(
-        data["Q5: По личным причинам ты не успеваешь сделать работу, которую должны отдать сегодня. Что делать?"]
-    )
-    row.Q6 = str(
-        data[
-            "Q6: Ты наметил через неделю уехать в отпуск в Европу. Как это повлияет на твою работоспособность, и что по-твоему надо обязательно сделать?"
-        ]
-    )
+    if "Q1: В какой период времени ты на связи в Skype?" in data:
+        row.Q1 = ", ".join(data["Q1: В какой период времени ты на связи в Skype?"])
+    if "Q2: Как быстро ты отвечаешь в Skype?" in data:
+        row.Q2 = ", ".join(data["Q2: Как быстро ты отвечаешь в Skype?"])
+    if (
+        "Q3: Сегодня понедельник. У клиента дедлайн по запуску сайта среду 12 pm EDT. Какое с твоей точки зрения оптимальное расписание согласований последних изменений?"
+        in data
+    ):
+        row.Q3 = str(
+            data[
+                "Q3: Сегодня понедельник. У клиента дедлайн по запуску сайта среду 12 pm EDT. Какое с твоей точки зрения оптимальное расписание согласований последних изменений?"
+            ]
+        )
+    if (
+        'Q4: Ты пообещал клиенту отправить работу завтра без указания точного времени. Какие приемлемые сроки этого "завтра"?"'
+        in data
+    ):
+        row.Q4 = str(
+            data[
+                'Q4: Ты пообещал клиенту отправить работу завтра без указания точного времени. Какие приемлемые сроки этого "завтра"?'
+            ]
+        )
+    if "Q5: По личным причинам ты не успеваешь сделать работу, которую должны отдать сегодня. Что делать?" in data:
+        row.Q5 = str(
+            data["Q5: По личным причинам ты не успеваешь сделать работу, которую должны отдать сегодня. Что делать?"]
+        )
+    if (
+        "Q6: Ты наметил через неделю уехать в отпуск в Европу. Как это повлияет на твою работоспособность, и что по-твоему надо обязательно сделать?"
+        in data
+    ):
+        row.Q6 = str(
+            data[
+                "Q6: Ты наметил через неделю уехать в отпуск в Европу. Как это повлияет на твою работоспособность, и что по-твоему надо обязательно сделать?"
+            ]
+        )
     row.Personalities_16 = str(data["16 Personalities"])
     row.DISC = str(data["DISC"])
 
