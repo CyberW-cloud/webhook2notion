@@ -648,13 +648,13 @@ def invites():
 
 
 def create_response(res_type, data):
-    collection_url = "https://www.notion.so/c383c6f9d7994cf1abd2a021ca388cdf?v=e7aec8ea8949478b964dee0ed071d9a5"
+    # collection_url = "https://www.notion.so/c383c6f9d7994cf1abd2a021ca388cdf?v=e7aec8ea8949478b964dee0ed071d9a5"
+    collection_url = "https://www.notion.so/e5adc577cda043488952ca23cae24eea?v=9d3772ac7e10457e9c1229d5f9bd780a"
     token = os.environ.get("TOKEN")
 
     client = NotionClient(token)
     cv = client.get_collection_view(collection_url)
     row = cv.collection.add_row()
-    print(f"row =  {row}")
     row.Date = str(datetime.datetime.now().date())
     row.Name = str(data["Name"])
     row.Gender = str(data["Gender"][0])
