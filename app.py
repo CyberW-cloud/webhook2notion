@@ -9,7 +9,6 @@ import pytz
 import datetime
 from datetime import timedelta
 
-
 timezone = "Europe/Kiev"
 
 app = Flask(__name__)
@@ -50,18 +49,16 @@ def create_message(token, parent_page_url, message_content):
     # notion
     client = NotionClient(token)
     page = client.get_block(parent_page_url)
-    
-    patern = '#"(?$0'
+
+    pattern = '#"(?$0'
     insert_after = None
     div = 0
     divs = 0
-    client = NotionClient(token)
-    page = client.get_block(parent_page_url)
     for child in page.children:
         if child.type == 'factory':
             insert_after = child
             break
-        if child.type == 'text' and child.title == patern:
+        if child.type == 'text' and child.title == pattern:
             insert_after = child
             break
         if child.type == 'divider':
@@ -91,8 +88,6 @@ def create_message(token, parent_page_url, message_content):
     b.move_to(a, "after")
     c.move_to(b, "after")
     d.move_to(c, "after")
-    
-
 
 
 def create_rss(token, collection_url, subject, link, description):
@@ -250,21 +245,21 @@ def get_proposals(token, days_before):
         "comparator": "checkbox_is",
         "value": "Yes",
     },
-    {
-        "property": "Declined",
-        "comparator": "checkbox_is",
-        "value": "No",
-    },
-    {
-        "property": "Contract",
-        "comparator": "is_empty",
-    },
-    {
-        "property": "Modified",
-        "comparator": "date_is_on_or_before",
-        "value_type": 'exact_date',
-        "value": int(n.timestamp()) * 1000,
-    }
+        {
+            "property": "Declined",
+            "comparator": "checkbox_is",
+            "value": "No",
+        },
+        {
+            "property": "Contract",
+            "comparator": "is_empty",
+        },
+        {
+            "property": "Modified",
+            "comparator": "date_is_on_or_before",
+            "value_type": 'exact_date',
+            "value": int(n.timestamp()) * 1000,
+        }
     ]
     cv = cv.build_query(filter=filter_params)
     result = cv.execute()
@@ -278,7 +273,7 @@ def get_proposals(token, days_before):
             proposal['person'] = row.Sent_by if row.Sent_by else None
         if proposal['person']:
             proposal['person_name'] = proposal['person'].full_name.replace(u'\xa0', u'')
-        # person field is class User, so we need linked it to stats DB. Try to Find person in stats DB
+            # person field is class User, so we need linked it to stats DB. Try to Find person in stats DB
             filter_params = [{
                 "property": "title",
                 "comparator": "string_contains",
@@ -376,8 +371,8 @@ def get_todo_list_by_role(token, roles):
 def weekly_todo_pa(token, staff, calendar):
     print('pa start')
     for pa in staff:
-#        if pa['name'] != 'Denys Safonov':
-#            continue
+        #        if pa['name'] != 'Denys Safonov':
+        #            continue
         freelancers = ', '.join(map(lambda c: '[{}]({})'.format(c[0], c[1]), pa['pa_for']))
         print(f"PA {pa['name']} start")
 
@@ -427,11 +422,12 @@ def weekly_todo_pa(token, staff, calendar):
         print(f"PA {pa['name']} done")
     print('pa done')
 
+
 def weekly_todo_cc(token, staff, calendar):
     print('CC start')
     for cc in staff:
-#        if cc['name'] != 'Denys Safonov':
-#           continue
+        #        if cc['name'] != 'Denys Safonov':
+        #           continue
         print(f"CC {cc['name']} start")
         # Monday
         todo = list()
@@ -456,12 +452,13 @@ def weekly_todo_cc(token, staff, calendar):
         print(f"CC {cc['name']} done")
     print('CC done')
 
+
 def weekly_todo_bidder(token, staff, calendar):
     print('bidder start')
     for bidder in staff:
-#        if bidder['name'] != 'Denys Safonov':
-#            continue
-        print(f"bidder {bidder ['name']} start")
+        #        if bidder['name'] != 'Denys Safonov':
+        #            continue
+        print(f"bidder {bidder['name']} start")
 
         # Monday
         todo = list()
@@ -470,11 +467,11 @@ def weekly_todo_bidder(token, staff, calendar):
         create_todo(token, calendar['mon'], bidder['todo_url'], todo, text='')
 
         # Wednesday
-#        todo = list()
-#        todo.append('Добавить и структурировать шаблоны в [Proposal templates]'
-#                    '(https://www.notion.so/bd59fed23f2a43b9b5fec15a57537790#2f798130e8ca44cba913a5c645fe33fc) '
-#                    'по итогам Cross-review')
-#        create_todo(token, calendar['wed'], bidder['todo_url'], todo, text='Еженедельные задачи')
+        #        todo = list()
+        #        todo.append('Добавить и структурировать шаблоны в [Proposal templates]'
+        #                    '(https://www.notion.so/bd59fed23f2a43b9b5fec15a57537790#2f798130e8ca44cba913a5c645fe33fc) '
+        #                    'по итогам Cross-review')
+        #        create_todo(token, calendar['wed'], bidder['todo_url'], todo, text='Еженедельные задачи')
 
         # Thursday
         todo = list()
@@ -499,7 +496,7 @@ def weekly_todo():
     roles = re.split('[, ;|\\\\/|.]', roles)  # get role list from arguments
     staff = get_todo_list_by_role(token_v2, roles)
     print('roles get done')
-    
+
     # looking next monday
     if d.weekday() == 0:
         today = d
@@ -598,9 +595,9 @@ def todo_one():
     todo = "{}".format(request.args.get("todo")).split("||")
     text = request.args.get("text")
     date = request.args.get("date", None)
-    if urllib.parse.unquote(member).find("https://www.notion.so") != -1: 
+    if urllib.parse.unquote(member).find("https://www.notion.so") != -1:
         todo_url = urllib.parse.unquote(member)
-    else: 
+    else:
         todo_url = get_toto_url_by_name(token_v2, member)
     if todo_url is not None:
         create_todo(token_v2, date, todo_url, todo, text)
@@ -653,6 +650,54 @@ def invites():
     print(f'add {subject}')
     create_invite(token_v2, collection_url, subject, description, invite_to)
     return f'added {subject} receipt to Notion'
+
+
+def create_response(res_type, data):
+    collection_url = "https://www.notion.so/c383c6f9d7994cf1abd2a021ca388cdf?v=e7aec8ea8949478b964dee0ed071d9a5"
+    token = os.environ.get("TOKEN")
+
+    client = NotionClient(token)
+    cv = client.get_collection_view(collection_url)
+    row = cv.collection.add_row()
+    row.Date = str(datetime.datetime.now().date())
+    row.Name = str(data['Name'])
+    row.Gender = str(data['Gender'][0])
+    row.Email = str(data['Email'])
+    row.Mobile_telephone = str(data['Mobile telephone'])
+    row.Skype_ID = str(data['Skype ID'])
+    row.English_language_level = str(data['English language level'])
+    row.Frameworks_languages_of_programming = str(data['Frameworks, languages of programming'])
+    row.Developed_websites = str(data['Developed websites'])
+    row.Link_to_Upwork_profile = str(data['Link to Upwork profile'])
+    row.About_yourself = str(data['About yourself'])
+    row.Work_Experience = str(data['Work Experience'])
+    row.Skills_and_specialization = str(data['Skills and specialization'])
+    row.Availability = ', '.join(data['Availability'])
+    row.Why_freelance = str(data['Why freelance?'])
+    row.Are_you_a_fulltime_freelancer = str(data['Are you a fulltime freelancer?'])
+    row.Q1 = ', '.join(data['Q1: В какой период времени ты на связи в Skype?'])
+    row.Q2 = ', '.join(data['Q2: Как быстро ты отвечаешь в Skype?'])
+    row.Q3 = str(data['Q3: Сегодня понедельник. У клиента дедлайн по запуску сайта среду 12 pm EDT. Какое с твоей точки зрения оптимальное расписание согласований последних изменений?'])
+    row.Q4 = str(data['Q4: Ты пообещал клиенту отправить работу завтра без указания точного времени. Какие приемлемые сроки этого "завтра"?'])
+    row.Q5 = str(data['Q5: По личным причинам ты не успеваешь сделать работу, которую должны отдать сегодня. Что делать?'])
+    row.Q6 = str(data['Q6: Ты наметил через неделю уехать в отпуск в Европу. Как это повлияет на твою работоспособность, и что по-твоему надо обязательно сделать?'])
+    row.Personalities_16 = str(data['16 Personalities'])
+    row.DISC = str(data['DISC'])
+
+    return f'creating new {res_type} response from {data["Name"]}'
+
+
+@app.route('/responses', methods=['POST'])
+def responses():
+    res_type = request.args.get('type')
+    if res_type != 'developer':
+        return f'type {res_type} is not supported yet'
+    data = request.get_json()
+    print(res_type)
+    for i in data:
+        print(i + ' is ' + str(data[i]))
+    res = create_response(res_type, data)
+    return res
 
 
 if __name__ == '__main__':
