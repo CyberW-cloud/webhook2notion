@@ -91,7 +91,7 @@ def create_message(token, parent_page_url, message_content):
     b.move_to(a, "after")
     c.move_to(b, "after")
     d.move_to(c, "after")
-    a.set_property('title', "")
+    a.title = ""
 
 
 def create_rss(token, collection_url, subject, link, description):
