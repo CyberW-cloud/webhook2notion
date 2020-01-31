@@ -648,117 +648,50 @@ def invites():
     return f"added {subject} receipt to Notion"
 
 
-def create_response_developer(data):
+def create_response(type, data):
     # Development
-    # collection_url = "https://www.notion.so/c383c6f9d7994cf1abd2a021ca388cdf?v=e7aec8ea8949478b964dee0ed071d9a5"
+    # collection_url = "https://www.notion.so/c8cc4837308c4b299a88d36d07bc2f4f?v=dd587a4640aa41bd9ff88ca268aff553"
     # Production
-    collection_url = "https://www.notion.so/e5adc577cda043488952ca23cae24eea?v=9d3772ac7e10457e9c1229d5f9bd780a"
+    collection_url = "https://www.notion.so/1d8596d12d6e4860af30f5c3ab38b7d2"
     token = os.environ.get("TOKEN")
-
     client = NotionClient(token)
+
     cv = client.get_collection_view(collection_url)
-    row = cv.collection.add_row()
-    row.Date = datetime.datetime.strptime(data["timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")
-    row.Name = str(data["Name"])
-    if "Gender" in data:
-        row.Gender = str(data["Gender"][0])
-    if "Email" in data:
-        row.Email = str(data["Email"])
-    row.Mobile_telephone = str(data["Mobile telephone"])
-    row.Skype_ID = str(data["Skype ID"])
-    if "English language level" in data:
-        row.English_language_level = str(data["English language level"])
-    row.Frameworks_languages_of_programming = str(data["Frameworks, languages of programming"])
-    row.Developed_websites = str(data["Developed websites"])
-    row.Link_to_Upwork_profile = str(data["Link to Upwork profile"])
-    row.About_yourself = str(data["About yourself"])
-    row.Work_Experience = str(data["Work Experience"])
-    row.Skills_and_specialization = str(data["Skills and specialization"])
-    if "Availability" in data:
-        row.Availability = ", ".join(data["Availability"])
-    if "Why freelance?" in data:
-        row.Why_freelance = str(data["Why freelance?"])
-    if "Are you a fulltime freelancer?" in data:
-        row.Are_you_a_fulltime_freelancer = str(data["Are you a fulltime freelancer?"])
-    if "Q1" in data:
-        row.Q1 = data["Q1"]
-    if "Q2" in data:
-        row.Q2 = data["Q2"]
-    if "Q3" in data:
-        row.Q3 = str(data["Q3"])
-    if "Q4" in data:
-        row.Q4 = str(data["Q4"])
-    if "Q5" in data:
-        row.Q5 = str(data["Q5"])
-    if "Q6" in data:
-        row.Q6 = str(data["Q6"])
-    row.Personalities_16 = str(data["16 Personalities"])
-    row.DISC = str(data["DISC"])
-
-
-def create_response_manager(data):
-    # Development
-    collection_url = "https://www.notion.so/47a3c036dad24f9d90bf11fcf42306b6?v=17efc6a9dcb04c49bbe532d41403a9ef"
-    # Production
-    # collection_url = "https://www.notion.so/c175a76a5294449fbe7beb3301114385?v=cc2374d2abf4424999c76e3d1cd02777"
-    token = os.environ.get("TOKEN")
-
-    client = NotionClient(token)
-    cv = client.get_collection_view(collection_url)
-    row = cv.collection.add_row()
-    row.Date = datetime.datetime.strptime(data["timestamp"], "%Y-%m-%dT%H:%M:%S.%fZ")  # .date()
-    row.Name = str(data["Name"])
-    if "Gender" in data:
-        row.Gender = str(data["Gender"][0])
-    if "Email" in data:
-        row.Email = str(data["Email"])
-    row.Mobile_telephone = str(data["Mobile telephone"])
-    row.Skype_ID = str(data["Skype ID"])
-    if "English language level" in data:
-        row.English_language_level = str(data["English language level"])
-    row.Frameworks_languages_of_programming = str(data["Frameworks, languages of programming"])
-    row.Developed_websites = str(data["Developed websites"])
-    row.Link_to_Upwork_profile = str(data["Link to Upwork profile"])
-    row.About_yourself = str(data["About yourself"])
-    row.Work_Experience = str(data["Work Experience"])
-    row.Skills_and_specialization = str(data["Skills and specialization"])
-    if "Availability" in data:
-        row.Availability = ", ".join(data["Availability"])
-    if "Why freelance?" in data:
-        row.Why_freelance = str(data["Why freelance?"])
-    if "Are you a fulltime freelancer?" in data:
-        row.Are_you_a_fulltime_freelancer = str(data["Are you a fulltime freelancer?"])
-    if "Q1" in data:
-        row.Q1 = data["Q1"]
-    if "Q2" in data:
-        row.Q2 = data["Q2"]
-    if "Q3" in data:
-        row.Q3 = str(data["Q3"])
-    if "Q4" in data:
-        row.Q4 = str(data["Q4"])
-    if "Q5" in data:
-        row.Q5 = str(data["Q5"])
-    if "Q6" in data:
-        row.Q6 = str(data["Q6"])
-    row.Personalities_16 = str(data["16 Personalities"])
-    row.DISC = str(data["DISC"])
+    upwork_profile = data["Upwork profile"] + ("/" if data["Upwork profile"][-1] != "/" else "")
+    records = cv.collection.get_rows()
+    row_exist = None
+    for record in records:
+        rec_profile = record.get_property("upwork_profile")
+        if rec_profile != "":
+            if (rec_profile + ("/" if rec_profile[-1] != "/" else "")) == upwork_profile:
+                row_exist = record
+                break
+    row = row_exist if row_exist is not None else cv.collection.add_row()
+    row.set_property("Type", type)
+    for i in data:
+        print(f"{i}: {data[i]}")
+        if i == "timestamp":
+            row.set_property("Form filled", datetime.datetime.strptime(data[i], "%Y-%m-%dT%H:%M:%S.%fZ"))
+        else:
+            if "_".join(str.lower(i).split()) in row.get_all_properties().keys():
+                row.set_property("_".join(str.lower(i).split()), data[i])
+            else:
+                print(f'no column "{i}" in target table')
 
 
 @app.route("/responses", methods=["POST"])
 def responses():
+    accepted_types = ["designer", "developer", "manager"]
+    print("start new response")
     res_type = request.args.get("type")
     data = request.get_json()
-    if res_type == "developer":
-        create_response_developer(data)
-    # elif res_type == "manager":
-    #     create_response_manager(data)
+    if res_type in accepted_types:
+        create_response(res_type, data)
     else:
+        print(f"type '{res_type}' is not supported yet")
         return f"type '{res_type}' is not supported yet"
-    print(res_type)
-    for i in data:
-        print(i + " is " + str(data[i]))
-
-    return f'creating new {res_type} response from {data["Name"]}'
+    print(f'created {res_type} response from {data["Name"]}')
+    return f'created new {res_type} response from {data["Name"]}'
 
 
 if __name__ == "__main__":
