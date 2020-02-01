@@ -651,20 +651,22 @@ def invites():
 
 def create_response(type, data):
     # Development
-    # collection_url = "https://www.notion.so/c8cc4837308c4b299a88d36d07bc2f4f?v=dd587a4640aa41bd9ff88ca268aff553"
+    collection_url = "https://www.notion.so/c8cc4837308c4b299a88d36d07bc2f4f?v=dd587a4640aa41bd9ff88ca268aff553"
     # Production
-    collection_url = "https://www.notion.so/1d8596d12d6e4860af30f5c3ab38b7d2"
+    # collection_url = "https://www.notion.so/1d8596d12d6e4860af30f5c3ab38b7d2"
     token = os.environ.get("TOKEN")
     client = NotionClient(token)
 
     cv = client.get_collection_view(collection_url)
-    upwork_profile = data["Upwork profile"] + ("/" if data["Upwork profile"][-1] != "/" else "")
+    upwork_profile = data["Upwork profile"]
+    upwork_id = upwork_profile[upwork_profile.find('~')+1:upwork_profile.find('~')+19]
     records = cv.collection.get_rows()
     row_exist = None
     for record in records:
         rec_profile = record.get_property("upwork_profile")
         if rec_profile != "":
-            if (rec_profile + ("/" if rec_profile[-1] != "/" else "")) == upwork_profile:
+            uw_id = rec_profile[rec_profile.find('~') + 1:rec_profile.find('~') + 19]
+            if uw_id == upwork_id:
                 row_exist = record
                 break
     row = row_exist if row_exist is not None else cv.collection.add_row()
