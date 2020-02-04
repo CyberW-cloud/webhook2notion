@@ -653,7 +653,7 @@ def create_response(type, data):
     # Development
     # collection_url = "https://www.notion.so/c8cc4837308c4b299a88d36d07bc2f4f?v=dd587a4640aa41bd9ff88ca268aff553"
     # Production
-    collection_url = "https://www.notion.so/1d8596d12d6e4860af30f5c3ab38b7d2"
+    collection_url = "https://www.notion.so/1f4aabb8710f4c89a3411de53fc7222a?v=0e8184ceca384767917f928bb3d20e6f"
     token = os.environ.get("TOKEN")
     client = NotionClient(token)
 
