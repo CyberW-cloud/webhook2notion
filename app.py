@@ -303,35 +303,44 @@ def get_todo_list_by_role(token, roles):
     team = client.get_collection_view(
         "https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=536bcc489f93433ab19d697490b00525"
     )
+    team_df = nview_to_pandas(team)
     # python 536bcc489f93433ab19d697490b00525
     # no_filters 375e91212fc4482c815f0b4419cbf5e3
     stats = client.get_collection_view(
         "https://www.notion.so/e4d36149b9d8476e9985a2c658d4a873?v=3238ddee2ea04d5ea302d99fc2a2d5cc"
     )
+    # stats_df = nview_to_pandas(stats)
     todo_list = dict()
     for role in roles:
-        filter_params = [
-            {"property": "Roles", "comparator": "enum_contains", "value": role},
-            {"property": "out of Team now", "comparator": "checkbox_is", "value": "No"},
-        ]
-        people = team.build_query(filter=filter_params).execute()
+        # filter_params = [
+        #     {"property": "Roles", "comparator": "enum_contains", "value": role},
+        #     {"property": "out of Team now", "comparator": "checkbox_is", "value": "No"},
+        # ]
+        # people = team.build_query(filter=filter_params).execute()
+
+        people = team_df[[role in x for x in team_df["roles"]]]
+        people = people[people["out_of_team_now"] != True]
+
         todo_list[role] = []
-        for person in people:
+        for index, person in people.iterrows():
             d = dict()
-            filter_params = [
-                {"property": "title", "comparator": "string_contains", "value": person.name.replace("\xa0", "")}
-            ]
-            person_stat = stats.build_query(filter=filter_params).execute()
-            if person_stat:
-                d["stats"] = person_stat[0]
-                d["todo_url"] = person_stat[0].todo
+            # filter_params = [
+            #     {"property": "title", "comparator": "string_contains", "value": person.name.replace("\xa0", "")}
+            # ]
+            # person_stat = stats.build_query(filter=filter_params).execute()
+
+            # person_stat = stats_df[stats_df['name'] == person['name']]
+
+            if person:
+                # d["stats"] = person[0]
+                d["todo_url"] = person[0].todo
                 d["team"] = person
                 d["name"] = person.name.replace("\xa0", "")
                 d["pa_for"] = []
                 d["bidder_for"] = []
-                for f in person_stat[0].pa_role:
+                for f in person[0].pa_role:
                     d["pa_for"].append((f.name.replace("\xa0", ""), f.get_browseable_url()))
-                for f in person_stat[0].bidder_role_for:
+                for f in person[0].bidder_role_for:
                     d["bidder_for"].append((f.name.replace("\xa0", ""), f.get_browseable_url()))
                 todo_list[role].append(d)
             else:
@@ -493,7 +502,7 @@ def weekly_todo():
         "sat": today + timedelta(5),
         "sun": today + timedelta(6),
     }
-
+    # !!!!!!!!! STOP HERE !!!!!!!!!!!!
     for role in roles:
         if role == "PA":
             weekly_todo_pa(token_v2, staff[role], dates)
@@ -653,7 +662,7 @@ def create_response(type, data):
     # Development
     # collection_url = "https://www.notion.so/c8cc4837308c4b299a88d36d07bc2f4f?v=dd587a4640aa41bd9ff88ca268aff553"
     # Production
-    collection_url = "https://www.notion.so/1d8596d12d6e4860af30f5c3ab38b7d2"
+    collection_url = "https://www.notion.so/1f4aabb8710f4c89a3411de53fc7222a?v=0e8184ceca384767917f928bb3d20e6f"
     token = os.environ.get("TOKEN")
     client = NotionClient(token)
 
