@@ -303,39 +303,52 @@ def get_todo_list_by_role(token, roles):
     team = client.get_collection_view(
         "https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=536bcc489f93433ab19d697490b00525"
     )
+    team_df = nview_to_pandas(team)
     # python 536bcc489f93433ab19d697490b00525
     # no_filters 375e91212fc4482c815f0b4419cbf5e3
     stats = client.get_collection_view(
         "https://www.notion.so/e4d36149b9d8476e9985a2c658d4a873?v=3238ddee2ea04d5ea302d99fc2a2d5cc"
     )
+    # stats_df = nview_to_pandas(stats)
     todo_list = dict()
     for role in roles:
-        filter_params = [
-            {"property": "Roles", "comparator": "enum_contains", "value": role},
-            {"property": "out of Team now", "comparator": "checkbox_is", "value": "No"},
-        ]
-        people = team.build_query(filter=filter_params).execute()
+        # filter_params = [
+        #     {"property": "Roles", "comparator": "enum_contains", "value": role},
+        #     {"property": "out of Team now", "comparator": "checkbox_is", "value": "No"},
+        # ]
+        # people = team.build_query(filter=filter_params).execute()
+
+        team_df.loc[:, 'pa_name'] = team_df.pa.map(lambda x: next(iter(x), None))
+        team_df.pa_name = team_df.pa_name.apply(lambda x: x.name.replace('\xa0', '') if x else '')
+        team_df.loc[:, 'bidder_name'] = team_df.bidder.map(lambda x: next(iter(x), None))
+        team_df.bidder_name = team_df.bidder_name.apply(lambda x: x.name.replace('\xa0', '') if x else '')
+        people = team_df[[role in x for x in team_df["roles"]]]
+        people = people[people["out_of_team_now"] != True]
+
         todo_list[role] = []
-        for person in people:
+        for index, person in people.iterrows():
             d = dict()
-            filter_params = [
-                {"property": "title", "comparator": "string_contains", "value": person.name.replace("\xa0", "")}
-            ]
-            person_stat = stats.build_query(filter=filter_params).execute()
-            if person_stat:
-                d["stats"] = person_stat[0]
-                d["todo_url"] = person_stat[0].todo
-                d["team"] = person
-                d["name"] = person.name.replace("\xa0", "")
-                d["pa_for"] = []
-                d["bidder_for"] = []
-                for f in person_stat[0].pa_role:
-                    d["pa_for"].append((f.name.replace("\xa0", ""), f.get_browseable_url()))
-                for f in person_stat[0].bidder_role_for:
-                    d["bidder_for"].append((f.name.replace("\xa0", ""), f.get_browseable_url()))
-                todo_list[role].append(d)
-            else:
-                print(person.name.replace("\xa0", ""), "not found in stats")
+            # filter_params = [
+            #     {"property": "title", "comparator": "string_contains", "value": person.name.replace("\xa0", "")}
+            # ]
+            # person_stat = stats.build_query(filter=filter_params).execute()
+
+            # person_stat = stats_df[stats_df['name'] == person['name']]
+
+            # if person:
+            # d["stats"] = person[0]
+            d["todo_url"] = person['todo'].split()[1]
+            d["team"] = person
+            d["name"] = person['name'].replace('\xa0', '')
+            d["pa_for"] = []
+            d["bidder_for"] = []
+            for i, f in team_df[team_df['pa_name'] == person['name']].iterrows():
+                d["pa_for"].append((f['name'], f['row'].get_browseable_url()))
+            for i, f in team_df[team_df['bidder_name'] == person['name']].iterrows():
+                d["bidder_for"].append((f['name'], f['row'].get_browseable_url()))
+            todo_list[role].append(d)
+            # else:
+            #     print(person.name.replace("\xa0", ""), "not found in stats")
     print(*todo_list.items(), sep="\n")
     return todo_list
 
@@ -351,13 +364,14 @@ def weekly_todo_pa(token, staff, calendar):
         # Monday
         todo = list()
         todo.append("Memo - проверить наличие и адекватность [Timelogs]" "(https://www.upwork.com/reports/pc/timelogs)")
-        todo.append(f"Запросить available and planned hours у {freelancers}")
-        todo.append(
-            f"Заполнить fact в [Workload]"
-            f"(https://www.notion.so/Workload-ef6a6d4e3bbb41d8b4286b339f603aba) по "
-            f"{freelancers}"
-        )
-        todo.append(f"Собрать Stats из Upwork и Загрузить на pCLoud по {freelancers}")
+        if freelancers:
+            todo.append(f"Запросить available and planned hours у {freelancers}")
+            todo.append(
+                f"Заполнить fact в [Workload]"
+                f"(https://www.notion.so/Workload-ef6a6d4e3bbb41d8b4286b339f603aba) по "
+                f"{freelancers}"
+            )
+            todo.append(f"Собрать Stats из Upwork и Загрузить на pCLoud по {freelancers}")
         create_todo(token, calendar["mon"], pa["todo_url"], todo, text="")
 
         # Tuesday
@@ -396,6 +410,7 @@ def weekly_todo_pa(token, staff, calendar):
         todo.append(f"Запросить информацию по отпускам и day-off {freelancers}")
         todo.append(f"Занести информацию по отпускам и day-off {freelancers} в Календарь")
         create_todo(token, calendar["fri"], pa["todo_url"], todo, text="")
+
         print(f"PA {pa['name']} done")
     print("pa done")
 
@@ -493,7 +508,6 @@ def weekly_todo():
         "sat": today + timedelta(5),
         "sun": today + timedelta(6),
     }
-
     for role in roles:
         if role == "PA":
             weekly_todo_pa(token_v2, staff[role], dates)
