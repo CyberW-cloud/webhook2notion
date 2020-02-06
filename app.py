@@ -1,4 +1,3 @@
-import datetime
 import re
 import urllib.parse
 from datetime import timedelta
@@ -15,122 +14,30 @@ timezone = "Europe/Kiev"
 app = Flask(__name__)
 
 
-def create_invite(token, collection_url, subject, description, invite_to):
-    # notion
-    match = re.search("https://upwork.com/applications/\d+", description)
-    url = match.group()
-    item_id = re.search("\d+", url)
-    client = NotionClient(token)
-    cv = client.get_collection_view(collection_url)
-    row = cv.collection.add_row()
-    row.name = subject
-    row.description = description
-    row.status = "New"
-    row.to = invite_to
-    row.link = url
-    row.id = item_id.group()
-
-
-def create_pcj(token, collection_url, subject, description, invite_to, link):
-    # notion
-    item_id = re.search("%7E[\w]+", link)
-    client = NotionClient(token)
-    cv = client.get_collection_view(collection_url)
-    row = cv.collection.add_row()
-    row.name = subject[:-9]
-    row.description = description
-    row.status = "New"
-    row.to = invite_to
-    row.link = "https://www.upwork.com/ab/jobs/search/?previous_clients=all&q={}&sort=recency".format(
-        urllib.parse.quote(subject[:-9])
+def parse_staff(todo, table, obj, client_days_before):
+    test_date = datetime.datetime.now()
+    test_date = test_date.replace(hour=12, minute=0, second=0, microsecond=0) - datetime.timedelta(
+        days=client_days_before
     )
-    row.id = item_id.group()[3:]
-
-
-def create_message(token, parent_page_url, message_content):
-    # notion
-    client = NotionClient(token)
-    page = client.get_block(parent_page_url)
-
-    pattern = '#"(?$0'
-    insert_after = None
-    div = 0
-    divs = 0
-    for child in page.children:
-        if child.type == "factory":
-            insert_after = child
-            break
-        if child.type == "text" and child.title == pattern:
-            insert_after = child
-            break
-        if child.type == "divider":
-            if div == 1:
-                divs += 1
-            else:
-                div = 1
-                divs = 1
-            if divs == 3:
-                insert_after = child
-                break
-            else:
-                continue
-        div = 0
-
-    a = page.children.add_new(TextBlock, title=" . ")
-    b = page.children.add_new(DividerBlock)
-    c = page.children.add_new(
-        TextBlock,
-        title="{data} {msg}".format(data=datetime.datetime.now().strftime("%d-%m-%Y %H:%M"), msg=message_content),
-    )
-    d = page.children.add_new(DividerBlock)
-
-    if insert_after is None:
-        a.move_to(page, "first-child")
-    else:
-        a.move_to(insert_after, "after")
-    b.move_to(a, "after")
-    c.move_to(b, "after")
-    d.move_to(c, "after")
-    a.title = ""
-
-
-def create_rss(token, collection_url, subject, link, description):
-    # notion
-    client = NotionClient(token)
-    cv = client.get_collection_view(collection_url)
-    row = cv.collection.add_row()
-    row.name = subject
-    row.link = link
-    row.description = description
-    if link.find("https://www.upwork.com/blog/") != -1:
-        row.label = "upwok blog"
-    if link.find("https://community.upwork.com/t5/Announcements/") != -1:
-        row.label = "upwork community announcements"
-
-
-def get_toto_url_by_name(token, name):
-    client = NotionClient(token)
-    stats = client.get_collection_view(
-        "https://www.notion.so/e4d36149b9d8476e9985a2c658d4a873?v=3238ddee2ea04d5ea302d99fc2a2d5cc"
-    )
-    filter_params = [{"property": "title", "comparator": "string_contains", "value": name}]
-    person_stat = stats.build_query(filter=filter_params).execute()
-    return person_stat[0].todo if person_stat else None
-
-
-def create_todo(token, date, link, todo, text):
-    # notion
-    if date is not None:  # if date not provided use now()
-        if isinstance(date, str):
-            date = datetime.datetime.strptime(urllib.parse.unquote("{}".format(date)), "%Y-%m-%dT%H:%M:%S.%fZ").date()
-    else:
-        date = datetime.datetime.now().date()
-
-    client = NotionClient(token)
-    page = client.get_block(link)
-    tasks = todo
-
-    return create_new_task(page, "", text=text, date=date, timezone=timezone, tasks=tasks)
+    # Preparing data to make task in Notion.
+    # group and clarify (by set behavior) data by person_name
+    for row in table:
+        person = row["person_name"]
+        if person not in todo:
+            todo[person] = dict()
+            todo[person]["todo_url"] = row["person"].todo
+            todo[person]["projects"] = set()
+            todo[person]["contracts"] = set()
+            todo[person]["clients"] = set()
+            todo[person]["proposals"] = set()
+        todo[person][obj].add(row["url"])
+        # check updates of client and add to task if it's need
+        if row["client"] is not None:
+            if row["client"].Modified <= test_date:
+                todo[person]["clients"].add(
+                    (row["client"].name.replace("\xa0", ""), row["client"].get_browseable_url())
+                )
+    return todo
 
 
 def get_contracts(token, days_before):
@@ -220,6 +127,63 @@ def get_projects(token, days_before):
     return res
 
 
+@app.route("/kick_staff", methods=["GET"])
+def kick_staff():
+    token_v2 = os.environ.get("TOKEN")
+    date = request.args.get("date", None)
+    contracts_day = request.args.get("contracts_day", 9, type=int)
+    projects_day = request.args.get("projects_day", contracts_day, type=int)
+    client_days_before = request.args.get("client_day", 14, type=int)
+    cc_tag = request.args.get("no_contracts", None)
+    pm_tag = request.args.get("no_projects", None)
+    cc = True if cc_tag is None else False
+    pm = True if pm_tag is None else False
+    if cc:
+        contracts = get_contracts(token_v2, contracts_day)
+        print("contracts done")
+    else:
+        contracts = []
+    if pm:
+        projects = get_projects(token_v2, projects_day)
+        print("projects done")
+    else:
+        projects = []
+
+    todo = dict()
+    todo = parse_staff(todo, contracts, "contracts", client_days_before)
+    todo = parse_staff(todo, projects, "projects", client_days_before)
+    for key in todo:
+        task = todo[key]
+        print("start todo")
+        if task["contracts"]:
+            create_todo(
+                token_v2,
+                date,
+                task["todo_url"],
+                map(lambda c: "[{}]({})".format(c[0], c[1]), task["contracts"]),
+                "Контракты не получали обновления на прошлой неделе. Пожалуйста, срочно обнови:",
+            )
+
+        if task["projects"]:
+            create_todo(
+                token_v2,
+                date,
+                task["todo_url"],
+                map(lambda p: "[{}]({})".format(p[0], p[1]), task["projects"]),
+                "Проекты не получали обновления на прошлой неделе. Пожалуйста, срочно обнови:",
+            )
+
+        if task["clients"]:
+            create_todo(
+                token_v2,
+                date,
+                task["todo_url"],
+                map(lambda t: "[{}]({})".format(t[0], t[1]), task["clients"]),
+                "Занеси новую информацию которую ты узнал про клиентов:",
+            )
+    return "Done!"
+
+
 def get_proposals(token, days_before):
     client = NotionClient(token)
     cv = client.get_collection_view(
@@ -272,85 +236,69 @@ def get_proposals(token, days_before):
     return res
 
 
-def parse_staff(todo, table, obj, client_days_before):
-    test_date = datetime.datetime.now()
-    test_date = test_date.replace(hour=12, minute=0, second=0, microsecond=0) - datetime.timedelta(
-        days=client_days_before
-    )
-    # Preparing data to make task in Notion.
-    # group and clarify (by set behavior) data by person_name
-    for row in table:
-        person = row["person_name"]
-        if person not in todo:
-            todo[person] = dict()
-            todo[person]["todo_url"] = row["person"].todo
-            todo[person]["projects"] = set()
-            todo[person]["contracts"] = set()
-            todo[person]["clients"] = set()
-            todo[person]["proposals"] = set()
-        todo[person][obj].add(row["url"])
-        # check updates of client and add to task if it's need
-        if row["client"] is not None:
-            if row["client"].Modified <= test_date:
-                todo[person]["clients"].add(
-                    (row["client"].name.replace("\xa0", ""), row["client"].get_browseable_url())
-                )
-    return todo
+@app.route("/proposals_check", methods=["GET"])
+def proposals_check():
+    token_v2 = os.environ.get("TOKEN")
+    date = request.args.get("date", None)
+    days = request.args.get("days_before", 7, type=int)
+    proposals = get_proposals(token_v2, days)
+    todo = dict()
+    todo = parse_staff(todo, proposals, "proposals", 0)
+    for key in todo:
+        task = todo[key]
+        print("start todo")
+        if task["proposals"]:
+            create_todo(
+                token_v2,
+                date,
+                task["todo_url"],
+                map(lambda p: "[{}]({})".format(p[0], p[1]), task["proposals"]),
+                "Теплый клиент остывает, нужно срочно что то делать. Проверь:",
+            )
+    return "Done!"
 
 
-def get_todo_list_by_role(token, roles):
+def get_todo_url_by_name(token, name):
     client = NotionClient(token)
-    team = client.get_collection_view(
-        "https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=536bcc489f93433ab19d697490b00525"
-    )
-    team_df = nview_to_pandas(team)
-    # python 536bcc489f93433ab19d697490b00525
-    # no_filters 375e91212fc4482c815f0b4419cbf5e3
     stats = client.get_collection_view(
         "https://www.notion.so/e4d36149b9d8476e9985a2c658d4a873?v=3238ddee2ea04d5ea302d99fc2a2d5cc"
     )
-    # stats_df = nview_to_pandas(stats)
-    todo_list = dict()
-    for role in roles:
-        # filter_params = [
-        #     {"property": "Roles", "comparator": "enum_contains", "value": role},
-        #     {"property": "out of Team now", "comparator": "checkbox_is", "value": "No"},
-        # ]
-        # people = team.build_query(filter=filter_params).execute()
+    filter_params = [{"property": "title", "comparator": "string_contains", "value": name}]
+    person_stat = stats.build_query(filter=filter_params).execute()
+    return person_stat[0].todo if person_stat else None
 
-        team_df.loc[:, 'pa_name'] = team_df.pa.map(lambda x: next(iter(x), None))
-        team_df.pa_name = team_df.pa_name.apply(lambda x: x.name.replace('\xa0', '') if x else '')
-        team_df.loc[:, 'bidder_name'] = team_df.bidder.map(lambda x: next(iter(x), None))
-        team_df.bidder_name = team_df.bidder_name.apply(lambda x: x.name.replace('\xa0', '') if x else '')
-        people = team_df[[role in x for x in team_df["roles"]]]
-        people = people[people["out_of_team_now"] != True]
 
-        todo_list[role] = []
-        for index, person in people.iterrows():
-            d = dict()
-            # filter_params = [
-            #     {"property": "title", "comparator": "string_contains", "value": person.name.replace("\xa0", "")}
-            # ]
-            # person_stat = stats.build_query(filter=filter_params).execute()
+def create_todo(token, date, link, todo, text):
+    # notion
+    if date is not None:  # if date not provided use now()
+        if isinstance(date, str):
+            date = datetime.datetime.strptime(urllib.parse.unquote("{}".format(date)), "%Y-%m-%dT%H:%M:%S.%fZ").date()
+    else:
+        date = datetime.datetime.now().date()
 
-            # person_stat = stats_df[stats_df['name'] == person['name']]
+    client = NotionClient(token)
+    page = client.get_block(link)
+    tasks = todo
 
-            # if person:
-            # d["stats"] = person[0]
-            d["todo_url"] = person['todo'].split()[1]
-            d["team"] = person
-            d["name"] = person['name'].replace('\xa0', '')
-            d["pa_for"] = []
-            d["bidder_for"] = []
-            for i, f in team_df[team_df['pa_name'] == person['name']].iterrows():
-                d["pa_for"].append((f['name'], f['row'].get_browseable_url()))
-            for i, f in team_df[team_df['bidder_name'] == person['name']].iterrows():
-                d["bidder_for"].append((f['name'], f['row'].get_browseable_url()))
-            todo_list[role].append(d)
-            # else:
-            #     print(person.name.replace("\xa0", ""), "not found in stats")
-    print(*todo_list.items(), sep="\n")
-    return todo_list
+    return create_new_task(page, "", text=text, date=date, timezone=timezone, tasks=tasks)
+
+
+@app.route("/todoone", methods=["GET"])
+def todo_one():
+    member = request.args.get("member")
+    token_v2 = os.environ.get("TOKEN")
+    todo = "{}".format(request.args.get("todo")).split("||")
+    text = request.args.get("text")
+    date = request.args.get("date", None)
+    if urllib.parse.unquote(member).find("https://www.notion.so") != -1:
+        todo_url = urllib.parse.unquote(member)
+    else:
+        todo_url = get_todo_url_by_name(token_v2, member)
+    if todo_url is not None:
+        create_todo(token_v2, date, todo_url, todo, text)
+        return f'added to {member} {text if text else ""} {todo}  to Notion'
+    else:
+        return f"{member} not found in StatsDB in Notion or not Notion URL"
 
 
 def weekly_todo_pa(token, staff, calendar):
@@ -484,6 +432,61 @@ def weekly_todo_bidder(token, staff, calendar):
     print("bidder done")
 
 
+def get_todo_list_by_role(token, roles):
+    client = NotionClient(token)
+    team = client.get_collection_view(
+        "https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=536bcc489f93433ab19d697490b00525"
+    )
+    team_df = nview_to_pandas(team)
+    # python 536bcc489f93433ab19d697490b00525
+    # no_filters 375e91212fc4482c815f0b4419cbf5e3
+    stats = client.get_collection_view(
+        "https://www.notion.so/e4d36149b9d8476e9985a2c658d4a873?v=3238ddee2ea04d5ea302d99fc2a2d5cc"
+    )
+    # stats_df = nview_to_pandas(stats)
+    todo_list = dict()
+    for role in roles:
+        # filter_params = [
+        #     {"property": "Roles", "comparator": "enum_contains", "value": role},
+        #     {"property": "out of Team now", "comparator": "checkbox_is", "value": "No"},
+        # ]
+        # people = team.build_query(filter=filter_params).execute()
+
+        team_df.loc[:, 'pa_name'] = team_df.pa.map(lambda x: next(iter(x), None))
+        team_df.pa_name = team_df.pa_name.apply(lambda x: x.name.replace('\xa0', '') if x else '')
+        team_df.loc[:, 'bidder_name'] = team_df.bidder.map(lambda x: next(iter(x), None))
+        team_df.bidder_name = team_df.bidder_name.apply(lambda x: x.name.replace('\xa0', '') if x else '')
+        people = team_df[[role in x for x in team_df["roles"]]]
+        people = people[people["out_of_team_now"] != True]
+
+        todo_list[role] = []
+        for index, person in people.iterrows():
+            d = dict()
+            # filter_params = [
+            #     {"property": "title", "comparator": "string_contains", "value": person.name.replace("\xa0", "")}
+            # ]
+            # person_stat = stats.build_query(filter=filter_params).execute()
+
+            # person_stat = stats_df[stats_df['name'] == person['name']]
+
+            # if person:
+            # d["stats"] = person[0]
+            d["todo_url"] = person['todo'].split()[1]
+            d["team"] = person
+            d["name"] = person['name'].replace('\xa0', '')
+            d["pa_for"] = []
+            d["bidder_for"] = []
+            for i, f in team_df[team_df['pa_name'] == person['name']].iterrows():
+                d["pa_for"].append((f['name'], f['row'].get_browseable_url()))
+            for i, f in team_df[team_df['bidder_name'] == person['name']].iterrows():
+                d["bidder_for"].append((f['name'], f['row'].get_browseable_url()))
+            todo_list[role].append(d)
+            # else:
+            #     print(person.name.replace("\xa0", ""), "not found in stats")
+    print(*todo_list.items(), sep="\n")
+    return todo_list
+
+
 @app.route("/weekly_todo", methods=["GET"])
 def weekly_todo():
     token_v2 = os.environ.get("TOKEN")
@@ -520,101 +523,18 @@ def weekly_todo():
     return "Done!"
 
 
-@app.route("/kick_staff", methods=["GET"])
-def kick_staff():
-    token_v2 = os.environ.get("TOKEN")
-    date = request.args.get("date", None)
-    contracts_day = request.args.get("contracts_day", 9, type=int)
-    projects_day = request.args.get("projects_day", contracts_day, type=int)
-    client_days_before = request.args.get("client_day", 14, type=int)
-    cc_tag = request.args.get("no_contracts", None)
-    pm_tag = request.args.get("no_projects", None)
-    cc = True if cc_tag is None else False
-    pm = True if pm_tag is None else False
-    if cc:
-        contracts = get_contracts(token_v2, contracts_day)
-        print("contracts done")
-    else:
-        contracts = []
-    if pm:
-        projects = get_projects(token_v2, projects_day)
-        print("projects done")
-    else:
-        projects = []
-
-    todo = dict()
-    todo = parse_staff(todo, contracts, "contracts", client_days_before)
-    todo = parse_staff(todo, projects, "projects", client_days_before)
-    for key in todo:
-        task = todo[key]
-        print("start todo")
-        if task["contracts"]:
-            create_todo(
-                token_v2,
-                date,
-                task["todo_url"],
-                map(lambda c: "[{}]({})".format(c[0], c[1]), task["contracts"]),
-                "Контракты не получали обновления на прошлой неделе. Пожалуйста, срочно обнови:",
-            )
-
-        if task["projects"]:
-            create_todo(
-                token_v2,
-                date,
-                task["todo_url"],
-                map(lambda p: "[{}]({})".format(p[0], p[1]), task["projects"]),
-                "Проекты не получали обновления на прошлой неделе. Пожалуйста, срочно обнови:",
-            )
-
-        if task["clients"]:
-            create_todo(
-                token_v2,
-                date,
-                task["todo_url"],
-                map(lambda t: "[{}]({})".format(t[0], t[1]), task["clients"]),
-                "Занеси новую информацию которую ты узнал про клиентов:",
-            )
-    return "Done!"
-
-
-@app.route("/proposals_check", methods=["GET"])
-def proposals_check():
-    token_v2 = os.environ.get("TOKEN")
-    date = request.args.get("date", None)
-    days = request.args.get("days_before", 7, type=int)
-    proposals = get_proposals(token_v2, days)
-    todo = dict()
-    todo = parse_staff(todo, proposals, "proposals", 0)
-    for key in todo:
-        task = todo[key]
-        print("start todo")
-        if task["proposals"]:
-            create_todo(
-                token_v2,
-                date,
-                task["todo_url"],
-                map(lambda p: "[{}]({})".format(p[0], p[1]), task["proposals"]),
-                "Теплый клиент остывает, нужно срочно что то делать. Проверь:",
-            )
-    return "Done!"
-
-
-@app.route("/todoone", methods=["GET"])
-def todo_one():
-    member = request.args.get("member")
-    token_v2 = os.environ.get("TOKEN")
-    todo = "{}".format(request.args.get("todo")).split("||")
-    text = request.args.get("text")
-    date = request.args.get("date", None)
-    if urllib.parse.unquote(member).find("https://www.notion.so") != -1:
-        todo_url = urllib.parse.unquote(member)
-    else:
-        todo_url = get_toto_url_by_name(token_v2, member)
-    if todo_url is not None:
-        create_todo(token_v2, date, todo_url, todo, text)
-        return f'added to {member} {text if text else ""} {todo}  to Notion'
-    else:
-        return f"{member} not found in StatsDB in Notion or not Notion URL"
+def create_rss(token, collection_url, subject, link, description):
+    # notion
+    client = NotionClient(token)
+    cv = client.get_collection_view(collection_url)
+    row = cv.collection.add_row()
+    row.name = subject
+    row.link = link
+    row.description = description
+    if link.find("https://www.upwork.com/blog/") != -1:
+        row.label = "upwok blog"
+    if link.find("https://community.upwork.com/t5/Announcements/") != -1:
+        row.label = "upwork community announcements"
 
 
 @app.route("/rss", methods=["POST"])
@@ -629,6 +549,53 @@ def rss():
     return f"added {subject} receipt to Notion"
 
 
+def create_message(token, parent_page_url, message_content):
+    # notion
+    client = NotionClient(token)
+    page = client.get_block(parent_page_url)
+
+    pattern = '#"(?$0'
+    insert_after = None
+    div = 0
+    divs = 0
+    for child in page.children:
+        if child.type == "factory":
+            insert_after = child
+            break
+        if child.type == "text" and child.title == pattern:
+            insert_after = child
+            break
+        if child.type == "divider":
+            if div == 1:
+                divs += 1
+            else:
+                div = 1
+                divs = 1
+            if divs == 3:
+                insert_after = child
+                break
+            else:
+                continue
+        div = 0
+
+    a = page.children.add_new(TextBlock, title=" . ")
+    b = page.children.add_new(DividerBlock)
+    c = page.children.add_new(
+        TextBlock,
+        title="{data} {msg}".format(data=datetime.datetime.now().strftime("%d-%m-%Y %H:%M"), msg=message_content),
+    )
+    d = page.children.add_new(DividerBlock)
+
+    if insert_after is None:
+        a.move_to(page, "first-child")
+    else:
+        a.move_to(insert_after, "after")
+    b.move_to(a, "after")
+    c.move_to(b, "after")
+    d.move_to(c, "after")
+    a.title = ""
+
+
 @app.route("/message", methods=["GET"])
 def message():
     parent_page_url = request.args.get("parent_page_url")
@@ -636,6 +603,22 @@ def message():
     message_content = request.args.get("message")
     create_message(token_v2, parent_page_url, message_content)
     return f"added {message_content} receipt to Notion"
+
+
+def create_pcj(token, collection_url, subject, description, invite_to, link):
+    # notion
+    item_id = re.search("%7E[\w]+", link)
+    client = NotionClient(token)
+    cv = client.get_collection_view(collection_url)
+    row = cv.collection.add_row()
+    row.name = subject[:-9]
+    row.description = description
+    row.status = "New"
+    row.to = invite_to
+    row.link = "https://www.upwork.com/ab/jobs/search/?previous_clients=all&q={}&sort=recency".format(
+        urllib.parse.quote(subject[:-9])
+    )
+    row.id = item_id.group()[3:]
 
 
 @app.route("/pcj", methods=["POST"])
@@ -649,6 +632,22 @@ def pcj():
     print(f"add {subject} {link}")
     create_pcj(token_v2, collection_url, subject, description, invite_to, link)
     return f"added {subject} receipt to Notion"
+
+
+def create_invite(token, collection_url, subject, description, invite_to):
+    # notion
+    match = re.search("https://upwork.com/applications/\d+", description)
+    url = match.group()
+    item_id = re.search("\d+", url)
+    client = NotionClient(token)
+    cv = client.get_collection_view(collection_url)
+    row = cv.collection.add_row()
+    row.name = subject
+    row.description = description
+    row.status = "New"
+    row.to = invite_to
+    row.link = url
+    row.id = item_id.group()
 
 
 @app.route("/invites", methods=["POST"])
@@ -665,9 +664,9 @@ def invites():
 
 def create_response(type, data):
     # Development
-    # collection_url = "https://www.notion.so/c8cc4837308c4b299a88d36d07bc2f4f?v=dd587a4640aa41bd9ff88ca268aff553"
+    collection_url = "https://www.notion.so/c8cc4837308c4b299a88d36d07bc2f4f?v=dd587a4640aa41bd9ff88ca268aff553"
     # Production
-    collection_url = "https://www.notion.so/1f4aabb8710f4c89a3411de53fc7222a?v=0e8184ceca384767917f928bb3d20e6f"
+    # collection_url = "https://www.notion.so/1f4aabb8710f4c89a3411de53fc7222a?v=0e8184ceca384767917f928bb3d20e6f"
     token = os.environ.get("TOKEN")
     client = NotionClient(token)
 
@@ -691,9 +690,13 @@ def create_response(type, data):
             row.set_property("Form filled", datetime.datetime.strptime(data[i], "%Y-%m-%dT%H:%M:%S.%fZ"))
         else:
             if "_".join(str.lower(i).split()) in row.get_all_properties().keys():
-                row.set_property("_".join(str.lower(i).split()), data[i])
+                try:
+                    row.set_property("_".join(str.lower(i).split()), data[i])
+                except Exception:
+                    print(f'unable to insert value "{data[i]}" into column "{i}"')
             else:
                 print(f'no column "{i}" in target table')
+    row.set_property('Status', 'Form filled')
 
 
 @app.route("/responses", methods=["POST"])
@@ -703,11 +706,12 @@ def responses():
     res_type = request.args.get("type")
     data = request.get_json()
     if res_type in accepted_types:
+        print(f'start creating {res_type} response from {data["Name"]}')
         create_response(res_type, data)
     else:
         print(f"type '{res_type}' is not supported yet")
         return f"type '{res_type}' is not supported yet"
-    print(f'created {res_type} response from {data["Name"]}')
+    print(f'created new {res_type} response from {data["Name"]}')
     return f'created new {res_type} response from {data["Name"]}'
 
 
