@@ -325,12 +325,12 @@ def todo_one():
 
 
 def weekly_todo_pa(token, staff, calendar):
-    print("pa start")
+    print("PAs start")
     for pa in staff:
         #        if pa['name'] != 'Denys Safonov':
         #            continue
-        freelancers = ", ".join(map(lambda c: "[{}]({})".format(c[0], c[1]), pa["pa_for"]))
         print(f"PA {pa['name']} start")
+        freelancers = ", ".join(map(lambda c: "[{}]({})".format(c[0], c[1]), pa["pa_for"]))
 
         # Monday
         todo = list()
@@ -383,11 +383,11 @@ def weekly_todo_pa(token, staff, calendar):
         create_todo(token, calendar["fri"], pa["todo_url"], todo, text="")
 
         print(f"PA {pa['name']} done")
-    print("pa done")
+    print("PAs done")
 
 
 def weekly_todo_cc(token, staff, calendar):
-    print("CC start")
+    print("CCs start")
     for cc in staff:
         #        if cc['name'] != 'Denys Safonov':
         #           continue
@@ -415,11 +415,11 @@ def weekly_todo_cc(token, staff, calendar):
         todo.append("Проверить,что фрилансер сообщил клиентам о day-off или отпуске на следующей неделе")
         create_todo(token, calendar["fri"], cc["todo_url"], todo, text="")
         print(f"CC {cc['name']} done")
-    print("CC done")
+    print("CCs done")
 
 
 def weekly_todo_bidder(token, staff, calendar):
-    print("bidder start")
+    print("bidders start")
     for bidder in staff:
         #        if bidder['name'] != 'Denys Safonov':
         #            continue
@@ -452,7 +452,7 @@ def weekly_todo_bidder(token, staff, calendar):
         )
         create_todo(token, calendar["fri"], bidder["todo_url"], todo, text="")
         print(f"bidder {bidder['name']} done")
-    print("bidder done")
+    print("bidders done")
 
 
 def get_todo_list_by_role(token, roles):
@@ -506,12 +506,13 @@ def get_todo_list_by_role(token, roles):
             todo_list[role].append(d)
             # else:
             #     print(person.name.replace("\xa0", ""), "not found in stats")
-    print(*todo_list.items(), sep="\n")
+    # print(*todo_list.items(), sep="\n")
     return todo_list
 
 
 @app.route("/weekly_todo", methods=["GET"])
 def weekly_todo():
+    print("weekly todo start")
     token_v2 = os.environ.get("TOKEN")
     d = request.args.get("date", datetime.datetime.now().date())
     roles = request.args.get("roles", "")
@@ -543,6 +544,7 @@ def weekly_todo():
             weekly_todo_bidder(token_v2, staff[role], dates)
         else:
             return f"Can't find Function for role {role}"
+    print("weekly todo done")
     return "Done!"
 
 
