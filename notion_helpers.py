@@ -4,7 +4,7 @@ from time import sleep
 
 import pandas as pd
 from notion.block import HeaderBlock, TextBlock, TodoBlock
-from notion.collection import NotionDate, TableView
+from notion.collection import NotionDate, TableView, TableQueryResult
 
 
 def get_date_from_title(title):
@@ -132,15 +132,18 @@ def create_new_task(page, header, date, text, timezone, tasks):
 def nview_to_pandas(view):
     """
     Convert Notion view to Pandas DataFrame
-    :param view: TableView object
+    :param view: TableView, TableQueryResult object
     :return: pandas.DataFrame
     """
-    if type(view) != TableView:
+    if isinstance(view, (TableView, TableQueryResult)):
+        # print(f"start converting to DF at {datetime.datetime.now()}")
+        rows = view.collection.get_rows()
+        data = []
+        for row in rows:
+            i = row.get_all_properties()
+            i["row"] = row
+            data.append(i)
+        # print(f"finish converting to DF at {datetime.datetime.now()}")
+        return pd.DataFrame(data)
+    else:
         return
-    rows = view.collection.get_rows()
-    data = []
-    for row in rows:
-        i = row.get_all_properties()
-        i["row"] = row
-        data.append(i)
-    return pd.DataFrame(data)

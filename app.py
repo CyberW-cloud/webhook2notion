@@ -40,49 +40,6 @@ def parse_staff(todo, table, obj, client_days_before):
     return todo
 
 
-def get_contracts(token, days_before):
-    client = NotionClient(token)
-    cv = client.get_collection_view(
-        "https://www.notion.so/5a95fb63129242a5b5b48f18e16ef19a?v=48599e7a184a4f32be2469e696367949"
-    )
-    # 48599e7a184a4f32be2469e696367949 - no_filters_view
-    # 02929acd595a48dda28cb9e2ff6ae210 - python_view
-
-    # calculate date for filter now() - days_before. Stupid notion starts new day at 12:00 a.m.
-    n = datetime.datetime.now(pytz.timezone("Europe/Kiev"))
-    n = n.replace(hour=12, minute=0, second=0, microsecond=0) - datetime.timedelta(days=days_before)
-
-    # get contracts In Progress with date less when now()-days before and w/o project
-    filter_params = [
-        {"property": "Status", "comparator": "enum_is", "value": "In Progress"},
-        {
-            "property": "Updated",
-            "comparator": "date_is_on_or_before",
-            "value_type": "exact_date",
-            "value": int(n.timestamp()) * 1000,
-        },
-        {"property": "Project", "comparator": "is_empty"},
-    ]
-    result = cv.build_query(filter=filter_params).execute()
-    res = []
-    # for every contract get person (how care this about contract and client for next check
-    for row in result:
-        contract = dict()
-        contract["person"] = row.Coordinator[0] if row.Coordinator else None
-        if contract["person"] is None:
-            continue
-        else:
-            contract["person_name"] = contract["person"].name.replace("\xa0", "")
-        if contract["person_name"] == "selfCC":  # if selfCC get a freelancer name
-            contract["person"] = row.freelancer[0] if row.freelancer else None
-            if contract["person"]:
-                contract["person_name"] = contract["person"].name.replace("\xa0", "")
-        contract["client"] = row.client_name[0] if row.client_name else None
-        contract["url"] = row.contract_name.replace("\xa0", ""), row.get_browseable_url()
-        res.append(contract)
-    return res
-
-
 def get_projects(token, days_before):
     client = NotionClient(token)
     cv = client.get_collection_view(
@@ -92,34 +49,38 @@ def get_projects(token, days_before):
     # 1ed5f8ce4e834f1382ffb447976e944f - python_view
 
     # calculate date for filter now() - days_before. Stupid notion starts new day at 12:00 a.m.
-    n = datetime.datetime.now(pytz.timezone("Europe/Kiev"))
+    # n = datetime.datetime.now(pytz.timezone("Europe/Kiev"))
+    n = datetime.datetime.now()
     n = n.replace(hour=12, minute=0, second=0, microsecond=0) - datetime.timedelta(days=days_before)
 
     # get projects InProgress with date less when now()-days before
-    filter_params = [
-        {"property": "Status", "comparator": "enum_is", "value": "inProgress"},
-        {
-            "property": "Updated",
-            "comparator": "date_is_on_or_before",
-            "value_type": "exact_date",
-            "value": int(n.timestamp()) * 1000,
-        },
-    ]
-    cv = cv.build_query(filter=filter_params)
-    result = cv.execute()
+    # filter_params = [
+    #     {"property": "Status", "comparator": "enum_is", "value": "inProgress"},
+    #     {
+    #         "property": "Updated",
+    #         "comparator": "date_is_on_or_before",
+    #         "value_type": "exact_date",
+    #         "value": int(n.timestamp()) * 1000,
+    #     },
+    # ]
+    # cv = cv.build_query(filter=filter_params)
+    # result = cv.execute()
+    result = nview_to_pandas(cv)
+    result = result[(result["status"].str.lower() == "inprogress") & (result["updated"] <= pd.Timestamp(n))]
     res = []
 
     # for every project get person and client
-    for row in result:
+    # for row in result:
+    for index, row in result.iterrows():
         project = dict()
-        if row.PM:
-            project["person"] = row.PM[0]
+        if row["pm"]:
+            project["person"] = row["pm"][0]
         else:
-            project["person"] = row.contracts[0].Coordinator[0] if row.contracts[0].Coordinator[0] else None
+            project["person"] = row["contracts"][0].coordinator[0] if row["contracts"][0].coordinator[0] else None
         if project["person"]:
             project["person_name"] = project["person"].name.replace("\xa0", "")
-        project["client"] = row.client_name[0] if row.client_name else None
-        project["url"] = row.name.replace("\xa0", ""), row.get_browseable_url()
+        project["client"] = row["client_name"][0] if row["client_name"] else None
+        project["url"] = row["name"].replace("\xa0", ""), row["row"].get_browseable_url()
         if project["person"] is None:
             continue
         else:
@@ -127,8 +88,70 @@ def get_projects(token, days_before):
     return res
 
 
+def get_contracts(token, days_before):
+    client = NotionClient(token)
+    cv = client.get_collection_view(
+        "https://www.notion.so/5a95fb63129242a5b5b48f18e16ef19a?v=48599e7a184a4f32be2469e696367949"
+    )
+    # 48599e7a184a4f32be2469e696367949 - no_filters_view
+    # 02929acd595a48dda28cb9e2ff6ae210 - python_view
+
+    # calculate date for filter now() - days_before. Stupid notion starts new day at 12:00 a.m.
+    # n = datetime.datetime.now(pytz.timezone("Europe/Kiev"))
+    n = datetime.datetime.now()
+    n = n.replace(hour=12, minute=0, second=0, microsecond=0) - datetime.timedelta(days=days_before)
+
+    # get contracts In Progress with date less when now()-days before and w/o project
+    # filter_params = [
+    #     {"property": "Status", "comparator": "enum_is", "value": "In Progress"},
+    #     {
+    #         "property": "Updated",
+    #         "comparator": "date_is_on_or_before",
+    #         "value_type": "exact_date",
+    #         "value": int(n.timestamp()) * 1000,
+    #     },
+    #     {"property": "Project", "comparator": "is_empty"},
+    # ]
+    # result = cv.build_query(filter=filter_params).execute()
+    result = nview_to_pandas(cv)
+    result = result[
+        (result["project"].str.len() == 0)
+        & (result["status"].str.lower() == "in progress")
+        & (result["updated"] <= pd.Timestamp(n))
+    ]
+    res = []
+    # for every contract get person (how care this about contract and client for next check
+    # for row in result:
+    for index, row in result.iterrows():
+        contract = dict()
+        if not row["coordinator"]:
+            continue
+        else:
+            contract["person"] = row["coordinator"][0]
+            if contract["person"].name.replace("\xa0", "") == "selfCC":
+                contract["person"] = row["freelancer"][0] if row["freelancer"] else None
+            if contract["person"]:
+                contract["person_name"] = contract["person"].name.replace("\xa0", "")
+
+        # contract["person"] = row['coordinator'][0] if row.Coordinator else None
+        # if contract["person"] is None:
+        #     continue
+        # else:
+        #     contract["person_name"] = contract["person"].name.replace("\xa0", "")
+        # if contract["person_name"] == "selfCC":  # if selfCC get a freelancer name
+        #     contract["person"] = row.freelancer[0] if row.freelancer else None
+        #     if contract["person"]:
+        #         contract["person_name"] = contract["person"].name.replace("\xa0", "")
+
+        contract["client"] = row["client_name"][0] if row["client_name"] else None
+        contract["url"] = row["contract_name"].replace("\xa0", ""), row["row"].get_browseable_url()
+        res.append(contract)
+    return res
+
+
 @app.route("/kick_staff", methods=["GET"])
 def kick_staff():
+    print("starting kickstaff")
     token_v2 = os.environ.get("TOKEN")
     date = request.args.get("date", None)
     contracts_day = request.args.get("contracts_day", 9, type=int)
@@ -138,6 +161,7 @@ def kick_staff():
     pm_tag = request.args.get("no_projects", None)
     cc = True if cc_tag is None else False
     pm = True if pm_tag is None else False
+
     if cc:
         contracts = get_contracts(token_v2, contracts_day)
         print("contracts done")
@@ -154,7 +178,7 @@ def kick_staff():
     todo = parse_staff(todo, projects, "projects", client_days_before)
     for key in todo:
         task = todo[key]
-        print("start todo")
+        print(f"start todo for {key['person_name']}")
         if task["contracts"]:
             create_todo(
                 token_v2,
@@ -452,10 +476,10 @@ def get_todo_list_by_role(token, roles):
         # ]
         # people = team.build_query(filter=filter_params).execute()
 
-        team_df.loc[:, 'pa_name'] = team_df.pa.map(lambda x: next(iter(x), None))
-        team_df.pa_name = team_df.pa_name.apply(lambda x: x.name.replace('\xa0', '') if x else '')
-        team_df.loc[:, 'bidder_name'] = team_df.bidder.map(lambda x: next(iter(x), None))
-        team_df.bidder_name = team_df.bidder_name.apply(lambda x: x.name.replace('\xa0', '') if x else '')
+        team_df.loc[:, "pa_name"] = team_df.pa.map(lambda x: next(iter(x), None))
+        team_df.pa_name = team_df.pa_name.apply(lambda x: x.name.replace("\xa0", "") if x else "")
+        team_df.loc[:, "bidder_name"] = team_df.bidder.map(lambda x: next(iter(x), None))
+        team_df.bidder_name = team_df.bidder_name.apply(lambda x: x.name.replace("\xa0", "") if x else "")
         people = team_df[[role in x for x in team_df["roles"]]]
         people = people[people["out_of_team_now"] != True]
 
@@ -471,15 +495,15 @@ def get_todo_list_by_role(token, roles):
 
             # if person:
             # d["stats"] = person[0]
-            d["todo_url"] = person['todo'].split()[1]
+            d["todo_url"] = person["todo"].split()[1]
             d["team"] = person
-            d["name"] = person['name'].replace('\xa0', '')
+            d["name"] = person["name"].replace("\xa0", "")
             d["pa_for"] = []
             d["bidder_for"] = []
-            for i, f in team_df[team_df['pa_name'] == person['name']].iterrows():
-                d["pa_for"].append((f['name'], f['row'].get_browseable_url()))
-            for i, f in team_df[team_df['bidder_name'] == person['name']].iterrows():
-                d["bidder_for"].append((f['name'], f['row'].get_browseable_url()))
+            for i, f in team_df[team_df["pa_name"] == person["name"]].iterrows():
+                d["pa_for"].append((f["name"], f["row"].get_browseable_url()))
+            for i, f in team_df[team_df["bidder_name"] == person["name"]].iterrows():
+                d["bidder_for"].append((f["name"], f["row"].get_browseable_url()))
             todo_list[role].append(d)
             # else:
             #     print(person.name.replace("\xa0", ""), "not found in stats")
@@ -696,7 +720,7 @@ def create_response(type, data):
                     print(f'unable to insert value "{data[i]}" into column "{i}"')
             else:
                 print(f'no column "{i}" in target table')
-    row.set_property('Status', 'Form filled')
+    row.set_property("Status", "Form filled")
 
 
 @app.route("/responses", methods=["POST"])
