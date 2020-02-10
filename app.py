@@ -178,7 +178,6 @@ def kick_staff():
     todo = parse_staff(todo, projects, "projects", client_days_before)
     for key in todo:
         task = todo[key]
-        print(f"start todo for {task['person_name']}")
         if task["contracts"]:
             create_todo(
                 token_v2,
