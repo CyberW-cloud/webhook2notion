@@ -58,7 +58,7 @@ def get_projects(token, days_before):
     #     {"property": "Status", "comparator": "enum_is", "value": "inProgress"},
     #     {
     #         "property": "Updated",
-    #         "comparator": "date_is_on_or_before",
+    #         "comparator": "date_is_on_or_before ",
     #         "value_type": "exact_date",
     #         "value": int(n.timestamp()) * 1000,
     #     },
@@ -178,7 +178,7 @@ def kick_staff():
     todo = parse_staff(todo, projects, "projects", client_days_before)
     for key in todo:
         task = todo[key]
-        print(f"start todo for {key['person_name']}")
+        print(f"start todo for {task['person_name']}")
         if task["contracts"]:
             create_todo(
                 token_v2,
