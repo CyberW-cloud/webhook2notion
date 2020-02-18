@@ -740,6 +740,15 @@ def responses():
     return f'created new {res_type} response from {data["Name"]}'
 
 
+@app.route("/token", methods=["POST"])
+def new_token():
+    parent_page_url = request.args.get("parent_page_url")
+    token_v2 = os.environ.get("TOKEN")
+    message_content = request.args.get("message")
+    create_message(token_v2, parent_page_url, message_content)
+    return f"new token sent"
+
+
 if __name__ == "__main__":
     app.debug = True
     port = int(os.environ.get("PORT", 5000))
