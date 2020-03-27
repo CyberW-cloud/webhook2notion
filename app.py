@@ -54,21 +54,34 @@ def get_projects(token, days_before):
     n = n.replace(hour=12, minute=0, second=0, microsecond=0) - datetime.timedelta(days=days_before)
 
     # get projects InProgress with date less when now()-days before
-    # filter_params = [
-    #     {"property": "Status", "comparator": "enum_is", "value": "inProgress"},
-    #     {
-    #         "property": "Updated",
-    #         "comparator": "date_is_on_or_before ",
-    #         "value_type": "exact_date",
-    #         "value": int(n.timestamp()) * 1000,
-    #     },
-    # ]
-    # cv = cv.build_query(filter=filter_params)
-    # result = cv.execute()
-    result = nview_to_pandas(cv)
-    result = result[(result["status"].str.lower() == "inprogress") & (result["updated"] <= pd.Timestamp(n))]
-    res = []
+    filter_params = {
+        "filters": [
+            {
+                "filter": {"value": {"type": "exact", "value": "inProgress"}, "operator": "enum_is"},
+                "property": "Status",
+            },
+            {
+                "property": "Updated",
+                "filter": {
+                    "operator": "date_is_on_or_before",
+                    "value": {
+                        "type": "exact",
+                        "value": {
+                            "type": "date",
+                            "start_date": str(n.date())
+                            # "start_date": '2020-03-19'
+                        },
+                    },
+                },
+            },
+        ],
+        "operator": "and",
+    }
+    cv = cv.build_query(filter=filter_params)
+    result = cv.execute()
 
+    result = nview_to_pandas(result)
+    res = []
     # for every project get person and client
     # for row in result:
     for index, row in result.iterrows():
@@ -102,26 +115,36 @@ def get_contracts(token, days_before):
     n = n.replace(hour=12, minute=0, second=0, microsecond=0) - datetime.timedelta(days=days_before)
 
     # get contracts In Progress with date less when now()-days before and w/o project
-    # filter_params = [
-    #     {"property": "Status", "comparator": "enum_is", "value": "In Progress"},
-    #     {
-    #         "property": "Updated",
-    #         "comparator": "date_is_on_or_before",
-    #         "value_type": "exact_date",
-    #         "value": int(n.timestamp()) * 1000,
-    #     },
-    #     {"property": "Project", "comparator": "is_empty"},
-    # ]
-    # result = cv.build_query(filter=filter_params).execute()
-    result = nview_to_pandas(cv)
-    result = result[
-        (result["project"].str.len() == 0)
-        & (result["status"].str.lower() == "in progress")
-        & (result["updated"] <= pd.Timestamp(n))
-    ]
+    filter_params = {
+        "filters": [
+            {
+                "filter": {"value": {"type": "exact", "value": "In Progress"}, "operator": "enum_is"},
+                "property": "Status",
+            },
+            {
+                "property": "Updated",
+                "filter": {
+                    "operator": "date_is_on_or_before",
+                    "value": {
+                        "type": "exact",
+                        "value": {
+                            "type": "date",
+                            "start_date": str(n.date())
+                            # "start_date": '2020-03-19'
+                        },
+                    },
+                },
+            },
+            {"filter": {"operator": "is_empty"}, "property": "Project"},
+        ],
+        "operator": "and",
+    }
+    cv = cv.build_query(filter=filter_params)
+    result = cv.execute()
+
+    result = nview_to_pandas(result)
     res = []
     # for every contract get person (how care this about contract and client for next check
-    # for row in result:
     for index, row in result.iterrows():
         contract = dict()
         if not row["coordinator"]:
@@ -132,17 +155,6 @@ def get_contracts(token, days_before):
                 contract["person"] = row["freelancer"][0] if row["freelancer"] else None
             if contract["person"]:
                 contract["person_name"] = contract["person"].name.replace("\xa0", "")
-
-        # contract["person"] = row['coordinator'][0] if row.Coordinator else None
-        # if contract["person"] is None:
-        #     continue
-        # else:
-        #     contract["person_name"] = contract["person"].name.replace("\xa0", "")
-        # if contract["person_name"] == "selfCC":  # if selfCC get a freelancer name
-        #     contract["person"] = row.freelancer[0] if row.freelancer else None
-        #     if contract["person"]:
-        #         contract["person_name"] = contract["person"].name.replace("\xa0", "")
-
         contract["client"] = row["client_name"][0] if row["client_name"] else None
         contract["url"] = row["contract_name"].replace("\xa0", ""), row["row"].get_browseable_url()
         res.append(contract)
@@ -204,6 +216,7 @@ def kick_staff():
                 map(lambda t: "[{}]({})".format(t[0], t[1]), task["clients"]),
                 "Занеси новую информацию которую ты узнал про клиентов:",
             )
+    print("kickstaff done")
     return "Done!"
 
 
@@ -697,13 +710,13 @@ def create_response(type, data):
 
     cv = client.get_collection_view(collection_url)
     upwork_profile = data["Upwork profile"]
-    upwork_id = upwork_profile[upwork_profile.find("~") + 1 : upwork_profile.find("~") + 19]
+    upwork_id = upwork_profile[upwork_profile.find("~") + 1: upwork_profile.find("~") + 19]
     records = cv.collection.get_rows()
     row_exist = None
     for record in records:
         rec_profile = record.get_property("upwork_profile")
         if rec_profile != "":
-            uw_id = rec_profile[rec_profile.find("~") + 1 : rec_profile.find("~") + 19]
+            uw_id = rec_profile[rec_profile.find("~") + 1: rec_profile.find("~") + 19]
             if uw_id == upwork_id:
                 row_exist = record
                 break
@@ -738,15 +751,6 @@ def responses():
         return f"type '{res_type}' is not supported yet"
     print(f'created new {res_type} response from {data["Name"]}')
     return f'created new {res_type} response from {data["Name"]}'
-
-
-@app.route("/token", methods=["POST"])
-def new_token():
-    parent_page_url = request.args.get("parent_page_url")
-    token_v2 = os.environ.get("TOKEN")
-    message_content = request.args.get("message")
-    create_message(token_v2, parent_page_url, message_content)
-    return f"new token sent"
 
 
 if __name__ == "__main__":

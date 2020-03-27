@@ -129,21 +129,23 @@ def create_new_task(page, header, date, text, timezone, tasks):
         move_task_before(ret, parent)
 
 
-def nview_to_pandas(view):
-    """
-    Convert Notion view to Pandas DataFrame
-    :param view: TableView, TableQueryResult object
+def nview_to_pandas(source):
+    """Convert Notion object to Pandas DataFrame.
+
+    :param source: TableView/TableQueryResult object
     :return: pandas.DataFrame
     """
-    if isinstance(view, (TableView, TableQueryResult)):
-        # print(f"start converting to DF at {datetime.datetime.now()}")
-        rows = view.collection.get_rows()
-        data = []
-        for row in rows:
-            i = row.get_all_properties()
-            i["row"] = row
-            data.append(i)
-        # print(f"finish converting to DF at {datetime.datetime.now()}")
-        return pd.DataFrame(data)
+    if isinstance(source, TableQueryResult):
+        rows = source
+    elif isinstance(source, TableView):
+        rows = source.collection.get_rows()
     else:
-        return
+        raise TypeError("Incorrect type for convert to pandas")
+
+    data = []
+    for row in rows:
+        i = row.get_all_properties()
+        i["row"] = row
+        data.append(i)
+
+    return pd.DataFrame(data)
