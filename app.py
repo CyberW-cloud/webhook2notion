@@ -89,7 +89,11 @@ def get_projects(token, days_before):
         if row["pm"]:
             project["person"] = row["pm"][0]
         else:
-            project["person"] = row["contracts"][0].coordinator[0] if row["contracts"][0].coordinator[0] else None
+            for contract in row["contracts"]:
+                if contract.coordinator[0]:
+                    if contract.coordinator[0].name != "selfCC" and contract.status == "In Progress":
+                        project["person"] = contract.coordinator[0]
+                        break
         if project["person"]:
             project["person_name"] = project["person"].name.replace("\xa0", "")
         project["client"] = row["client_name"][0] if row["client_name"] else None
@@ -402,8 +406,8 @@ def weekly_todo_pa(token, staff, calendar):
 def weekly_todo_cc(token, staff, calendar):
     print("CCs start")
     for cc in staff:
-        #        if cc['name'] != 'Denys Safonov':
-        #           continue
+        # if cc['name'] != 'Davyd Podosian':
+        #     continue
         print(f"CC {cc['name']} start")
         # Monday
         todo = list()
@@ -525,11 +529,11 @@ def get_todo_list_by_role(token, roles):
 
 @app.route("/weekly_todo", methods=["GET"])
 def weekly_todo():
-    print("weekly todo start")
-    token_v2 = os.environ.get("TOKEN")
-    d = request.args.get("date", datetime.datetime.now().date())
     roles = request.args.get("roles", "")
     roles = re.split("[, ;|\\\\/|.]", roles)  # get role list from arguments
+    print(f"weekly todo for {roles} start")
+    token_v2 = os.environ.get("TOKEN")
+    d = request.args.get("date", datetime.datetime.now().date())
     staff = get_todo_list_by_role(token_v2, roles)
     print("roles get done")
 
@@ -557,7 +561,7 @@ def weekly_todo():
             weekly_todo_bidder(token_v2, staff[role], dates)
         else:
             return f"Can't find Function for role {role}"
-    print("weekly todo done")
+    print(f"weekly todo for {roles} done")
     return "Done!"
 
 
@@ -710,13 +714,13 @@ def create_response(type, data):
 
     cv = client.get_collection_view(collection_url)
     upwork_profile = data["Upwork profile"]
-    upwork_id = upwork_profile[upwork_profile.find("~") + 1: upwork_profile.find("~") + 19]
+    upwork_id = upwork_profile[upwork_profile.find("~") + 1 : upwork_profile.find("~") + 19]
     records = cv.collection.get_rows()
     row_exist = None
     for record in records:
         rec_profile = record.get_property("upwork_profile")
         if rec_profile != "":
-            uw_id = rec_profile[rec_profile.find("~") + 1: rec_profile.find("~") + 19]
+            uw_id = rec_profile[rec_profile.find("~") + 1 : rec_profile.find("~") + 19]
             if uw_id == upwork_id:
                 row_exist = record
                 break
