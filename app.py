@@ -237,17 +237,29 @@ def get_proposals(token, days_before):
         "https://www.notion.so/e4d36149b9d8476e9985a2c658d4a873?v=3238ddee2ea04d5ea302d99fc2a2d5cc"
     )
     # get proposal replied, not declined and with empty contract field
-    filter_params = [
-        {"property": "Reply", "comparator": "checkbox_is", "value": "Yes"},
-        {"property": "Declined", "comparator": "checkbox_is", "value": "No"},
-        {"property": "Contract", "comparator": "is_empty"},
-        {
-            "property": "Modified",
-            "comparator": "date_is_on_or_before",
-            "value_type": "exact_date",
-            "value": int(n.timestamp()) * 1000,
-        },
-    ]
+    filter_params = {
+        "filters": [
+            {"property": "Reply", "filter": {"operator": "checkbox_is", "value": {"type": "exact", "value": True}}},
+            {"property": "Declined", "filter": {"operator": "checkbox_is", "value": {"type": "exact", "value": False}}},
+            {"property": "Contract", "filter": {"operator": "is_empty"}},
+            {
+                "property": "Modified",
+                "filter": {
+                    "operator": "date_is_on_or_before",
+                    "value": {
+                        "type": "exact",
+                        "value": {
+                            "type": "date",
+                            "start_date": str(n.date())
+                            # "start_date": "2020-03-24",
+                        },
+                    },
+                },
+            },
+        ],
+        "operator": "and",
+    }
+
     cv = cv.build_query(filter=filter_params)
     result = cv.execute()
     res = []
@@ -261,7 +273,18 @@ def get_proposals(token, days_before):
         if proposal["person"]:
             proposal["person_name"] = proposal["person"].full_name.replace("\xa0", "")
             # person field is class User, so we need linked it to stats DB. Try to Find person in stats DB
-            filter_params = [{"property": "title", "comparator": "string_contains", "value": proposal["person_name"]}]
+            filter_params = {
+                "filters": [
+                    {
+                        "property": "title",
+                        "filter": {
+                            "operator": "string_contains",
+                            "value": {"type": "exact", "value": proposal["person_name"]},
+                        },
+                    }
+                ],
+                "operator": "and",
+            }
             person_stat = stats.build_query(filter=filter_params).execute()
             if person_stat:
                 proposal["person"] = person_stat[0]
@@ -278,6 +301,7 @@ def get_proposals(token, days_before):
 
 @app.route("/proposals_check", methods=["GET"])
 def proposals_check():
+    print(f"Proposal check started")
     token_v2 = os.environ.get("TOKEN")
     date = request.args.get("date", None)
     days = request.args.get("days_before", 7, type=int)
@@ -295,6 +319,7 @@ def proposals_check():
                 map(lambda p: "[{}]({})".format(p[0], p[1]), task["proposals"]),
                 "Теплый клиент остывает, нужно срочно что то делать. Проверь:",
             )
+    print(f"Proposal check finished")
     return "Done!"
 
 
