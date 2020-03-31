@@ -361,8 +361,10 @@ def todo_one():
         todo_url = get_todo_url_by_name(token_v2, member)
     if todo_url is not None:
         create_todo(token_v2, date, todo_url, todo, text)
+        print(f'added to {member} {text if text else ""} {todo}  to Notion')
         return f'added to {member} {text if text else ""} {todo}  to Notion'
     else:
+        print(f"{member} not found in StatsDB in Notion or not Notion URL")
         return f"{member} not found in StatsDB in Notion or not Notion URL"
 
 
