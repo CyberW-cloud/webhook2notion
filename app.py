@@ -439,6 +439,7 @@ def weekly_todo_cc(token, staff, calendar):
         # Monday
         todo = list()
         todo.append("Ping клиентов с открытыми контрактами, которые пропали")
+        todo.append("Обнови свой профиль, он тоже может приносить лиды (если не знаешь что улучшить спроси у коллег")
         create_todo(token, calendar["mon"], cc["todo_url"], todo, text="")
 
         # Tuesday
