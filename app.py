@@ -786,7 +786,7 @@ def responses():
     return f'created new {res_type} response from {data["Name"]}'
 
 
-def set_new_candidate_status(upwork_profile, email, status):
+def set_new_candidate_status(upwork_profile, email, status, test_task):
     # Development
     # collection_url = "https://www.notion.so/5f43e89f432a40e79d006681f9929782?v=c4b00956dfe145cabfcadb0580ae0754"
     # Production
@@ -809,6 +809,7 @@ def set_new_candidate_status(upwork_profile, email, status):
         row.set_property("upwork_profile", upwork_profile)
         row.set_property("email", email)
         row.set_property("name", "NEW CANDIDATE")
+    row.set_property("test_task", test_task)
     try:
         row.set_property("Status", status)
     except Exception:
@@ -823,7 +824,8 @@ def candidate_status():
     upwork_profile = request.form.get("upwork")
     email = request.form.get("email")
     status = request.form.get("status")
-    result = set_new_candidate_status(upwork_profile, email, status)
+    test_task = request.form.get("test_task")
+    result = set_new_candidate_status(upwork_profile, email, status, test_task)
     return result
 
 
