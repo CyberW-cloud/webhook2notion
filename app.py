@@ -788,9 +788,9 @@ def responses():
 
 def set_new_candidate_status(upwork_profile, email, status):
     # Development
-    collection_url = "https://www.notion.so/5f43e89f432a40e79d006681f9929782?v=c4b00956dfe145cabfcadb0580ae0754"
+    # collection_url = "https://www.notion.so/5f43e89f432a40e79d006681f9929782?v=c4b00956dfe145cabfcadb0580ae0754"
     # Production
-    # collection_url = "https://www.notion.so/1f4aabb8710f4c89a3411de53fc7222a?v=0e8184ceca384767917f928bb3d20e6f"
+    collection_url = "https://www.notion.so/1f4aabb8710f4c89a3411de53fc7222a?v=0e8184ceca384767917f928bb3d20e6f"
     token = os.environ.get("TOKEN")
     client = NotionClient(token)
     cv = client.get_collection_view(collection_url)
