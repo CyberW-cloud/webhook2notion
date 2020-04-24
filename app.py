@@ -6,6 +6,7 @@ import pytz
 from flask import Flask, request
 from notion.block import *
 from notion.client import NotionClient
+from notion.collection import CollectionRowBlock
 
 from notion_helpers import *
 
@@ -742,13 +743,13 @@ def create_response(type, data):
 
     cv = client.get_collection_view(collection_url)
     upwork_profile = data["Upwork profile"]
-    upwork_id = upwork_profile[upwork_profile.find("~") + 1 : upwork_profile.find("~") + 19]
+    upwork_id = upwork_profile[upwork_profile.find("~") + 1: upwork_profile.find("~") + 19]
     records = cv.collection.get_rows()
     row_exist = None
     for record in records:
         rec_profile = record.get_property("upwork_profile")
         if rec_profile != "":
-            uw_id = rec_profile[rec_profile.find("~") + 1 : rec_profile.find("~") + 19]
+            uw_id = rec_profile[rec_profile.find("~") + 1: rec_profile.find("~") + 19]
             if uw_id == upwork_id:
                 row_exist = record
                 break
@@ -783,6 +784,47 @@ def responses():
         return f"type '{res_type}' is not supported yet"
     print(f'created new {res_type} response from {data["Name"]}')
     return f'created new {res_type} response from {data["Name"]}'
+
+
+def set_new_candidate_status(upwork_profile, email, status):
+    # Development
+    collection_url = "https://www.notion.so/5f43e89f432a40e79d006681f9929782?v=c4b00956dfe145cabfcadb0580ae0754"
+    # Production
+    # collection_url = "https://www.notion.so/1f4aabb8710f4c89a3411de53fc7222a?v=0e8184ceca384767917f928bb3d20e6f"
+    token = os.environ.get("TOKEN")
+    client = NotionClient(token)
+    cv = client.get_collection_view(collection_url)
+    records = nview_to_pandas(cv)
+    records["upwork_id"] = records["upwork_profile"].apply(lambda x: x[x.find("~") + 1: x.find("~") + 19])
+    rec = None
+    if upwork_profile is not None:
+        upwork_id = upwork_profile[upwork_profile.find("~") + 1: upwork_profile.find("~") + 19] if upwork_profile.find("~") > 0 else None
+        rec = records[records["upwork_id"] == upwork_id]
+    if (rec is None or len(rec) == 0) and email is not None:
+        rec = records[records["email"] == email]
+    if rec is not None and len(rec) != 0:
+        row = rec["row"].values[0]
+    else:
+        row = cv.collection.add_row()
+        row.set_property("upwork_profile", upwork_profile)
+        row.set_property("email", email)
+        row.set_property("name", "NEW CANDIDATE")
+    try:
+        row.set_property("Status", status)
+    except Exception:
+        print(f"Can't set status {status}")
+        return f"Can't set status {status}"
+    print(f"Set status {status} to {row.get_property('name')}")
+    return f"Set status {status} to {row.get_property('name')}"
+
+
+@app.route("/candidate_status", methods=["POST"])
+def candidate_status():
+    upwork_profile = request.form.get("upwork")
+    email = request.form.get("email")
+    status = request.form.get("status")
+    result = set_new_candidate_status(upwork_profile, email, status)
+    return result
 
 
 if __name__ == "__main__":
