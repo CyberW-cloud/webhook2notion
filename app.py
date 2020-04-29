@@ -786,45 +786,69 @@ def responses():
     return f'created new {res_type} response from {data["Name"]}'
 
 
-def set_candidate_status(data):
+def parse_data_from_manychat(data):
     # Development
-    collection_url = "https://www.notion.so/5f43e89f432a40e79d006681f9929782?v=c4b00956dfe145cabfcadb0580ae0754"
+    # collection_url = "https://www.notion.so/d6efa1a128ea44fd92e9e2a5665a1e2b?v=b65bdd6109384d9faf30eaa8a95ec33d"
     # Production
-    # collection_url = "https://www.notion.so/1f4aabb8710f4c89a3411de53fc7222a?v=0e8184ceca384767917f928bb3d20e6f"
+    collection_url = "https://www.notion.so/1f4aabb8710f4c89a3411de53fc7222a?v=0e8184ceca384767917f928bb3d20e6f"
     token = os.environ.get("TOKEN")
     client = NotionClient(token)
     cv = client.get_collection_view(collection_url)
     records = nview_to_pandas(cv)
     records["upwork_id"] = records["upwork_profile"].apply(lambda x: x[x.find("~") + 1: x.find("~") + 19])
 
-    # rec = None
-    # if upwork_profile is not None:
-    #     upwork_id = upwork_profile[upwork_profile.find("~") + 1: upwork_profile.find("~") + 19] if upwork_profile.find("~") > 0 else None
-    #     rec = records[records["upwork_id"] == upwork_id]
-    # if (rec is None or len(rec) == 0) and email is not None:
-    #     rec = records[records["email"] == email]
-    # if rec is not None and len(rec) != 0:
-    #     row = rec["row"].values[0]
+    upwork_profile = data["custom_fields"]["upwork_profile"]
+    email = data["custom_fields"]['email']
+    rec = None
+    if upwork_profile is not None:
+        upwork_id = upwork_profile[upwork_profile.find("~") + 1: upwork_profile.find("~") + 19] if upwork_profile.find("~") > 0 else None
+        rec = records[records["upwork_id"] == upwork_id]
+    if (rec is None or len(rec) == 0) and email is not None:
+        rec = records[records["email"] == email]
+    if rec is not None and len(rec) != 0:
+        row = rec["row"].values[0]
+    else:
+        row = cv.collection.add_row()
+        row.set_property("upwork_profile", upwork_profile)
+        row.set_property("email", email)
+        row.set_property("name", data['name'])
+        row.set_property('gender', 'М' if data['gender'] == 'male' else 'Ж')
+
+    res = {}
+    for i in data:
+        if i != 'custom_fields':
+            print(f"{i}: {data[i]}")
+            res[i] = data[i]
+        else:
+            for j in data[i]:
+                print(f"{j}: {data[i][j]}")
+                res[j] = data[i][j]
+
+    # if i == "date_time":
+    #     row.set_property("Form filled", datetime.datetime.strptime(data[i], "%Y-%m-%dT%H:%M:%S.%fZ"))
     # else:
-    #     row = cv.collection.add_row()
-    #     row.set_property("upwork_profile", upwork_profile)
-    #     row.set_property("email", email)
-    #     row.set_property("name", "NEW CANDIDATE")
-    # row.set_property("test_task", test_task)
+    #     if "_".join(str.lower(i).split()) in row.get_all_properties().keys():
+    #         try:
+    #             row.set_property("_".join(str.lower(i).split()), data[i])
+    #         except Exception:
+    #             print(f'unable to insert value "{data[i]}" into column "{i}"')
+    #     else:
+    #         print(f'no column "{i}" in target table')
+
     # try:
     #     row.set_property("Status", status)
     # except Exception:
     #     print(f"Can't set status {status}")
     #     return f"Can't set status {status}"
-    # print(f"Set status {status} to {row.get_property('name')}")
-    # return f"Set status {status} to {row.get_property('name')}"
+    print(f"Data for {row.get_property('name')} updated")
+    return res
 
 
-@app.route("/candidate_status", methods=["POST"])
-def candidate_status():
+@app.route("/manychat", methods=["POST"])
+def manychat():
     data = request.get_json()
-    result = {'version': 'v2', 'content': {}, 'data': data}
-    return result
+    result = parse_data_from_manychat(data)
+    return {'version': 'v2', 'content': {}, 'data': result}
 
 
 if __name__ == "__main__":
