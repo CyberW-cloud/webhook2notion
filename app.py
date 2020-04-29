@@ -798,6 +798,7 @@ def parse_data_from_manychat(data):
     records["upwork_id"] = records["upwork_profile"].apply(lambda x: x[x.find("~") + 1: x.find("~") + 19])
 
     # upwork_profile = data["custom_fields"]["upwork_profile"]
+    upwork_profile = ""
     email = data["custom_fields"]['email']
     rec = None
     if upwork_profile is not None:
