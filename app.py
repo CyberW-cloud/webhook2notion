@@ -794,14 +794,15 @@ def parse_data_from_manychat(data):
     token = os.environ.get("TOKEN")
     client = NotionClient(token)
     cv = client.get_collection_view(collection_url)
+
     records = nview_to_pandas(cv)
     records["upwork_id"] = records["upwork_profile"].apply(lambda x: x[x.find("~") + 1: x.find("~") + 19])
 
-    # upwork_profile = data["custom_fields"]["upwork_profile"]
-    upwork_profile = ""
-    email = data["custom_fields"]['email']
+    user_info = data["user_info"]
+    upwork_profile = user_info["upwork_profile"]
+    email = user_info['email']
     rec = None
-    if upwork_profile is not None:
+    if upwork_profile is not None and upwork_profile.find("~") > 0:
         upwork_id = upwork_profile[upwork_profile.find("~") + 1: upwork_profile.find("~") + 19] if upwork_profile.find("~") > 0 else None
         rec = records[records["upwork_id"] == upwork_id]
     if (rec is None or len(rec) == 0) and email is not None:
@@ -810,37 +811,31 @@ def parse_data_from_manychat(data):
         row = rec["row"].values[0]
     else:
         row = cv.collection.add_row()
-        row.set_property("upwork_profile", upwork_profile)
-        row.set_property("email", email)
-        row.set_property("name", data['name'])
-        row.set_property('gender', 'М' if data['gender'] == 'male' else 'Ж')
+        row.set_property("name", user_info['name'])
+        if user_info['gender'] == 'male':
+            gender = 'М'
+        elif user_info['gender'] == 'female':
+            gender = 'Ж'
+        else:
+            gender = ''
+        row.set_property('gender', gender)
+        row.set_property("email", email if email is not None else "")
+        row.set_property("upwork_profile", upwork_profile if upwork_profile is not None else "")
 
     res = {}
-    for i in data:
-        if i != 'custom_fields':
-            print(f"{i}: {data[i]}")
-            res[i] = data[i]
+    fields = data['data']
+    for i in fields:
+        print(f"{i}: {fields[i]}")
+        res[i] = fields[i]
+
+        if "_".join(str.lower(i).split()) in row.get_all_properties().keys():
+            try:
+                row.set_property("_".join(str.lower(i).split()), fields[i])
+            except Exception:
+                print(f'unable to insert value "{fields[i]}" into column "{i}"')
         else:
-            for j in data[i]:
-                print(f"{j}: {data[i][j]}")
-                res[j] = data[i][j]
+            print(f'no column "{i}" in target table')
 
-    # if i == "date_time":
-    #     row.set_property("Form filled", datetime.datetime.strptime(data[i], "%Y-%m-%dT%H:%M:%S.%fZ"))
-    # else:
-    #     if "_".join(str.lower(i).split()) in row.get_all_properties().keys():
-    #         try:
-    #             row.set_property("_".join(str.lower(i).split()), data[i])
-    #         except Exception:
-    #             print(f'unable to insert value "{data[i]}" into column "{i}"')
-    #     else:
-    #         print(f'no column "{i}" in target table')
-
-    # try:
-    #     row.set_property("Status", status)
-    # except Exception:
-    #     print(f"Can't set status {status}")
-    #     return f"Can't set status {status}"
     print(f"Data for {row.get_property('name')} updated")
     return res
 
