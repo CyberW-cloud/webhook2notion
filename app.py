@@ -474,7 +474,7 @@ def weekly_todo_fl(token, staff, calendar):
         create_todo(token, calendar["mon"], fl["todo_url"], todo, text="")
     print("Mon FL done")
 
-def friday_todo_fl(token, staff):
+def friday_todo_fl(token, staff, calendar):
     print("Fri Fl's start")
     for fl in staff:
         if fl['name'] != 'Denys Safonov':
