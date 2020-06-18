@@ -622,7 +622,7 @@ def weekly_todo():
 def friday_todo():
     roles = request.args.get("roles", "")
     roles = re.split("[, ;|\\\\/|.]", roles)  # get role list from arguments
-    print(f"weekly todo for {roles} start")
+    print(f"Friday todo for {roles} start")
     token_v2 = os.environ.get("TOKEN")
     d = request.args.get("date", datetime.datetime.now().date())
     staff = get_todo_list_by_role(token_v2, roles)
