@@ -628,7 +628,7 @@ def friday_todo():
     staff = get_todo_list_by_role(token_v2, roles)
     print("roles get done")
 
-        today = d
+    today = d
 
     dates = {
         "fri": today,
