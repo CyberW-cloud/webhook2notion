@@ -470,20 +470,19 @@ def weekly_todo_fl(token, staff, calendar):
         # Monday
         todo = list()
         todo.append(f"Загрузи статы по [ссылке]({fl['stats_upload']})")
-        todo.append("Коментом, тегнув cвоего PA, напиши свою планируемую загрузку на неделю")
+        todo.append(f"Коментом, тегнув {fl['pa_name']}, напиши свою планируемую загрузку на неделю")
         create_todo(token, calendar["mon"], fl["todo_url"], todo, text="")
     print("Mon FL done")
 
 def friday_todo_fl(token, staff, calendar):
     print("Fri Fl's start")
     for fl in staff:
-        if fl['name'] == 'Denys Safonov':         
-            print(f"FL {fl['name']} start")
-            # Friday
-            todo = list()
-            todo.append(f"Загрузи статы по [ссылке]({fl['stats_upload']})")
-            todo.append(f"Коментом напиши какие day-off ты планируешь на следующую неделю и тегни {fl['pa_name']}, иначе напиши - Не планирую")
-            create_todo(token, calendar["fri"], fl["todo_url"], todo, text="")		
+#        if fl['name'] == 'Denys Safonov':         
+        print(f"FL {fl['name']} start")
+        # Friday
+        todo = list()
+        todo.append(f"Коментом напиши какие day-off ты планируешь на следующую неделю и тегни {fl['pa_name']}, иначе напиши - Не планирую")
+        create_todo(token, calendar["fri"], fl["todo_url"], todo, text="")		
     print("Fri FL done")    
 
 def weekly_todo_bidder(token, staff, calendar):
