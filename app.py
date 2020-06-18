@@ -477,8 +477,8 @@ def weekly_todo_fl(token, staff, calendar):
 def friday_todo_fl(token, staff):
     print("Fri Fl's start")
     for fl in staff:
-        if fl['name'] != 'Denys Safonov':
-        continue
+ #       if fl['name'] != 'Denys Safonov':
+ #       continue
         print(f"FL {fl['name']} start")
         # Friday
         todo = list()
