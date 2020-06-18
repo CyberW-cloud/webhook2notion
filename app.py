@@ -477,13 +477,13 @@ def weekly_todo_fl(token, staff, calendar):
 def friday_todo_fl(token, staff):
     print("Fri Fl's start")
     for fl in staff:
- #       if fl['name'] != 'Denys Safonov':
- #       continue
-        print(f"FL {fl['name']} start")
-        # Friday
-        todo = list()
-        todo.append("Коментом напиши какие day-off ты планируешь на следующую неделю и тегни своего PA, иначе напиши - Не планирую")
-        create_todo(token, calendar["fri"], fl["todo_url"], todo, text="")
+        if fl['name'] != 'Denys Safonov':
+            continue
+            print(f"FL {fl['name']} start")
+            # Friday
+            todo = list()
+            todo.append("Коментом напиши какие day-off ты планируешь на следующую неделю и тегни своего PA, иначе напиши - Не планирую")
+            create_todo(token, calendar["fri"], fl["todo_url"], todo, text="")
     print("Fri FL done")    
 
 def weekly_todo_bidder(token, staff, calendar):
@@ -635,7 +635,7 @@ def friday_todo():
     }
     for role in roles:
         if  role == "FL":
-            fiday_todo_fl(token_v2, staff[role], dates)    
+            friday_todo_fl(token_v2, staff[role], dates)    
         else:
             return f"Can't find Function for role {role}"
     print(f"fiday todo for {roles} done")
