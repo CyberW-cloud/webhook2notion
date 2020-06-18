@@ -481,7 +481,8 @@ def friday_todo_fl(token, staff, calendar):
             print(f"FL {fl['name']} start")
             # Friday
             todo = list()
-            todo.append("Коментом напиши какие day-off ты планируешь на следующую неделю и тегни своего PA, иначе напиши - Не планирую")
+            todo.append(f"Загрузи статы по [ссылке]({fl['stats_upload']})")
+            todo.append(f"Коментом напиши какие day-off ты планируешь на следующую неделю и тегни {fl['pa_name']}, иначе напиши - Не планирую")
             create_todo(token, calendar["fri"], fl["todo_url"], todo, text="")		
     print("Fri FL done")    
 
