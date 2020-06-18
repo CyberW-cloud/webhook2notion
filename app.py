@@ -463,6 +463,28 @@ def weekly_todo_cc(token, staff, calendar):
         print(f"CC {cc['name']} done")
     print("CCs done")
 
+def weekly_todo_fl(token, staff, calendar):
+    print("Mon Fl's start")
+    for fl in staff:
+        print(f"FL {fl['name']} start")
+        # Monday
+        todo = list()
+        todo.append(f"Загрузи статы по [ссылке]({fl['stats_upload']})")
+        todo.append("Коментом, тегнув cвоего PA, напиши свою планируемую загрузку на неделю")
+        create_todo(token, calendar["mon"], fl["todo_url"], todo, text="")
+    print("Mon FL done")
+
+def friday_todo_fl(token, staff):
+    print("Fri Fl's start")
+    for fl in staff:
+        if fl['name'] != 'Denys Safonov':
+        continue
+        print(f"FL {fl['name']} start")
+        # Friday
+        todo = list()
+        todo.append("Коментом напиши какие day-off ты планируешь на следующую неделю и тегни своего PA, иначе напиши - Не планирую")
+        create_todo(token, calendar["fri"], fl["todo_url"], todo, text="")
+    print("Fri FL done")    
 
 def weekly_todo_bidder(token, staff, calendar):
     print("bidders start")
@@ -541,6 +563,7 @@ def get_todo_list_by_role(token, roles):
             # if person:
             # d["stats"] = person[0]
             d["todo_url"] = person["todo"].split()[1]
+            d["stats_upload"] = person["stats_upload"]
             d["team"] = person
             d["name"] = person["name"].replace("\xa0", "")
             d["pa_for"] = []
@@ -588,9 +611,34 @@ def weekly_todo():
             weekly_todo_cc(token_v2, staff[role], dates)
         elif role == "Bidder":
             weekly_todo_bidder(token_v2, staff[role], dates)
+        elif role == "FL":
+            weekly_todo_fl(token_v2, staff[role], dates)    
         else:
             return f"Can't find Function for role {role}"
     print(f"weekly todo for {roles} done")
+    return "Done!"
+
+@app.route("/friday_todo", methods=["GET"])
+def friday_todo():
+    roles = request.args.get("roles", "")
+    roles = re.split("[, ;|\\\\/|.]", roles)  # get role list from arguments
+    print(f"weekly todo for {roles} start")
+    token_v2 = os.environ.get("TOKEN")
+    d = request.args.get("date", datetime.datetime.now().date())
+    staff = get_todo_list_by_role(token_v2, roles)
+    print("roles get done")
+
+        today = d
+
+    dates = {
+        "fri": today,
+    }
+    for role in roles:
+        if  role == "FL":
+            fiday_todo_fl(token_v2, staff[role], dates)    
+        else:
+            return f"Can't find Function for role {role}"
+    print(f"fiday todo for {roles} done")
     return "Done!"
 
 
