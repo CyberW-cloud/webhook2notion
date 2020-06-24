@@ -617,7 +617,7 @@ def weekly_todo():
             return f"Can't find Function for role {role}"
     print(f"weekly todo for {roles} done")
     return "Done!"
- 
+  
 @app.route("/friday_todo", methods=["GET"])
 def friday_todo():
     roles = request.args.get("roles", "")
