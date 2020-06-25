@@ -1,6 +1,6 @@
 import upwork
 from upwork.routers import auth
-from flask import Flask, request
+import os
 
 
 def get_desktop_client():
