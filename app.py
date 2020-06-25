@@ -901,7 +901,7 @@ def manychat():
 def proposals_texts_collect():
     upwork_client = get_desktop_client()
     token = os.environ.get("TOKEN")
-
+	print(auth.Api(upwork_client).get_user_info())
     client = NotionClient(token)
     cv = client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
 
