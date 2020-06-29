@@ -951,7 +951,7 @@ def proposals_texts_collect():
     for row in result:
         x=x+1
         application = applications.Api(upwork_client).get_specific(row.Proposal_ID)
-        pprint(application)
+        pprint({application})
         page = client.get_block(row.get_browseable_url())  
         page.children.add_new(TextBlock, title=application["coverLetter"])
         page.children.add_new(TextBlock, title=application["questionsAnswers"])
