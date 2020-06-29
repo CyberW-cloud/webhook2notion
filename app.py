@@ -11,7 +11,6 @@ from notion.collection import CollectionRowBlock
 from notion_helpers import *
 # from upwork_helper import *
 
-from pprint import pprint
 import upwork
 from upwork.routers import auth
 from upwork.routers.hr.freelancers import applications
@@ -951,7 +950,7 @@ def proposals_texts_collect():
     for row in result:
         x=x+1
         application = applications.Api(upwork_client).get_specific(row.Proposal_ID)
-        pprint({application})
+        print({application})
         page = client.get_block(row.get_browseable_url())  
         page.children.add_new(TextBlock, title=application["coverLetter"])
         page.children.add_new(TextBlock, title=application["questionsAnswers"])
