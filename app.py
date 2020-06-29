@@ -312,8 +312,8 @@ def proposals_check():
     for key in todo:
         task = todo[key]
         print("start todo")
+        print(task["todo_url"])
         if task["proposals"]:
-            print(task["todo_url"])
             create_todo(
                 token_v2,
                 date,
