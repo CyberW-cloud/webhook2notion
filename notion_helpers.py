@@ -37,6 +37,7 @@ def get_user_id_from_title(title):
         return None
 
 
+
 # looking for headers with target date or return last header
 def get_previous_or_target_headers(page, target_date):
     prev_date = datetime.datetime.strptime("1900-01-01", "%Y-%m-%d").date()  # start date for comparison
