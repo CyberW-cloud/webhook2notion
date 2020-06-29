@@ -932,7 +932,7 @@ def proposals_texts_collect():
     result = cv.execute()
     x=1
     for row in result:
-        x=x+1
+    	x=x+1
         upwork_client.hr_v4.get_freelancer_application(row.Proposal_ID)
         page = client.get_block(row.get_browseable_url())  
         page.children.add_new(TextBlock, title=application["coverLetter"])
