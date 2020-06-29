@@ -344,6 +344,7 @@ def create_todo(token, date, link, todo, text):
         date = datetime.datetime.now().date()
 
     client = NotionClient(token)
+    print(link)
     page = client.get_block(link)
     tasks = todo
 
