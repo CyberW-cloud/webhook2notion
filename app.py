@@ -9,7 +9,6 @@ from notion.client import NotionClient
 from notion.collection import CollectionRowBlock
 
 from notion_helpers import *
-from upwork_helper import *
 
 timezone = "Europe/Kiev"
 
@@ -618,7 +617,7 @@ def weekly_todo():
             return f"Can't find Function for role {role}"
     print(f"weekly todo for {roles} done")
     return "Done!"
- 
+
 @app.route("/friday_todo", methods=["GET"])
 def friday_todo():
     roles = request.args.get("roles", "")
@@ -895,52 +894,6 @@ def manychat():
     result = parse_data_from_manychat(data)
     return {'version': 'v2', 'content': {}, 'data': result}
 
-
-
-@app.route("/proposals_texts_collect", methods=["GET"])
-def proposals_texts_collect():
-    upwork_client = get_desktop_client()
-    token = os.environ.get("TOKEN")
-
-    client = NotionClient(token)
-    cv = client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
-
- # calculate date for filter now() - days_before. Stupid notion starts new day at 12:00 a.m.
-    n = datetime.datetime.now(pytz.timezone("Europe/Kiev"))
-    n = n.replace(hour=12, minute=0, second=0, microsecond=0) - datetime.timedelta(1)
-    filter_params = {
-        "filters": [
-            {
-                "property": "Date Sent",
-                "filter": {
-                    "operator": "date_is_on_or_after",
-                    "value": {
-                        "type": "exact",
-                        "value": {
-                            "type": "date",
-                            "start_date": str(n.date())
-                            # "start_date": "2020-03-24",
-                        },
-                    },
-                },
-            },
-        ],
-        "operator": "and",
-    }
-
-    cv = cv.build_query(filter=filter_params)
-    result = cv.execute()
-    x=1
-    for row in result:
-    	x=x+1
-        upwork_client.hr_v4.get_freelancer_application(row.Proposal_ID)
-        page = client.get_block(row.get_browseable_url())  
-        page.children.add_new(TextBlock, title=application["coverLetter"])
-        page.children.add_new(TextBlock, title=application["questionsAnswers"])
-        page.set_property('Job name', application["opening_title"])
-        page.set_property('Job URL', f'http://www.upwork.com/jobs/{application["openingCiphertext"]}')
-        if x == 2:
-            break
 
 if __name__ == "__main__":
     app.debug = True
