@@ -9,10 +9,7 @@ from notion.client import NotionClient
 from notion.collection import CollectionRowBlock
 
 from notion_helpers import *
-# from upwork_helper import *
-
-import upwork
-from upwork.routers import auth
+from upwork_helper import *
 
 timezone = "Europe/Kiev"
 
@@ -898,26 +895,13 @@ def manychat():
     result = parse_data_from_manychat(data)
     return {'version': 'v2', 'content': {}, 'data': result}
 
-def get_desktop_client():
-    config = upwork.Config({
-          'consumer_key': os.environ.get("ConsumerKey"),            
-          'consumer_secret': os.environ.get("ConsumerSecret"),            
-          'access_token': os.environ.get("AccessToken"),            
-          'access_token_secret': os.environ.get("AccessSecret")})
-     
-    client = upwork.Client(config)
-    try:        
-        config.access_token        
-        config.access_token_secret
-    except AttributeError:
-        print('Token Error')
-    return client
+
 
 @app.route("/proposals_texts_collect", methods=["GET"])
 def proposals_texts_collect():
     upwork_client = get_desktop_client()
     token = os.environ.get("TOKEN")
-    print(auth.Api(upwork_client).get_user_info())
+	print(auth.Api(upwork_client).get_user_info())
     client = NotionClient(token)
     cv = client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
 
