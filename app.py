@@ -950,7 +950,6 @@ def proposals_texts_collect():
     x=1
     for row in result:
         x=x+1
-        pprint(auth.Api(upwork_client).get_user_info())
         application = applications.Api(upwork_client).get_specific(row.Proposal_ID)
         pprint(application)
         page = client.get_block(row.get_browseable_url())  
