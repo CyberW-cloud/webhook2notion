@@ -13,7 +13,6 @@ from notion_helpers import *
 
 import upwork
 from upwork.routers import auth
-from upwork.routers.hr.freelancers import applications
 
 timezone = "Europe/Kiev"
 
@@ -918,6 +917,7 @@ def get_desktop_client():
 def proposals_texts_collect():
     upwork_client = get_desktop_client()
     token = os.environ.get("TOKEN")
+    print(auth.Api(upwork_client).get_user_info())
     client = NotionClient(token)
     cv = client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
 
@@ -949,7 +949,7 @@ def proposals_texts_collect():
     x=1
     for row in result:
         x=x+1
-        applications.Api(upwork_client).get_specific(row.Proposal_ID)
+        upwork_client.hr_v4.get_freelancer_application(row.Proposal_ID)
         page = client.get_block(row.get_browseable_url())  
         page.children.add_new(TextBlock, title=application["coverLetter"])
         page.children.add_new(TextBlock, title=application["questionsAnswers"])
