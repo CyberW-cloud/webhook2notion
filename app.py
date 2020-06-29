@@ -313,6 +313,7 @@ def proposals_check():
         task = todo[key]
         print("start todo")
         if task["proposals"]:
+            print(task["todo_url"])
             create_todo(
                 token_v2,
                 date,
