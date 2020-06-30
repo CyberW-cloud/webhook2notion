@@ -838,7 +838,7 @@ def responses():
     print(f'created new {res_type} response from {data["Name"]}')
     return f'created new {res_type} response from {data["Name"]}'
 
-def test_response(type, data):
+def test_response(data):
     # Development
     # collection_url = "https://www.notion.so/c8cc4837308c4b299a88d36d07bc2f4f?v=dd587a4640aa41bd9ff88ca268aff553"
     # Production
@@ -848,7 +848,6 @@ def test_response(type, data):
 
     cv = client.get_collection_view(collection_url)    
     row = cv.collection.add_row()
-    row.set_property("email", type)
     for i in data:       
             if "_".join(str.lower(i).split()) in row.get_all_properties().keys():
                 try:
@@ -861,7 +860,7 @@ def test_response(type, data):
 @app.route("/testr", methods=["POST"])
 def testr():
     print(f'start creating {res_type} response from {data["Name"]}')
-    test_response(res_type, data)
+    test_response(data)
     print(f'created new {res_type} response from {data["Name"]}')
     return f'created new {res_type} response from {data["Name"]}'
 
