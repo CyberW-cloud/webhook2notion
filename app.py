@@ -859,6 +859,7 @@ def test_response(data):
 
 @app.route("/testr", methods=["POST"])
 def testr():
+    data = request.get_json()
     print(f'start creating {res_type} response from {data["Name"]}')
     test_response(data)
     print(f'created new {res_type} response from {data["Name"]}')
