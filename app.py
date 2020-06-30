@@ -820,6 +820,9 @@ def create_response(type, data):
     row.set_property("Status", "Form filled")
 
 
+
+
+
 @app.route("/responses", methods=["POST"])
 def responses():
     accepted_types = ["designer", "developer", "manager", "bidders"]
@@ -834,6 +837,34 @@ def responses():
         return f"type '{res_type}' is not supported yet"
     print(f'created new {res_type} response from {data["Name"]}')
     return f'created new {res_type} response from {data["Name"]}'
+
+def test_response(type, data):
+    # Development
+    # collection_url = "https://www.notion.so/c8cc4837308c4b299a88d36d07bc2f4f?v=dd587a4640aa41bd9ff88ca268aff553"
+    # Production
+    collection_url = "https://www.notion.so/78e87ae88ae9423ea62e8b240e896bab?v=dd360e7b77204dc49271f97733cdf4a7"
+    token = os.environ.get("TOKEN")
+    client = NotionClient(token)
+
+    cv = client.get_collection_view(collection_url)    
+    row = cv.collection.add_row()
+    row.set_property("email", type)
+    for i in data:       
+            if "_".join(str.lower(i).split()) in row.get_all_properties().keys():
+                try:
+                    row.set_property("_".join(str.lower(i).split()), data[i])
+                except Exception:
+                    print(f'unable to insert value "{data[i]}" into column "{i}"')
+            else:
+                print(f'no column "{i}" in target table')
+
+@app.route("/test", methods=["POST"])
+def responses():
+    print(f'start creating {res_type} response from {data["Name"]}')
+    test_response(res_type, data)
+    print(f'created new {res_type} response from {data["Name"]}')
+    return f'created new {res_type} response from {data["Name"]}'
+
 
 
 def parse_data_from_manychat(data):
