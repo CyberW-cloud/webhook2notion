@@ -827,7 +827,6 @@ def create_response(type, data):
 def responses():
     accepted_types = ["designer", "developer", "manager", "bidders"]
     print("start new response")
-    res_type = request.args.get("type")
     data = request.get_json()
     if res_type in accepted_types:
         print(f'start creating {res_type} response from {data["Name"]}')
