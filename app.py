@@ -860,10 +860,10 @@ def test_response(data):
 @app.route("/testr", methods=["POST"])
 def testr():
     data = request.get_json()
-    print(f'start creating {res_type} response from {data["Name"]}')
+    print(f'start creating {res_type} response from {data["email"]}')
     test_response(data)
-    print(f'created new {res_type} response from {data["Name"]}')
-    return f'created new {res_type} response from {data["Name"]}'
+    print(f'created new {res_type} response from {data["email"]}')
+    return f'created new {res_type} response from {data["email"]}'
 
 
 
