@@ -858,8 +858,8 @@ def test_response(type, data):
             else:
                 print(f'no column "{i}" in target table')
 
-@app.route("/test", methods=["POST"])
-def responses():
+@app.route("/testr", methods=["POST"])
+def testr():
     print(f'start creating {res_type} response from {data["Name"]}')
     test_response(res_type, data)
     print(f'created new {res_type} response from {data["Name"]}')
