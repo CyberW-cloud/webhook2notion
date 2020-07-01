@@ -165,66 +165,6 @@ def get_contracts(token, days_before):
         res.append(contract)
     return res
 
-
-@app.route("/kick_staff", methods=["GET"])
-def kick_staff():
-    print("starting kickstaff")
-    token_v2 = os.environ.get("TOKEN")
-    date = request.args.get("date", None)
-    contracts_day = request.args.get("contracts_day", 9, type=int)
-    projects_day = request.args.get("projects_day", contracts_day, type=int)
-    client_days_before = request.args.get("client_day", 14, type=int)
-    cc_tag = request.args.get("no_contracts", None)
-    pm_tag = request.args.get("no_projects", None)
-    cc = True if cc_tag is None else False
-    pm = True if pm_tag is None else False
-
-    if cc:
-        contracts = get_contracts(token_v2, contracts_day)
-        print("contracts done")
-    else:
-        contracts = []
-    if pm:
-        projects = get_projects(token_v2, projects_day)
-        print("projects done")
-    else:
-        projects = []
-
-    todo = dict()
-    todo = parse_staff(todo, contracts, "contracts", client_days_before)
-    todo = parse_staff(todo, projects, "projects", client_days_before)
-    for key in todo:
-        task = todo[key]
-        if task["contracts"]:
-            create_todo(
-                token_v2,
-                date,
-                task["todo_url"],
-                map(lambda c: "[{}]({})".format(c[0], c[1]), task["contracts"]),
-                "Контракты не получали обновления на прошлой неделе. Пожалуйста, срочно обнови:",
-            )
-
-        if task["projects"]:
-            create_todo(
-                token_v2,
-                date,
-                task["todo_url"],
-                map(lambda p: "[{}]({})".format(p[0], p[1]), task["projects"]),
-                "Проекты не получали обновления на прошлой неделе. Пожалуйста, срочно обнови:",
-            )
-
-        if task["clients"]:
-            create_todo(
-                token_v2,
-                date,
-                task["todo_url"],
-                map(lambda t: "[{}]({})".format(t[0], t[1]), task["clients"]),
-                "Занеси новую информацию которую ты узнал про клиентов:",
-            )
-    print("kickstaff done")
-    return "Done!"
-
-
 def get_proposals(token, days_before):
     client = NotionClient(token)
     cv = client.get_collection_view(
@@ -300,6 +240,67 @@ def get_proposals(token, days_before):
     return res
 
 
+@app.route("/kick_staff", methods=["GET"])
+def kick_staff():
+    print("starting kickstaff")
+    token_v2 = os.environ.get("TOKEN")
+    date = request.args.get("date", None)
+    contracts_day = request.args.get("contracts_day", 9, type=int)
+    projects_day = request.args.get("projects_day", contracts_day, type=int)
+    client_days_before = request.args.get("client_day", 14, type=int)
+    cc_tag = request.args.get("no_contracts", None)
+    pm_tag = request.args.get("no_projects", None)
+    cc = True if cc_tag is None else False
+    pm = True if pm_tag is None else False
+
+    if cc:
+        contracts = get_contracts(token_v2, contracts_day)
+        print("contracts done")
+    else:
+        contracts = []
+    if pm:
+        projects = get_projects(token_v2, projects_day)
+        print("projects done")
+    else:
+        projects = []
+
+    todo = dict()
+    todo = parse_staff(todo, contracts, "contracts", client_days_before)
+    todo = parse_staff(todo, projects, "projects", client_days_before)
+    for key in todo:
+        task = todo[key]
+        if task["contracts"]:
+            create_todo(
+                token_v2,
+                date,
+                task["todo_url"],
+                map(lambda c: "[{}]({})".format(c[0], c[1]), task["contracts"]),
+                "Контракты не получали обновления на прошлой неделе. Пожалуйста, срочно обнови:",
+            )
+
+        if task["projects"]:
+            create_todo(
+                token_v2,
+                date,
+                task["todo_url"],
+                map(lambda p: "[{}]({})".format(p[0], p[1]), task["projects"]),
+                "Проекты не получали обновления на прошлой неделе. Пожалуйста, срочно обнови:",
+            )
+
+        if task["clients"]:
+            create_todo(
+                token_v2,
+                date,
+                task["todo_url"],
+                map(lambda t: "[{}]({})".format(t[0], t[1]), task["clients"]),
+                "Занеси новую информацию которую ты узнал про клиентов:",
+            )
+    print("kickstaff done")
+    return "Done!"
+
+
+
+
 @app.route("/proposals_check", methods=["GET"])
 def proposals_check():
     print(f"Proposal check started")
@@ -314,6 +315,7 @@ def proposals_check():
         print("start todo")
         if task["proposals"]:
             print(f"ToDo: {task['todo_url']}")
+            print(f"ToDo: {task['person_name']}")
             create_todo(
                 token_v2,
                 date,
