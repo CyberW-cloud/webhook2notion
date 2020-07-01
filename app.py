@@ -38,6 +38,7 @@ def parse_staff(todo, table, obj, client_days_before):
                 todo[person]["clients"].add(
                     (row["client"].name.replace("\xa0", ""), row["client"].get_browseable_url())
                 )
+    print(todo)            
     return todo
 
 
@@ -315,7 +316,6 @@ def proposals_check():
         print("start todo")
         if task["proposals"]:
             print(f"ToDo: {task['todo_url']}")
-            print(f"ToDo: {task['person_name']}")
             create_todo(
                 token_v2,
                 date,
