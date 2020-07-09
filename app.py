@@ -828,7 +828,7 @@ def create_response(type, data):
 
 @app.route("/responses", methods=["POST"])
 def responses():
-    accepted_types = ["designer", "developer", "manager", "bidders"]
+    accepted_types = ["designer", "developer", "manager", "bidders", "recruiter"]
     print("start new response")
     res_type = request.args.get("type")
     data = request.get_json()
