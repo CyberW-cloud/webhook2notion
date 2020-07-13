@@ -474,7 +474,7 @@ def weekly_todo_fl(token, staff, calendar):
         print(f"FL {fl['name']} start")
         # Monday
         todo = list()
-        todo.append(f"Загрузи [статы](https://www.upwork.com/ab/g/who-viewed/) по [ссылке]({fl['stats_upload']})")
+        todo.append(f"Загрузи [статы](https://bit.ly/30k15In) по [ссылке]({fl['stats_upload']})")
         todo.append(f"Коментом, тегнув {fl['pa_name']}, напиши свою планируемую загрузку на неделю")
         create_todo(token, calendar["mon"], fl["todo_url"], todo, text="")
     print("Mon FL done")
