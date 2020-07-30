@@ -53,6 +53,7 @@ def todo_test():
         if(n<set_date):
             if("Daily" == todo.periodicity[0]):
                 todo.due_date.start += datetime.timedelta(1)
+                print(todo.due_date.start)
                 todo.set_date.start = todo.due_date.start - datetime.timedelta(0,0,0,0,0,12)
 
             if("/w" in todo.periodicity[0]):
@@ -81,7 +82,7 @@ def todo_test():
 
 
 
-    return(str(todo.set_date.start))
+    return(str(todo.due_date.start))
 
 def parse_staff(todo, table, obj, client_days_before):
     test_date = datetime.datetime.now()
