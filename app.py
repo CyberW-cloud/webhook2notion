@@ -42,7 +42,7 @@ def todo_test():
     tasks = list()
 
     # adding 12 hrs bc notion thinks that days start at 12 am
-    date = datetime.datetime.strptime(result[0].set_date.start), "%Y-%m-%d %H:%M:%S")\
+    date = datetime.datetime.strptime(result[0].set_date.start, "%Y-%m-%d %H:%M:%S")\
             +datetime.datetime(0,0,0,12)
     #going over all results to send them for addition simultaneously
     #for todo in result:
