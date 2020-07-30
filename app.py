@@ -36,14 +36,9 @@ def todo_test():
     }
     cv = cv.build_query(filter=filter_params)
     result = cv.execute()
-
-   
-
             
 
-
-
-    return(type(result))
+    return("rr")
 
 def parse_staff(todo, table, obj, client_days_before):
     test_date = datetime.datetime.now()
