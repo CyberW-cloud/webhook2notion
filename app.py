@@ -32,7 +32,7 @@ def todo_test():
     filter_params = {
         "filters": [
             {
-                "filter": {"value": {"type": "exact", "value": "TO DO"}, "operator": "enum_is"},
+                "filter": {"value": {"type": "exact", "value": "DONE"}, "operator": "enum_is"},
                 "property": "Status",
             }
         ],
@@ -88,7 +88,7 @@ def todo_test():
 
                 changes.append({"set":set_date , "due":due_date , "id":todo.id})
         else:
-            todo.status = "DONE"
+            todo.status = "TO DO"
 
 
     for record in cv.collection.get_rows():
