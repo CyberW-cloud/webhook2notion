@@ -113,7 +113,7 @@ def todo_test():
                 changes.append({"set":set_date , "due":due_date , "id":todo.id})
         else:
             s = str(set_date.date()) + " ||| " + str(datetime.datetime.now().date())
-            if(set_date.date() == datetime.datetime.now().date()):
+            if(todo.set_date.start.date() == datetime.datetime.now().date()):
                 todo.status = "TO DO"
 
 
