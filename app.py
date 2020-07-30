@@ -59,7 +59,7 @@ def todo_test():
                 
                 due_date = todo.due_date.start + datetime.timedelta(1)
     
-                set_date = todo.due_date.start - datetime.timedelta(0,0,0,0,0,12)
+                set_date = due_date - datetime.timedelta(0,0,0,0,0,12)
 
                 changes.append({"set":set_date , "due":due_date , "id":todo.id})
 
@@ -89,7 +89,7 @@ def todo_test():
                     offset = datetime.deltatime(target_day-day)
 
                 due_date = todo.due_date.start + offset
-                set_date = todo.due_date.start - datetime.timedelta(1)
+                set_date = due_date - datetime.timedelta(1)
 
                 changes.append({"set":set_date , "due":due_date , "id":todo.id})
 
@@ -106,7 +106,7 @@ def todo_test():
                 due_date = datetime.datetime(todo.due_date.start.year + month // 12, month % 12 + 1, min(todo.due_date.start.day, calendar.monthrange(year,month)[1]),\
                                             todo.due_date.start.hour, todo.due_date.start.minute)
 
-                set_date = todo.due_date.start - datetime.timedelta(0,0,0,0,0,0,offset)
+                set_date = due_date - datetime.timedelta(0,0,0,0,0,0,offset)
 
                 changes.append({"set":set_date , "due":due_date , "id":todo.id})
         else:
