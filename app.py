@@ -24,7 +24,7 @@ def todo_test():
     client = NotionClient(token_v2)
     cv = client.get_collection_view(site)
 
-    """# get projects with TODO status
+    # get projects with TODO status
     filter_params = {
         "filters": [
             {
@@ -35,7 +35,7 @@ def todo_test():
         "operator": "and",
     }
     cv = cv.build_query(filter=filter_params)
-    result = cv.execute()
+    """result = cv.execute()
 
     result = nview_to_pandas(result)"""
 
