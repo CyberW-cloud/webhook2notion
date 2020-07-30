@@ -54,7 +54,7 @@ def update_todo()
     result = cv.execute()
 
     result = nview_to_pandas(result)
-    print(result)
+    return str(result)
 
 def parse_staff(todo, table, obj, client_days_before):
     test_date = datetime.datetime.now()
