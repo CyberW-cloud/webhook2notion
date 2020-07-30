@@ -16,12 +16,13 @@ app = Flask(__name__)
 
 @app.route("/todo_test", methods=["GET"])
 def todo_test()
-    app = Flask(__name__)
+   
 
     site = "https://www.notion.so/0aead28cb9f34ec2b41a9af19b96817a?v=1266d9ce8cbd4c968d29b4b877bed345"
     token_v2 = os.environ.get("TOKEN")
 
-    client.get_collection_view(site)
+    client = NotionClient(token_v2)
+    cv = client.get_collection_view(site)
 
     # get projects with TODO status
     filter_params = {
@@ -38,8 +39,6 @@ def todo_test()
 
     result = nview_to_pandas(result)
 
-    for TODO in result:
-        TODO.status = "DONE"
 
     print(f"Got It!")
     print(str(result))
