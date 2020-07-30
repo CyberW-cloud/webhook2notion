@@ -23,7 +23,7 @@ def todo_test()
 
     client.get_collection_view(site)
 
-    # get projects цшер TODO status
+    # get projects with TODO status
     filter_params = {
         "filters": [
             {
@@ -37,6 +37,10 @@ def todo_test()
     result = cv.execute()
 
     result = nview_to_pandas(result)
+
+    for TODO in result:
+        TODO.status = "DONE"
+
     print(f"Got It!")
     print(str(result))
     return str(result)
