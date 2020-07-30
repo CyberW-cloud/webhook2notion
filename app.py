@@ -1,7 +1,6 @@
 import re
 import urllib.parse
 from datetime import timedelta
-import datetime
 
 import pytz
 from flask import Flask, request
@@ -50,8 +49,8 @@ def todo_test():
     #going over all results to send them for addition simultaneously
     for todo in result:
         Set_date = todo.set_date.start + datetime.timedelta(0,0,0,0,0,12)
-
-        if(datetime.datetime.now()<datetime.now):
+        n = datetime.datetime.now()
+        if(n<set_date):
             if("Daily" == todo.periodicity[0]):
                 todo.due_date += datetime.timedelta(1)
                 todo.set_date = todo.due_date
