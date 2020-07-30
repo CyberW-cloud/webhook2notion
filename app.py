@@ -23,10 +23,7 @@ def todo_test()
 
     client.get_collection_view(site)
 
-    n = datetime.datetime.now()
-    n = n.replace(hour=12, minute=0, second=0, microsecond=0) - datetime.timedelta(days=days_before)
-
-    # get projects InProgress with date less when now()-days before
+    # get projects цшер TODO status
     filter_params = {
         "filters": [
             {
@@ -40,6 +37,7 @@ def todo_test()
     result = cv.execute()
 
     result = nview_to_pandas(result)
+    print(f"Got It!")
     print(str(result))
     return str(result)
 
