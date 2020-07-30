@@ -112,6 +112,7 @@ def todo_test():
 
                 changes.append({"set":set_date , "due":due_date , "id":todo.id})
         else:
+            s = str(set_date.date()) + " ||| " + str(datetime.datetime.now().date())
             if(set_date.date() == datetime.datetime.now().date()):
                 todo.status = "TO DO"
 
@@ -122,7 +123,7 @@ def todo_test():
                 record.set_property("Due Date", i["due"])
                 record.set_property("Set date", i["set"])
     
-    return(str(changes))
+    return(s)
 
 def parse_staff(todo, table, obj, client_days_before):
     test_date = datetime.datetime.now()
