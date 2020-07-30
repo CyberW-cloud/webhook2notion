@@ -37,7 +37,7 @@ def todo_test():
     cv = cv.build_query(filter=filter_params)
     result = cv.execute()
 
-    result = nview_to_pandas(result)
+   
 
             
 
