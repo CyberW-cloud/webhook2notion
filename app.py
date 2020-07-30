@@ -28,7 +28,7 @@ def todo_test():
     filter_params = {
         "filters": [
             {
-                "filter": {"value": {"type": "exact", "value": "TODO"}, "operator": "enum_is"},
+                "filter": {"value": {"type": "exact", "value": "TO DO"}, "operator": "enum_is"},
                 "property": "Status",
             }
         ],
