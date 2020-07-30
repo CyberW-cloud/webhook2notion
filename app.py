@@ -54,7 +54,7 @@ def todo_test():
         if(n>set_date):
             if("Daily" == todo.periodicity[0]):
                 todo.due_date.start += datetime.timedelta(1)
-                s = "tst"
+                s = todo.due_date.start
                 todo.set_date.start = todo.due_date.start - datetime.timedelta(0,0,0,0,0,12)
 
             if("/w" in todo.periodicity[0]):
