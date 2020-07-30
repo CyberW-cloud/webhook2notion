@@ -35,9 +35,9 @@ def todo_test():
         "operator": "and",
     }
     cv = cv.build_query(filter=filter_params)
-    """result = cv.execute()
+    result = cv.execute()
 
-    result = nview_to_pandas(result)"""
+    result = nview_to_pandas(result)
 
     return("test")
 
