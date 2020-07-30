@@ -32,21 +32,7 @@ def update_todo()
             {
                 "filter": {"value": {"type": "exact", "value": "TODO"}, "operator": "enum_is"},
                 "property": "Status",
-            },
-            {
-                "property": "Updated",
-                "filter": {
-                    "operator": "date_is_on_or_before",
-                    "value": {
-                        "type": "exact",
-                        "value": {
-                            "type": "date",
-                            "start_date": str(n.date())
-                            # "start_date": '2020-03-19'
-                        },
-                    },
-                },
-            },
+            }
         ],
         "operator": "and",
     }
