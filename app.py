@@ -73,7 +73,7 @@ def todo_test():
                 target = -1
                 for i in todo.periodicity:
                     if i in week:
-                        per_numbered.append("week.index(i)")
+                        per_numbered.append(week.index(i))
 
                 per_numbered.sort()
                 
