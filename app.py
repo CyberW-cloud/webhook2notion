@@ -84,9 +84,9 @@ def todo_test():
 
                 if target_day == -1:
                     target_day = per_numbered[0]
-                    offset = datetime.deltatime(7 + day-target_day)
+                    offset = datetime.timedelta(7 + day-target_day)
                 else:
-                    offset = datetime.deltatime(target_day-day)
+                    offset = datetime.timedelta(target_day-day)
 
                 due_date = todo.due_date.start + offset
                 set_date = due_date - datetime.timedelta(1)
