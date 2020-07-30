@@ -52,13 +52,13 @@ def todo_test():
         n = datetime.datetime.now()
         if(n<set_date):
             if("Daily" == todo.periodicity[0]):
-                todo.due_date += datetime.timedelta(1)
-                todo.set_date = todo.due_date - datetime.timedelta(0,0,0,0,0,12)
+                todo.due_date.start += datetime.timedelta(1)
+                todo.set_date.start = todo.due_date.start - datetime.timedelta(0,0,0,0,0,12)
 
             if("/w" in todo.periodicity[0]):
                 weeks = int(todo.periodicity[0][0])
-                todo.due_date += datetime.timedelta(0,0,0,0,0,0,weeks)
-                todo.set_date = todo.due_date - datetime.timedelta(1)
+                todo.due_date.start += datetime.timedelta(0,0,0,0,0,0,weeks)
+                todo.set_date.start = todo.due_date.start - datetime.timedelta(1)
 
             if("m" in todo.periodicity[0]):
                 if("1t/m" == todo.periodicity[0]):
@@ -68,12 +68,12 @@ def todo_test():
                     months = int(todo.periodicity[0][3])
                     offset = 2
 
-                month = todo.due_date.month - 1 + months
-                todo.due_date.year = todo.due_date.year + month // 12
-                todo.due_date.month = month % 12 + 1
-                todo.due_date.day = min(todo.due_date.day, calendar.monthrange(year,month)[1])
+                month = todo.due_date.start.month - 1 + months
+                todo.due_date.start.year = todo.due_date.start.year + month // 12
+                todo.due_date.start.month = month % 12 + 1
+                todo.due_date.start.day = min(todo.due_date.start.day, calendar.monthrange(year,month)[1])
 
-                todo.set_date -= datetime.timedelta(0,0,0,0,0,0,offset)
+                todo.set_date.start -= datetime.timedelta(0,0,0,0,0,0,offset)
 
         else:
             todo.status = "TO DO"
