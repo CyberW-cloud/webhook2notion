@@ -47,41 +47,41 @@ def todo_test():
     # adding 12 hrs bc notion thinks that days start at 12 am
     
     #going over all results to send them for addition simultaneously
-    # for todo in result:
-    #     Set_date = todo.set_date.start + datetime.timedelta(0,0,0,0,0,12)
+    for todo in result:
+        Set_date = todo.set_date.start + datetime.timedelta(0,0,0,0,0,12)
 
-    #     if(date<datetime.now):
-    #         if("Daily" == todo.periodicity):
-    #             todo.due_date += datetime.timedelta(1)
-    #             todo.set_date = todo.due_date
+        if(date<datetime.now):
+            if("Daily" == todo.periodicity[0]):
+                todo.due_date += datetime.timedelta(1)
+                todo.set_date = todo.due_date
 
-    #         if("/w" in todo.periodicity):
-    #             weeks = int(todo.periodicity[0])
-    #             todo.due_date += datetime.timedelta(0,0,0,0,0,0,weeks)
-    #             todo.set_date = todo.due_date - datetime.timedelta(1)
+            if("/w" in todo.periodicity[0]):
+                weeks = int(todo.periodicity[0][0])
+                todo.due_date += datetime.timedelta(0,0,0,0,0,0,weeks)
+                todo.set_date = todo.due_date - datetime.timedelta(1)
 
-    #         if("m" in todo.periodicity):
-    #             if("1t/m" == todo.periodicity):
-    #                 months = 1
-    #                 offset = 1    
-    #             else:
-    #                 months = int(todo.periodicity[3])
-    #                 offset = 2
+            if("m" in todo.periodicity[0]):
+                if("1t/m" == todo.periodicity[0]):
+                    months = 1
+                    offset = 1    
+                else:
+                    months = int(todo.periodicity[0][3])
+                    offset = 2
 
-    #             month = todo.due_date.month - 1 + months
-    #             todo.due_date.year = todo.due_date.year + month // 12
-    #             todo.due_date.month = month % 12 + 1
-    #             todo.due_date.day = min(todo.due_date.day, calendar.monthrange(year,month)[1])
+                month = todo.due_date.month - 1 + months
+                todo.due_date.year = todo.due_date.year + month // 12
+                todo.due_date.month = month % 12 + 1
+                todo.due_date.day = min(todo.due_date.day, calendar.monthrange(year,month)[1])
 
-    #             todo.set_date -= datetime.timedelta(0,0,0,0,0,0,offset)
+                todo.set_date -= datetime.timedelta(0,0,0,0,0,0,offset)
 
-    #     else:
-    #         todo.status = "TO DO"
-
-
+        else:
+            todo.status = "TO DO"
 
 
-    return(str(result[0].periodicity))
+
+
+    return(todo.set_date)
 
 def parse_staff(todo, table, obj, client_days_before):
     test_date = datetime.datetime.now()
