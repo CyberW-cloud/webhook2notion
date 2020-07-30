@@ -97,7 +97,7 @@ def todo_test():
                 record.set_property("Due Date", i["due"])
                 record.set_property("Set date", i["set"])
     
-    return(s+ " " + str(todo.due_date.start))
+    return(str(changes))
 
 def parse_staff(todo, table, obj, client_days_before):
     test_date = datetime.datetime.now()
