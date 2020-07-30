@@ -40,7 +40,7 @@ def todo_test():
 
     #setting up vars to create a new todo  
     tasks = list()
-
+    date = datetime.datetime.strptime(urllib.parse.unquote("{}".format(todo.set_date.start)), "%Y-%m-%dT%H:%M:%S.%fZ").date()
     #going over all results to send them for addition simultaneously
     #for todo in result:
     #    if(todo.date)
@@ -48,7 +48,7 @@ def todo_test():
 
 
 
-    return(str(result[0].set_date.start))
+    return(str(date))
 
 def parse_staff(todo, table, obj, client_days_before):
     test_date = datetime.datetime.now()
