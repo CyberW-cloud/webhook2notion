@@ -81,7 +81,7 @@ def todo_test():
 
 
 
-    return(str(todo.set_date))
+    return(str(todo.set_date.start))
 
 def parse_staff(todo, table, obj, client_days_before):
     test_date = datetime.datetime.now()
