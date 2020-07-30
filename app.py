@@ -41,8 +41,6 @@ def todo_test()
 
 
     print(f"Got It!")
-    print(str(result))
-    return str(result)
 
 def parse_staff(todo, table, obj, client_days_before):
     test_date = datetime.datetime.now()
