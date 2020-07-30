@@ -64,9 +64,31 @@ def todo_test():
                 changes.append({"set":set_date , "due":due_date , "id":todo.id})
 
             if("/w" in todo.periodicity[0]):
-                weeks = int(todo.periodicity[0][0])
+                times_per_week = int(todo.periodicity[0][0])
                 
-                due_date = todo.due_date.start + datetime.timedelta(0,0,0,0,0,0,weeks)
+                week = ["Mo", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+                per_numbered = []
+                day = datetime.datetime.today().weekday()
+                
+                target = -1
+                for i in periodicity:
+                    if i in week:
+                        per_numbered.append("week.index(i)")
+
+                per_numbered.sort()
+                
+                target_day = -1
+                for i in per_numbered:
+                    if i>day:
+                        target_day = i
+
+                if target_day == -1:
+                    target_day = per_numbered[0]
+                    offset = datetime.deltatime(7 + day-target_day)
+                else:
+                    offset = datetime.deltatime(target_day-day)
+
+                due_date += todo.due_date.start 
                 set_date = todo.due_date.start - datetime.timedelta(1)
 
                 changes.append({"set":set_date , "due":due_date , "id":todo.id})
