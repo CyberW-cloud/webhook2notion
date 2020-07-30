@@ -47,13 +47,14 @@ def todo_test():
     # adding 12 hrs bc notion thinks that days start at 12 am
     
     #going over all results to send them for addition simultaneously
+    s = ""
     for todo in result:
         set_date = todo.set_date.start + datetime.timedelta(0,0,0,0,0,12)
         n = datetime.datetime.now()
         if(n<set_date):
             if("Daily" == todo.periodicity[0]):
                 todo.due_date.start += datetime.timedelta(1)
-                print(todo.due_date.start)
+                s = "tst"
                 todo.set_date.start = todo.due_date.start - datetime.timedelta(0,0,0,0,0,12)
 
             if("/w" in todo.periodicity[0]):
@@ -78,11 +79,11 @@ def todo_test():
 
         else:
             todo.status = "TO DO"
+            s = "n0"
 
 
 
-
-    return(str(todo.due_date.start))
+    return(s+ " " + str(todo.due_date.start))
 
 def parse_staff(todo, table, obj, client_days_before):
     test_date = datetime.datetime.now()
