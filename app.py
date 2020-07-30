@@ -57,9 +57,6 @@ def todo_test():
             if("Daily" == todo.periodicity[0]):
                 s= str(todo.due_date.start) + " "
                 todo.due_date.start += datetime.timedelta(1)
-                page.refresh()
-              
-
                 s += str(todo.due_date.start)
                 todo.due_date.to_notion()
                 todo.set_date.start = todo.due_date.start - datetime.timedelta(0,0,0,0,0,12)
@@ -89,6 +86,8 @@ def todo_test():
             s = "n0"
 
 
+    for record in cv.collection.get_rows():
+        s+= " " + str(record)
     return(s+ " " + str(todo.due_date.start))
 
 def parse_staff(todo, table, obj, client_days_before):
