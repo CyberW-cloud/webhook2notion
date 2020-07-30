@@ -49,22 +49,27 @@ def todo_test():
     #going over all results to send them for addition simultaneously
     s = ""
     page = client.get_block(site)
-
+    changes = []
     for todo in result:
         set_date = todo.set_date.start + datetime.timedelta(0,0,0,0,0,12)
         n = datetime.datetime.now()
         if(n>set_date):
+            
             if("Daily" == todo.periodicity[0]):
-                s= str(todo.id)
-                todo.due_date.start += datetime.timedelta(1)
+                
+                due_date = todo.due_date.start + datetime.timedelta(1)
     
-                todo.due_date.to_notion()
-                todo.set_date.start = todo.due_date.start - datetime.timedelta(0,0,0,0,0,12)
+                set_date = todo.due_date.start - datetime.timedelta(0,0,0,0,0,12)
+
+                changes.append({"set":set_date , "due":due_date , "id":todo.id})
 
             if("/w" in todo.periodicity[0]):
                 weeks = int(todo.periodicity[0][0])
-                todo.due_date.start += datetime.timedelta(0,0,0,0,0,0,weeks)
-                todo.set_date.start = todo.due_date.start - datetime.timedelta(1)
+                
+                due_date = todo.due_date.start + datetime.timedelta(0,0,0,0,0,0,weeks)
+                set_date = todo.due_date.start - datetime.timedelta(1)
+
+                changes.append({"set":set_date , "due":due_date , "id":todo.id})
 
             if("m" in todo.periodicity[0]):
                 if("1t/m" == todo.periodicity[0]):
@@ -75,19 +80,23 @@ def todo_test():
                     offset = 2
 
                 month = todo.due_date.start.month - 1 + months
-                todo.due_date.start.year = todo.due_date.start.year + month // 12
-                todo.due_date.start.month = month % 12 + 1
-                todo.due_date.start.day = min(todo.due_date.start.day, calendar.monthrange(year,month)[1])
 
-                todo.set_date.start -= datetime.timedelta(0,0,0,0,0,0,offset)
+                due_date = datetime.datetime(todo.due_date.start.year + month // 12, month % 12 + 1, min(todo.due_date.start.day, calendar.monthrange(year,month)[1]),\
+                                            todo.due_date.start.hour, todo.due_date.start.minute)
 
+                set_date = todo.due_date.start - datetime.timedelta(0,0,0,0,0,0,offset)
+
+                changes.append({"set":set_date , "due":due_date , "id":todo.id})
         else:
             todo.status = "TO DO"
-            s = "n0"
 
 
     for record in cv.collection.get_rows():
-        s+= " |||| " + str(record)
+        for i in changes:
+            if i["id"] == record.id:
+                record.set_property("Due Date", i["due"])
+                record.set_property("Set date", i["set"])
+    
     return(s+ " " + str(todo.due_date.start))
 
 def parse_staff(todo, table, obj, client_days_before):
