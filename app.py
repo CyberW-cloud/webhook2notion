@@ -58,7 +58,7 @@ def todo_test():
                 s= str(todo.due_date.start) + " "
                 todo.due_date.start += datetime.timedelta(1)
                 page.refresh()
-                todo.due_date.refresh()
+              
 
                 s += str(todo.due_date.start)
                 todo.due_date.to_notion()
