@@ -40,6 +40,7 @@ def todo_test()
     result = cv.execute()
 
     result = nview_to_pandas(result)
+    print(str(result))
     return str(result)
 
 def parse_staff(todo, table, obj, client_days_before):
