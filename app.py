@@ -39,7 +39,11 @@ def todo_test():
 
     result = nview_to_pandas(result)
 
-    return(result.to_string())
+            
+
+
+
+    return(type(result))
 
 def parse_staff(todo, table, obj, client_days_before):
     test_date = datetime.datetime.now()
