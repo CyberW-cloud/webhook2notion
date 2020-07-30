@@ -71,7 +71,7 @@ def todo_test():
                 day = datetime.datetime.today().weekday()
                 
                 target = -1
-                for i in periodicity:
+                for i in todo.periodicity:
                     if i in week:
                         per_numbered.append("week.index(i)")
 
