@@ -14,6 +14,11 @@ timezone = "Europe/Kiev"
 
 app = Flask(__name__)
 
+
+
+def add_months(sourcedate, months):
+    
+
 @app.route("/todo_test", methods=["GET"])
 def todo_test():
    
@@ -42,15 +47,43 @@ def todo_test():
     tasks = list()
 
     # adding 12 hrs bc notion thinks that days start at 12 am
-    date = result[0].set_date.start
+    
     #going over all results to send them for addition simultaneously
-    #for todo in result:
-    #    if(todo.date)
-    #    tasks.append(todo.name)
+    # for todo in result:
+    #     Set_date = todo.set_date.start + datetime.timedelta(0,0,0,0,0,12)
+
+    #     if(date<datetime.now):
+    #         if("Daily" == todo.periodicity):
+    #             todo.due_date += datetime.timedelta(1)
+    #             todo.set_date = todo.due_date
+
+    #         if("/w" in todo.periodicity):
+    #             weeks = int(todo.periodicity[0])
+    #             todo.due_date += datetime.timedelta(0,0,0,0,0,0,weeks)
+    #             todo.set_date = todo.due_date - datetime.timedelta(1)
+
+    #         if("m" in todo.periodicity):
+    #             if("1t/m" == todo.periodicity):
+    #                 months = 1
+    #                 offset = 1    
+    #             else:
+    #                 months = int(todo.periodicity[3])
+    #                 offset = 2
+
+    #             month = todo.due_date.month - 1 + months
+    #             todo.due_date.year = todo.due_date.year + month // 12
+    #             todo.due_date.month = month % 12 + 1
+    #             todo.due_date.day = min(todo.due_date.day, calendar.monthrange(year,month)[1])
+
+    #             todo.set_date -= datetime.timedelta(0,0,0,0,0,0,offset)
+
+    #     else:
+    #         todo.status = "TO DO"
 
 
 
-    return(str(date+datetime.timedelta(0,0,0,0,0,12)))
+
+    return(str(result[0].periodicity))
 
 def parse_staff(todo, table, obj, client_days_before):
     test_date = datetime.datetime.now()
