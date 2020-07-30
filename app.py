@@ -56,6 +56,7 @@ def todo_test():
                 s= str(todo.due_date.start) + " "
                 todo.due_date.start += datetime.timedelta(1)
                 s += str(todo.due_date.start)
+                todo.due_date.to_notion()
                 todo.set_date.start = todo.due_date.start - datetime.timedelta(0,0,0,0,0,12)
 
             if("/w" in todo.periodicity[0]):
