@@ -18,7 +18,7 @@ app = Flask(__name__)
 def todo_test():
    
 
-    site = "https://www.notion.so/0aead28cb9f34ec2b41a9af19b96817a?v=1266d9ce8cbd4c968d29b4b877bed345"
+    """site = "https://www.notion.so/0aead28cb9f34ec2b41a9af19b96817a?v=1266d9ce8cbd4c968d29b4b877bed345"
     token_v2 = os.environ.get("TOKEN")
 
     client = NotionClient(token_v2)
@@ -37,10 +37,9 @@ def todo_test():
     cv = cv.build_query(filter=filter_params)
     result = cv.execute()
 
-    result = nview_to_pandas(result)
+    result = nview_to_pandas(result)"""
 
-
-    print(f"Got It!")
+    print("test")
 
 def parse_staff(todo, table, obj, client_days_before):
     test_date = datetime.datetime.now()
