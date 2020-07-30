@@ -87,7 +87,7 @@ def todo_test():
 
 
     for record in cv.collection.get_rows():
-        s+= " " + str(record)
+        s+= " |||| " + str(record)
     return(s+ " " + str(todo.due_date.start))
 
 def parse_staff(todo, table, obj, client_days_before):
