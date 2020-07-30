@@ -88,7 +88,7 @@ def todo_test():
                 else:
                     offset = datetime.deltatime(target_day-day)
 
-                due_date += todo.due_date.start 
+                due_date = todo.due_date.start + offset
                 set_date = todo.due_date.start - datetime.timedelta(1)
 
                 changes.append({"set":set_date , "due":due_date , "id":todo.id})
