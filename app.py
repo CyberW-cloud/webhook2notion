@@ -88,7 +88,7 @@ def todo_test():
 
                 changes.append({"set":set_date , "due":due_date , "id":todo.id})
         else:
-            if(set_date.date() == datetime.date.now())
+            if(set_date.date() == datetime.date.now()):
                 todo.status = "TO DO"
 
 
