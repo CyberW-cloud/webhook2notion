@@ -88,7 +88,8 @@ def todo_test():
 
                 changes.append({"set":set_date , "due":due_date , "id":todo.id})
         else:
-            todo.status = "TO DO"
+            if(set_date.date() == datetime.date.now())
+                todo.status = "TO DO"
 
 
     for record in cv.collection.get_rows():
