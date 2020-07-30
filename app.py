@@ -50,7 +50,7 @@ def todo_test():
     for todo in result:
         Set_date = todo.set_date.start + datetime.timedelta(0,0,0,0,0,12)
 
-        if(datetime.now()<datetime.now):
+        if(datetime.datetime.now()<datetime.now):
             if("Daily" == todo.periodicity[0]):
                 todo.due_date += datetime.timedelta(1)
                 todo.set_date = todo.due_date
