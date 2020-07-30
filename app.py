@@ -53,7 +53,7 @@ def todo_test():
     for todo in result:
         set_date = todo.set_date.start + datetime.timedelta(0,0,0,0,0,12)
         n = datetime.datetime.now()
-        if(n>set_date):
+        if(n.date()>set_date.date()):
             
             if("Daily" == todo.periodicity[0]):
                 
@@ -83,8 +83,10 @@ def todo_test():
                         target_day = i
 
                 if target_day == -1:
+                    
                     target_day = per_numbered[0]
                     offset = datetime.timedelta(7 + day-target_day)
+
                 else:
                     offset = datetime.timedelta(target_day-day)
 
