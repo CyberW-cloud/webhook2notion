@@ -42,8 +42,7 @@ def todo_test():
     tasks = list()
 
     # adding 12 hrs bc notion thinks that days start at 12 am
-    date = datetime.datetime.strptime(result[0].set_date.start, "%Y-%m-%d %H:%M:%S")\
-            +datetime.datetime(0,0,0,12)
+    date = result[0].set_date.start
     #going over all results to send them for addition simultaneously
     #for todo in result:
     #    if(todo.date)
@@ -51,7 +50,7 @@ def todo_test():
 
 
 
-    return(str(date))
+    return(date+datetime.datetime(0,0,0,12,0,0))
 
 def parse_staff(todo, table, obj, client_days_before):
     test_date = datetime.datetime.now()
