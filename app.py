@@ -16,7 +16,6 @@ app = Flask(__name__)
 
 
 
-def add_months(sourcedate, months):
     
 
 @app.route("/todo_test", methods=["GET"])
@@ -43,8 +42,7 @@ def todo_test():
     result = cv.execute()
             
 
-    #setting up vars to create a new todo  
-    tasks = list()
+
 
     # adding 12 hrs bc notion thinks that days start at 12 am
     
