@@ -53,7 +53,7 @@ def todo_test():
         if(n<set_date):
             if("Daily" == todo.periodicity[0]):
                 todo.due_date += datetime.timedelta(1)
-                todo.set_date = todo.due_date
+                todo.set_date = todo.due_date - datetime.timedelta(0,0,0,0,0,12)
 
             if("/w" in todo.periodicity[0]):
                 weeks = int(todo.periodicity[0][0])
