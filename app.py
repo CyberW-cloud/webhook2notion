@@ -38,7 +38,7 @@ def todo_test():
     result = cv.execute()
             
 
-    return("rr")
+    return(str(result))
 
 def parse_staff(todo, table, obj, client_days_before):
     test_date = datetime.datetime.now()
