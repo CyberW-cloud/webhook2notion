@@ -53,7 +53,7 @@ def todo_test():
     for todo in result:
         set_date = todo.set_date.start + datetime.timedelta(0,0,0,0,0,12)
         n = datetime.datetime.now()
-        if(n>set_date):
+        if(n.date()>set_date):
             
             if("Daily" == todo.periodicity[0]):
                 
