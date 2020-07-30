@@ -48,7 +48,7 @@ def todo_test():
     
     #going over all results to send them for addition simultaneously
     for todo in result:
-        Set_date = todo.set_date.start + datetime.timedelta(0,0,0,0,0,12)
+        set_date = todo.set_date.start + datetime.timedelta(0,0,0,0,0,12)
         n = datetime.datetime.now()
         if(n<set_date):
             if("Daily" == todo.periodicity[0]):
