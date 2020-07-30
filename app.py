@@ -48,6 +48,8 @@ def todo_test():
     
     #going over all results to send them for addition simultaneously
     s = ""
+    page = client.get_block(link)
+
     for todo in result:
         set_date = todo.set_date.start + datetime.timedelta(0,0,0,0,0,12)
         n = datetime.datetime.now()
@@ -55,6 +57,8 @@ def todo_test():
             if("Daily" == todo.periodicity[0]):
                 s= str(todo.due_date.start) + " "
                 todo.due_date.start += datetime.timedelta(1)
+                todo.due_date.refresh()
+
                 s += str(todo.due_date.start)
                 todo.due_date.to_notion()
                 todo.set_date.start = todo.due_date.start - datetime.timedelta(0,0,0,0,0,12)
@@ -82,7 +86,6 @@ def todo_test():
         else:
             todo.status = "TO DO"
             s = "n0"
-
 
 
     return(s+ " " + str(todo.due_date.start))
