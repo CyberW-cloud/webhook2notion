@@ -15,7 +15,7 @@ timezone = "Europe/Kiev"
 app = Flask(__name__)
 
 @app.route("/todo_test", methods=["GET"])
-def update_todo()
+def todo_test()
     app = Flask(__name__)
 
     site = "https://www.notion.so/0aead28cb9f34ec2b41a9af19b96817a?v=1266d9ce8cbd4c968d29b4b877bed345"
