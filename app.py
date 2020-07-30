@@ -38,7 +38,17 @@ def todo_test():
     result = cv.execute()
             
 
-    return(result[0].name)
+    #setting up vars to create a new todo  
+    tasks = list()
+
+    #going over all results to send them for addition simultaneously
+    #for todo in result:
+    #    if(todo.date)
+    #    tasks.append(todo.name)
+
+
+
+    return(result[0].set_date)
 
 def parse_staff(todo, table, obj, client_days_before):
     test_date = datetime.datetime.now()
