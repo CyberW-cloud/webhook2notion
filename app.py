@@ -15,7 +15,21 @@ timezone = "Europe/Kiev"
 app = Flask(__name__)
 
 
+def get_offset_to_closest_weekday(source, targets):
+    targets.sort()
 
+    day = source.weekday()
+    target_day = -1
+    for i in targets:
+        if i>day:
+            target_day = i
+            break
+    if target_day == -1
+        target_day = per_numbered[0]
+        offset = datetime.timedelta(7 + target_day-day)
+
+    else:
+        offset = datetime.timedelta(target_day-day)
     
 
 @app.route("/todo_test", methods=["GET"])
@@ -44,7 +58,6 @@ def todo_test():
 
 
 
-    # adding 12 hrs bc notion thinks that days start at 12 am
     
     #going over all results to send them for addition simultaneously
     s = ""
@@ -57,7 +70,7 @@ def todo_test():
             
             if("Daily" == todo.periodicity[0]):
                 
-                due_date = todo.due_date.start + datetime.timedelta(1)
+                due_date = todo.due_date.start + get_offset_to_closest_weekday(todo.due_date.start, [0,1,2,3,4])
     
                 set_date = due_date - datetime.timedelta(0,0,0,0,0,12)
 
