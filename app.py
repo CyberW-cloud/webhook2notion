@@ -116,9 +116,9 @@ def todo_test():
                     months = int(todo.periodicity[0][3])
                     offset = 2
 
-                
+
                 due_date = todo.due_date.start + datetime.timedelta(30*months-2)
-                due_date = due_date + get_offset_to_closest_weekday(due_date, todo.periodicity)
+                due_date = due_date + get_offset_to_closest_weekday(due_date, todo.periodicity[1:])
 
                 set_date = due_date - datetime.timedelta(0,0,0,0,0,12,offset)
 
