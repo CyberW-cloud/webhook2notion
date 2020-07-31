@@ -114,12 +114,10 @@ def todo_test():
                 changes.append({"set":set_date , "due":due_date , "id":todo.id})
 
             elif("w" in period[0]):
-                
+                s+= " ojp " + period[0][3]
                 #if format is *t/w and includes days
                 if("w" == period[0][3]):
                     times_per_week = int(period[0][0])
-                    
-                    
 
                     due_date = datetime.datetime.today() + get_offset_to_closest_weekday(datetime.datetime.today(),period[1:])
                     s += " __/|||\\___ " + str(due_date)
