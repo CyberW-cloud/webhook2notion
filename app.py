@@ -119,11 +119,9 @@ def todo_test():
                 if("w" == period[0][3]):
                     times_per_week = int(period[0][0])
 
-                    due_date = datetime.datetime.today() + get_offset_to_closest_weekday(datetime.datetime.today().date(),period[1:])
-                    due_date.hour = due_start.hour
-                    due_date.minute = due_start.minute
-                    due_date.second = 0
-                    due_date.microsecond = 0
+                    due_date = datetime.datetime.today().date() + get_offset_to_closest_weekday(datetime.datetime.today().date(),period[1:])
+                    due_date = datetime.datetime.combine(due_date, datetime.time(due_start.hour, due_start.minute, 0, 0))
+
                    
                 #if format is 1t/*w, don't need to correct for weekdays bc adding weeks doesn't change them
                 else:
