@@ -75,7 +75,12 @@ def todo_test():
     page = client.get_block(site)
     changes = []
     for todo in result:
-        set_date = todo.set_date.start 
+
+        if isinstance(todo.set_date.start, datetime.datetime):
+            set_date = todo.set_date.start.date()
+        else:
+            set_date = todo.set_date.start
+
         n = datetime.datetime.now()
         period = todo.periodicity
         s += " || " + str(period)
@@ -99,7 +104,7 @@ def todo_test():
                 period.append("Wed")
                 period.append("Fri")
 
-        if(n.date()>set_date.date()):
+        if(n.date()>set_date):
             
             if("Daily" == period[0]):
                 
