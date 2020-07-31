@@ -77,9 +77,9 @@ def todo_test():
     for todo in result:
 
         if isinstance(todo.set_date.start, datetime.datetime):
-            set_date = todo.set_date.start.date()
+            set_start = todo.set_date.start.date()
         else:
-            set_date = todo.set_date.start
+            set_start = todo.set_date.start
 
         n = datetime.datetime.now()
         period = todo.periodicity
@@ -88,7 +88,7 @@ def todo_test():
         if(isinstance(todo.due_date.start, datetime.datetime)):
             due_start = todo.due_date.start
         else:
-            due_date = datetime.datetime(todo.due_date.start.year, todo.due_date.start.month, todo.due_date.start.day, 17)
+            due_start = datetime.datetime(todo.due_date.start.year, todo.due_date.start.month, todo.due_date.start.day, 17)
 
         if(len(period)<=1):
             if(len(period)==0):
@@ -104,7 +104,7 @@ def todo_test():
                 period.append("Wed")
                 period.append("Fri")
 
-        if(n.date()>set_date):
+        if(n.date()>set_start):
             
             if("Daily" == period[0]):
                 
@@ -153,7 +153,7 @@ def todo_test():
                 changes.append({"set":set_date , "due":due_date , "id":todo.id})
         
         
-        if(todo.set_date.start.date() == datetime.datetime.now().date()):
+        if(set_start == datetime.datetime.now().date()):
             todo.status = "TO DO"
 
 
