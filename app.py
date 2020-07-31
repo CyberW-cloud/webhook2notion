@@ -87,7 +87,7 @@ def todo_test():
 
         
         due_start = datetime.datetime(todo.due_date.start.year, todo.due_date.start.month, todo.due_date.start.day, 14)
-
+        s += " _______ " + due_start
         if(len(period)<=1):
             if(len(period)==0):
                 period.append("Daily")
@@ -171,7 +171,7 @@ def todo_test():
         if(set_start == datetime.datetime.now().date()):
             todo.status = "TO DO"
 
-    return(str(changes))
+    return(s)
 
 def parse_staff(todo, table, obj, client_days_before):
     test_date = datetime.datetime.now()
