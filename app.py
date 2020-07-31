@@ -24,7 +24,7 @@ def get_offset_to_closest_weekday(source, targets):
         
         for i in range(len(targets)):
             if targets[i] in week:
-                targets[i].append(week.index(targets[i]))
+                targets[i] = week.index(targets[i])
 
 
     targets.sort()
