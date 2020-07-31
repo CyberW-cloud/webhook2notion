@@ -87,7 +87,8 @@ def todo_test():
 
         
         due_start = datetime.datetime(todo.due_date.start.year, todo.due_date.start.month, todo.due_date.start.day, 14)
-        s += " _______ " + str(due_start)
+        
+
         if(len(period)<=1):
             if(len(period)==0):
                 period.append("Daily")
@@ -121,7 +122,7 @@ def todo_test():
                     
 
                     due_date = datetime.datetime.today() + get_offset_to_closest_weekday(datetime.datetime.today(),period[1:])
-                    s += " _______ " + str(due_date)
+                    s += " __/|||\\___ " + str(due_date)
                 #if format is 1t/*w, don't need to correct for weekdays bc adding weeks doesn't change them
                 else:
                     offset = datetime.timedelta(int(period[0][3]) * 7)
