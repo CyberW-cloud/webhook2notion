@@ -63,32 +63,39 @@ def todo_test():
 
                 changes.append({"set":set_date , "due":due_date , "id":todo.id})
 
-            if("/w" in todo.periodicity[0]):
-                times_per_week = int(todo.periodicity[0][0])
+            if("w" in todo.periodicity[0]):
                 
-                week = ["Mo", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-                per_numbered = []
-                day = datetime.datetime.today().weekday()
-                
-                target = -1
-                for i in todo.periodicity:
-                    if i in week:
-                        per_numbered.append(week.index(i))
-
-                per_numbered.sort()
-                
-                target_day = -1
-                for i in per_numbered:
-                    if i>day:
-                        target_day = i
-
-                if target_day == -1:
+                #if format is *t/w and includes days
+                if("w" == todo.periodicity[0][3]):
+                    times_per_week = int(todo.periodicity[0][0])
                     
-                    target_day = per_numbered[0]
-                    offset = datetime.timedelta(7 + target_day-day)
+                    week = ["Mo", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+                    per_numbered = []
+                    day = datetime.datetime.today().weekday()
+                    
+                    target = -1
+                    for i in todo.periodicity:
+                        if i in week:
+                            per_numbered.append(week.index(i))
 
+                    per_numbered.sort()
+                    
+                    target_day = -1
+                    for i in per_numbered:
+                        if i>day:
+                            target_day = i
+
+                    if target_day == -1:
+                        
+                        target_day = per_numbered[0]
+                        offset = datetime.timedelta(7 + target_day-day)
+
+                    else:
+                        offset = datetime.timedelta(target_day-day)
+
+                #if format is 1t/*w
                 else:
-                    offset = datetime.timedelta(target_day-day)
+                    offset = datetime.timedelta(int(todo.periodicity[0][3]) * 7)
 
                 due_date = datetime.datetime.today() + offset
                 set_date = due_date - datetime.timedelta(1)
