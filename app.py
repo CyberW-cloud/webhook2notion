@@ -87,7 +87,7 @@ def todo_test():
 
                 changes.append({"set":set_date , "due":due_date , "id":todo.id})
 
-            if("w" in todo.periodicity[0]):
+            elif("w" in todo.periodicity[0]):
                 
                 #if format is *t/w and includes days
                 if("w" == todo.periodicity[0][3]):
@@ -108,8 +108,8 @@ def todo_test():
 
                 changes.append({"set":set_date , "due":due_date , "id":todo.id})
 
-            if("m" in todo.periodicity[0]):
-            
+            elif("m" in todo.periodicity[0]):
+                
                 if("1t/m" == todo.periodicity[0]):
                     months = 1
                     offset = 1    
@@ -127,9 +127,9 @@ def todo_test():
 
                 changes.append({"set":set_date , "due":due_date , "id":todo.id})
         
-        else:
-            if(todo.set_date.start.date() == datetime.datetime.now().date()):
-                todo.status = "TO DO"
+        
+        if(todo.set_date.start.date() == datetime.datetime.now().date()):
+            todo.status = "TO DO"
 
 
     for record in cv.collection.get_rows():
