@@ -85,7 +85,7 @@ def todo_test():
 
             if "1t/" in period[0]:
                 period.append("Wed")
-            elif "2t/" in period[0]
+            elif "2t/" in period[0]:
                 period.append("Tue")
                 period.append("Thu")
             elif "3t" in period[0]:
