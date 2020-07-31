@@ -16,6 +16,17 @@ app = Flask(__name__)
 
 
 def get_offset_to_closest_weekday(source, targets):
+    
+    if type(targets[0]) == type(""):
+        week = ["Mo", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+        per_numbered = []
+        
+        
+        for i in range(len(targets)):
+            if targets[i] in week:
+                targets[i].append(week.index(targets[i]))
+
+
     targets.sort()
 
     day = source.weekday()
@@ -82,33 +93,11 @@ def todo_test():
                 if("w" == todo.periodicity[0][3]):
                     times_per_week = int(todo.periodicity[0][0])
                     
-                    week = ["Mo", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-                    per_numbered = []
-                    day = datetime.datetime.today().weekday()
                     
-                    target = -1
-                    for i in todo.periodicity:
-                        if i in week:
-                            per_numbered.append(week.index(i))
 
-                    per_numbered.sort()
-                    
-                    target_day = -1
-                    for i in per_numbered:
-                        if i>day:
-                            target_day = i
+                    due_date = datetime.datetime.today() + get_offset_to_closest_weekday(datetime.datetime.today(),todo.periodicity)
 
-                    if target_day == -1:
-                        
-                        target_day = per_numbered[0]
-                        offset = datetime.timedelta(7 + target_day-day)
-
-                    else:
-                        offset = datetime.timedelta(target_day-day)
-
-                    due_date = datetime.datetime.today() + offset
-
-                #if format is 1t/*w
+                #if format is 1t/*w, don't need to correct for weekdays bc adding weeks doesn't change them
                 else:
                     offset = datetime.timedelta(int(todo.periodicity[0][3]) * 7)
 
@@ -127,12 +116,9 @@ def todo_test():
                     months = int(todo.periodicity[0][3])
                     offset = 2
 
-                month = todo.due_date.start.month - 1 + months
-                year = todo.due_date.start.year + month // 12
-                month = month % 12 + 1
-                day = min(todo.due_date.start.day, calendar.monthrange(year,month)[1])
                 
-                due_date = datetime.datetime(year, month, day, todo.due_date.start.hour, todo.due_date.start.minute)
+                due_date = todo.due_date.start + datetime.timedelta(30*months-2)
+                due_date = due_date + get_offset_to_closest_weekday(due_date, todo.periodicity)
 
                 set_date = due_date - datetime.timedelta(0,0,0,0,0,12,offset)
 
