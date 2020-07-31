@@ -160,15 +160,15 @@ def todo_test():
                 record.set_property("Due Date", i["due"])
                 record.set_property("Set date", i["set"])
                 record.refresh()
-    
+                
     for todo in result:
-    	if isinstance(todo.set_date.start, datetime.datetime):
+        if isinstance(todo.set_date.start, datetime.datetime):
             set_start = todo.set_date.start.date()
         else:
             set_start = todo.set_date.start
 
 
-    	if(set_start == datetime.datetime.now().date()):
+        if(set_start == datetime.datetime.now().date()):
             todo.status = "TO DO"
 
     return(str(changes))
@@ -645,7 +645,7 @@ def friday_todo_fl(token, staff, calendar):
         # Friday
         todo = list()
         todo.append(f"Коментом напиши какие day-off ты планируешь на следующую неделю и тегни {fl['pa_name']}, иначе напиши - Не планирую")
-        create_todo(token, calendar["fri"], fl["todo_url"], todo, text="")		
+        create_todo(token, calendar["fri"], fl["todo_url"], todo, text="")      
     print("Fri FL done")    
 
 def weekly_todo_bidder(token, staff, calendar):
