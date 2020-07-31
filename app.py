@@ -24,7 +24,7 @@ def get_offset_to_closest_weekday(source, targets):
         
         for i in range(len(targets)):
             if targets[i] in week:
-                targets[i] = week.index(targets[i])
+                targets[i] = week.index(targets[i])             
 
 
     targets.sort()
@@ -95,7 +95,7 @@ def todo_test():
                     
                     
 
-                    due_date = datetime.datetime.today() + get_offset_to_closest_weekday(datetime.datetime.today(),todo.periodicity)
+                    due_date = datetime.datetime.today() + get_offset_to_closest_weekday(datetime.datetime.today(),todo.periodicity[1:])
 
                 #if format is 1t/*w, don't need to correct for weekdays bc adding weeks doesn't change them
                 else:
