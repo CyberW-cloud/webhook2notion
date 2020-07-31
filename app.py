@@ -25,7 +25,7 @@ def get_offset_to_closest_weekday(source, targets):
             target_day = i
             break
     if target_day == -1
-        target_day = per_numbered[0]
+        target_day = targets[0]
         offset = datetime.timedelta(7 + target_day-day)
 
     else:
