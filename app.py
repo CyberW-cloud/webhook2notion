@@ -85,10 +85,8 @@ def todo_test():
         period = todo.periodicity
         s += " || " + str(period)
 
-        if(isinstance(todo.due_date.start, datetime.datetime)):
-            due_start = todo.due_date.start
-        else:
-            due_start = datetime.datetime(todo.due_date.start.year, todo.due_date.start.month, todo.due_date.start.day, 17)
+        
+        due_start = datetime.datetime(todo.due_date.start.year, todo.due_date.start.month, todo.due_date.start.day, 17)
 
         if(len(period)<=1):
             if(len(period)==0):
@@ -153,8 +151,7 @@ def todo_test():
                 changes.append({"set":set_date , "due":due_date , "id":todo.id})
         
         
-        if(set_start == datetime.datetime.now().date()):
-            todo.status = "TO DO"
+        
 
 
     for record in cv.collection.get_rows():
@@ -162,7 +159,12 @@ def todo_test():
             if i["id"] == record.id:
                 record.set_property("Due Date", i["due"])
                 record.set_property("Set date", i["set"])
+                record.refresh()
     
+    for todo in result:
+    	if(set_start == datetime.datetime.now().date()):
+            todo.status = "TO DO"
+
     return(str(changes))
 
 def parse_staff(todo, table, obj, client_days_before):
