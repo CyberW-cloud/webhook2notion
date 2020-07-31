@@ -86,7 +86,7 @@ def todo_test():
         s += " || " + str(period)
 
         
-        due_start = datetime.datetime(todo.due_date.start.year, todo.due_date.start.month, todo.due_date.start.day, 17)
+        due_start = datetime.datetime(todo.due_date.start.year, todo.due_date.start.month, todo.due_date.start.day, 14)
 
         if(len(period)<=1):
             if(len(period)==0):
@@ -162,6 +162,12 @@ def todo_test():
                 record.refresh()
     
     for todo in result:
+    	if isinstance(todo.set_date.start, datetime.datetime):
+            set_start = todo.set_date.start.date()
+        else:
+            set_start = todo.set_date.start
+
+
     	if(set_start == datetime.datetime.now().date()):
             todo.status = "TO DO"
 
