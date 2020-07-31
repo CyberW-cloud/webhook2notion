@@ -75,11 +75,14 @@ def todo_test():
     page = client.get_block(site)
     changes = []
     for todo in result:
-        set_date = todo.set_date.start + datetime.timedelta(0,0,0,0,0,12)
+        set_date = todo.set_date.start 
         n = datetime.datetime.now()
         period = todo.periodicity
 
         if(len(period)<=1):
+            if(len(period)==0):
+                period.append("Daily")
+
             if "1t/" in period[0]:
                 period.append("Wed")
             elif "2t/" in period[0]
@@ -134,7 +137,6 @@ def todo_test():
                 due_date = due_date + get_offset_to_closest_weekday(due_date, period[1:])
 
                 set_date = due_date - datetime.timedelta(0,0,0,0,0,12,offset)
-
 
 
                 changes.append({"set":set_date , "due":due_date , "id":todo.id})
