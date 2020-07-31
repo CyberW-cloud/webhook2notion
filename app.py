@@ -120,7 +120,7 @@ def todo_test():
                     times_per_week = int(period[0][0])
 
                     due_date = datetime.datetime.today() + get_offset_to_closest_weekday(datetime.datetime.today(),period[1:])
-                    s += " __/|||\\___ " + str(due_date)
+                    s += " __/|||\\___ " + str(due_date) + " " + str(datetime.datetime.today()) + " " + str(get_offset_to_closest_weekday(datetime.datetime.today(),period[1:]))
                 #if format is 1t/*w, don't need to correct for weekdays bc adding weeks doesn't change them
                 else:
                     offset = datetime.timedelta(int(period[0][3]) * 7)
