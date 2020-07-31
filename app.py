@@ -104,13 +104,13 @@ def todo_test():
                     offset = 2
 
                 month = todo.due_date.start.month - 1 + months
-                year = todo.due_date.start.sourcedate.year + month // 12
+                year = todo.due_date.start.year + month // 12
                 month = month % 12 + 1
-                day = min(sourcedate.day, calendar.monthrange(year,month)[1])
+                day = min(todo.due_date.start.day, calendar.monthrange(year,month)[1])
                 
-                due_date = datetime.datetime(year, month, day, todo.due_date.start.hour, todo.due_date.start.hour)
+                due_date = datetime.datetime(year, month, day, todo.due_date.start.hour, todo.due_date.start.minute)
 
-                set_date = due_date - datetime.timedelta(0,0,0,0,0,0,offset)
+                set_date = due_date - datetime.timedelta(0,0,0,0,0,12,offset)
 
                 changes.append({"set":set_date , "due":due_date , "id":todo.id})
         else:
