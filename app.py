@@ -79,6 +79,12 @@ def todo_test():
         n = datetime.datetime.now()
         period = todo.periodicity
         s += " || " + str(period)
+
+        if(isinstance(todo.due_date.start, datetime.datetime)):
+            due_start = todo.due_date.start
+        else:
+            due_date = datetime.datetime(todo.due_date.start.year, todo.due_date.start.month, todo.due_date.start.day, 17)
+
         if(len(period)<=1):
             if(len(period)==0):
                 period.append("Daily")
@@ -97,7 +103,7 @@ def todo_test():
             
             if("Daily" == period[0]):
                 
-                due_date = todo.due_date.start + get_offset_to_closest_weekday(todo.due_date.start, [0,1,2,3,4])
+                due_date = due_start + get_offset_to_closest_weekday(due_start, [0,1,2,3,4])
     
                 set_date = due_date - datetime.timedelta(0,0,0,0,0,12)
 
@@ -117,7 +123,7 @@ def todo_test():
                 else:
                     offset = datetime.timedelta(int(period[0][3]) * 7)
 
-                    due_date = todo.due_date.start + offset
+                    due_date = due_start + offset
 
 
                 set_date = due_date - datetime.timedelta(1,0,0,0,0,12)
@@ -133,7 +139,7 @@ def todo_test():
                     offset = 2
 
 
-                due_date = todo.due_date.start + datetime.timedelta(30*months-3)
+                due_date = due_start + datetime.timedelta(30*months-3)
                 due_date = due_date + get_offset_to_closest_weekday(due_date, period[1:])
 
                 set_date = due_date - datetime.timedelta(0,0,0,0,0,12,offset)
