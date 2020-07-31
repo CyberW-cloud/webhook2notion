@@ -86,7 +86,7 @@ def todo_test():
         s += " || " + str(period)
 
         
-        due_start = datetime.datetime(todo.due_date.start.year, todo.due_date.start.month, todo.due_date.start.day, 14)
+        due_start = datetime.datetime(todo.due_date.start.year, todo.due_date.start.month, todo.due_date.start.day, 17)
         
 
         if(len(period)<=1):
