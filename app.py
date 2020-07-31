@@ -77,9 +77,22 @@ def todo_test():
     for todo in result:
         set_date = todo.set_date.start + datetime.timedelta(0,0,0,0,0,12)
         n = datetime.datetime.now()
+        period = todo.periodicity
+
+        if(len(period)<=1):
+            if "1t/" in period[0]:
+                period.append("Wed")
+            elif "2t/" in period[0]
+                period.append("Tue")
+                period.append("Thu")
+            elif "3t" in period[0]:
+                period.append("Mo")
+                period.append("Wed")
+                period.append("Fri")
+
         if(n.date()>set_date.date()):
             
-            if("Daily" == todo.periodicity[0]):
+            if("Daily" == period[0]):
                 
                 due_date = todo.due_date.start + get_offset_to_closest_weekday(todo.due_date.start, [0,1,2,3,4])
     
@@ -87,19 +100,19 @@ def todo_test():
 
                 changes.append({"set":set_date , "due":due_date , "id":todo.id})
 
-            elif("w" in todo.periodicity[0]):
+            elif("w" in period[0]):
                 
                 #if format is *t/w and includes days
-                if("w" == todo.periodicity[0][3]):
-                    times_per_week = int(todo.periodicity[0][0])
+                if("w" == period[0][3]):
+                    times_per_week = int(period[0][0])
                     
                     
 
-                    due_date = datetime.datetime.today() + get_offset_to_closest_weekday(datetime.datetime.today(),todo.periodicity[1:])
+                    due_date = datetime.datetime.today() + get_offset_to_closest_weekday(datetime.datetime.today(),period[1:])
 
                 #if format is 1t/*w, don't need to correct for weekdays bc adding weeks doesn't change them
                 else:
-                    offset = datetime.timedelta(int(todo.periodicity[0][3]) * 7)
+                    offset = datetime.timedelta(int(period[0][3]) * 7)
 
                     due_date = todo.due_date.start + offset
 
@@ -108,18 +121,17 @@ def todo_test():
 
                 changes.append({"set":set_date , "due":due_date , "id":todo.id})
 
-            elif("m" in todo.periodicity[0]):
-                
-                if("1t/m" == todo.periodicity[0]):
+            elif("m" in period[0]):
+                if("1t/m" == period[0]):
                     months = 1
                     offset = 1    
                 else:
-                    months = int(todo.periodicity[0][3])
+                    months = int(period[0][3])
                     offset = 2
 
 
                 due_date = todo.due_date.start + datetime.timedelta(30*months-3)
-                due_date = due_date + get_offset_to_closest_weekday(due_date, todo.periodicity[1:])
+                due_date = due_date + get_offset_to_closest_weekday(due_date, period[1:])
 
                 set_date = due_date - datetime.timedelta(0,0,0,0,0,12,offset)
 
