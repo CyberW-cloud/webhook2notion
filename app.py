@@ -99,7 +99,7 @@ def todo_test():
                 else:
                     offset = datetime.timedelta(int(todo.periodicity[0][3]) * 7)
 
-                    due_date = todo.due_date.start + datetime.timedelta(offset)
+                    due_date = todo.due_date.start + offset
 
 
                 set_date = due_date - datetime.timedelta(1)
