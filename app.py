@@ -87,7 +87,7 @@ def todo_test():
 
         
         due_start = datetime.datetime(todo.due_date.start.year, todo.due_date.start.month, todo.due_date.start.day, 14)
-        s += " _______ " + due_start
+        s += " _______ " + str(due_start)
         if(len(period)<=1):
             if(len(period)==0):
                 period.append("Daily")
