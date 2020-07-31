@@ -93,11 +93,15 @@ def todo_test():
                     else:
                         offset = datetime.timedelta(target_day-day)
 
+                    due_date = datetime.datetime.today() + offset
+
                 #if format is 1t/*w
                 else:
                     offset = datetime.timedelta(int(todo.periodicity[0][3]) * 7)
 
-                due_date = datetime.datetime.today() + offset
+                    due_date = todo.due_date.start + datetime.timedelta(offset)
+
+
                 set_date = due_date - datetime.timedelta(1)
 
                 changes.append({"set":set_date , "due":due_date , "id":todo.id})
