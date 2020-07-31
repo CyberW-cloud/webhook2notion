@@ -85,7 +85,7 @@ def todo_test():
                 if target_day == -1:
                     
                     target_day = per_numbered[0]
-                    offset = datetime.timedelta(7 + day-target_day)
+                    offset = datetime.timedelta(7 + target_day-day)
 
                 else:
                     offset = datetime.timedelta(target_day-day)
