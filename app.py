@@ -26,10 +26,10 @@ def get_offset_to_closest_weekday(source, targets):
             break
     if target_day == -1:
         target_day = targets[0]
-        offset = datetime.timedelta(7 + target_day-day)
+        return datetime.timedelta(7 + target_day-day)
 
     else:
-        offset = datetime.timedelta(target_day-day)
+        return datetime.timedelta(target_day-day)
     
 
 @app.route("/todo_test", methods=["GET"])
