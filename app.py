@@ -78,7 +78,7 @@ def todo_test():
         set_date = todo.set_date.start 
         n = datetime.datetime.now()
         period = todo.periodicity
-        s = period
+        s += " || " + str(period)
         if(len(period)<=1):
             if(len(period)==0):
                 period.append("Daily")
