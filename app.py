@@ -104,11 +104,12 @@ def todo_test():
                     due_date = todo.due_date.start + offset
 
 
-                set_date = due_date - datetime.timedelta(1)
+                set_date = due_date - datetime.timedelta(1,0,0,0,0,12)
 
                 changes.append({"set":set_date , "due":due_date , "id":todo.id})
 
             if("m" in todo.periodicity[0]):
+            
                 if("1t/m" == todo.periodicity[0]):
                     months = 1
                     offset = 1    
@@ -117,14 +118,16 @@ def todo_test():
                     offset = 2
 
 
-                due_date = todo.due_date.start + datetime.timedelta(30*months-2)
+                due_date = todo.due_date.start + datetime.timedelta(30*months-3)
                 due_date = due_date + get_offset_to_closest_weekday(due_date, todo.periodicity[1:])
 
                 set_date = due_date - datetime.timedelta(0,0,0,0,0,12,offset)
 
+
+
                 changes.append({"set":set_date , "due":due_date , "id":todo.id})
+        
         else:
-            s = str(set_date.date()) + " ||| " + str(datetime.datetime.now().date())
             if(todo.set_date.start.date() == datetime.datetime.now().date()):
                 todo.status = "TO DO"
 
