@@ -46,14 +46,15 @@ def get_offset_to_closest_weekday(source, targets):
 @app.route("/Hb_tasks", methods=["GET"])
 def Hb_tasks():
    
-
+    #connect to the desk
     site = "https://www.notion.so/0aead28cb9f34ec2b41a9af19b96817a?v=1266d9ce8cbd4c968d29b4b877bed345"
     token_v2 = os.environ.get("TOKEN")
 
+    #get all tasks
     client = NotionClient(token_v2)
     cv = client.get_collection_view(site)
 
-    # get projects with TODO status
+    # filter out projects without TODO status
     filter_params = {
         "filters": [
             {
@@ -70,7 +71,7 @@ def Hb_tasks():
 
 
     
-    #going over all results to send them for addition simultaneously
+    #s can be used to get debug output
     s = ""
     page = client.get_block(site)
     changes = []
@@ -83,7 +84,6 @@ def Hb_tasks():
 
         n = datetime.datetime.now()
         period = todo.periodicity
-        s += " || " + str(period)
 
         
         due_start = datetime.datetime(todo.due_date.start.year, todo.due_date.start.month, todo.due_date.start.day, 17)
@@ -91,7 +91,7 @@ def Hb_tasks():
 
         if(len(period)<=1):
             if(len(period)==0):
-                period.append("Daily")
+                period.append("No Period")
 
             if "1t/" in period[0]:
                 period.append("Wed")
@@ -103,7 +103,7 @@ def Hb_tasks():
                 period.append("Wed")
                 period.append("Fri")
 
-        if(n.date()>set_start):
+        if(n.date()>set_start and period[0] != "No Period"):
             
             if("Daily" == period[0]):
                 
@@ -171,6 +171,10 @@ def Hb_tasks():
 
         if(set_start == datetime.datetime.now().date()):
             todo.status = "TO DO"
+
+
+
+
 
     return(s)
 
