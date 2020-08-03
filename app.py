@@ -43,8 +43,8 @@ def get_offset_to_closest_weekday(source, targets):
         return datetime.timedelta(target_day-day)
     
 
-@app.route("/todo_test", methods=["GET"])
-def todo_test():
+@app.route("/Hb_tasks", methods=["GET"])
+def Hb_tasks():
    
 
     site = "https://www.notion.so/0aead28cb9f34ec2b41a9af19b96817a?v=1266d9ce8cbd4c968d29b4b877bed345"
