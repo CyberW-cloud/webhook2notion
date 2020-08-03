@@ -3,6 +3,7 @@ import urllib.parse
 from datetime import timedelta
 import calendar
 import pytz
+import math
 from flask import Flask, request
 from notion.block import *
 from notion.client import NotionClient
@@ -88,11 +89,13 @@ def Hb_tasks():
         
         due_start = datetime.datetime(todo.due_date.start.year, todo.due_date.start.month, todo.due_date.start.day, 17)
         
-
+        # if weekdays / periodicity has not been set up
         if(len(period)<=1):
+
             if(len(period)==0):
                 period.append("No Period")
 
+            #apply default values depending on the periodicity
             if "1t/" in period[0]:
                 period.append("Wed")
             elif "2t/" in period[0]:
@@ -103,10 +106,12 @@ def Hb_tasks():
                 period.append("Wed")
                 period.append("Fri")
 
+        #skip result if we already handled it or if periodicity has not been set
         if(n.date()>set_start and period[0] != "No Period"):
             
             if("Daily" == period[0]):
                 
+                #limit to working days
                 due_date = due_start + get_offset_to_closest_weekday(due_start, [0,1,2,3,4])
     
                 set_date = due_date - datetime.timedelta(0,0,0,0,0,12)
@@ -114,12 +119,15 @@ def Hb_tasks():
                 changes.append({"set":set_date , "due":due_date , "id":todo.id})
 
             elif("w" in period[0]):
-                s+= " ojp " + period[0][3]
-                #if format is *t/w and includes days
+
+                #if format is *t/w 
                 if("w" == period[0][3]):
                     times_per_week = int(period[0][0])
 
+                    #set the next correct weekday as the target
                     due_date = datetime.datetime.today().date() + get_offset_to_closest_weekday(datetime.datetime.today().date(),period[1:])
+
+                    #we have to do this because .today() returns time as well, so we have to change it
                     due_date = datetime.datetime.combine(due_date, datetime.time(due_start.hour, due_start.minute, 0, 0))
 
                    
@@ -134,6 +142,7 @@ def Hb_tasks():
 
                 changes.append({"set":set_date , "due":due_date , "id":todo.id})
 
+            #the format is 1/*m, we just offset by * month(s) and find the closest correct weekday to set it to 
             elif("m" in period[0]):
                 if("1t/m" == period[0]):
                     months = 1
@@ -142,8 +151,12 @@ def Hb_tasks():
                     months = int(period[0][3])
                     offset = 2
 
+                #this formula tries to get the closest weekday in 30*month days 
+                #we have to do -1 because get_offset looks from the next day forward
+                due_date = due_start + datetime.timedelta(math.floor(30*months//7) * 7 -1)
 
-                due_date = due_start + datetime.timedelta(30*months-3)
+                #not needed tbh, but it is just a failsafe in case the previous line doesn't land on the day before a chosen weekday
+                #also helps to mitigate a bug (if the previous due_date != target weekday, the previous line doesn't work)
                 due_date = due_date + get_offset_to_closest_weekday(due_date, period[1:])
 
                 set_date = due_date - datetime.timedelta(0,0,0,0,0,12,offset)
@@ -154,14 +167,16 @@ def Hb_tasks():
         
         
 
-
+    #commit our changes (we find the rows with the id of one of our changes and update it accordingly)
     for record in cv.collection.get_rows():
-        for i in changes:
-            if i["id"] == record.id:
+        for change in changes:
+            if change["id"] == record.id:
                 record.set_property("Due Date", i["due"])
                 record.set_property("Set date", i["set"])
                 record.refresh()
-                
+            
+
+    #go over all tasks and change the status to TODO if the task should be set today    
     for todo in result:
         if isinstance(todo.set_date.start, datetime.datetime):
             set_start = todo.set_date.start.date()
@@ -173,7 +188,7 @@ def Hb_tasks():
             todo.status = "TO DO"
 
 
-
+    s+= "changes:  " + str(changes)
 
 
     return(s)
