@@ -57,7 +57,7 @@ def get_offset_to_closest_weekday(source, targets):
 def Hb_tasks():
    
     #connect to the desk
-    site = "https://www.notion.so/0aead28cb9f34ec2b41a9af19b96817a?v=1266d9ce8cbd4c968d29b4b877bed345"
+    site = "https://www.notion.so/Head-board-749105cdfebe4d0282469b04191a24c8"
     token_v2 = os.environ.get("TOKEN")
 
     #get all tasks
