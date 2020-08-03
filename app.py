@@ -1,8 +1,9 @@
 import re
 import urllib.parse
 from datetime import timedelta
-
+import calendar
 import pytz
+import math
 from flask import Flask, request
 from notion.block import *
 from notion.client import NotionClient
@@ -14,6 +15,194 @@ timezone = "Europe/Kiev"
 
 app = Flask(__name__)
 
+#Source : Date/Datetime, the start of the search
+#Targets : Can be an int or an String array. 
+#          the int array has to be from 0 (mon) to 6 (sun)
+#          the String array has to contain only the strings inside the week array
+#Returns timedelta that has an amount of days from source to the closest weekday
+def get_offset_to_closest_weekday(source, targets):
+    
+    #check if we got an int or string array
+    if type(targets[0]) == type(""):
+        week = ["Mo", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+        
+        #transform the string array to an int array
+        for i in range(len(targets)):
+            if targets[i] in week:
+                targets[i] = week.index(targets[i])             
+
+    #sort array just in case it wasn't sorted before
+    targets.sort()
+
+
+    day = source.weekday()
+    target_day = -1
+
+    #get the first weekday that is > source weekday
+    for i in targets:
+        if i>day:
+            target_day = i
+            break
+
+    #if the closest weekday is on the next week        
+    if target_day == -1:
+        target_day = targets[0]
+        return datetime.timedelta(7 + target_day-day)
+
+    else:
+        return datetime.timedelta(target_day-day)
+    
+
+@app.route("/hb_tasks", methods=["GET"])
+def Hb_tasks():
+   
+    #connect to the desk
+    site = "https://www.notion.so/Head-board-749105cdfebe4d0282469b04191a24c8"
+    token_v2 = os.environ.get("TOKEN")
+
+    #get all tasks
+    client = NotionClient(token_v2)
+    cv = client.get_collection_view(site)
+
+    # filter out projects without TODO status
+    filter_params = {
+        "filters": [
+            {
+                "filter": {"value": {"type": "exact", "value": "DONE"}, "operator": "enum_is"},
+                "property": "Status",
+            }
+        ],
+        "operator": "and",
+    }
+    cv = cv.build_query(filter=filter_params)
+    result = cv.execute()
+            
+
+
+
+    
+    #s can be used to get debug output
+    s = ""
+    page = client.get_block(site)
+    changes = []
+    for todo in result:
+
+        if isinstance(todo.set_date.start, datetime.datetime):
+            set_start = todo.set_date.start.date()
+        else:
+            set_start = todo.set_date.start
+
+        n = datetime.datetime.now()
+        period = todo.periodicity
+
+        
+        due_start = datetime.datetime(todo.due_date.start.year, todo.due_date.start.month, todo.due_date.start.day, 17)
+        
+        # if weekdays / periodicity has not been set up
+        if(len(period)<=1):
+
+            if(len(period)==0):
+                period.append("No Period")
+
+            #apply default values depending on the periodicity
+            if "1t/" in period[0]:
+                period.append("Wed")
+            elif "2t/" in period[0]:
+                period.append("Tue")
+                period.append("Thu")
+            elif "3t" in period[0]:
+                period.append("Mo")
+                period.append("Wed")
+                period.append("Fri")
+
+        #skip result if we already handled it or if periodicity has not been set
+        if(n.date()>set_start and period[0] != "No Period"):
+            
+            if("Daily" == period[0]):
+                
+                #limit to working days
+                due_date = due_start + get_offset_to_closest_weekday(due_start, [0,1,2,3,4])
+    
+                set_date = due_date - datetime.timedelta(0,0,0,0,0,12)
+
+                changes.append({"set":set_date , "due":due_date , "id":todo.id})
+
+            elif("w" in period[0]):
+
+                #if format is *t/w 
+                if("w" == period[0][3]):
+                    times_per_week = int(period[0][0])
+
+                    #set the next correct weekday as the target
+                    due_date = datetime.datetime.today().date() + get_offset_to_closest_weekday(datetime.datetime.today().date(),period[1:])
+
+                    #we have to do this because .today() returns time as well, so we have to change it
+                    due_date = datetime.datetime.combine(due_date, datetime.time(due_start.hour, due_start.minute, 0, 0))
+
+                   
+                #if format is 1t/*w, don't need to correct for weekdays bc adding weeks doesn't change them
+                else:
+                    offset = datetime.timedelta(int(period[0][3]) * 7)
+
+                    due_date = due_start + offset
+
+
+                set_date = due_date - datetime.timedelta(1,0,0,0,0,12)
+
+                changes.append({"set":set_date , "due":due_date , "id":todo.id})
+
+            #the format is 1/*m, we just offset by * month(s) and find the closest correct weekday to set it to 
+            elif("m" in period[0]):
+                if("1t/m" == period[0]):
+                    months = 1
+                    offset = 1    
+                else:
+                    months = int(period[0][3])
+                    offset = 2
+
+                #this formula tries to get the closest weekday in 30*month days 
+                #we have to do -1 because get_offset looks from the next day forward
+                due_date = due_start + datetime.timedelta(math.floor(30*months//7) * 7 -1)
+
+                #not needed tbh, but it is just a failsafe in case the previous line doesn't land on the day before a chosen weekday
+                #also helps to mitigate a bug (if the previous due_date != target weekday, the previous line doesn't work)
+                due_date = due_date + get_offset_to_closest_weekday(due_date, period[1:])
+
+                set_date = due_date - datetime.timedelta(0,0,0,0,0,12,offset)
+
+
+                changes.append({"set":set_date , "due":due_date , "id":todo.id})
+        
+        
+        
+
+    #commit our changes (we find the rows with the id of one of our changes and update it accordingly)
+    for record in cv.collection.get_rows():
+        for change in changes:
+            if change["id"] == record.id:
+                record.set_property("Due Date", change["due"])
+                record.set_property("Set date", change["set"])
+
+                #we refresh the change so we can use the updated result in the next for
+                record.refresh()
+            
+
+    #go over all tasks and change the status to TODO if the task should be set today    
+    for todo in result:
+        if isinstance(todo.set_date.start, datetime.datetime):
+            set_start = todo.set_date.start.date()
+        else:
+            set_start = todo.set_date.start
+
+
+        if(set_start == datetime.datetime.now().date()):
+            todo.status = "TO DO"
+
+
+    s+= "changes:  " + str(changes)
+
+
+    return(s)
 
 def parse_staff(todo, table, obj, client_days_before):
     test_date = datetime.datetime.now()
@@ -487,7 +676,7 @@ def friday_todo_fl(token, staff, calendar):
         # Friday
         todo = list()
         todo.append(f"Коментом напиши какие day-off ты планируешь на следующую неделю и тегни {fl['pa_name']}, иначе напиши - Не планирую")
-        create_todo(token, calendar["fri"], fl["todo_url"], todo, text="")		
+        create_todo(token, calendar["fri"], fl["todo_url"], todo, text="")      
     print("Fri FL done")    
 
 def weekly_todo_bidder(token, staff, calendar):
