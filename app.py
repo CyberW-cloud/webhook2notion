@@ -19,27 +19,32 @@ app = Flask(__name__)
 #Targets : Can be an int or an String array. 
 #          the int array has to be from 0 (mon) to 6 (sun)
 #          the String array has to contain only the strings inside the week array
+#Returns timedelta that has an amount of days from source to the closest weekday
 def get_offset_to_closest_weekday(source, targets):
     
     #check if we got an int or string array
     if type(targets[0]) == type(""):
         week = ["Mo", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
-        per_numbered = []
         
-        
+        #transform the string array to an int array
         for i in range(len(targets)):
             if targets[i] in week:
                 targets[i] = week.index(targets[i])             
 
-
+    #sort array just in case it wasn't sorted before
     targets.sort()
+
 
     day = source.weekday()
     target_day = -1
+
+    #get the first weekday that is > source weekday
     for i in targets:
         if i>day:
             target_day = i
             break
+
+    #if the closest weekday is on the next week        
     if target_day == -1:
         target_day = targets[0]
         return datetime.timedelta(7 + target_day-day)
