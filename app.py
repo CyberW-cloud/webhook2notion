@@ -180,8 +180,10 @@ def Hb_tasks():
     for record in cv.collection.get_rows():
         for change in changes:
             if change["id"] == record.id:
-                record.set_property("Due Date", i["due"])
-                record.set_property("Set date", i["set"])
+                record.set_property("Due Date", change["due"])
+                record.set_property("Set date", change["set"])
+
+                #we refresh the change so we can use the updated result in the next for
                 record.refresh()
             
 
