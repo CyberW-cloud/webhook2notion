@@ -44,7 +44,7 @@ def get_offset_to_closest_weekday(source, targets):
         return datetime.timedelta(target_day-day)
     
 
-@app.route("/Hb_tasks", methods=["GET"])
+@app.route("/hb_tasks", methods=["GET"])
 def Hb_tasks():
    
     #connect to the desk
