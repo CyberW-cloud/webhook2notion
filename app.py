@@ -15,9 +15,13 @@ timezone = "Europe/Kiev"
 
 app = Flask(__name__)
 
-
+#Source : Date/Datetime, the start of the search
+#Targets : Can be an int or an String array. 
+#          the int array has to be from 0 (mon) to 6 (sun)
+#          the String array has to contain only the strings inside the week array
 def get_offset_to_closest_weekday(source, targets):
     
+    #check if we got an int or string array
     if type(targets[0]) == type(""):
         week = ["Mo", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
         per_numbered = []
