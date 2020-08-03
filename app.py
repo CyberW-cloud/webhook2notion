@@ -13,7 +13,142 @@ from notion_helpers import *
 
 timezone = "Europe/Kiev"
 
+#flag used to stop scripts applying changes to notion
+TEST = False
+
 app = Flask(__name__)
+
+
+
+@app.route("/test_scripts", methods=["GET"])
+def test_scripts():
+    TEST = True
+    s = ""
+    
+
+
+    #testing /hb_tasks
+    s += "_______________________________________" + "\n"
+    s += "Testing /hb_tasks ..." + "\n"
+    try:
+        s += Hb_tasks() + "\n"
+    except Exception as e:
+        s += str(e) + "\n"
+    
+    s+= "_______________________________________" + "\n"
+
+    #testing /kick_staff
+    s += "_______________________________________" + "\n"
+    s += "Testing /kick_staff ..." + "\n"
+    try:
+        s += kick_staff() + "\n"
+    except Exception as e:
+        s += str(e) + "\n"
+    
+    s+= "_______________________________________" + "\n"
+
+    #testing /proposals_check
+    s += "Testing /proposals_check ..." + "\n"
+    try:
+        s += proposals_check() + "\n"
+    except Exception as e:
+        s += str(e) + "\n"
+    
+    s+= "_______________________________________" + "\n"
+
+    #testing /todoone
+    s += "Testing /todoone ..." + "\n"
+    try:
+        s += todo_one() + "\n"
+    except Exception as e:
+        s += str(e) + "\n"
+    
+    s+= "_______________________________________" + "\n"
+
+    #testing /weekly_todo
+    s += "Testing /weekly_todo ..." + "\n"
+    try:
+        s += weekly_todo() + "\n"
+    except Exception as e:
+        s += str(e) + "\n"
+    
+    s+= "_______________________________________" + "\n"
+
+    #testing /friday_todo
+    s += "Testing /friday_todo ..." + "\n"
+    try:
+        s += friday_todo() + "\n"
+    except Exception as e:
+        s += str(e) + "\n"
+    
+    s+= "_______________________________________" + "\n"
+
+    #testing /rss
+    s += "Testing /rss ..." + "\n"
+    try:
+        s += rss() + "\n"
+    except Exception as e:
+        s += str(e) + "\n"
+    
+    s+= "_______________________________________" + "\n"
+
+    #testing /message
+    s += "Testing /message ..." + "\n"
+    try:
+        s += message() + "\n"
+    except Exception as e:
+        s += str(e) + "\n"
+    
+    s+= "_______________________________________" + "\n"
+
+    #testing /pcj
+    s += "Testing /pcj ..." + "\n"
+    try:
+        s += pcj() + "\n"
+    except Exception as e:
+        s += str(e) + "\n"
+    
+    s+= "_______________________________________" + "\n"
+
+    #testing /invites
+    s += "Testing /invites ..." + "\n"
+    try:
+        s += invites() + "\n"
+    except Exception as e:
+        s += str(e) + "\n"
+    
+    s+= "_______________________________________" + "\n"
+
+    #testing /friday_todo
+    s += "Testing /responses ..." + "\n"
+    try:
+        s += responses() + "\n"
+    except Exception as e:
+        s += str(e) + "\n"
+    
+    s+= "_______________________________________" + "\n"
+
+    #testing /manychat
+    s += "Testing /manychat ..." + "\n"
+    try:
+        s += manychat() + "\n"
+    except Exception as e:
+        s += str(e) + "\n"
+    
+    s+= "_______________________________________" + "\n"
+
+    
+    TEST = False
+
+    return s
+
+
+
+
+
+
+
+
 
 #Source : Date/Datetime, the start of the search
 #Targets : Can be an int or an String array. 
@@ -177,14 +312,15 @@ def Hb_tasks():
         
 
     #commit our changes (we find the rows with the id of one of our changes and update it accordingly)
-    for record in cv.collection.get_rows():
-        for change in changes:
-            if change["id"] == record.id:
-                record.set_property("Due Date", change["due"])
-                record.set_property("Set date", change["set"])
+    if(!TEST):
+        for record in cv.collection.get_rows():
+            for change in changes:
+                if change["id"] == record.id:
+                    record.set_property("Due Date", change["due"])
+                    record.set_property("Set date", change["set"])
 
-                #we refresh the change so we can use the updated result in the next for
-                record.refresh()
+                    #we refresh the change so we can use the updated result in the next for
+                    record.refresh()
             
 
     #go over all tasks and change the status to TODO if the task should be set today    
@@ -196,7 +332,9 @@ def Hb_tasks():
 
 
         if(set_start == datetime.datetime.now().date()):
-            todo.status = "TO DO"
+            if(!TEST):
+                todo.status = "TO DO"
+            changes.append({"status": "TO DO", "Task": todo.name})
 
 
     s+= "changes:  " + str(changes)
@@ -432,6 +570,10 @@ def get_proposals(token, days_before):
 
 @app.route("/kick_staff", methods=["GET"])
 def kick_staff():
+
+    #variable used to test
+    s = ""
+
     print("starting kickstaff")
     token_v2 = os.environ.get("TOKEN")
     date = request.args.get("date", None)
@@ -467,6 +609,7 @@ def kick_staff():
                 map(lambda c: "[{}]({})".format(c[0], c[1]), task["contracts"]),
                 "Контракты не получали обновления на прошлой неделе. Пожалуйста, срочно обнови:",
             )
+            s += "Контракты не получали обновления на прошлой неделе. Пожалуйста, срочно обнови:  ||  " + task[todo_url] + "\n"
 
         if task["projects"]:
             create_todo(
@@ -476,6 +619,7 @@ def kick_staff():
                 map(lambda p: "[{}]({})".format(p[0], p[1]), task["projects"]),
                 "Проекты не получали обновления на прошлой неделе. Пожалуйста, срочно обнови:",
             )
+            s += "Проекты не получали обновления на прошлой неделе. Пожалуйста, срочно обнови:  ||  " + task[todo_url] + "\n"
 
         if task["clients"]:
             create_todo(
@@ -485,14 +629,20 @@ def kick_staff():
                 map(lambda t: "[{}]({})".format(t[0], t[1]), task["clients"]),
                 "Занеси новую информацию которую ты узнал про клиентов:",
             )
+            s += "Занеси новую информацию которую ты узнал про клиентов:    ||  " + task[todo_url] + "\n"
+
     print("kickstaff done")
-    return "Done!"
+    return s
 
 
 
 
 @app.route("/proposals_check", methods=["GET"])
 def proposals_check():
+
+    #var used for testing and debug
+    s = ""
+
     print(f"Proposal check started")
     token_v2 = os.environ.get("TOKEN")
     date = request.args.get("date", None)
@@ -513,8 +663,10 @@ def proposals_check():
                 map(lambda p: "[{}]({})".format(p[0], p[1]), task["proposals"]),
                 "Теплый клиент остывает, нужно срочно что то делать. Проверь:",
             )
+            s += "Теплый клиент остывает, нужно срочно что то делать. Проверь:  ||  " + task["todo_url"] + "\n"
+
     print(f"Proposal check finished")
-    return "Done!"
+    return s
 
 
 def get_todo_url_by_name(token, name):
@@ -528,6 +680,11 @@ def get_todo_url_by_name(token, name):
 
 
 def create_todo(token, date, link, todo, text):
+
+    #don't do anything if we are testing
+    if TEST:
+        return
+
     # notion
     if date is not None:  # if date not provided use now()
         if isinstance(date, str):
@@ -775,12 +932,20 @@ def get_todo_list_by_role(token, roles):
 
 @app.route("/weekly_todo", methods=["GET"])
 def weekly_todo():
+
+    #var used for testing and debug
+    s = ""
+
     roles = request.args.get("roles", "")
     roles = re.split("[, ;|\\\\/|.]", roles)  # get role list from arguments
     print(f"weekly todo for {roles} start")
+    
+    s += roles + "\n"
+
     token_v2 = os.environ.get("TOKEN")
     d = request.args.get("date", datetime.datetime.now().date())
     staff = get_todo_list_by_role(token_v2, roles)
+    
     print("roles get done")
 
     # looking next monday
@@ -801,19 +966,27 @@ def weekly_todo():
     for role in roles:
         if role == "PA":
             weekly_todo_pa(token_v2, staff[role], dates)
+            s += "pa todo launched" + "\n"
         elif role == "CC":
             weekly_todo_cc(token_v2, staff[role], dates)
+            s += "cc todo launched" + "\n"
         elif role == "Bidder":
             weekly_todo_bidder(token_v2, staff[role], dates)
+            s += "bidder todo launched" + "\n"
         elif role == "FL":
-            weekly_todo_fl(token_v2, staff[role], dates)    
+            weekly_todo_fl(token_v2, staff[role], dates)
+            s += "pa todo launched" + "\n"    
         else:
             return f"Can't find Function for role {role}"
     print(f"weekly todo for {roles} done")
-    return "Done!"
+    return s
   
 @app.route("/friday_todo", methods=["GET"])
 def friday_todo():
+
+    #var used for testing and debug
+    s = ""
+
     roles = request.args.get("roles", "")
     roles = re.split("[, ;|\\\\/|.]", roles)  # get role list from arguments
     print(f"Friday todo for {roles} start")
@@ -832,8 +1005,8 @@ def friday_todo():
             friday_todo_fl(token_v2, staff[role], dates)    
         else:
             return f"Can't find Function for role {role}"
-    print(f"Fiday todo for {roles} done")
-    return "Done!"
+    print(f"Friday todo for {roles} done")
+    return f"Friday todo for {roles} done"
 
 
 def create_rss(token, collection_url, subject, link, description):
@@ -863,6 +1036,11 @@ def rss():
 
 
 def create_message(token, parent_page_url, message_content):
+    
+    #don't do anything if we are testing
+    if TEST:
+        return
+    
     # notion
     client = NotionClient(token)
     page = client.get_block(parent_page_url)
@@ -919,6 +1097,11 @@ def message():
 
 
 def create_pcj(token, collection_url, subject, description, invite_to, link):
+    
+    #don't do anything if we are testing (not sure what we are adding exactly, but couldn't hurt)
+    if TEST:
+        return
+
     # notion
     item_id = re.search("%7E[\w]+", link)
     client = NotionClient(token)
@@ -948,6 +1131,11 @@ def pcj():
 
 
 def create_invite(token, collection_url, subject, description, invite_to):
+
+    #don't do anything if we are testing (not sure what we are adding exactly, but couldn't hurt)
+    if TEST:
+        return
+
     # notion
     match = re.search("https://upwork.com/applications/\d+", description)
     url = match.group()
@@ -976,6 +1164,12 @@ def invites():
 
 
 def create_response(type, data):
+
+    #don't do anything if we are testing (not sure what we are adding exactly, but couldn't hurt)
+    if TEST:
+        return
+
+
     # Development
     # collection_url = "https://www.notion.so/c8cc4837308c4b299a88d36d07bc2f4f?v=dd587a4640aa41bd9ff88ca268aff553"
     # Production
@@ -1077,7 +1271,8 @@ def parse_data_from_manychat(data):
 
         if "_".join(str.lower(i).split()) in row.get_all_properties().keys():
             try:
-                row.set_property("_".join(str.lower(i).split()), fields[i])
+                if TEST:
+                    row.set_property("_".join(str.lower(i).split()), fields[i])
             except Exception:
                 print(f'unable to insert value "{fields[i]}" into column "{i}"')
         else:
