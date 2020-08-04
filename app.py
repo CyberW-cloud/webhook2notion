@@ -41,7 +41,7 @@ def test_scripts():
 	try:
 		s += Hb_tasks() + "\n"
 	except Exception as e:
-		s += str(e) + "\n" + str(e.__traceback__)
+		s += str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__)))
 	
 	
 	s += "\nlog: \n" + log + "\n"
@@ -60,7 +60,7 @@ def test_scripts():
 			s += kick_staff() + "\n"
 
 	except Exception as e:
-		s += str(e) + "\n" + str(e.__traceback__)
+		s += str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__)))
 	
 	s += "\nlog: \n" + log + "\n"
 	log = ""
@@ -77,7 +77,7 @@ def test_scripts():
 		):
 			s += proposals_check() + "\n"
 	except Exception as e:
-		s += str(e) + "\n" + str(e.__traceback__)
+		s += str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__)))
 	
 	s += "\nlog: \n" + log + "\n"
 	log = ""
@@ -93,7 +93,7 @@ def test_scripts():
 		):
 			s += todo_one() + "\n"
 	except Exception as e:
-		s += str(e) + "\n" + str(e.__traceback__)
+		s += str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__)))
 	
 	s += "\nlog: \n" + log + "\n"
 	log = ""
@@ -109,7 +109,7 @@ def test_scripts():
 		):
 			s += weekly_todo() + "\n"
 	except Exception as e:
-		s += str(e) + "\n" + str(e.__traceback__)
+		s += str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__)))
 	
 	s += "\nlog: \n" + log + "\n"
 	log = ""
@@ -125,7 +125,7 @@ def test_scripts():
 		):
 			s += friday_todo() + "\n"
 	except Exception as e:
-		s += str(e) + "\n" + str(e.__traceback__)
+		s += str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__)))
 	
 	s += "\nlog: \n" + log + "\n"
 	log = ""
@@ -137,7 +137,7 @@ def test_scripts():
 	# try:
 	# 	s += rss() + "\n"
 	# except Exception as e:
-	# 	s += str(e) + "\n" + str(e.__traceback__)
+	# 	s += str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__)))
 	
 	# s += "\nlog: \n" + log + "\n"
 	# log = ""
@@ -154,7 +154,7 @@ def test_scripts():
 		):
 			s += message() + "\n"
 	except Exception as e:
-		s += str(e) + "\n" + str(e.__traceback__)
+		s += str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__)))
 	
 	s += "\nlog: \n" + log + "\n"
 	log = ""
@@ -166,7 +166,7 @@ def test_scripts():
 	# try:
 	# 	s += pcj() + "\n"
 	# except Exception as e:
-	# 	s += str(e) + "\n" + str(e.__traceback__)
+	# 	s += str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__)))
 	
 	# s += "\nlog: \n" + log + "\n"
 	# log = ""
@@ -178,7 +178,7 @@ def test_scripts():
 	# try:
 	# 	s += invites() + "\n"
 	# except Exception as e:
-	# 	s += str(e) + "\n" + str(e.__traceback__)
+	# 	s += str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__)))
 	
 	# s += "\nlog: \n" + log + "\n"
 	# log = ""
@@ -195,7 +195,7 @@ def test_scripts():
 		):
 			s += responses() + "\n"
 	except Exception as e:
-		s += str(e) + "\n" + str(e.__traceback__)
+		s += str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__)))
 	
 	s += "\nlog: \n" + log + "\n"
 	log = ""
@@ -207,7 +207,7 @@ def test_scripts():
 	# try:
 	# 	s += manychat() + "\n"
 	# except Exception as e:
-	# 	s += str(e) + "\n" + str(e.__traceback__)
+	# 	s += str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__)))
 	
 	# s += "\nlog: \n" + log + "\n"
 	# log = ""
