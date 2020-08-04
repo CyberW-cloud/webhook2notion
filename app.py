@@ -758,6 +758,7 @@ def create_todo(token, date, link, todo, text):
 
 	#don't do anything if we are testing, log the call
 	if TEST:
+		global log
 		log += "Called create_todo with: " + str(type(date)) + ":" + str(date) + ", " + str(type(link)) + ":" + str(link) + ", " + str(type(todo)) + ":" + str(todo) + ", " + str(type(text)) + ":" + str(text)
 		return
 
