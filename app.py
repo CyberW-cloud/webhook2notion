@@ -760,7 +760,7 @@ def create_todo(token, date, link, todo, text):
 	global Test
 	#don't do anything if we are testing, log the call
 	if TEST:
-		log += "Called create_todo with: " + str(type(date)) + ":" + str(date) + ", " + str(type(link)) + ":" + str(link) + ", " + str(type(todo)) + ":" + str(todo) + ", " + str(type(text)) + ":" + str(text)
+		log += ("Called create_todo with: " + str(type(date)) + ":" + str(date) + ", " + str(type(link)) + ":" + str(link) + ", " + str(type(todo)) + ":" + str(todo) + ", " + str(type(text)) + ":" + str(text)).replace('<', '&lt;').replace('>', '&gt;')
 		return
 
 	# notion
@@ -1117,7 +1117,7 @@ def create_message(token, parent_page_url, message_content):
 	
 	#don't do anything if we are testing
 	if TEST:
-		log+= "called create_message with: " + str(type(parent_page_url)) + " " + str(parent_page_url) + ", " + str(type(message_content)) + " " + str(message_content)
+		log+= ("called create_message with: " + str(type(parent_page_url)) + " " + str(parent_page_url) + ", " + str(type(message_content)) + " " + str(message_content)).replace('<', '&lt;').replace('>', '&gt;')
 		return
 	
 	# notion
