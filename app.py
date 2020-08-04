@@ -89,7 +89,7 @@ def test_scripts():
 		with app.test_request_context(
 			url_for("todo_one"),
 			#put test data here
-			data = {"date": datetime.datetime.today(), "member": "https://www.notion.so/473c33a2308d464bbe8ea86e1a926fc8", todo: "Test todo, disregard if seen", "text": "TEST"}
+			data = {"date": datetime.datetime.today(), "member": "https://www.notion.so/473c33a2308d464bbe8ea86e1a926fc8", "todo": "Test todo, disregard if seen", "text": "TEST"}
 		):
 			s += todo_one() + "\n"
 	except Exception as e:
@@ -105,7 +105,7 @@ def test_scripts():
 		with app.test_request_context(
 			url_for("weekly_todo"),
 			#put test data here
-			data = {"roles:" "PA,CC,Bidder,FL"}
+			data = {"roles": "PA,CC,Bidder,FL"}
 		):
 			s += weekly_todo() + "\n"
 	except Exception as e:
@@ -121,7 +121,7 @@ def test_scripts():
 		with app.test_request_context(
 			url_for("friday_todo"),
 			#put test data here
-			data = {"roles:" "PA,CC,Bidder,FL"}
+			data = {"roles": "PA,CC,Bidder,FL"}
 		):
 			s += friday_todo() + "\n"
 	except Exception as e:
