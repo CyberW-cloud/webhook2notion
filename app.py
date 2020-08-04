@@ -28,9 +28,10 @@ app = Flask(__name__)
 @app.route("/test_scripts", methods=["GET"])
 def test_scripts():
 	global TEST
+	global log
 	TEST = True
 	s = ""
-	log = ""
+
 
 
 	#testing /hb_tasks
@@ -41,7 +42,7 @@ def test_scripts():
 	except Exception as e:
 		s += str(e) + "\n"
 	
-	global log
+	
 	s += "\nlog: \n" + log
 	log = ""
 	s+= "_______________________________________" + "\n"
@@ -755,10 +756,10 @@ def get_todo_url_by_name(token, name):
 
 
 def create_todo(token, date, link, todo, text):
-
+	global log
+	global Test
 	#don't do anything if we are testing, log the call
 	if TEST:
-		global log
 		log += "Called create_todo with: " + str(type(date)) + ":" + str(date) + ", " + str(type(link)) + ":" + str(link) + ", " + str(type(todo)) + ":" + str(todo) + ", " + str(type(text)) + ":" + str(text)
 		return
 
