@@ -43,7 +43,7 @@ def test_scripts():
 		s += str(e) + "\n"
 	
 	
-	s += "\nlog: \n" + log
+	s += "\nlog: \n" + log + "\n"
 	log = ""
 	s+= "_______________________________________" + "\n"
 
@@ -61,7 +61,7 @@ def test_scripts():
 	except Exception as e:
 		s += str(e) + "\n"
 	
-	s += "\nlog: \n" + log
+	s += "\nlog: \n" + log + "\n"
 	log = ""
 
 	s+= "_______________________________________" + "\n"
@@ -78,7 +78,7 @@ def test_scripts():
 	except Exception as e:
 		s += str(e) + "\n"
 	
-	s += "\nlog: \n" + log
+	s += "\nlog: \n" + log + "\n"
 	log = ""
 	s+= "_______________________________________" + "\n"
 
@@ -94,7 +94,7 @@ def test_scripts():
 	except Exception as e:
 		s += str(e) + "\n"
 	
-	s += "\nlog: \n" + log
+	s += "\nlog: \n" + log + "\n"
 	log = ""
 	s+= "_______________________________________" + "\n"
 
@@ -110,7 +110,7 @@ def test_scripts():
 	except Exception as e:
 		s += str(e) + "\n"
 	
-	s += "\nlog: \n" + log
+	s += "\nlog: \n" + log + "\n"
 	log = ""
 	s+= "_______________________________________" + "\n"
 
@@ -126,7 +126,7 @@ def test_scripts():
 	except Exception as e:
 		s += str(e) + "\n"
 	
-	s += "\nlog: \n" + log
+	s += "\nlog: \n" + log + "\n"
 	log = ""
 
 	s+= "_______________________________________" + "\n"
@@ -138,7 +138,7 @@ def test_scripts():
 	# except Exception as e:
 	# 	s += str(e) + "\n"
 	
-	# s += "\nlog: \n" + log
+	# s += "\nlog: \n" + log + "\n"
 	# log = ""
 
 	s+= "_______________________________________" + "\n"
@@ -155,7 +155,7 @@ def test_scripts():
 	except Exception as e:
 		s += str(e) + "\n"
 	
-	s += "\nlog: \n" + log
+	s += "\nlog: \n" + log + "\n"
 	log = ""
 
 	# s+= "_______________________________________" + "\n"
@@ -167,7 +167,7 @@ def test_scripts():
 	# except Exception as e:
 	# 	s += str(e) + "\n"
 	
-	# s += "\nlog: \n" + log
+	# s += "\nlog: \n" + log + "\n"
 	# log = ""
 
 	# s+= "_______________________________________" + "\n"
@@ -179,7 +179,7 @@ def test_scripts():
 	# except Exception as e:
 	# 	s += str(e) + "\n"
 	
-	# s += "\nlog: \n" + log
+	# s += "\nlog: \n" + log + "\n"
 	# log = ""
 
 	# s+= "_______________________________________" + "\n"
@@ -190,13 +190,13 @@ def test_scripts():
 		with app.test_request_context(
 			url_for("responses"),
 			#put test data here
-			data = {"message": "Test. Please disregard this if you saw it", "parent_page_url": "https://example.com"}
+			data = {"type": "developer", "message": "Test. Please disregard this if you saw it", "parent_page_url": "https://example.com"}
 		):
 			s += responses() + "\n"
 	except Exception as e:
 		s += str(e) + "\n"
 	
-	s += "\nlog: \n" + log
+	s += "\nlog: \n" + log + "\n"
 	log = ""
 
 	s+= "_______________________________________" + "\n"
@@ -208,7 +208,7 @@ def test_scripts():
 	# except Exception as e:
 	# 	s += str(e) + "\n"
 	
-	# s += "\nlog: \n" + log
+	# s += "\nlog: \n" + log + "\n"
 	# log = ""
 
 	# s+= "_______________________________________" + "\n"
@@ -268,7 +268,7 @@ def get_offset_to_closest_weekday(source, targets):
 def Hb_tasks():
    
 	#connect to the desk
-	site = "https://www.notion.so/Head-board-749105cdfebe4d0282469b04191a24c8"
+	site = "https://www.notion.so/0aead28cb9f34ec2b41a9af19b96817a?v=1266d9ce8cbd4c968d29b4b877bed345"
 	token_v2 = os.environ.get("TOKEN")
 
 	#get all tasks
@@ -685,7 +685,7 @@ def kick_staff():
 				map(lambda c: "[{}]({})".format(c[0], c[1]), task["contracts"]),
 				"Контракты не получали обновления на прошлой неделе. Пожалуйста, срочно обнови:",
 			)
-			s += "Контракты не получали обновления на прошлой неделе. Пожалуйста, срочно обнови:  ||  " + task[todo_url] + "\n"
+			s += "Контракты не получали обновления на прошлой неделе. Пожалуйста, срочно обнови:  ||  " + task["todo_url"] + "\n"
 
 		if task["projects"]:
 			create_todo(
@@ -695,7 +695,7 @@ def kick_staff():
 				map(lambda p: "[{}]({})".format(p[0], p[1]), task["projects"]),
 				"Проекты не получали обновления на прошлой неделе. Пожалуйста, срочно обнови:",
 			)
-			s += "Проекты не получали обновления на прошлой неделе. Пожалуйста, срочно обнови:  ||  " + task[todo_url] + "\n"
+			s += "Проекты не получали обновления на прошлой неделе. Пожалуйста, срочно обнови:  ||  " + task["todo_url"] + "\n"
 
 		if task["clients"]:
 			create_todo(
@@ -705,7 +705,7 @@ def kick_staff():
 				map(lambda t: "[{}]({})".format(t[0], t[1]), task["clients"]),
 				"Занеси новую информацию которую ты узнал про клиентов:",
 			)
-			s += "Занеси новую информацию которую ты узнал про клиентов:    ||  " + task[todo_url] + "\n"
+			s += "Занеси новую информацию которую ты узнал про клиентов:    ||  " + task["todo_url"] + "\n"
 
 	print("kickstaff done")
 	return s
@@ -1115,6 +1115,8 @@ def rss():
 
 def create_message(token, parent_page_url, message_content):
 	
+	global TEST
+	global log
 	#don't do anything if we are testing
 	if TEST:
 		log+= ("called create_message with: " + str(type(parent_page_url)) + " " + str(parent_page_url) + ", " + str(type(message_content)) + " " + str(message_content)).replace('<', '&lt;').replace('>', '&gt;')
