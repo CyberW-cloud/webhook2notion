@@ -40,8 +40,8 @@ def test_scripts():
 	except Exception as e:
 		s += str(e) + "\n"
 	
-	s += "\nlogs: \n" + logs
-	logs = ""
+	s += "\nlog: \n" + log
+	log = ""
 	s+= "_______________________________________" + "\n"
 
 	#testing /kick_staff
@@ -58,8 +58,8 @@ def test_scripts():
 	except Exception as e:
 		s += str(e) + "\n"
 	
-	s += "\nlogs: \n" + logs
-	logs = ""
+	s += "\nlog: \n" + log
+	log = ""
 
 	s+= "_______________________________________" + "\n"
 
@@ -75,8 +75,8 @@ def test_scripts():
 	except Exception as e:
 		s += str(e) + "\n"
 	
-	s += "\nlogs: \n" + logs
-	logs = ""
+	s += "\nlog: \n" + log
+	log = ""
 	s+= "_______________________________________" + "\n"
 
 	#testing /todoone
@@ -91,8 +91,8 @@ def test_scripts():
 	except Exception as e:
 		s += str(e) + "\n"
 	
-	s += "\nlogs: \n" + logs
-	logs = ""
+	s += "\nlog: \n" + log
+	log = ""
 	s+= "_______________________________________" + "\n"
 
 	#testing /weekly_todo
@@ -107,8 +107,8 @@ def test_scripts():
 	except Exception as e:
 		s += str(e) + "\n"
 	
-	s += "\nlogs: \n" + logs
-	logs = ""
+	s += "\nlog: \n" + log
+	log = ""
 	s+= "_______________________________________" + "\n"
 
 	#testing /friday_todo
@@ -123,8 +123,8 @@ def test_scripts():
 	except Exception as e:
 		s += str(e) + "\n"
 	
-	s += "\nlogs: \n" + logs
-	logs = ""
+	s += "\nlog: \n" + log
+	log = ""
 
 	s+= "_______________________________________" + "\n"
 
@@ -135,8 +135,8 @@ def test_scripts():
 	# except Exception as e:
 	# 	s += str(e) + "\n"
 	
-	# s += "\nlogs: \n" + logs
-	# logs = ""
+	# s += "\nlog: \n" + log
+	# log = ""
 
 	s+= "_______________________________________" + "\n"
 
@@ -152,8 +152,8 @@ def test_scripts():
 	except Exception as e:
 		s += str(e) + "\n"
 	
-	s += "\nlogs: \n" + logs
-	logs = ""
+	s += "\nlog: \n" + log
+	log = ""
 
 	# s+= "_______________________________________" + "\n"
 
@@ -164,8 +164,8 @@ def test_scripts():
 	# except Exception as e:
 	# 	s += str(e) + "\n"
 	
-	# s += "\nlogs: \n" + logs
-	# logs = ""
+	# s += "\nlog: \n" + log
+	# log = ""
 
 	# s+= "_______________________________________" + "\n"
 
@@ -176,8 +176,8 @@ def test_scripts():
 	# except Exception as e:
 	# 	s += str(e) + "\n"
 	
-	# s += "\nlogs: \n" + logs
-	# logs = ""
+	# s += "\nlog: \n" + log
+	# log = ""
 
 	# s+= "_______________________________________" + "\n"
 
@@ -193,8 +193,8 @@ def test_scripts():
 	except Exception as e:
 		s += str(e) + "\n"
 	
-	s += "\nlogs: \n" + logs
-	logs = ""
+	s += "\nlog: \n" + log
+	log = ""
 
 	s+= "_______________________________________" + "\n"
 
@@ -205,8 +205,8 @@ def test_scripts():
 	# except Exception as e:
 	# 	s += str(e) + "\n"
 	
-	# s += "\nlogs: \n" + logs
-	# logs = ""
+	# s += "\nlog: \n" + log
+	# log = ""
 
 	# s+= "_______________________________________" + "\n"
 
