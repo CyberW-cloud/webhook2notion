@@ -27,11 +27,10 @@ app = Flask(__name__)
 
 @app.route("/test_scripts", methods=["GET"])
 def test_scripts():
-	global log
-	global TEST 
+	global TEST
 	TEST = True
 	s = ""
-	
+	log = ""
 
 
 	#testing /hb_tasks
@@ -42,6 +41,7 @@ def test_scripts():
 	except Exception as e:
 		s += str(e) + "\n"
 	
+	global log
 	s += "\nlog: \n" + log
 	log = ""
 	s+= "_______________________________________" + "\n"
