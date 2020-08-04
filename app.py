@@ -82,7 +82,12 @@ def test_scripts():
 	#testing /todoone
 	s += "Testing /todoone ..." + "\n"
 	try:
-		s += todo_one() + "\n"
+		with app.test_request_context(
+			url_for("todo_one"),
+			#put test data here
+			data = {"date": datetime.datetime.today(), "member": "https://www.notion.so/473c33a2308d464bbe8ea86e1a926fc8", todo: "Test todo, disregard if seen", "text": "TEST"}
+		):
+			s += todo_one() + "\n"
 	except Exception as e:
 		s += str(e) + "\n"
 	
@@ -93,7 +98,12 @@ def test_scripts():
 	#testing /weekly_todo
 	s += "Testing /weekly_todo ..." + "\n"
 	try:
-		s += weekly_todo() + "\n"
+		with app.test_request_context(
+			url_for("weekly_todo"),
+			#put test data here
+			data = {"roles:" "PA,CC,Bidder,FL"}
+		):
+			s += weekly_todo() + "\n"
 	except Exception as e:
 		s += str(e) + "\n"
 	
@@ -104,6 +114,11 @@ def test_scripts():
 	#testing /friday_todo
 	s += "Testing /friday_todo ..." + "\n"
 	try:
+		with app.test_request_context(
+			url_for("friday_todo"),
+			#put test data here
+			data = {"roles:" "PA,CC,Bidder,FL"}
+		):
 		s += friday_todo() + "\n"
 	except Exception as e:
 		s += str(e) + "\n"
@@ -113,21 +128,26 @@ def test_scripts():
 
 	s+= "_______________________________________" + "\n"
 
-	#testing /rss
-	s += "Testing /rss ..." + "\n"
-	try:
-		s += rss() + "\n"
-	except Exception as e:
-		s += str(e) + "\n"
+	# #testing /rss (no idea how to test it)
+	# s += "Testing /rss ..." + "\n"
+	# try:
+	# 	s += rss() + "\n"
+	# except Exception as e:
+	# 	s += str(e) + "\n"
 	
-	s += "\nlogs: \n" + logs
-	logs = ""
+	# s += "\nlogs: \n" + logs
+	# logs = ""
 
 	s+= "_______________________________________" + "\n"
 
 	#testing /message
 	s += "Testing /message ..." + "\n"
 	try:
+		with app.test_request_context(
+			url_for("message"),
+			#put test data here
+			data = {"message": "Test. Please disregard this if you saw it", "parent_page_url": "https://example.com"}
+		):
 		s += message() + "\n"
 	except Exception as e:
 		s += str(e) + "\n"
@@ -135,35 +155,40 @@ def test_scripts():
 	s += "\nlogs: \n" + logs
 	logs = ""
 
-	s+= "_______________________________________" + "\n"
+	# s+= "_______________________________________" + "\n"
 
-	#testing /pcj
-	s += "Testing /pcj ..." + "\n"
-	try:
-		s += pcj() + "\n"
-	except Exception as e:
-		s += str(e) + "\n"
+	# #testing /pcj (no idea how to test it)
+	# s += "Testing /pcj ..." + "\n"
+	# try:
+	# 	s += pcj() + "\n"
+	# except Exception as e:
+	# 	s += str(e) + "\n"
 	
-	s += "\nlogs: \n" + logs
-	logs = ""
+	# s += "\nlogs: \n" + logs
+	# logs = ""
 
-	s+= "_______________________________________" + "\n"
+	# s+= "_______________________________________" + "\n"
 
-	#testing /invites
-	s += "Testing /invites ..." + "\n"
-	try:
-		s += invites() + "\n"
-	except Exception as e:
-		s += str(e) + "\n"
+	# #testing /invites (no idea how to test it)
+	# s += "Testing /invites ..." + "\n"
+	# try:
+	# 	s += invites() + "\n"
+	# except Exception as e:
+	# 	s += str(e) + "\n"
 	
-	s += "\nlogs: \n" + logs
-	logs = ""
+	# s += "\nlogs: \n" + logs
+	# logs = ""
 
-	s+= "_______________________________________" + "\n"
+	# s+= "_______________________________________" + "\n"
 
-	#testing /friday_todo
+	#testing /responses developer
 	s += "Testing /responses ..." + "\n"
 	try:
+		with app.test_request_context(
+			url_for("responses"),
+			#put test data here
+			data = {"message": "Test. Please disregard this if you saw it", "parent_page_url": "https://example.com"}
+		):
 		s += responses() + "\n"
 	except Exception as e:
 		s += str(e) + "\n"
@@ -173,17 +198,17 @@ def test_scripts():
 
 	s+= "_______________________________________" + "\n"
 
-	#testing /manychat
-	s += "Testing /manychat ..." + "\n"
-	try:
-		s += manychat() + "\n"
-	except Exception as e:
-		s += str(e) + "\n"
+	# #testing /manychat
+	# s += "Testing /manychat ..." + "\n"
+	# try:
+	# 	s += manychat() + "\n"
+	# except Exception as e:
+	# 	s += str(e) + "\n"
 	
-	s += "\nlogs: \n" + logs
-	logs = ""
+	# s += "\nlogs: \n" + logs
+	# logs = ""
 
-	s+= "_______________________________________" + "\n"
+	# s+= "_______________________________________" + "\n"
 
 	
 	TEST = False
@@ -1088,6 +1113,7 @@ def create_message(token, parent_page_url, message_content):
 	
 	#don't do anything if we are testing
 	if TEST:
+		log+= "called create_message with: " + str(type(parent_page_url)) + " " + str(parent_page_url) + ", " + str(type(message_content)) + " " + str(message_content)
 		return
 	
 	# notion
