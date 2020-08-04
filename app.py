@@ -1173,7 +1173,7 @@ def message():
 
 def create_pcj(token, collection_url, subject, description, invite_to, link):
 	
-	#don't do anything if we are testing (not sure what we are adding exactly, but couldn't hurt)
+	#don't do anything if we are testing (not sure what we are creating exactly, but couldn't hurt)
 	if TEST:
 		return
 
