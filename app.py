@@ -27,6 +27,8 @@ app = Flask(__name__)
 
 @app.route("/test_scripts", methods=["GET"])
 def test_scripts():
+	global log
+	global TEST 
 	TEST = True
 	s = ""
 	
