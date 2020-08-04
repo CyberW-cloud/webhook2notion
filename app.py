@@ -119,7 +119,7 @@ def test_scripts():
 			#put test data here
 			data = {"roles:" "PA,CC,Bidder,FL"}
 		):
-		s += friday_todo() + "\n"
+			s += friday_todo() + "\n"
 	except Exception as e:
 		s += str(e) + "\n"
 	
@@ -148,7 +148,7 @@ def test_scripts():
 			#put test data here
 			data = {"message": "Test. Please disregard this if you saw it", "parent_page_url": "https://example.com"}
 		):
-		s += message() + "\n"
+			s += message() + "\n"
 	except Exception as e:
 		s += str(e) + "\n"
 	
@@ -189,7 +189,7 @@ def test_scripts():
 			#put test data here
 			data = {"message": "Test. Please disregard this if you saw it", "parent_page_url": "https://example.com"}
 		):
-		s += responses() + "\n"
+			s += responses() + "\n"
 	except Exception as e:
 		s += str(e) + "\n"
 	
