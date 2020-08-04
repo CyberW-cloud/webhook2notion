@@ -217,6 +217,7 @@ def test_scripts():
 	
 	TEST = False
 
+	s = s.replace('<', '&lt;').replace('>', '&gt;').replace("\n", "<br/>\n")
 	return s
 
 
