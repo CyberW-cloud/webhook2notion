@@ -28,16 +28,16 @@ def test_notion_api_calls():
 	create_test_page_from_todo("https://www.notion.so/ToDo-Anna-Markos-31d182fece9a4dab8ffa309998b39914")
 
 
-# def create_test_page_from_todo(todo_url):
-# 	token = os.environ.get("TOKEN")
-# 	client = NotionClient(token)
+def create_test_page_from_todo(todo_url):
+	token = os.environ.get("TOKEN")
+	client = NotionClient(token)
 	
-# 	parent = client.get_block(test_page_url)
-# 	title = client.get_block(todo_url).title
-# 	parent.children.add_new(PageBlock, title=title)
+	parent = client.get_block(test_page_url)
+	title = client.get_block(todo_url).title
+	parent.children.add_new(PageBlock, title=title)
 
-# 	#-1 means last element of the children (the one the prev line created)
-# 	return parent.children[-1].get_browseable_url()
+	#-1 means last element of the children (the one the prev line created)
+	return parent.children[-1].get_browseable_url()
 
 
 #Source : Date/Datetime, the start of the search
