@@ -20,12 +20,16 @@ app = Flask(__name__)
 TEST = False
 test_page_url = "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c"
 
-@app.route("/test_notion", methods=["GET"])
-def test_notion_api_calls():
-
+@app.route("/test_scripts", methods=["GET"])
+def test_scripts():
+	TEST = True
 	
-	token = os.environ.get("TOKEN")
-	create_test_page_from_todo("https://www.notion.so/ToDo-Anna-Markos-31d182fece9a4dab8ffa309998b39914")
+	kick_staff()
+
+
+
+	TEST = False
+	return "Done!"
 
 
 def create_test_page_from_todo(todo_url):
