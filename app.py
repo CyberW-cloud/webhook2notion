@@ -555,19 +555,19 @@ def create_todo(token, date, link, todo, text):
 
 
     # notion
-    if date is not None:  # if date not provided use now()
-        if isinstance(date, str):
-            date = datetime.datetime.strptime(urllib.parse.unquote("{}".format(date)), "%Y-%m-%dT%H:%M:%S.%fZ").date()
-    else:
-        date = datetime.datetime.now().date()
+	if date is not None:  # if date not provided use now()
+		if isinstance(date, str):
+			date = datetime.datetime.strptime(urllib.parse.unquote("{}".format(date)), "%Y-%m-%dT%H:%M:%S.%fZ").date()
+	else:
+		date = datetime.datetime.now().date()
 
    
-    print(link)
-    page = client.get_block(link)
-    tasks = todo
+	print(link)
+	page = client.get_block(link)
+	tasks = todo
 
-    return
-    return create_new_task(page, "", text=text, date=date, timezone=timezone, tasks=tasks)
+	return
+	return create_new_task(page, "", text=text, date=date, timezone=timezone, tasks=tasks)
 
 
 @app.route("/todoone", methods=["GET"])
