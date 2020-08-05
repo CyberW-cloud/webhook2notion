@@ -24,12 +24,12 @@ test_page_url = "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c"
 def test_scripts():
 	TEST = True
 	
-	kick_staff()
+
 
 
 
 	TEST = False
-	return "Done!"
+	return create_test_page_from_todo("https://www.notion.so/ToDo-Anna-Markos-31d182fece9a4dab8ffa309998b39914")
 
 
 def create_test_page_from_todo(todo_url):
