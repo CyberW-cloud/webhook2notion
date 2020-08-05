@@ -15,6 +15,22 @@ timezone = "Europe/Kiev"
 
 app = Flask(__name__)
 
+
+#var used to signify testing
+TEST = False
+test_page_url = "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c"
+
+@app.route("/test_notion", methods=["GET"])
+def test_notion_api_calls():
+
+	
+	token = os.environ.get("TOKEN")
+	create_todo(token, None, "https://www.notion.so/ToDo-Anna-Markos-31d182fece9a4dab8ffa309998b39914", list("TEST"), "TEST")
+
+
+
+
+
 #Source : Date/Datetime, the start of the search
 #Targets : Can be an int or an String array. 
 #          the int array has to be from 0 (mon) to 6 (sun)
@@ -83,7 +99,6 @@ def Hb_tasks():
     
     #s can be used to get debug output
     s = ""
-    page = client.get_block(site)
     changes = []
     for todo in result:
 
@@ -528,6 +543,17 @@ def get_todo_url_by_name(token, name):
 
 
 def create_todo(token, date, link, todo, text):
+
+	client = NotionClient(token)
+	if TEST:
+		parent = client.get_block(test_page_url)
+		title = client.get_block(link).title
+		parent.children.add_new(PageBlock, title=title)
+
+		#-1 means last element of the children (the one the prev line created)
+		link = parent.children[-1].get_browseable_url()
+
+
     # notion
     if date is not None:  # if date not provided use now()
         if isinstance(date, str):
@@ -535,11 +561,12 @@ def create_todo(token, date, link, todo, text):
     else:
         date = datetime.datetime.now().date()
 
-    client = NotionClient(token)
+   
     print(link)
     page = client.get_block(link)
     tasks = todo
 
+    return
     return create_new_task(page, "", text=text, date=date, timezone=timezone, tasks=tasks)
 
 
@@ -1098,4 +1125,3 @@ if __name__ == "__main__":
     app.debug = True
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port)
-    
