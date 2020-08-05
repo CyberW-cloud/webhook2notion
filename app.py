@@ -25,7 +25,7 @@ def test_notion_api_calls():
 
 	
 	token = os.environ.get("TOKEN")
-	create_todo(token, None, "https://www.notion.so/ToDo-Anna-Markos-31d182fece9a4dab8ffa309998b39914", list("TEST"), "TEST")
+	create_test_page_from_todo("https://www.notion.so/ToDo-Anna-Markos-31d182fece9a4dab8ffa309998b39914")
 
 
 def create_test_page_from_todo(todo_url):
