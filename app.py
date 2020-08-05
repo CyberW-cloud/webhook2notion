@@ -28,7 +28,16 @@ def test_notion_api_calls():
 	create_todo(token, None, "https://www.notion.so/ToDo-Anna-Markos-31d182fece9a4dab8ffa309998b39914", list("TEST"), "TEST")
 
 
+def create_test_page_from_todo(todo_url):
+	token = os.environ.get("TOKEN")
+	client = NotionClient(token)
+	
+	parent = client.get_block(test_page_url)
+	title = client.get_block(todo_url).title
+	parent.children.add_new(PageBlock, title=title)
 
+	#-1 means last element of the children (the one the prev line created)
+	return parent.children[-1].get_browseable_url()
 
 
 #Source : Date/Datetime, the start of the search
@@ -474,6 +483,10 @@ def kick_staff():
     todo = parse_staff(todo, projects, "projects", client_days_before)
     for key in todo:
         task = todo[key]
+        
+        if TEST:
+        	task["todo_url"] = create_test_page_from_todo(task["todo_url"])
+        
         if task["contracts"]:
             create_todo(
                 token_v2,
@@ -544,16 +557,6 @@ def get_todo_url_by_name(token, name):
 
 def create_todo(token, date, link, todo, text):
 
-	client = NotionClient(token)
-	if TEST:
-		parent = client.get_block(test_page_url)
-		title = client.get_block(link).title
-		parent.children.add_new(PageBlock, title=title)
-
-		#-1 means last element of the children (the one the prev line created)
-		link = parent.children[-1].get_browseable_url()
-
-
     # notion
 	if date is not None:  # if date not provided use now()
 		if isinstance(date, str):
@@ -593,6 +596,10 @@ def todo_one():
 def weekly_todo_pa(token, staff, calendar):
     print("PAs start")
     for pa in staff:
+
+		if TEST:
+			pa["todo_url"] = create_test_page_from_todo(pa["todo_url"])
+
         #        if pa['name'] != 'Denys Safonov':
         #            continue
         print(f"PA {pa['name']} start")
@@ -655,6 +662,10 @@ def weekly_todo_pa(token, staff, calendar):
 def weekly_todo_cc(token, staff, calendar):
     print("CCs start")
     for cc in staff:
+    	
+		if TEST:
+			cc["todo_url"] = create_test_page_from_todo(cc["todo_url"])
+
         # if cc['name'] != 'Davyd Podosian':
         #     continue
         print(f"CC {cc['name']} start")
@@ -687,6 +698,10 @@ def weekly_todo_cc(token, staff, calendar):
 def weekly_todo_fl(token, staff, calendar):
     print("Mon Fl's start")
     for fl in staff:
+
+    	if TEST:
+			fl["todo_url"] = create_test_page_from_todo(fl["todo_url"])
+
         print(f"FL {fl['name']} start")
         # Monday
         todo = list()
@@ -698,6 +713,10 @@ def weekly_todo_fl(token, staff, calendar):
 def friday_todo_fl(token, staff, calendar):
     print("Fri Fl's start")
     for fl in staff:
+
+		if TEST:
+			fl["todo_url"] = create_test_page_from_todo(fl["todo_url"])
+
 #        if fl['name'] == 'Denys Safonov':         
         print(f"FL {fl['name']} start")
         # Friday
@@ -709,6 +728,11 @@ def friday_todo_fl(token, staff, calendar):
 def weekly_todo_bidder(token, staff, calendar):
     print("bidders start")
     for bidder in staff:
+
+		if TEST:
+			bidder["todo_url"] = create_test_page_from_todo(bidder["todo_url"])
+
+
         #        if bidder['name'] != 'Denys Safonov':
         #        continue
         print(f"bidder {bidder['name']} start")
