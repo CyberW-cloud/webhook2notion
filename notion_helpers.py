@@ -144,10 +144,10 @@ def nview_to_pandas(source):
         raise TypeError("Incorrect type for convert to pandas")
 
     data = []
-    for row in rows:
-        i = row.get_all_properties()
+    for row in range(len(rows)):
+        i = rows[row].get_all_properties()
         print(i)
-        i["row"] = row
+        i["row"] = rows[row]
         data.append(i)
 
     return pd.DataFrame(data)
