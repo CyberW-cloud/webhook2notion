@@ -137,6 +137,7 @@ def nview_to_pandas(source):
     """
     if isinstance(source, TableQueryResult):
         rows = source
+        print(type(source), source)
     elif isinstance(source, TableView):
         rows = source.collection.get_rows()
     else:
