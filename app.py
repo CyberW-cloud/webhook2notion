@@ -29,7 +29,7 @@ def test_scripts():
 
 
 	TEST = False
-	return create_test_page_from_todo("https://www.notion.so/ToDo-Anna-Markos-31d182fece9a4dab8ffa309998b39914")
+	return "Done"
 
 
 def create_test_page_from_todo(todo_url):
