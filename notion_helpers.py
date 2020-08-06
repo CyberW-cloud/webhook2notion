@@ -138,7 +138,7 @@ def get_all_properties(QueryRowBlock):
                 props.append(i["slug"])
 
     return props
-    
+
 def nview_to_pandas(source):
     """Convert Notion object to Pandas DataFrame.
 
@@ -155,7 +155,7 @@ def nview_to_pandas(source):
 
     data = []
     for row in rows:
-        print(row.collection.get_schema_properties())
+        print(get_all_properties(row))
         i = row.get_all_properties()
         i["row"] = row
         data.append(i)
