@@ -131,10 +131,10 @@ def create_new_task(page, header, date, text, timezone, tasks):
 def get_all_properties(QueryRowBlock):
     
 
-    props = []
+    props = {}
     for i in QueryRowBlock.schema:
         if "type" in i.keys():
-            props.append(i["slug"])
+            props[i["slug"]] = QueryRowBlock.get_property(i["slug"])
 
     return props
 
