@@ -135,8 +135,10 @@ def get_all_properties(QueryRowBlock):
     for i in QueryRowBlock.schema:
         if "type" in i.keys():
             print()
-            props[i["slug"]] = record_dict[i["id"]][0][0]
-
+            if(i["id"] in record_dict):
+                props[i["slug"]] = record_dict[i["id"]][0][0]
+            else:
+                print(i["slug"])
     return props
 
 def nview_to_pandas(source):
