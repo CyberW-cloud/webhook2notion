@@ -129,10 +129,10 @@ def create_new_task(page, header, date, text, timezone, tasks):
         move_task_before(ret, parent)
 
 def get_all_properties(QueryRowBlock):
-    build_schema = QueryRowBlock.collection.get_schema_properties()
+    
 
     props = []
-    for i in build_schema:
+    for i in QueryRowBlock.schema:
         if "type" in i.keys():
             props.append(i["slug"])
 
