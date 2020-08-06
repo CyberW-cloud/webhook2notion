@@ -135,7 +135,7 @@ def get_all_properties(QueryRowBlock):
     for i in QueryRowBlock.schema:
         if "type" in i.keys():
             print()
-            props[i["slug"]] = record_dict[i["id"]]
+            props[i["slug"]] = record_dict[i["id"]][0][0]
 
     return props
 
