@@ -129,13 +129,13 @@ def create_new_task(page, header, date, text, timezone, tasks):
         move_task_before(ret, parent)
 
 def get_all_properties(QueryRowBlock):
-    
+    record_dict = QueryRowBlock.get()["properties"]
 
     props = {}
     for i in QueryRowBlock.schema:
         if "type" in i.keys():
-            print(QueryRowBlock.get())
-            props[i["slug"]] = QueryRowBlock.get(i["slug"])
+            print()
+            props[i["slug"]] = record_dict[i["id"]]
 
     return props
 
