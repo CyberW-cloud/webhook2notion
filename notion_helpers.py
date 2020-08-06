@@ -136,9 +136,9 @@ def get_all_properties(QueryRowBlock):
         if "type" in i.keys():
             print()
             if(i["id"] in record_dict):
-                props[i["slug"]] = QueryRowBlock._convert_notion_to_python(record_dict[i["id"]][0][0],i)
-            else:
-                print(i["slug"])
+                print(QueryRowBlock._convert_notion_to_python(record_dict[i["id"]][0][0],i))
+
+
     return props
 
 def nview_to_pandas(source):
