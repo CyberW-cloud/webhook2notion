@@ -136,7 +136,7 @@ def get_all_properties(QueryRowBlock):
         if "type" in i.keys():
             print()
             if(i["id"] in record_dict):
-                props[i["slug"]] = record_dict[i["id"]][0][0]
+                props[i["slug"]] = QueryRowBlock._convert_notion_to_python(record_dict[i["id"]][0][0],i)
             else:
                 print(i["slug"])
     return props
