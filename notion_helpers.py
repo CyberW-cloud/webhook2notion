@@ -128,7 +128,17 @@ def create_new_task(page, header, date, text, timezone, tasks):
             ret["to-do"].append(td)
         move_task_before(ret, parent)
 
+def get_all_properties(QueryRowBlock):
+    build_schema = QueryRowBlock.collection.get_schema_properties()
 
+    props = []
+    for i in build_schema:
+        if "type" in i.keys():
+            if(i["type"] == "property"):
+                props.append(i["slug"])
+
+    return props
+    
 def nview_to_pandas(source):
     """Convert Notion object to Pandas DataFrame.
 
