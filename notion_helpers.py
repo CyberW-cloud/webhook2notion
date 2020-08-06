@@ -134,8 +134,7 @@ def get_all_properties(QueryRowBlock):
     props = []
     for i in build_schema:
         if "type" in i.keys():
-            if(i["type"] == "property"):
-                props.append(i["slug"])
+            props.append(i["slug"])
 
     return props
 
