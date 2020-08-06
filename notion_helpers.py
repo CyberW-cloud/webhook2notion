@@ -145,7 +145,7 @@ def nview_to_pandas(source):
 
     data = []
     for row in rows:
-        print(row.get_schema_properties())
+        print(rows.get_schema_properties())
         i = row.get_all_properties()
         i["row"] = row
         data.append(i)
