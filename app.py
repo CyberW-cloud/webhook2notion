@@ -872,7 +872,9 @@ def get_todo_list_by_role(token, roles):
 
 @app.route("/weekly_todo", methods=["GET"])
 def weekly_todo():
+
 	roles = request.args.get("roles", "")
+	print(roles)
 	roles = re.split("[, ;|\\\\/|.]", roles)  # get role list from arguments
 	print(f"weekly todo for {roles} start")
 	token_v2 = os.environ.get("TOKEN")
