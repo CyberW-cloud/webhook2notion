@@ -562,6 +562,7 @@ def get_todo_url_by_name(token, name):
 
 def create_todo(token, date, link, todo, text):
 
+	print(link)
 	client = NotionClient(token)
 	# notion
 	if date is not None:  # if date not provided use now()
