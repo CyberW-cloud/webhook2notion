@@ -128,18 +128,7 @@ def create_new_task(page, header, date, text, timezone, tasks):
             ret["to-do"].append(td)
         move_task_before(ret, parent)
 
-def get_all_properties(QueryRowBlock):
-    record_dict = QueryRowBlock.get()["properties"]
 
-    props = {}
-    for i in QueryRowBlock.schema:
-        if "type" in i.keys():
-            print()
-            if(i["id"] in record_dict):
-                print(QueryRowBlock._convert_notion_to_python(record_dict[i["id"]][0][0],i))
-
-
-    return props
 
 def nview_to_pandas(source):
     """Convert Notion object to Pandas DataFrame.
@@ -149,7 +138,6 @@ def nview_to_pandas(source):
     """
     if isinstance(source, TableQueryResult):
         rows = source
-        print(type(source), source)
     elif isinstance(source, TableView):
         rows = source.collection.get_rows()
     else:
@@ -157,8 +145,6 @@ def nview_to_pandas(source):
 
     data = []
     for row in rows:
-        #print(row.collection.get_schema_properties())
-        #print(get_all_properties(row))
         i = row.get_all_properties()
         i["row"] = row
         data.append(i)
