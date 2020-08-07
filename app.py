@@ -29,12 +29,8 @@ def test_scripts():
 	#kick_staff()
 
 	#weekly_todo
-	with app.test_request_context(
-		url_for("weekly_todo"),
-		#put test data here
-		data = {"roles": "PA,CC,Bidder,FL"}
-	):
-		weekly_todo()
+	
+	weekly_todo()
 
 
 
