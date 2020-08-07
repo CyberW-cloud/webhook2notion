@@ -27,12 +27,9 @@ def test_scripts():
 	
 
 	#kick_staff()
+	#weekly_todo()
 
-	#weekly_todo
-	
-	weekly_todo()
-
-
+	friday_todo()
 
 
 	TEST = False
