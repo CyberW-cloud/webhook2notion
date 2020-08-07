@@ -578,7 +578,7 @@ def create_todo(token, date, link, todo, text):
 	page = client.get_block(link)
 	tasks = todo
 
-	return
+
 	return create_new_task(page, "", text=text, date=date, timezone=timezone, tasks=tasks)
 
 
