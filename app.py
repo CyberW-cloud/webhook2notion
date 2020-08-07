@@ -18,37 +18,60 @@ app = Flask(__name__)
 
 #var used to signify testing
 TEST = False
-test_page_url = "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c"
+test_page_url = ""
 
 @app.route("/test_scripts", methods=["GET"])
 def test_scripts():
 	global TEST
-	TEST = True
-	
+	global test_page_url
+	parent_page_url = "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c"
+	TEST = True	
 
-	#kick_staff()
-	#weekly_todo()
+	token = os.environ.get("TOKEN")
+	client = NotionClient(token)
+
+	title = str(datetime.datetime.now().day) + " " + str(datetime.datetime.now().month) + " " + str(datetime.datetime.now().year) + " "
+	day_page = create_page(parent_page_url, title)
+	
+	test_page_url = create_page(day_page.get_browseable_url(), "/kickstaff")
+
+	kick_staff()
+	
+	test_page_url = create_page(day_page.get_browseable_url(), "/weekly_todo")
+
+	weekly_todo()
+
+	test_page_url = create_page(day_page.get_browseable_url(), "/friday_todo")
 
 	friday_todo()
 
+	test_page_url = ""
 
 	TEST = False
 	return "Done"
 
+def create_page(parent_url, title):
+	token = os.environ.get("TOKEN")
+	client = NotionClient(token)
+
+	parent = client.get_block(parent_url)
+	parent.children.add_new(PageBlock, title=title)
+
+	return parent.children[-1]
 
 def create_test_page_from_todo(todo_url):
 	token = os.environ.get("TOKEN")
 	client = NotionClient(token)
 	
-	parent = client.get_block(test_page_url)
+	
 	title = client.get_block(todo_url).title
-	parent.children.add_new(PageBlock, title=title)
+	page = create_page(test_page_url, title)
 
 	#add a header because the create todo can't handle an empty page 
-	parent.children[-1].children.add_new(HeaderBlock, title = " ")
+	page.children.add_new(HeaderBlock, title = " ")
 
 	#-1 means last element of the children (the one the prev line created)
-	return parent.children[-1].get_browseable_url()
+	return page.get_browseable_url()
 
 
 #Source : Date/Datetime, the start of the search
