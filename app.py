@@ -492,7 +492,7 @@ def kick_staff():
 		if TEST:
 			task["todo_url"] = create_test_page_from_todo(task["todo_url"])
 		
-		print("kickstaff origin: " + str(task["todo_url"]))
+		print("kickstaff origin: " + str(create_test_page_from_todo(task["todo_url"])))
 
 		if task["contracts"]:
 			create_todo(
