@@ -461,6 +461,7 @@ def get_proposals(token, days_before):
 
 @app.route("/kick_staff", methods=["GET"])
 def kick_staff():
+	global TEST
 	print("starting kickstaff")
 	token_v2 = os.environ.get("TOKEN")
 	date = request.args.get("date", None)
@@ -490,6 +491,7 @@ def kick_staff():
 		task = todo[key]
 		
 		if TEST:
+			print("1")
 			task["todo_url"] = create_test_page_from_todo(task["todo_url"])
 		
 		print("kickstaff origin: " + str(create_test_page_from_todo(task["todo_url"])))
