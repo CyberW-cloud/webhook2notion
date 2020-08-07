@@ -492,6 +492,8 @@ def kick_staff():
 		if TEST:
 			task["todo_url"] = create_test_page_from_todo(task["todo_url"])
 		
+		print("kickstaff origin: " + str(task["todo_url"]))
+
 		if task["contracts"]:
 			create_todo(
 				token_v2,
@@ -562,7 +564,7 @@ def get_todo_url_by_name(token, name):
 
 def create_todo(token, date, link, todo, text):
 
-	print(link)
+
 	client = NotionClient(token)
 	# notion
 	if date is not None:  # if date not provided use now()
