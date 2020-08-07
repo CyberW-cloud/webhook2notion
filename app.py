@@ -26,9 +26,18 @@ def test_scripts():
 	TEST = True
 	
 
-	kick_staff()
+	#kick_staff()
 
-	weekly_todo()
+	#weekly_todo
+	with app.test_request_context(
+		url_for("weekly_todo"),
+		#put test data here
+		data = {"roles": "PA,CC,Bidder,FL"}
+	):
+		weekly_todo()
+
+
+
 
 	TEST = False
 	return "Done"
