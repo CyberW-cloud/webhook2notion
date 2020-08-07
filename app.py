@@ -42,6 +42,9 @@ def create_test_page_from_todo(todo_url):
 	title = client.get_block(todo_url).title
 	parent.children.add_new(PageBlock, title=title)
 
+	#add a header because the create todo can't handle an empty page 
+	parent.children[-1].children.add_new(client.get_block("https://www.notion.so/ToDo-Denys-Safonov-473c33a2308d464bbe8ea86e1a926fc8#5cdf39e2f6ac468c8f38a0c61c11bcac"))
+
 	#-1 means last element of the children (the one the prev line created)
 	return parent.children[-1].get_browseable_url()
 
