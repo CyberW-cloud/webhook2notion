@@ -22,6 +22,7 @@ test_page_url = "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c"
 
 @app.route("/test_scripts", methods=["GET"])
 def test_scripts():
+	global TEST
 	TEST = True
 	
 
