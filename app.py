@@ -28,7 +28,7 @@ def test_scripts():
 
 	kick_staff()
 
-
+	weekly_todo()
 
 	TEST = False
 	return "Done"
@@ -43,7 +43,7 @@ def create_test_page_from_todo(todo_url):
 	parent.children.add_new(PageBlock, title=title)
 
 	#add a header because the create todo can't handle an empty page 
-	parent.children[-1].children.add_new(HeaderBlock, title = "Test block. Please Ignore")
+	parent.children[-1].children.add_new(HeaderBlock, title = " ")
 
 	#-1 means last element of the children (the one the prev line created)
 	return parent.children[-1].get_browseable_url()
@@ -531,6 +531,8 @@ def kick_staff():
 
 @app.route("/proposals_check", methods=["GET"])
 def proposals_check():
+	global TEST
+
 	print(f"Proposal check started")
 	token_v2 = os.environ.get("TOKEN")
 	date = request.args.get("date", None)
@@ -541,8 +543,14 @@ def proposals_check():
 	for key in todo:
 		task = todo[key]
 		print("start todo")
-		print(task["todo_url"])
+		
 		if task["proposals"]:
+
+			if TEST:
+				task["todo_url"] = create_test_page_from_todo(task["todo_url"])
+
+			print(task["todo_url"])
+
 			print(f"ToDo: {task['todo_url']}")
 			create_todo(
 				token_v2,
@@ -581,12 +589,14 @@ def create_todo(token, date, link, todo, text):
 	page = client.get_block(link)
 	tasks = todo
 
-
+	return
 	return create_new_task(page, "", text=text, date=date, timezone=timezone, tasks=tasks)
 
 
 @app.route("/todoone", methods=["GET"])
 def todo_one():
+	global TEST
+
 	member = request.args.get("member")
 	token_v2 = os.environ.get("TOKEN")
 	todo = "{}".format(request.args.get("todo")).split("||")
@@ -596,7 +606,12 @@ def todo_one():
 		todo_url = urllib.parse.unquote(member)
 	else:
 		todo_url = get_todo_url_by_name(token_v2, member)
+	
 	if todo_url is not None:
+
+		if TEST:
+			task["todo_url"] = create_test_page_from_todo(task["todo_url"])
+
 		create_todo(token_v2, date, todo_url, todo, text)
 		print(f'added to {member} {text if text else ""} {todo}  to Notion')
 		return f'added to {member} {text if text else ""} {todo}  to Notion'
@@ -606,6 +621,8 @@ def todo_one():
 
 
 def weekly_todo_pa(token, staff, calendar):
+	global TEST
+
 	print("PAs start")
 	for pa in staff:
 
@@ -672,6 +689,8 @@ def weekly_todo_pa(token, staff, calendar):
 
 
 def weekly_todo_cc(token, staff, calendar):
+	global TEST
+
 	print("CCs start")
 	for cc in staff:
 		
@@ -708,6 +727,8 @@ def weekly_todo_cc(token, staff, calendar):
 	print("CCs done")
 
 def weekly_todo_fl(token, staff, calendar):
+	global TEST
+
 	print("Mon Fl's start")
 	for fl in staff:
 
@@ -723,6 +744,8 @@ def weekly_todo_fl(token, staff, calendar):
 	print("Mon FL done")
 
 def friday_todo_fl(token, staff, calendar):
+	global TEST
+
 	print("Fri Fl's start")
 	for fl in staff:
 
@@ -738,6 +761,8 @@ def friday_todo_fl(token, staff, calendar):
 	print("Fri FL done")	
 
 def weekly_todo_bidder(token, staff, calendar):
+	global TEST
+
 	print("bidders start")
 	for bidder in staff:
 
