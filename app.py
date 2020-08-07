@@ -24,7 +24,7 @@ test_page_url = "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c"
 def test_scripts():
 	TEST = True
 	
-	
+
 	kick_staff()
 
 
@@ -562,6 +562,7 @@ def get_todo_url_by_name(token, name):
 
 def create_todo(token, date, link, todo, text):
 
+	client = NotionClient(token)
 	# notion
 	if date is not None:  # if date not provided use now()
 		if isinstance(date, str):
