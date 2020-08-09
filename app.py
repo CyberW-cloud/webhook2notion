@@ -635,9 +635,7 @@ def todo_one():
 	global TEST
 
 	if not TEST:
-		member = request.args.get("member")
-	else:
-		member = test_page_url
+	member = request.args.get("member")
 	token_v2 = os.environ.get("TOKEN")
 	todo = "{}".format(request.args.get("todo")).split("||")
 	text = request.args.get("text")
@@ -650,7 +648,7 @@ def todo_one():
 	if todo_url is not None:
 
 		if TEST:
-			task["todo_url"] = create_test_page_from_todo(task["todo_url"])
+			todo_url = create_test_page_from_todo(todo_url)
 
 		create_todo(token_v2, date, todo_url, todo, text)
 		print(f'added to {member} {text if text else ""} {todo}  to Notion')
