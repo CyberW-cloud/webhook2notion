@@ -53,6 +53,15 @@ def test_scripts():
 
 	friday_todo()
 
+	test_page_url = create_page(day_page.get_browseable_url(), "/todo_one").get_browseable_url()
+
+	with app.test_request_context(
+		url_for("todo_one"),
+
+		data = {"member": test_page_url, "todo": "Test todo, disregard if seen", "text": "TEST"}
+	):
+		todo_one()
+
 	test_page_url = ""
 
 	TEST = False
@@ -631,6 +640,7 @@ def todo_one():
 	global TEST
 
 	member = request.args.get("member")
+	print(member)
 	token_v2 = os.environ.get("TOKEN")
 	todo = "{}".format(request.args.get("todo")).split("||")
 	text = request.args.get("text")
