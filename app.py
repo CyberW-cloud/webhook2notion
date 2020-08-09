@@ -25,6 +25,10 @@ def test_scripts():
 	global TEST
 	global test_page_url
 	parent_page_url = "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c"
+	
+	if TEST:
+		return #to avoid any race cases
+
 	TEST = True	
 
 	token = os.environ.get("TOKEN")
@@ -35,11 +39,11 @@ def test_scripts():
 	
 	test_page_url = create_page(day_page.get_browseable_url(), "/kickstaff").get_browseable_url()
 
-	#kick_staff()
+	kick_staff()
 	
 	test_page_url = create_page(day_page.get_browseable_url(), "/weekly_todo").get_browseable_url()
 
-	#weekly_todo()
+	weekly_todo()
 
 	test_page_url = create_page(day_page.get_browseable_url(), "/friday_todo").get_browseable_url()
 
