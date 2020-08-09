@@ -666,7 +666,7 @@ def weekly_todo_pa(token, staff, calendar):
 		if TEST:
 			pa["todo_url"] = create_test_page_from_todo(pa["todo_url"])
 
-		#		if pa['name'] != 'Denys Safonov':
+		#		if pa['name'] != 'Denys Safonov': 
 		#			continue
 		print(f"PA {pa['name']} start")
 		freelancers = ", ".join(map(lambda c: "[{}]({})".format(c[0], c[1]), pa["pa_for"]))
