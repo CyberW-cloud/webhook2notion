@@ -634,7 +634,6 @@ def create_todo(token, date, link, todo, text):
 def todo_one():
 	global TEST
 
-	if not TEST:
 	member = request.args.get("member")
 	token_v2 = os.environ.get("TOKEN")
 	todo = "{}".format(request.args.get("todo")).split("||")
