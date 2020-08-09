@@ -376,7 +376,7 @@ def get_contracts(token, days_before):
 	cv = client.get_collection_view(
 		"https://www.notion.so/5a95fb63129242a5b5b48f18e16ef19a?v=48599e7a184a4f32be2469e696367949"
 	)
-	# 48599e7a184a4f32be2469e696367949 - no_filters_view
+	# 48599e7a184a4f32be2469e696367949 - no_filters_view 
 	# 02929acd595a48dda28cb9e2ff6ae210 - python_view
 
 	# calculate date for filter now() - days_before. Stupid notion starts new day at 12:00 a.m.
