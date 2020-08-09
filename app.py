@@ -65,7 +65,7 @@ def test_scripts():
 		return "Done"
 	except Exception as e:
 		TEST = False
-		return "Test FAILED!: " + str(e)
+		return "Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__)))
 
 def create_page(parent_url, title):
 	token = os.environ.get("TOKEN")
