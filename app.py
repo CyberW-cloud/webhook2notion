@@ -20,6 +20,7 @@ app = Flask(__name__)
 TEST = False
 test_page_url = ""
 
+
 @app.route("/test_scripts", methods=["GET"])
 def test_scripts():
 	global TEST
@@ -29,38 +30,42 @@ def test_scripts():
 	if TEST:
 		return "Test already running!"	#to avoid any race cases
 
-	TEST = True	
+	try:
+		TEST = True	
 
-	token = os.environ.get("TOKEN")
-	client = NotionClient(token)
+		token = os.environ.get("TOKEN")
+		client = NotionClient(token)
 
-	title = str(datetime.datetime.now().day) + " " + str(datetime.datetime.now().month) + " " + str(datetime.datetime.now().year) + " "
-	day_page = create_page(parent_page_url, title)
-	
-	test_page_url = create_page(day_page.get_browseable_url(), "/kickstaff").get_browseable_url()
+		title = str(datetime.datetime.now().day) + " " + str(datetime.datetime.now().month) + " " + str(datetime.datetime.now().year) + " "
+		day_page = create_page(parent_page_url, title)
+		
+		test_page_url = create_page(day_page.get_browseable_url(), "/kickstaff").get_browseable_url()
 
-	kick_staff()
+		kick_staff()
 
-	test_page_url = create_page(day_page.get_browseable_url(), "/proposals_check").get_browseable_url()
+		test_page_url = create_page(day_page.get_browseable_url(), "/proposals_check").get_browseable_url()
 
-	proposals_check()
-	
-	test_page_url = create_page(day_page.get_browseable_url(), "/weekly_todo").get_browseable_url()
+		proposals_check()
+		
+		test_page_url = create_page(day_page.get_browseable_url(), "/weekly_todo").get_browseable_url()
 
-	weekly_todo()
+		weekly_todo()
 
-	test_page_url = create_page(day_page.get_browseable_url(), "/friday_todo").get_browseable_url()
+		test_page_url = create_page(day_page.get_browseable_url(), "/friday_todo").get_browseable_url()
 
-	friday_todo()
+		friday_todo()
 
-	test_page_url = create_page(day_page.get_browseable_url(), "/todo_one").get_browseable_url()
+		test_page_url = create_page(day_page.get_browseable_url(), "/todo_one").get_browseable_url()
 
-	todo_one()
+		todo_one()
 
-	test_page_url = ""
+		test_page_url = ""
 
-	TEST = False
-	return "Done"
+		TEST = False
+		return "Done"
+	except Exception as e:
+		TEST = False
+		return "Test FAILED!: " + str(e)
 
 def create_page(parent_url, title):
 	token = os.environ.get("TOKEN")
