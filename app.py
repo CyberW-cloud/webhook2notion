@@ -1,7 +1,7 @@
 import re
 import urllib.parse
 from datetime import timedelta
-import calendar
+import calendar, time
 import pytz
 import math
 import traceback
@@ -635,8 +635,18 @@ def create_todo(token, date, link, todo, text):
 	tasks = todo
 
 
-	return create_new_task(page, "", text=text, date=date, timezone=timezone, tasks=tasks)
+	timeout = time.time()+10 #timeout after 3 seconds 
+	task = None
+	while time.time()<timeout:
+		try:
+			task = create_new_task(page, "", text=text, date=date, timezone=timezone, tasks=tasks)	
+		except Exception as e:
+			print("retrying due to: "str(e))
+		
+	if task == None:
+		raise IOError("Notion is most likely down. F")
 
+	return task
 
 @app.route("/todoone", methods=["GET"])
 def todo_one():
