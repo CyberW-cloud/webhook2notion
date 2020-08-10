@@ -647,7 +647,6 @@ def create_todo(token, date, link, todo, text):
 	if not added:
 		raise IOError("Notion is most likely down. F")
 
-	return task
 
 @app.route("/todoone", methods=["GET"])
 def todo_one():
