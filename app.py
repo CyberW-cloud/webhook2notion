@@ -70,8 +70,8 @@ def test_scripts():
 	# 	print("Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__))))
 	# 	return "Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__)))
 	
-	parent = client.get_block(day_page)
-	parent.children.add_new(CollectionViewPageBlock, title="test_table")
+
+	day_page.children.add_new(CollectionViewPageBlock, title="test_table")
 
 	rows = page.views
 	print(type(rows))
