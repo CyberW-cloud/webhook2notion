@@ -24,51 +24,56 @@ test_page_url = ""
 
 @app.route("/test_scripts", methods=["GET"])
 def test_scripts():
-	global TEST
-	global test_page_url
-	parent_page_url = "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c"
+	# global TEST
+	# global test_page_url
+	# parent_page_url = "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c"
 	
-	if TEST:
-		return "Test already running!"	#to avoid any race cases
+	# if TEST:
+	# 	return "Test already running!"	#to avoid any race cases
 
-	try:
-		TEST = True	
+	# try:
+	# 	TEST = True	
 
-		token = os.environ.get("TOKEN")
-		client = NotionClient(token)
+	token = os.environ.get("TOKEN")
+	client = NotionClient(token)
 
-		title = str(datetime.datetime.now().day) + " " + str(datetime.datetime.now().month) + " " + str(datetime.datetime.now().year) + " "
-		day_page = create_page(parent_page_url, title)
+	# 	title = str(datetime.datetime.now().day) + " " + str(datetime.datetime.now().month) + " " + str(datetime.datetime.now().year) + " "
+	# 	day_page = create_page(parent_page_url, title)
 		
-		test_page_url = create_page(day_page.get_browseable_url(), "/kickstaff").get_browseable_url()
+	# 	test_page_url = create_page(day_page.get_browseable_url(), "/kickstaff").get_browseable_url()
 
-		kick_staff()
+	# 	kick_staff()
 
-		test_page_url = create_page(day_page.get_browseable_url(), "/proposals_check").get_browseable_url()
+	# 	test_page_url = create_page(day_page.get_browseable_url(), "/proposals_check").get_browseable_url()
 
-		proposals_check()
+	# 	proposals_check()
 		
-		test_page_url = create_page(day_page.get_browseable_url(), "/weekly_todo").get_browseable_url()
+	# 	test_page_url = create_page(day_page.get_browseable_url(), "/weekly_todo").get_browseable_url()
 
-		weekly_todo()
+	# 	weekly_todo()
 
-		test_page_url = create_page(day_page.get_browseable_url(), "/friday_todo").get_browseable_url()
+	# 	test_page_url = create_page(day_page.get_browseable_url(), "/friday_todo").get_browseable_url()
 
-		friday_todo()
+	# 	friday_todo()
 
-		test_page_url = create_page(day_page.get_browseable_url(), "/todo_one").get_browseable_url()
+	# 	test_page_url = create_page(day_page.get_browseable_url(), "/todo_one").get_browseable_url()
 
-		todo_one()
+	# 	todo_one()
 
-		test_page_url = ""
+	# 	test_page_url = ""
 
-		TEST = False
-		print()
-		return "Done"
-	except Exception as e:
-		TEST = False
-		print("Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__))))
-		return "Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__)))
+	# 	TEST = False
+	# 	print()
+	# 	return "Done"
+	# except Exception as e:
+	# 	TEST = False
+	# 	print("Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__))))
+	# 	return "Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__)))
+	page = client.get_block("https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=375e91212fc4482c815f0b4419cbf5e3")
+	print(type(page))
+	print(type(page.children[0]))
+	return "1"
+
 
 def create_page(parent_url, title):
 	token = os.environ.get("TOKEN")
