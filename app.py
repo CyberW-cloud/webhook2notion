@@ -37,7 +37,7 @@ def test_scripts():
 	token = os.environ.get("TOKEN")
 	client = NotionClient(token)
 
-	# 	title = str(datetime.datetime.now().day) + " " + str(datetime.datetime.now().month) + " " + str(datetime.datetime.now().year) + " "
+	title = str(datetime.datetime.now().day) + " " + str(datetime.datetime.now().month) + " " + str(datetime.datetime.now().year) + " "
 	day_page = create_page(parent_page_url, title)
 		
 	# 	test_page_url = create_page(day_page.get_browseable_url(), "/kickstaff").get_browseable_url()
