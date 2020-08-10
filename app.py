@@ -4,6 +4,7 @@ from datetime import timedelta
 import calendar
 import pytz
 import math
+import traceback
 from flask import Flask, request, url_for
 from notion.block import *
 from notion.client import NotionClient
@@ -62,9 +63,11 @@ def test_scripts():
 		test_page_url = ""
 
 		TEST = False
+		print()
 		return "Done"
 	except Exception as e:
 		TEST = False
+		print("Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__))))
 		return "Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__)))
 
 def create_page(parent_url, title):
