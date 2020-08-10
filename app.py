@@ -635,12 +635,13 @@ def create_todo(token, date, link, todo, text):
 	tasks = todo
 
 
-	timeout = time.time()+10 #timeout after 3 seconds 
+	timeout = time.time()+10 #timeout after 10 seconds 
 	added = False
 	while time.time()<timeout:
 		try:
 			create_new_task(page, "", text=text, date=date, timezone=timezone, tasks=tasks)	
 			added = True
+			break
 		except Exception as e:
 			print("retrying due to: " + str(e))
 		
@@ -665,7 +666,7 @@ def todo_one():
 	if todo_url is not None:
 
 		if TEST:
-			todo_url = create_test_page_from_todo(todo_url)
+			todo_url = create_test_page_from_todo("https://www.notion.so/473c33a2308d464bbe8ea86e1a926fc8")
 
 		create_todo(token_v2, date, todo_url, todo, text)
 		print(f'added to {member} {text if text else ""} {todo}  to Notion')
