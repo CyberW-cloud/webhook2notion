@@ -641,7 +641,7 @@ def create_todo(token, date, link, todo, text):
 		try:
 			task = create_new_task(page, "", text=text, date=date, timezone=timezone, tasks=tasks)	
 		except Exception as e:
-			print("retrying due to: "str(e))
+			print("retrying due to: " + str(e))
 		
 	if task == None:
 		raise IOError("Notion is most likely down. F")
