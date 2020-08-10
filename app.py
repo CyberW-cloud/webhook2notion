@@ -38,7 +38,7 @@ def test_scripts():
 	client = NotionClient(token)
 
 	# 	title = str(datetime.datetime.now().day) + " " + str(datetime.datetime.now().month) + " " + str(datetime.datetime.now().year) + " "
-	# 	day_page = create_page(parent_page_url, title)
+	day_page = create_page(parent_page_url, title)
 		
 	# 	test_page_url = create_page(day_page.get_browseable_url(), "/kickstaff").get_browseable_url()
 
@@ -69,12 +69,16 @@ def test_scripts():
 	# 	TEST = False
 	# 	print("Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__))))
 	# 	return "Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__)))
-	page = client.get_block("https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=375e91212fc4482c815f0b4419cbf5e3")
+	
+	parent = client.get_block(day_page)
+	parent.children.add_new(CollectionViewPageBlock, title="test_table")
+
 	rows = page.views
 	print(type(rows))
 	print(len(rows))
-	print(rows[0])
-	return "1"
+	rows.add_new(TextBlock)
+	rows[-1] = "TEST"
+	return rows[-1]
 
 def create_page(parent_url, title):
 	token = os.environ.get("TOKEN")
