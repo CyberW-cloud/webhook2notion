@@ -42,11 +42,11 @@ def test_scripts():
 		
 		test_page_url = create_page(day_page.get_browseable_url(), "/kickstaff").get_browseable_url()
 
-		kick_staff()
+		#kick_staff()
 
 		test_page_url = create_page(day_page.get_browseable_url(), "/proposals_check").get_browseable_url()
 
-		proposals_check()
+		#proposals_check()
 		
 		test_page_url = create_page(day_page.get_browseable_url(), "/weekly_todo").get_browseable_url()
 
@@ -54,11 +54,11 @@ def test_scripts():
 
 		test_page_url = create_page(day_page.get_browseable_url(), "/friday_todo").get_browseable_url()
 
-		friday_todo()
+		#friday_todo()
 
 		test_page_url = create_page(day_page.get_browseable_url(), "/todo_one").get_browseable_url()
 
-		todo_one()
+		#todo_one()
 
 		test_page_url = ""
 
