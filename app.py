@@ -8,7 +8,7 @@ import traceback
 from flask import Flask, request, url_for
 from notion.block import *
 from notion.client import NotionClient
-from notion.collection import CollectionRowBlock
+from notion.collection import CollectionRowBlock, Collection
 
 from notion_helpers import *
 
@@ -74,6 +74,7 @@ def test_scripts():
 	day_page.children.add_new(CollectionViewPageBlock, title="test_table")
 
 	rows = day_page.children[-1].views
+	day_page.children[-1].collection = views.parent.get_collection_view().collection
 	print(type(rows))
 	print(len(rows))
 	rows.add_new(TextBlock)
