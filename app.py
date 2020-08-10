@@ -74,7 +74,7 @@ def test_scripts():
 	day_page.children.add_new(CollectionViewPageBlock, title="test_table")
 
 	rows = day_page.children[-1].views
-	day_page.children[-1].collection = rows.parent.get_collection_view().collection
+	day_page.children[-1].collection = day_page.children[-1].get_collection_view().collection
 	print(type(rows))
 	print(len(rows))
 	rows.add_new(TextBlock)
