@@ -72,9 +72,10 @@ def test_scripts():
 	
 
 	day_page.children.add_new(CollectionViewPageBlock, title="test_table")
+	collection = client.get_collection(client.create_record("TEST", parent=day_page.children[-1], schema={"Leet":{"name":"But Why?", "type":"text"}})
 
 	rows = day_page.children[-1].views
-	day_page.children[-1].collection = day_page.collection
+    
 	print(type(rows))
 	print(len(rows))
 	rows.add_new(TextBlock)
