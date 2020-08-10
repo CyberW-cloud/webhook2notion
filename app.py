@@ -70,7 +70,10 @@ def test_scripts():
 	# 	print("Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__))))
 	# 	return "Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__)))
 	page = client.get_block("https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=375e91212fc4482c815f0b4419cbf5e3")
-	print(len(type(page).views))
+	rows = len(type(page).views
+	print(type(rows))
+	print(len(rows))
+	print(rows[0])
 	return "1"
 
 def create_page(parent_url, title):
