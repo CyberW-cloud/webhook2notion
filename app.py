@@ -540,7 +540,17 @@ def create_todo(token, date, link, todo, text):
     page = client.get_block(link)
     tasks = todo
 
-    return create_new_task(page, "", text=text, date=date, timezone=timezone, tasks=tasks)
+    timeout = time.time()+10 #timeout after 10 seconds 
+	added = False
+	while time.time()<timeout:
+		try:
+			create_new_task(page, "", text=text, date=date, timezone=timezone, tasks=tasks)	
+			added = True
+		except Exception as e:
+			print("retrying due to: " + str(e))
+		
+	if not added:
+		raise IOError("Notion is most likely down. F")
 
 
 @app.route("/todoone", methods=["GET"])
