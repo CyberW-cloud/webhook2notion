@@ -636,14 +636,15 @@ def create_todo(token, date, link, todo, text):
 
 
 	timeout = time.time()+10 #timeout after 3 seconds 
-	task = "tmp"
+	added = False
 	while time.time()<timeout:
 		try:
-			task = create_new_task(page, "", text=text, date=date, timezone=timezone, tasks=tasks)	
+			create_new_task(page, "", text=text, date=date, timezone=timezone, tasks=tasks)	
+			added = True
 		except Exception as e:
 			print("retrying due to: " + str(e))
 		
-	if task == "tmp":
+	if not added:
 		raise IOError("Notion is most likely down. F")
 
 	return task
