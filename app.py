@@ -546,6 +546,7 @@ def create_todo(token, date, link, todo, text):
 		try:
 			create_new_task(page, "", text=text, date=date, timezone=timezone, tasks=tasks)	
 			added = True
+			break
 		except Exception as e:
 			print("retrying due to: " + str(e))
 		
