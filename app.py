@@ -80,7 +80,7 @@ def test_scripts():
 	page.collection = collection
 
     
-	test_row = page.collection.add_new()
+	test_row = page.collection.add_row()
 	test_row.name = "This worked!"
 	page.collection.refresh()
 
