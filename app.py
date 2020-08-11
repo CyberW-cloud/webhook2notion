@@ -70,23 +70,22 @@ def test_scripts():
 	# 	print("Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__))))
 	# 	return "Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__)))
 	
-	print(type(client.get_block("https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=375e91212fc4482c815f0b4419cbf5e3")))
-	day_page.children.add_new(CollectionViewPageBlock, title = "test_table")
-	page = day_page.children[-1]
 
+	day_page.children.add_new(CollectionViewPageBlock)
+	page = day_page.children[-1]
+	
 	schema = client.get_block("https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=375e91212fc4482c815f0b4419cbf5e3").collection.get("schema")
 
 	collection = client.get_collection(client.create_record("collection", parent=page, schema=schema))
 	page.collection = collection
 
     
-	#test_row = page.collection.add_row()
-	#test_row.name = "This worked!"
-	#page.collection.refresh()
+	test_row = page.collection.add_new()
+	test_row.name = "This worked!"
+	page.collection.refresh()
 
-	#return test_row.name
-	return "1"
-	
+	return test_row
+
 def create_page(parent_url, title):
 	token = os.environ.get("TOKEN")
 	client = NotionClient(token)
