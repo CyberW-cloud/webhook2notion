@@ -82,7 +82,7 @@ def test_scripts():
 
     
 	test_row = page.views.add_new()
-	test_row = page.views.add_new()
+	test_row = page.collection.add_row()
 	test_row.name = "This worked!"
 	page.collection.refresh()
 
