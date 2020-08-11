@@ -26,7 +26,7 @@ test_page_url = ""
 def test_scripts():
 	# global TEST
 	# global test_page_url
-	parent_page_url = "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c"
+	parent_page_url = "https://www.notion.so/Testy-gi6745f90a3268473790a8070ec8434d4c"
 	
 	# if TEST:
 	# 	return "Test already running!"	#to avoid any race cases
