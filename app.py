@@ -24,70 +24,79 @@ test_page_url = ""
 
 @app.route("/test_scripts", methods=["GET"])
 def test_scripts():
-	# global TEST
-	# global test_page_url
+	global TEST
+	global test_page_url
 	parent_page_url = "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c"
 	
-	# if TEST:
-	# 	return "Test already running!"	#to avoid any race cases
+	if TEST:
+		return "Test already running!"	#to avoid any race cases
 
-	# try:
-	# 	TEST = True	
+	try:
+		TEST = True	
+		token = os.environ.get("TOKEN")
+		client = NotionClient(token)
 
-	token = os.environ.get("TOKEN")
-	client = NotionClient(token)
-
-	title = str(datetime.datetime.now().day) + " " + str(datetime.datetime.now().month) + " " + str(datetime.datetime.now().year) + " "
-	day_page = create_page(parent_page_url, title)
-		
-	# 	test_page_url = create_page(day_page.get_browseable_url(), "/kickstaff").get_browseable_url()
-
-	# 	kick_staff()
-
-	# 	test_page_url = create_page(day_page.get_browseable_url(), "/proposals_check").get_browseable_url()
-
-	# 	proposals_check()
-		
-	# 	test_page_url = create_page(day_page.get_browseable_url(), "/weekly_todo").get_browseable_url()
-
-	# 	weekly_todo()
-
-	# 	test_page_url = create_page(day_page.get_browseable_url(), "/friday_todo").get_browseable_url()
-
-	# 	friday_todo()
-
-	# 	test_page_url = create_page(day_page.get_browseable_url(), "/todo_one").get_browseable_url()
-
-	# 	todo_one()
-
-	# 	test_page_url = ""
-
-	# 	TEST = False
-	# 	print()
-	# 	return "Done"
-	# except Exception as e:
-	# 	TEST = False
-	# 	print("Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__))))
-	# 	return "Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__)))
-	
-	
-	day_page.children.add_new(CollectionViewPageBlock, title = "table")
-	page = day_page.children[-1]
+		title = str(datetime.datetime.now().day) + " " + str(datetime.datetime.now().month) + " " + str(datetime.datetime.now().year) + " "
+		day_page = create_page(parent_page_url, title)
 
 
-	schema = client.get_block("https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=375e91212fc4482c815f0b4419cbf5e3").collection.get("schema")
 
-	collection = client.get_collection(client.create_record("collection", parent=page, schema=schema))
-	page.collection = collection
+
+		day_page.children.add_new(CollectionViewPageBlock, title = "table")
+		page = day_page.children[-1]
+
+
+		schema = client.get_block("https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=375e91212fc4482c815f0b4419cbf5e3").collection.get("schema")
+
+		collection = client.get_collection(client.create_record("collection", parent=page, schema=schema))
+		page.collection = collection
 
     
-	test_row = page.views.add_new()
-	test_row = page.collection.add_row()
-	test_row.title = "table"
-	test_row.name = "This worked!"
-	page.collection.refresh()
+		test_row = page.views.add_new()
+		test_row = page.collection.add_row()
+		test_row.name = "This worked!"
+		page.collection.refresh()
 
-	return test_row.name
+		if test_row.name != "This worked!":
+			raise IOError("Notion seems to be down for tables!")
+
+
+
+
+		test_page_url = create_page(day_page.get_browseable_url(), "/kickstaff").get_browseable_url()
+
+		kick_staff()
+
+		test_page_url = create_page(day_page.get_browseable_url(), "/proposals_check").get_browseable_url()
+
+		proposals_check()
+
+		test_page_url = create_page(day_page.get_browseable_url(), "/weekly_todo").get_browseable_url()
+
+		weekly_todo()
+
+		test_page_url = create_page(day_page.get_browseable_url(), "/friday_todo").get_browseable_url()
+
+		friday_todo()
+
+		test_page_url = create_page(day_page.get_browseable_url(), "/todo_one").get_browseable_url()
+
+		todo_one()
+
+		test_page_url = ""
+
+		TEST = False
+		print()
+		return "Done"
+
+	except Exception as e:
+		TEST = False
+		print("Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__))))
+		return "Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__)))
+	
+	
+
+
 
 def create_page(parent_url, title):
 	token = os.environ.get("TOKEN")
