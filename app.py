@@ -84,7 +84,7 @@ def test_scripts():
 	print(type(rows))
 	print(len(rows))
 	rows.add_new(view_type="table")
-	rows[-1] = "TEST"
+	rows[-1].set("Text", "This worked!")
 	return rows[-1]
 
 def create_page(parent_url, title):
