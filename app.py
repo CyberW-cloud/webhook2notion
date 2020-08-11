@@ -77,15 +77,13 @@ def test_scripts():
 	schema = client.get_block("https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=375e91212fc4482c815f0b4419cbf5e3").collection.get("schema")
 	print(schema)
 
-	collection = client.get_collection(client.create_record("collection", parent=page, schema='{"LMAO":{"name": "Text", "type":"text"}}'))
+	collection = client.get_collection(client.create_record("collection", parent=page, schema=schema))
 	page.collection = collection
 	rows = page.views
     
-	print(type(rows))
-	print(len(rows))
 	rows.add_new(view_type="table")
-	rows[-1].set("Text", "This worked!")
-	return rows[-1].get("Text", "NO LMAO")
+	rows[-1].set("Name", "This worked!")
+	return rows[-1].get("Name", "NO LMAO")
 
 def create_page(parent_url, title):
 	token = os.environ.get("TOKEN")
