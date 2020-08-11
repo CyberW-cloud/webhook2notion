@@ -528,19 +528,19 @@ def get_todo_url_by_name(token, name):
 
 
 def create_todo(token, date, link, todo, text):
-    # notion
-    if date is not None:  # if date not provided use now()
-        if isinstance(date, str):
-            date = datetime.datetime.strptime(urllib.parse.unquote("{}".format(date)), "%Y-%m-%dT%H:%M:%S.%fZ").date()
-    else:
-        date = datetime.datetime.now().date()
+	# notion
+	if date is not None:  # if date not provided use now()
+		if isinstance(date, str):
+			date = datetime.datetime.strptime(urllib.parse.unquote("{}".format(date)), "%Y-%m-%dT%H:%M:%S.%fZ").date()
+	else:
+		date = datetime.datetime.now().date()
 
-    client = NotionClient(token)
-    print(link)
-    page = client.get_block(link)
-    tasks = todo
+	client = NotionClient(token)
+	print(link)
+	page = client.get_block(link)
+	tasks = todo
 
-    timeout = time.time()+10 #timeout after 10 seconds 
+	timeout = time.time()+10 #timeout after 10 seconds 
 	added = False
 	while time.time()<timeout:
 		try:
