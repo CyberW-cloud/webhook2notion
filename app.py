@@ -72,7 +72,8 @@ def test_scripts():
 	
 
 	day_page.children.add_new(CollectionViewPageBlock, title="test_table")
-	schema = client.get_block("https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=375e91212fc4482c815f0b4419cbf5e3").collection.get_schema_properties()
+	schema = client.get_block("https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=375e91212fc4482c815f0b4419cbf5e3").collection.get("schema")
+	print(schema)
 
 	collection = client.get_collection(client.create_record("TEST", parent=day_page.children[-1], schema=str(schema)))
 
