@@ -80,12 +80,13 @@ def test_scripts():
 	page.collection = collection
 
     
-	test_row = page.collection.add_row()
-	test_row.name = "This worked!"
-	page.collection.refresh()
+	#test_row = page.collection.add_row()
+	#test_row.name = "This worked!"
+	#page.collection.refresh()
 
-	return test_row.name
-
+	#return test_row.name
+	return "1"
+	
 def create_page(parent_url, title):
 	token = os.environ.get("TOKEN")
 	client = NotionClient(token)
