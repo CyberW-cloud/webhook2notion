@@ -83,6 +83,7 @@ def test_scripts():
     
 	rows.add_new()
 	rows[-1].set("Name", "This worked!")
+	rows[-1].refresh()
 	return rows[-1].get("Name", "NO LMAO")
 
 def create_page(parent_url, title):
