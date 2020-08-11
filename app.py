@@ -81,7 +81,7 @@ def test_scripts():
 	page.collection = collection
 	rows = page.views
     
-	rows.add_new(view_type="table")
+	rows.add_new()
 	rows[-1].set("Name", "This worked!")
 	return rows[-1].get("Name", "NO LMAO")
 
