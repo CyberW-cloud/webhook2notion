@@ -72,16 +72,18 @@ def test_scripts():
 	
 
 	day_page.children.add_new(CollectionViewPageBlock, title="test_table")
+	page = day_page.children[-1]
+
 	schema = client.get_block("https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=375e91212fc4482c815f0b4419cbf5e3").collection.get("schema")
 	print(schema)
 
-	collection = client.get_collection(client.create_record("collection", parent=day_page.children[-1], schema='{"LMAO":{"name": "Text", "type":"text"}}'))
-	day_page.children[-1].collection = collection
-	rows = day_page.children[-1].views
+	collection = client.get_collection(client.create_record("collection", parent=page, schema='{"LMAO":{"name": "Text", "type":"text"}}'))
+	page.collection = collection
+	rows = page.views
     
 	print(type(rows))
 	print(len(rows))
-	rows.add_new(TextBlock)
+	rows.add_new(view_type="table")
 	rows[-1] = "TEST"
 	return rows[-1]
 
