@@ -85,7 +85,7 @@ def test_scripts():
 	print(len(rows))
 	rows.add_new(view_type="table")
 	rows[-1].set("Text", "This worked!")
-	return rows[-1]
+	return rows[-1].get("Text", "NO LMAO")
 
 def create_page(parent_url, title):
 	token = os.environ.get("TOKEN")
