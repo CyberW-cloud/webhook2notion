@@ -70,9 +70,10 @@ def test_scripts():
 	# 	print("Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__))))
 	# 	return "Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__)))
 	
-	#print(client.get_block("https://www.notion.so/149932056fc04126b8c41152ceae186a").collection.get_rows())
-	day_page.children.add_new(CollectionViewPageBlock)
+	
+	day_page.children.add_new(CollectionViewPageBlock, title = "table")
 	page = day_page.children[-1]
+	page.title = "table"
 
 	schema = client.get_block("https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=375e91212fc4482c815f0b4419cbf5e3").collection.get("schema")
 
@@ -80,6 +81,7 @@ def test_scripts():
 	page.collection = collection
 
     
+	test_row = page.views.add_new()
 	test_row = page.views.add_new()
 	test_row.name = "This worked!"
 	page.collection.refresh()
