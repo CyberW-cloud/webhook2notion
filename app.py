@@ -70,7 +70,7 @@ def test_scripts():
 	# 	print("Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__))))
 	# 	return "Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__)))
 	
-	print(client.get_block("https://www.notion.so/149932056fc04126b8c41152ceae186a").collection.get_rows())
+	#print(client.get_block("https://www.notion.so/149932056fc04126b8c41152ceae186a").collection.get_rows())
 	day_page.children.add_new(CollectionViewPageBlock)
 	page = day_page.children[-1]
 
