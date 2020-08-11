@@ -84,7 +84,7 @@ def test_scripts():
 	test_row.name = "This worked!"
 	page.collection.refresh()
 
-	return test_row
+	return test_row.name
 
 def create_page(parent_url, title):
 	token = os.environ.get("TOKEN")
