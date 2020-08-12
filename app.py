@@ -103,7 +103,7 @@ def test_scripts():
 		test_page_url = ""
 
 		TEST = False
-		if(log=="")
+		if(log==""):
 			return "Done"
 		else:
 			print(log)
