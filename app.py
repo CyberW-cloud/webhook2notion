@@ -128,7 +128,7 @@ def check_test_results(page):
 
 	for child in page.children:
 		print(len(child.children))
-		if(len(child.children)>1):
+		if(len(child.children)<=1):
 			return False
 
 	return True
