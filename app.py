@@ -123,7 +123,7 @@ def check_test_results(page):
 	token = os.environ.get("TOKEN")
 	client = NotionClient(token)
 
-	if isinstance(page, String):
+	if isinstance(page, str):
 		page = client.get_block(page)
 
 	for child in page.children:
