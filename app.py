@@ -66,7 +66,7 @@ def test_scripts():
 		test_page_url = create_page(day_page.get_browseable_url(), "/kickstaff").get_browseable_url()
 
 		kick_staff()
-		print(check_test_results(test_page_url))
+		print(check_test_results("https://www.notion.so/kickstaff-89d68b9e77d14dc3a6f2321648de193e")
 
 		test_page_url = create_page(day_page.get_browseable_url(), "/proposals_check").get_browseable_url()
 
