@@ -31,6 +31,8 @@ def test_scripts():
 	if TEST:
 		return "Test already running!"	#to avoid any race cases
 
+	log = "TEST FAILED!: "
+
 	try:
 		TEST = True	
 		token = os.environ.get("TOKEN")
@@ -58,7 +60,7 @@ def test_scripts():
 		page.collection.refresh()
 
 		if test_row.name != "This worked!":
-			raise IOError("Notion seems to be down for tables!")
+			log += "TEST FAILED!: Notion seems to be down for tables!\n"
 
 
 
@@ -66,33 +68,50 @@ def test_scripts():
 		test_page_url = create_page(day_page.get_browseable_url(), "/kickstaff").get_browseable_url()
 
 		kick_staff()
-		print(check_test_results("https://www.notion.so/kickstaff-89d68b9e77d14dc3a6f2321648de193e"))
+
+		if not check_test_results(test_page_url):
+			log += "TEST FAILED!: kick_staff didn't add todo's correctly!\n"
 
 		test_page_url = create_page(day_page.get_browseable_url(), "/proposals_check").get_browseable_url()
 
 		proposals_check()
 
+		if not check_test_results(test_page_url):
+			log += "TEST FAILED!: proposals_check didn't add todo's correctly!\n"
+
 		test_page_url = create_page(day_page.get_browseable_url(), "/weekly_todo").get_browseable_url()
 
 		weekly_todo()
+
+		if not check_test_results(test_page_url):
+			log += "TEST FAILED!: weekly_todo didn't add todo's correctly!\n"
 
 		test_page_url = create_page(day_page.get_browseable_url(), "/friday_todo").get_browseable_url()
 
 		friday_todo()
 
+		if not check_test_results(test_page_url):
+			log += "TEST FAILED!: friday_todo didn't add todo's correctly!\n"
+
 		test_page_url = create_page(day_page.get_browseable_url(), "/todo_one").get_browseable_url()
 
 		todo_one()
 
+		if not check_test_results(test_page_url):
+			log += "TEST FAILED!: todo_one didn't add todo's correctly!\n"
+
 		test_page_url = ""
 
 		TEST = False
-		print()
-		return "Done"
+		if(log=="")
+			return "Done"
+		else:
+			print(log)
+			return log
 
 	except Exception as e:
 		TEST = False
-		print("Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__))))
+		print( log + "\n" + "Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__))))
 		return "Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__)))
 
 def create_page(parent_url, title):
@@ -675,7 +694,7 @@ def create_todo(token, date, link, todo, text):
 	tasks = todo
 
 
-	timeout = time.time()+10 #timeout after 10 seconds 
+	timeout = time.time()+20 #timeout after 20 seconds 
 	added = False
 	while time.time()<timeout:
 		try:
