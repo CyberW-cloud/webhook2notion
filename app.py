@@ -66,6 +66,7 @@ def test_scripts():
 		test_page_url = create_page(day_page.get_browseable_url(), "/kickstaff").get_browseable_url()
 
 		kick_staff()
+		print(check_test_results(test_page_url))
 
 		test_page_url = create_page(day_page.get_browseable_url(), "/proposals_check").get_browseable_url()
 
@@ -93,10 +94,6 @@ def test_scripts():
 		TEST = False
 		print("Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__))))
 		return "Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__)))
-	
-	
-
-
 
 def create_page(parent_url, title):
 	token = os.environ.get("TOKEN")
@@ -120,6 +117,21 @@ def create_test_page_from_todo(todo_url):
 
 	#-1 means last element of the children (the one the prev line created)
 	return page.get_browseable_url()
+
+
+def check_test_results(page):
+	token = os.environ.get("TOKEN")
+	client = NotionClient(token)
+
+	if isinstance(page, String):
+		page = client.get_block(page)
+
+	for child in page.children:
+		print(len(child.children))
+		if(len(child.children)>1):
+			return False
+
+	return True
 
 
 #Source : Date/Datetime, the start of the search
