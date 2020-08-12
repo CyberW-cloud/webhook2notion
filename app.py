@@ -135,7 +135,7 @@ def check_test_results(page):
 
 
 #Source : Date/Datetime, the start of the search
-#Targets : Can be an int or an String array. 
+#Targets : Can be an int or an String array.
 #		  the int array has to be from 0 (mon) to 6 (sun)
 #		  the String array has to contain only the strings inside the week array
 #Returns timedelta that has an amount of days from source to the closest weekday
