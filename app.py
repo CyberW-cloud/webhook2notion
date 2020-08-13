@@ -31,7 +31,7 @@ def add_global_block():
 	target = "https://www.notion.so/" + target.split("#")[-1]
 
 	page = client.get_block(page)
-	embed = page.children.add_new(BookmarkBlock)
+	embed = page.children.add_new(FramerBlock)
 	embed.set_source_url(target)
 
 @app.route("/test_scripts", methods=["GET"])
