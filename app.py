@@ -30,7 +30,7 @@ def add_global_block():
 	target = request.args.get("target", "https://www.notion.so/1977159-783c493291a84bc5a660b628f4ffc077#decd284ad3d34f53944f78b36e00d9a4")
 	target = "https://www.notion.so/" + target.split("#")[-1]
 
-	page = client.get(page)
+	page = client.get_block(page)
 	embed = page.children.add_new(EmbedBlock)
 	embed.set_source_url(target)
 
