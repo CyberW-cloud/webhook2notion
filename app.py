@@ -32,7 +32,7 @@ def add_global_block():
 
 	page = client.get_block(page)
 	page.children.add_new(TextBlock, title = target)
-	print(type(page.children[0]))
+	print(page.children[0].title)
 
 @app.route("/test_scripts", methods=["GET"])
 def test_scripts():
