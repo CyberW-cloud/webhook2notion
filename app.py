@@ -21,6 +21,9 @@ app = Flask(__name__)
 TEST = False
 test_page_url = ""
 
+def encode_url(url):
+	return "["+url+"]"+"("+url+")" 
+
 @app.route('/add_global_block', methods=["GET"])
 def add_global_block():
 	token = os.environ.get("TOKEN")
@@ -31,7 +34,7 @@ def add_global_block():
 	target = "https://www.notion.so/" + target.split("#")[-1]
 
 	page = client.get_block(page)
-	page.children.add_new(TextBlock, title = target)
+	page.children.add_new(TextBlock, title = encode_url(url))
 	print(page.children[0].title)
 
 @app.route("/test_scripts", methods=["GET"])
