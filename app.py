@@ -21,6 +21,18 @@ app = Flask(__name__)
 TEST = False
 test_page_url = ""
 
+@app.route('/add_global_block', methods=["GET"])
+def add_global_block():
+	token = os.environ.get("TOKEN")
+	client = NotionClient(token)
+
+	page = request.args.get("page", "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c")
+	target = request.args.get("target", "https://www.notion.so/1977159-783c493291a84bc5a660b628f4ffc077#decd284ad3d34f53944f78b36e00d9a4")
+	target = "https://www.notion.so/" + target.split("#")[-1]
+
+	page = client.get(page)
+	embed = page.children.add_new(EmbedBlock)
+	embed.set_source_url(target)
 
 @app.route("/test_scripts", methods=["GET"])
 def test_scripts():
