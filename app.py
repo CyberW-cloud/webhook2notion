@@ -34,7 +34,7 @@ def add_global_block():
 	target = "https://www.notion.so/" + target.split("#")[-1]
 
 	page = client.get_block(page)
-	page.children.add_new(TextBlock, title = encode_url(url))
+	page.children.add_new(TextBlock, title = encode_url(target))
 	print(page.children[0].title)
 
 @app.route("/test_scripts", methods=["GET"])
