@@ -26,17 +26,17 @@ def encode_url(url):
 
 @app.route('/add_global_block', methods=["GET"])
 def add_global_block():
-	global test_page_url
-	token = os.environ.get("TOKEN")
-	client = NotionClient(token)
+	# global test_page_url
+	# token = os.environ.get("TOKEN")
+	# client = NotionClient(token)
 
-	page = request.args.get("page", "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c")
-	target = request.args.get("target", "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c#4c2f39f1b39047a2bfbed185f662703f")
-	target = "https://www.notion.so/" + target.split("#")[-1]
-	print(target)
-	page = client.get_block(page)
-	page.children.add_new(TextBlock, title = encode_url(target))
-	print(page.children[0].title)
+	# page = request.args.get("page", "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c")
+	# target = request.args.get("target", "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c#4c2f39f1b39047a2bfbed185f662703f")
+	# target = "https://www.notion.so/" + target.split("#")[-1]
+	# print(target)
+	# page = client.get_block(page)
+	# page.children.add_new(TextBlock, title = encode_url(target))
+	print(type(page.children[-1]))
 
 
 
