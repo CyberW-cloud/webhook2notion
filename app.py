@@ -32,8 +32,8 @@ def add_global_block():
 
 	page = request.args.get("page", "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c")
 	target = request.args.get("target", "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c#4c2f39f1b39047a2bfbed185f662703f")
-	# target = "https://www.notion.so/" + target.split("#")[-1]
-
+	target = "https://www.notion.so/" + target.split("#")[-1]
+	print(target)
 	page = client.get_block(page)
 	page.children.add_new(TextBlock, title = encode_url(target))
 	print(page.children[0].title)
