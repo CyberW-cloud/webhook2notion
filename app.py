@@ -39,7 +39,6 @@ def add_global_block():
             table="block",
             parent=page,
             type=TextBlock._type,
-            child_list_key=page.child_list_key,
         )
 
 
