@@ -35,7 +35,7 @@ def add_global_block():
 	# print(target)
 	page = client.get_block(page)
 	block_id = self._client.create_record(
-    		id=target
+    		id=target,
             table="block",
             parent=page,
             type=TextBlock._type,
