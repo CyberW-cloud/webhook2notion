@@ -38,6 +38,7 @@ def add_global_block():
     		id=target,
             table="block",
             parent=page,
+            type="link_to_page"
         )
 
 
