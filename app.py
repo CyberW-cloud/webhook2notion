@@ -34,7 +34,7 @@ def add_global_block():
 	target = "e26aea11c2ec4849ac0b354a8028e6d0"
 	# print(target)
 	page = client.get_block(page)
-	block_id = self._client.create_record(
+	block_id = client.create_record(
     		id=target,
             table="block",
             parent=page,
