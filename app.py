@@ -38,7 +38,7 @@ def add_global_block():
     		id=target,
             table="block",
             parent=page,
-            type=TextBlock._type,
+            type="LinkToPage",
         )
 
 
