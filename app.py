@@ -31,12 +31,16 @@ def add_global_block():
 
 	page = request.args.get("page", "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c")
 	target = request.args.get("target", "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c#4c2f39f1b39047a2bfbed185f662703f")
-	target = "https://www.notion.so/" + target.split("#")[-1]
+	target = "e26aea11c2ec4849ac0b354a8028e6d0"
 	# print(target)
 	page = client.get_block(page)
-	page.children.add_new(LinkToCollectionBlock, title = encode_url(target))
-	print(page._get_record_data())
-
+	block_id = self._client.create_record(
+    		id=target
+            table="block",
+            parent=page,
+            type=TextBlock._type,
+            child_list_key=page.child_list_key,
+        )
 
 
 
