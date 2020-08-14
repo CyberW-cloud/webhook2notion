@@ -35,7 +35,7 @@ def add_global_block():
 	# print(target)
 	page = client.get_block(page)
 	page.children.add_new(LinkToCollectionBlock, title = encode_url(target))
-	print(type(page.children[-1]))
+	print(page.get())
 
 
 
