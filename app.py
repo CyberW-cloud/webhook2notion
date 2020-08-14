@@ -18,7 +18,7 @@ app = Flask(__name__)
 
 
 #var used to signify testing
-TEST = False
+TEST = True
 test_page_url = ""
 
 def encode_url(url):
@@ -26,16 +26,21 @@ def encode_url(url):
 
 @app.route('/add_global_block', methods=["GET"])
 def add_global_block():
-	token = os.environ.get("TOKEN")
-	client = NotionClient(token)
+	# token = os.environ.get("TOKEN")
+	# client = NotionClient(token)
 
-	page = request.args.get("page", "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c")
-	target = request.args.get("target", "https://www.notion.so/1977159-783c493291a84bc5a660b628f4ffc077#decd284ad3d34f53944f78b36e00d9a4")
-	target = "https://www.notion.so/" + target.split("#")[-1]
+	# page = request.args.get("page", "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c")
+	# target = request.args.get("target", "https://www.notion.so/1977159-783c493291a84bc5a660b628f4ffc077#decd284ad3d34f53944f78b36e00d9a4")
+	# target = "https://www.notion.so/" + target.split("#")[-1]
 
-	page = client.get_block(page)
-	page.children.add_new(TextBlock, title = encode_url(target))
-	print(page.children[0].title)
+	# page = client.get_block(page)
+	# page.children.add_new(TextBlock, title = encode_url(target))
+	# print(page.children[0].title)
+	print("CALLED" + test_page_url)
+	test_page_url += "TWICE!"
+
+
+
 
 @app.route("/test_scripts", methods=["GET"])
 def test_scripts():
