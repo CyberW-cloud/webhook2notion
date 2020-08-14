@@ -36,7 +36,7 @@ def add_global_block():
 	# page = client.get_block(page)
 	# page.children.add_new(TextBlock, title = encode_url(target))
 	# print(page.children[0].title)
-	print("CALLED" + test_page_url)
+	print("CALLED" + test_page_url + " " + str(request.args.get("times", -1)))
 	test_page_url += "TWICE!"
 
 
