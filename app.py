@@ -26,6 +26,7 @@ def encode_url(url):
 
 @app.route('/add_global_block', methods=["GET"])
 def add_global_block():
+	global test_page_url
 	# token = os.environ.get("TOKEN")
 	# client = NotionClient(token)
 
