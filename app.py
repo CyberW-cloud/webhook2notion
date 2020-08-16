@@ -31,14 +31,15 @@ def add_global_block():
 
 	page = request.args.get("page", "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c")
 	target = request.args.get("target", "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c#4c2f39f1b39047a2bfbed185f662703f")
-	target = "e26aea11c2ec4849ac0b354a8028e6d0"
+	target = "https://www.notion.so/"+"e26aea11c2ec4849ac0b354a8028e6d0"
 	# print(target)
 	page = client.get_block(page)
 	block_id = client.create_record(
-    		id=target,
+    		id=str(uuid.uuid4()),
             table="block",
             parent=page,
-            type="link_to_page"
+            type="link_to_page",
+        	link = target
         )
 
 
