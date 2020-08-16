@@ -39,33 +39,33 @@ def add_global_block():
 	print(page.space_info)
 
 
-	client.create_record("block", page)
+	# client.create_record("block", page)
 
-	# args = {			
-	# 		"id": target.id,
-	# 		"version": 1,
-	# 		"alive": True,
-	# 		"created_by": client.current_user.id,
-	# 		"created_time": now(),
-	# 		"table": "block",
-	# 		"parent_id": page.space_info["spaceId"],
-	# 		"type": "link_to_page"
-	# }
+	args = {			
+			"id": target.id,
+			"version": 1,
+			"alive": True,
+			"created_by": client.current_user.id,
+			"created_time": now(),
+			"table": "block",
+			"parent_id": page.space_info["spaceId"],
+			"type": "link_to_page"
+	}
 	
-	# client.submit_transaction(build_operation(
-	# 	args = args, command="set", id = target.id, path = [], table = "block" 
-	# ))
+	client.submit_transaction(build_operation(
+		args = args, command="set", id = target.id, path = [], table = "block" 
+	))
 
 
-	# client.submit_transaction(
-	# 	build_operation(
-	# 		id=target.id,
-	# 		path=[page.child_list_key],
-	# 		args={"id": target.id},
-	# 		command="listAfter",
-	# 		table=page._table,
-	# 	)
-	# )
+	client.submit_transaction(
+		build_operation(
+			id=target.id,
+			path=[page.child_list_key],
+			args={"id": target.id},
+			command="listAfter",
+			table=page._table,
+		)
+	)
 
 
 
