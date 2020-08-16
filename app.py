@@ -53,15 +53,15 @@ def add_global_block():
 	))
 
 
-	self.submit_transaction(
-		build_operation(
+	client.submit_transaction(
+		client.build_operation(
 			id=page.id,
 			path=[page.child_list_key],
 			args={"id": page.id},
 			command="listAfter",
 			table=page._table,
 		)
-
+	}
 
 
 
