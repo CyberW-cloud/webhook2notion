@@ -35,7 +35,7 @@ def add_global_block():
 	# print(target)
 	page = client.get_block(page)
 
-	print(client.get_record_data("block", extract_id("https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c"), True))
+	print(client.get_record_data("block", '6745f90a-3268-4737-90a8-070ec8434d4c', True))
 
 	# block_id = client.create_record(
 	# 		id=str(uuid.uuid4()),
