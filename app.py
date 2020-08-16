@@ -44,8 +44,8 @@ def add_global_block():
 
 	client.create_record("block", page, 
 		{
-			"id":target.id
-			"content":"["+target.id+"]"
+			"id":target.id,
+			"content":"["+str(target.id)+"]"
 		})
 	# args = {			
 	# 		"id": target.id,
