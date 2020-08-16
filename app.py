@@ -38,7 +38,7 @@ def add_global_block():
 	print(client.get_record_data("block", page.id, True))
 	print(page.space_info)
 
-	client.create_record("block", page)
+	client.create_record("block", page, id=target.id)
 
 	# args = {			
 	# 		"id": target.id,
