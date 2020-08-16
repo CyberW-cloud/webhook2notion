@@ -48,7 +48,7 @@ def add_global_block():
 			"created_by": client.current_user.id,
 			"created_time": now(),
 			"table": "block",
-			"parent_id": page.space_info["spaceId"],
+			"parent_id": page.id,
 			"type": "link_to_page"
 	}
 	
