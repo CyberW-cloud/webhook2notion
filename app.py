@@ -41,31 +41,37 @@ def add_global_block():
 	print(client.get_record_data("block", '6745f90a-3268-4737-90a8-070ec8434d4c', True))
 	print(page.space_info)
 
-	args = {			
-			"id": target.id,
-			"version": 1,
-			"alive": True,
-			"created_by": client.current_user.id,
-			"created_time": now(),
-			"table": "block",
-			"parent_id": page.space_info.id,
-			"type": "link_to_page"
-	}
+
+	client.create_record("block", page, 
+		{
+			"id":target.id
+			"content":"["+target.id+"]"
+		})
+	# args = {			
+	# 		"id": target.id,
+	# 		"version": 1,
+	# 		"alive": True,
+	# 		"created_by": client.current_user.id,
+	# 		"created_time": now(),
+	# 		"table": "block",
+	# 		"parent_id": page.space_info["spaceId"],
+	# 		"type": "link_to_page"
+	# }
 	
-	client.submit_transaction(build_operation(
-		args = args, command="set", id = target.id, path = [], table = "block" 
-	))
+	# client.submit_transaction(build_operation(
+	# 	args = args, command="set", id = target.id, path = [], table = "block" 
+	# ))
 
 
-	client.submit_transaction(
-		build_operation(
-			id=target.id,
-			path=[page.child_list_key],
-			args={"id": target.id},
-			command="listAfter",
-			table=page._table,
-		)
-	)
+	# client.submit_transaction(
+	# 	build_operation(
+	# 		id=target.id,
+	# 		path=[page.child_list_key],
+	# 		args={"id": target.id},
+	# 		command="listAfter",
+	# 		table=page._table,
+	# 	)
+	# )
 
 
 
