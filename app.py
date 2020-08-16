@@ -33,7 +33,7 @@ def add_global_block():
 
 
 	page = client.get_block("https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c")
-	target = client.get_block("https://www.notion.so/Team-Wiki-60db13eeb1dc40feba9e55d353d27ce2")
+	target = client.get_block("https://www.notion.so/Manager-Wiki-749af7940875414a821e40a31049bd06")
 
 	print(client.get_record_data("block", '6745f90a-3268-4737-90a8-070ec8434d4c', True))
 	print(page.space_info)
