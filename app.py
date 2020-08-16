@@ -39,31 +39,31 @@ def add_global_block():
 
 	print(client.get_record_data("block", '6745f90a-3268-4737-90a8-070ec8434d4c', True))
 
-	args = {			
-			"id": page.id,
-			"version": 1,
-			"alive": True,
-			"created_by": client.current_user.id,
-			"created_time": now(),
-			"table": "block",
-			"parent_id": page.id,
-			"type": "link_to_page"
-	}
+	# args = {			
+	# 		"id": page.id,
+	# 		"version": 1,
+	# 		"alive": True,
+	# 		"created_by": client.current_user.id,
+	# 		"created_time": now(),
+	# 		"table": "block",
+	# 		"parent_id": page.id,
+	# 		"type": "link_to_page"
+	# }
 	
-	client.submit_transaction(build_operation(
-		args = args, command="set", id = page.id, path = [], table = "block" 
-	))
+	# client.submit_transaction(build_operation(
+	# 	args = args, command="set", id = page.id, path = [], table = "block" 
+	# ))
 
 
-	client.submit_transaction(
-		build_operation(
-			id=page.id,
-			path=[page.child_list_key],
-			args={"id": page.id},
-			command="listAfter",
-			table=page._table,
-		)
-	)
+	# client.submit_transaction(
+	# 	build_operation(
+	# 		id=page.id,
+	# 		path=[page.child_list_key],
+	# 		args={"id": page.id},
+	# 		command="listAfter",
+	# 		table=page._table,
+	# 	)
+	# )
 
 
 
