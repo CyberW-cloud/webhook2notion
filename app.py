@@ -38,7 +38,7 @@ def add_global_block():
     		id=target,
             table="block",
             parent=page,
-            type="FAKEBLOCK!!!1"
+            type="link_to_page"
         )
 
 
