@@ -36,9 +36,9 @@ def add_global_block():
 	target = client.get_block("https://www.notion.so/Manager-Wiki-749af7940875414a821e40a31049bd06")
 
 	print(client.get_record_data("block", page.id, True))
-	print(page.space_info)
+	print(page.children._parent)
 
-	client.create_record("block", page, id=target.id)
+	#client.create_record("block", page, id=target.id)
 
 	# args = {			
 	# 		"id": target.id,
