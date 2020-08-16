@@ -9,9 +9,11 @@ from flask import Flask, request, url_for
 from notion.block import *
 from notion.client import NotionClient
 from notion.collection import CollectionRowBlock, Collection
-from notion.utils import extract_id
+
 from notion_helpers import *
 
+from notion.utils import extract_id
+from notion.operations import build_operation
 timezone = "Europe/Kiev"
 
 app = Flask(__name__)
@@ -48,13 +50,13 @@ def add_global_block():
 			"type": "link_to_page"
 	}
 	
-	client.submit_transaction(client.build_operation(
+	client.submit_transaction(build_operation(
 		args = args, command="set", id = page.id, path = [], table = "block" 
 	))
 
 
 	client.submit_transaction(
-		client.build_operation(
+		build_operation(
 			id=page.id,
 			path=[page.child_list_key],
 			args={"id": page.id},
