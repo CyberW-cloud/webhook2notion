@@ -49,7 +49,7 @@ def add_global_block():
 			"created_time": now(),
 			"table": "block",
 			"parent_id": page.id,
-			"parent_type":"block"
+			"parent_type":"block",
 			"type": "link_to_page"
 	}
 	
