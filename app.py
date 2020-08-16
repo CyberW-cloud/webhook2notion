@@ -38,7 +38,7 @@ def add_global_block():
 	print(client.get_record_data("block", page.id, True))
 	print(page.children._parent)
 
-	client.create_record("block", page.children._parent, id=target.id, type="link_to_page", child_list_key=page.child_list_key)
+	client.create_record("block", page.children._parent, id=target.id, type="link_to_page")
 
 	# args = {			
 	# 		"id": target.id,
