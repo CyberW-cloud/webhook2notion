@@ -38,8 +38,7 @@ def add_global_block():
 	print(client.get_record_data("block", page.id, True))
 	print(page.space_info)
 
-	create_page("https://www.notion.so/e00c343340c34f919d8460b3cbe26245", "test")
-	# client.create_record("block", page)
+	client.create_record("block", page)
 
 	# args = {			
 	# 		"id": target.id,
