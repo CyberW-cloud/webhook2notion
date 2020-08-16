@@ -61,7 +61,7 @@ def add_global_block():
 			command="listAfter",
 			table=page._table,
 		)
-	}
+	)
 
 
 
