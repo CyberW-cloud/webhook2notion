@@ -39,6 +39,7 @@ def add_global_block():
 	target = client.get_block("https://www.notion.so/Team-Wiki-60db13eeb1dc40feba9e55d353d27ce2")
 
 	print(client.get_record_data("block", '6745f90a-3268-4737-90a8-070ec8434d4c', True))
+	print(page.space_info)
 
 	args = {			
 			"id": target.id,
@@ -47,7 +48,7 @@ def add_global_block():
 			"created_by": client.current_user.id,
 			"created_time": now(),
 			"table": "block",
-			"parent_id": page.id,
+			"parent_id": page.space_info.id,
 			"type": "link_to_page"
 	}
 	
