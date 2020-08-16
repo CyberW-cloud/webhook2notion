@@ -35,7 +35,7 @@ def add_global_block():
 	target = request.args.get("target", "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c#4c2f39f1b39047a2bfbed185f662703f")
 	target = "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c"
 	# print(target)
-	page = client.get_block(page)
+	page = client.get_block("https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c")
 	target = client.get_block("https://www.notion.so/Team-Wiki-60db13eeb1dc40feba9e55d353d27ce2")
 
 	print(client.get_record_data("block", '6745f90a-3268-4737-90a8-070ec8434d4c', True))
