@@ -38,34 +38,34 @@ def add_global_block():
 	print(client.get_record_data("block", page.id, True))
 	print(page.space_info)
 
-
+	create_page("https://www.notion.so/e00c343340c34f919d8460b3cbe26245", "test")
 	# client.create_record("block", page)
 
-	args = {			
-			"id": target.id,
-			"version": 1,
-			"alive": True,
-			"created_by": client.current_user.id,
-			"created_time": now(),
-			"table": "block",
-			"parent_id": page.id,
-			"type": "link_to_page"
-	}
+	# args = {			
+	# 		"id": target.id,
+	# 		"version": 1,
+	# 		"alive": True,
+	# 		"created_by": client.current_user.id,
+	# 		"created_time": now(),
+	# 		"table": "block",
+	# 		"parent_id": page.id,
+	# 		"type": "link_to_page"
+	# }
 	
-	client.submit_transaction(build_operation(
-		args = args, command="set", id = target.id, path = [], table = "block" 
-	))
+	# client.submit_transaction(build_operation(
+	# 	args = args, command="set", id = target.id, path = [], table = "block" 
+	# ))
 
 
-	client.submit_transaction(
-		build_operation(
-			id=target.id,
-			path=[page.child_list_key],
-			args={"id": target.id},
-			command="listAfter",
-			table=page._table,
-		)
-	)
+	# client.submit_transaction(
+	# 	build_operation(
+	# 		id=target.id,
+	# 		path=[page.child_list_key],
+	# 		args={"id": target.id},
+	# 		command="listAfter",
+	# 		table=page._table,
+	# 	)
+	# )
 
 
 
