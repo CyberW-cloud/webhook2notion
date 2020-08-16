@@ -33,10 +33,10 @@ def add_global_block():
 
 
 	page = client.get_block("https://www.notion.so/e00c343340c34f919d8460b3cbe26245")
-	target = client.get_block("https://www.notion.so/Manager-Wiki-749af7940875414a821e40a31049bd06")
+	target = client.get_block("https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=375e91212fc4482c815f0b4419cbf5e3")
 
 	print(client.get_record_data("block", page.id, True))
-	print(page.children._parent)
+	print(target.id)
 
 	client.create_record("block", page, id=target.id, type="page")
 
