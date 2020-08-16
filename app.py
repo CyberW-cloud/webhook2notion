@@ -38,7 +38,7 @@ def add_global_block():
 	print(client.get_record_data("block", page.id, True))
 	print(page.children._parent)
 
-	client.create_record("block", page.children._parent, id=target.id, type="link_to_page", link = "https://www.notion.so/Manager-Wiki-749af7940875414a821e40a31049bd06")
+	client.create_record("block", page.children._parent, id=target.id, type="link_to_page", source = "https://www.notion.so/Manager-Wiki-749af7940875414a821e40a31049bd06")
 
 	# args = {			
 	# 		"id": target.id,
