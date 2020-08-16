@@ -40,7 +40,7 @@ def add_global_block():
             parent=page,
             type="link_to_page",
         	child_list_key = parent.child_list_key,
-        	link = target
+        	source = target
         )
 
 
