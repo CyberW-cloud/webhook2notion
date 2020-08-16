@@ -31,10 +31,7 @@ def add_global_block():
 	token = os.environ.get("TOKEN")
 	client = NotionClient(token)
 
-	page = request.args.get("page", "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c")
-	target = request.args.get("target", "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c#4c2f39f1b39047a2bfbed185f662703f")
-	target = "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c"
-	# print(target)
+
 	page = client.get_block("https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c")
 	target = client.get_block("https://www.notion.so/Team-Wiki-60db13eeb1dc40feba9e55d353d27ce2")
 
