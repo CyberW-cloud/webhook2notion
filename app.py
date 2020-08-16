@@ -9,7 +9,7 @@ from flask import Flask, request, url_for
 from notion.block import *
 from notion.client import NotionClient
 from notion.collection import CollectionRowBlock, Collection
-
+from notion.utils import extract_id
 from notion_helpers import *
 
 timezone = "Europe/Kiev"
@@ -34,13 +34,16 @@ def add_global_block():
 	target = "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c"
 	# print(target)
 	page = client.get_block(page)
-	block_id = client.create_record(
-    		id=str(uuid.uuid4()),
-            table="block",
-            parent=page,
-            type="link_to_page",
-        	source = target
-        )
+
+	page.children[-1]
+	print(client.get_record_data("block", extract_id("https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c"), True))
+
+	# block_id = client.create_record(
+	# 		id=str(uuid.uuid4()),
+	# 		table="block",
+	# 		parent=page,
+	# 		type="link_to_page"
+	# )
 
 
 
@@ -76,7 +79,7 @@ def test_scripts():
 		collection = client.get_collection(client.create_record("collection", parent=page, schema=schema))
 		page.collection = collection
 
-    
+	
 		test_row = page.views.add_new()
 		test_row = page.collection.add_row()
 		test_row.name = "This worked!"
