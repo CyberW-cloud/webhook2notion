@@ -55,7 +55,7 @@ def add_global_block():
 			"created_time": now(),
 			"last_edited_time":now(),
 			"properties": {},
-			"type" = "link_to_page",
+			"type" : "link_to_page",
 			"alive": True,
 			"parent_id": parent_id,
 			"parent_table": "block"
