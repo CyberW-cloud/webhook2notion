@@ -5,6 +5,7 @@ import calendar, time
 import pytz
 import math
 import traceback
+import uuid
 from flask import Flask, request, url_for
 from notion.block import *
 from notion.client import NotionClient
@@ -35,26 +36,41 @@ def add_global_block():
 	page = client.get_block("https://www.notion.so/e00c343340c34f919d8460b3cbe26245")
 	target = client.get_block("https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=375e91212fc4482c815f0b4419cbf5e3")
 
-	print(client.get_record_data("block", page.id, True))
-	print(target.id)
 
-	client.create_record("block", page, id=target.id, type="page")
 
-	# args = {			
-	# 		"id": target.id,
-	# 		"version": 1,
-	# 		"alive": True,
-	# 		"created_by": client.current_user.id,
-	# 		"created_time": now(),
-	# 		"table": "block",
-	# 		"parent_id": page.id,
-	# 		"type": "link_to_page"
-	# }
+
 	
-	# client.submit_transaction(build_operation(
-	# 	args = args, command="set", id = target.id, path = [], table = "block" 
-	# ))
+	#literally just ctrl+c the whole transaction
+	operations = []
+	target_id = "62d0b92d-ebcb-4d51-8081-eba97263ed24"
+	parent_id = "e00c3433-40c3-4f91-9d84-60b3cbe26245"
 
+	#create the class
+	operations.append(build_operation(
+		id = target_id,
+		path = [],
+		table="block",
+		args = {
+			"id": target_id,
+			"created_time": now(),
+			"last_edited_time":now()
+			"properties": {}
+			"type" = "link_to_page"
+			"alive": True
+			"parent_id": parent_id
+			"parent_table": "block"
+		},
+		command = "update"
+	))
+	#add more info for notion
+	operations.append(build_operation(
+		id = target_id,
+		path = ["created_by_id"],
+		
+		command = "set"
+
+
+	))
 
 	# client.submit_transaction(
 	# 	build_operation(
