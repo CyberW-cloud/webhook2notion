@@ -33,7 +33,7 @@ def add_global_block():
 	client = NotionClient(token)
 
 
-	page = client.get_block("https://www.notion.so/e00c343340c34f919d8460b3cbe26245")
+	page = client.get_block("https://www.notion.so/TEST-2-e00c343340c34f919d8460b3cbe26245")
 	target = client.get_block("https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=375e91212fc4482c815f0b4419cbf5e3")
 
 
@@ -46,6 +46,9 @@ def add_global_block():
 	parent_id = "e00c3433-40c3-4f91-9d84-60b3cbe26245"
 
 	#create the class
+	client.create_record("block", page, id=target.id, type="link_to_page")
+
+	#add all of the properties
 	operations.append(build_operation(
 		id = target_id,
 		path = [],
@@ -60,7 +63,7 @@ def add_global_block():
 			"parent_id": parent_id,
 			"parent_table": "block"
 		},
-		command = "set"
+		command = "update"
 	))
 	#add more info for notion
 	operations.append(build_operation(
