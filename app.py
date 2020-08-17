@@ -60,7 +60,7 @@ def add_global_block():
 			"parent_id": parent_id,
 			"parent_table": "block"
 		},
-		command = "update"
+		command = "set"
 	))
 	#add more info for notion
 	operations.append(build_operation(
