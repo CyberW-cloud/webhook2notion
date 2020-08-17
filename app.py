@@ -66,12 +66,44 @@ def add_global_block():
 	operations.append(build_operation(
 		id = target_id,
 		path = ["created_by_id"],
-		
+		table = "block", 
+		args = str(client.current_user.id),
 		command = "set"
-
-
 	))
 
+	operations.append(build_operation(
+		id = target_id,
+		path = ["created_by_table"],
+		table = "block",
+		args = "notion_user",
+		command = "set"
+	))
+
+	operations.append(build_operation(
+		id = target_id,
+		path = ["last_edited_time"],
+		table = "block",
+		args = now(),
+		command = "set"
+	))
+
+	operations.append(build_operation(
+		id = target_id,
+		path = ["last_edited_by_id"],
+		table = "block",
+		args = str(client.current_user.id),
+		command = "set"
+	))	
+
+	operations.append(build_operation(
+		id = target_id,
+		path = ["last_edited_by_table"],
+		table = "notion_user",
+		args = str(client.current_user.id),
+		command = "set"
+	))	
+
+	client.submit_transaction(operations, False)
 	# client.submit_transaction(
 	# 	build_operation(
 	# 		id=target.id,
