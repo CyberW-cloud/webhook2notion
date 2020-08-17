@@ -53,11 +53,11 @@ def add_global_block():
 		args = {
 			"id": target_id,
 			"created_time": now(),
-			"last_edited_time":now()
-			"properties": {}
-			"type" = "link_to_page"
-			"alive": True
-			"parent_id": parent_id
+			"last_edited_time":now(),
+			"properties": {},
+			"type" = "link_to_page",
+			"alive": True,
+			"parent_id": parent_id,
 			"parent_table": "block"
 		},
 		command = "update"
