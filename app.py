@@ -42,7 +42,7 @@ def add_global_block():
 	
 	#literally just ctrl+c the whole transaction
 	operations = []
-	target_id = str(uuid.uuid4())
+	target_id = "6745f90a-3268-4737-90a8-070ec8434d4c"
 	parent_id = "e00c3433-40c3-4f91-9d84-60b3cbe26245"
 
 
