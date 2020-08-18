@@ -59,8 +59,6 @@ def add_global_block():
 		"type": "link_to_page"
 	}
 
-	args.update(kwargs)
-
 	with client.as_atomic_transaction():
 
 		# create the new record
