@@ -131,13 +131,6 @@ def add_global_block():
 		command = "set"
 	))	
 
-	operations.append(build_operation(
-		id = target_id,
-		path = ["last_edited_by_table"],
-		table = "notion_user",
-		args = str(client.current_user.id),
-		command = "set"
-	))	
 	i = ""
 	for op in operations:
 		print(i)
