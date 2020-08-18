@@ -42,8 +42,14 @@ def add_global_block():
 	
 	#literally just ctrl+c the whole transaction
 	operations = []
-	target_id = "62d0b92d-ebcb-4d51-8081-eba97263ed24"
+	target_id = str(uuid.uuid4())
 	parent_id = "e00c3433-40c3-4f91-9d84-60b3cbe26245"
+
+
+	#add an empty textblock to copy EVERYTING that happens normally
+	text = page.children.add_new(TextBlock)
+	text.title = "/lin"
+	text.title = ""
 
 	#create the block (we have to remake client.create_record to add a set id)
 	child_list_key = page.child_list_key
@@ -98,6 +104,41 @@ def add_global_block():
 		},
 		command = "update"
 	))
+
+	operations.append(build_operation(
+		id = parent_id,
+		path = ["content"],
+		table = "block",
+		command = "listAfter",
+		args = {
+			"after":text.id,
+			"id":target_id
+		}
+
+	))
+
+	operations.append(build_operation(
+		id = text.id,
+		path = [],
+		table = "block",
+		command = "update",
+		args = {
+			"alive":False
+		}
+
+	))
+
+	operations.append(build_operation(
+		id = parent_id,
+		path = ["content"],
+		table = "block",
+		command = "listRemove",
+		args = {
+			"id":text.id
+		}
+
+	))
+
 	#add more info for notion
 	operations.append(build_operation(
 		id = target_id,
@@ -130,6 +171,14 @@ def add_global_block():
 		args = str(client.current_user.id),
 		command = "set"
 	))	
+
+	operations.append(build_operation(
+		id = target_id,
+		path = ["last_edited_by_table"],
+		table = "block",
+		args = "notion_user",
+		command = "set"
+	))
 
 	i = ""
 	for op in operations:
