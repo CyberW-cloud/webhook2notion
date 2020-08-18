@@ -182,8 +182,7 @@ def add_global_block():
 
 	i = ""
 	for op in operations:
-		print(i)
-		i+="+"
+		print(str(op))
 		client.submit_transaction(op, False)
 	# client.submit_transaction(
 	# 	build_operation(
