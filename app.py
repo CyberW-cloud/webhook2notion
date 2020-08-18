@@ -138,7 +138,10 @@ def add_global_block():
 		args = str(client.current_user.id),
 		command = "set"
 	))	
+	i = ""
 	for op in operations:
+		print(i)
+		i+="+"
 		client.submit_transaction(op, False)
 	# client.submit_transaction(
 	# 	build_operation(
