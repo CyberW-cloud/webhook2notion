@@ -45,8 +45,43 @@ def add_global_block():
 	target_id = "62d0b92d-ebcb-4d51-8081-eba97263ed24"
 	parent_id = "e00c3433-40c3-4f91-9d84-60b3cbe26245"
 
-	#create the class
-	client.create_record("block", page, id=target.id, type="link_to_page")
+	#create the block (we have to remake client.create_record to add a set id)
+	child_list_key = page.child_list_key
+
+    args = {
+        "id": target_id,
+        "version": 1,
+        "alive": True,
+        "created_by": client.current_user.id,
+        "created_time": now(),
+        "parent_id": page.id,
+        "parent_table": page._table,
+        "type": "link_to_page"
+    }
+
+    args.update(kwargs)
+
+    with client.as_atomic_transaction():
+
+        # create the new record
+        client.submit_transaction(
+            build_operation(
+                args=args, command="set", id=target_id, path=[], table="block"
+            )
+        )
+
+        # add the record to the content list of the parent, if needed
+        if child_list_key:
+            client.submit_transaction(
+                build_operation(
+                    id=page.id,
+                    path=[child_list_key],
+                    args={"id": target_id},
+                    command="listAfter",
+                    table=page._table,
+                )
+            )
+
 
 	#add all of the properties
 	operations.append(build_operation(
