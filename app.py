@@ -28,7 +28,6 @@ test_page_url = "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c"
 @app.route('/upwork_test', methods=["GET"])
 def upwork_test():
   
-	Assign access_token and access_token_secret if they are known
 	config = upwork.Config({\
 			'consumer_key': os.environ.get('ConsumerKey'),\
 			'consumer_secret': os.environ.get('ConsumerSecret'),\
