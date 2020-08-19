@@ -15,6 +15,7 @@ from notion_helpers import *
 
 from notion.utils import extract_id
 from notion.operations import build_operation
+import notion
 timezone = "Europe/Kiev"
 
 app = Flask(__name__)
