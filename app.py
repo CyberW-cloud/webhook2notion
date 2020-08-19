@@ -24,8 +24,18 @@ app = Flask(__name__)
 TEST = True
 test_page_url = "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c"
 
-def encode_url(url):
-	return "["+url+"]"+"("+url+")" 
+@app.route('/upwork_test', methods=["GET"])
+def upwork_test():
+  
+	Assign access_token and access_token_secret if they are known
+	config = upwork.Config({\
+			'consumer_key': os.environ.get('ConsumerKey'),\
+			'consumer_secret': os.environ.get('ConsumerSecret'),\
+			'access_token': os.environ.get('AccessToken'),\
+			'access_token_secret': os.environ.get('AccessSecret')})
+
+	client = upwork.Client(config)
+
 
 @app.route('/add_global_block', methods=["GET"])
 def add_global_block():
@@ -1224,7 +1234,7 @@ def create_rss(token, collection_url, subject, link, description):
 	row.link = link
 	row.description = description
 	if link.find("https://www.upwork.com/blog/") != -1:
-		row.label = "upwok blog"
+		row.label = "upwork blog"
 	if link.find("https://community.upwork.com/t5/Announcements/") != -1:
 		row.label = "upwork community announcements"
 
