@@ -57,7 +57,7 @@ def upwork_test():
 	tokens = os.environ.get('TOKENS')
 
 	rooms = [] # format: {"id": roomid, "name": room_name, "freelancers": [id1,id2]}
-	tokens = parse_tokens(tokens)
+	
 
 	login_config = upwork.Config({\
             'consumer_key': os.environ.get("ConsumerKey"),\
@@ -68,8 +68,9 @@ def upwork_test():
 	client = upwork.Client(login_config)
 
 	company = companyAPI(client)
+	messages = messageAPI(client)
 
-	#get all references
+	#get all references to companies
 	company_ref = [x["reference"] for x in company.get_list()["companies"]]
 	
 	unique_freelancer_ids = []
@@ -82,6 +83,12 @@ def upwork_test():
 
 				if user_id not in unique_freelancer_ids:
 					unique_freelancer_ids.append(user_id)
+
+	tokens = parse_tokens(tokens, unique_freelancer_ids)
+	
+
+	for reference in company_ref:
+		print(messages.get_rooms(company_ref))
 
 	return str(unique_freelancer_ids)
 
