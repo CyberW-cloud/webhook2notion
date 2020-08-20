@@ -17,9 +17,9 @@ from notion.utils import extract_id
 from notion.operations import build_operation
 
 import upwork
-from upwork.routers.messages import Api as msAPI
+from upwork.routers.messages import Api as messageAPI
 from upwork.routers.auth import Api as authAPI
-from upwork.routers.organization.teams import Api as teamsAPI
+from upwork.routers.organization.companies import Api as companyAPI
 
 
 timezone = "Europe/Kiev"
@@ -67,9 +67,9 @@ def upwork_test():
 
 	client = upwork.Client(login_config)
 
-	team = teamsAPI(client)
+	company = companyAPI(client)
 
-	print(team.get_users_in_team(os.environ.get("TeamID")))
+	print(company.get_list())
 
 @app.route('/add_global_block', methods=["GET"])
 def add_global_block():
