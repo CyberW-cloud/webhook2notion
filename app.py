@@ -66,7 +66,7 @@ def upwork_test():
             'access_token': os.environ.get("TokenToken"),\
             'access_token_secret': os.environ.get("TokenSecret")})
 
-	client = upwork.client(login_config)
+	client = upwork.Client(login_config)
 
 	company = companyAPI(client)
 
