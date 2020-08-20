@@ -88,9 +88,15 @@ def upwork_test():
 	tokens = parse_tokens(tokens, unique_freelancer_ids)
 	
 
-	for reference in company_ref:
-		client = upwork.Client(login_config)
-		print(messages.get_rooms(company_ref))
+	for freelancer in tokens:
+		client = upwork.Config(upwork.Config({\
+            'consumer_key': os.environ.get("ConsumerKey"),\
+            'consumer_secret': os.environ.get("ConsumerSecret"),\
+            'access_token': freelancer["AccessToken"],\
+            'access_token_secret': freelancer["AccessSecret"]}))
+		
+		auth = authAPI(client)
+		print(auth.get_user_info())
 
 
 	return str(unique_freelancer_ids)
