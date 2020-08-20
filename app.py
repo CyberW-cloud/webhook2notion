@@ -60,8 +60,15 @@ def upwork_test():
 	rooms = [] # format: {"id": roomid, "name": room_name, "freelancers": [id1,id2]}
 	tokens = parse_tokens(tokens)
 
-	ms = msAPI(client)
-	print(ms.get_rooms(tokens[0]))
+	login_config = upwork.Config({\
+            'consumer_key': os.environ.get("ConsumerKey"),\
+            'consumer_secret': os.environ.get("ConsumerSecret"),\
+            'access_token': os.environ.get("TokenToken"),\
+            'access_token_secret': os.environ.get("TokenSecret")})
+
+	client = upwork.client(login_config)
+
+	company = companyAPI(client)
 
 @app.route('/add_global_block', methods=["GET"])
 def add_global_block():
