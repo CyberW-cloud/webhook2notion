@@ -30,15 +30,26 @@ app = Flask(__name__)
 TEST = True
 test_page_url = "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c"
 
+def parse_tokens(tokens):
+	tokens = str(tokens)
+	tokens = re.search("{(.*)}")
+
+	ret = []
+	for i in tokens:
+		try:
+			strings = re.search('"(.*)"').group(1)
+			ret.append({"id": strings[0], strings[1]:strings[2], strings[3]:strings[4]})
+		except Exception:
+			continue
+
 @app.route('/upwork_test', methods=["GET"])
 def upwork_test():
   
 	
 	tokens = os.environ.get('TOKENS')
-	print(tokens[0])
 
 	rooms = [] # format: {"id": roomid, "name": room_name, "freelancers": [id1,id2]}
-
+	print(parse_tokens(tokens))
 #	ms = msAPI(client)
 #	print(ms.get_rooms(tokens[0]))
 
