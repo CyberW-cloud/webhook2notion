@@ -35,9 +35,9 @@ def parse_tokens(tokens):
 	tokens = re.search("{(.*)}", tokens)
 
 	ret = []
-	for i in tokens:
+	for i in range(len(tokens)):
 		try:
-			strings = re.search('"(.*)"', tokens).group(1)
+			strings = re.search('"(.*)"', tokens[i]).group(1)
 			ret.append({"id": strings[0], strings[1]:strings[2], strings[3]:strings[4]})
 		except Exception:
 			continue
