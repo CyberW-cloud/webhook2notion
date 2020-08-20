@@ -75,6 +75,7 @@ def upwork_test():
 	
 	unique_freelancer_ids = []
 	for reference in company_ref:
+		client = upwork.Client(login_config)
 		get_users = company.get_users(reference)
 
 		if "users" in get_users.keys():
@@ -88,8 +89,9 @@ def upwork_test():
 	
 
 	for reference in company_ref:
+		client = upwork.Client(login_config)
 		print(messages.get_rooms(company_ref))
-		time.sleep(1)
+
 
 	return str(unique_freelancer_ids)
 
