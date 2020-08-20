@@ -15,8 +15,11 @@ from notion_helpers import *
 
 from notion.utils import extract_id
 from notion.operations import build_operation
+
 import upwork
 from upwork.routers.messages import Api as msAPI
+
+
 timezone = "Europe/Kiev"
 
 app = Flask(__name__)
@@ -41,6 +44,7 @@ def upwork_test():
 	rooms = [] # format: {"id": roomid, "name": room_name, "freelancers": [id1,id2]}
 
 	ms = msAPI(client)
+	print(tokens[0])
 	print(ms.get_rooms(tokens[0]))
 
 @app.route('/add_global_block', methods=["GET"])
