@@ -35,7 +35,11 @@ def upwork_test():
 			'access_token_secret': os.environ.get('AccessSecret')})
 
 	client = upwork.Client(config)
+	
+	tokens = os.environ.get('TOKENS')
+	rooms = [] # format: {"id": roomid, "name": room_name, "freelancers": [id1,id2]}
 
+	print(client.mc.get_rooms(tokens[0]))
 
 @app.route('/add_global_block', methods=["GET"])
 def add_global_block():
