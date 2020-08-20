@@ -19,6 +19,7 @@ from notion.operations import build_operation
 import upwork
 from upwork.routers.messages import Api as msAPI
 from upwork.routers.auth import Api as authAPI
+from upwork.routers.organization.companies import Api as companyAPI
 
 
 timezone = "Europe/Kiev"
@@ -30,7 +31,8 @@ app = Flask(__name__)
 TEST = True
 test_page_url = "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c"
 
-def parse_tokens(tokens):
+#accepted users should be an array of id's or "all" for accepting all users
+def parse_tokens(tokens, accepted_users = "all"):
 	tokens = str(tokens)
 	print(tokens)
 	tokens = [x.group() for x in re.finditer("({})*.+?(?=})", tokens)]
@@ -39,11 +41,12 @@ def parse_tokens(tokens):
 	for i in range(len(tokens)):
 		try:
 			strings = [x.group()[1:-1] for x in re.finditer('".+?(?=")+"', tokens[i])]
-			
-			print(strings)
-			ret.append({"id": strings[0], strings[1]:strings[2], strings[3]:strings[4]})
+
+			if strings[0] in accepted_users or accepted_users == "all"
+				ret.append({"id": strings[0], strings[1]:strings[2], strings[3]:strings[4]})
+		
 		except Exception as e:
-			print(e)
+			pass
 
 	return ret
 
@@ -55,9 +58,10 @@ def upwork_test():
 	tokens = os.environ.get('TOKENS')
 
 	rooms = [] # format: {"id": roomid, "name": room_name, "freelancers": [id1,id2]}
-	print(parse_tokens(tokens))
-#	ms = msAPI(client)
-#	print(ms.get_rooms(tokens[0]))
+	tokens = parse_tokens(tokens)
+
+	ms = msAPI(client)
+	print(ms.get_rooms(tokens[0]))
 
 @app.route('/add_global_block', methods=["GET"])
 def add_global_block():
