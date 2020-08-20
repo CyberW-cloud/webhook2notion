@@ -95,6 +95,7 @@ def upwork_test():
             'access_token': freelancer["AccessToken"],\
             'access_token_secret': freelancer["AccessSecret"]}))
 		
+		print(freelancer)
 		auth = authAPI(client)
 		print(auth.get_user_info())
 
