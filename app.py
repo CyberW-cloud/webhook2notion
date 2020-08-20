@@ -42,7 +42,7 @@ def parse_tokens(tokens, accepted_users = "all"):
 		try:
 			strings = [x.group()[1:-1] for x in re.finditer('".+?(?=")+"', tokens[i])]
 
-			if strings[0] in accepted_users or accepted_users == "all"
+			if strings[0] in accepted_users or accepted_users == "all":
 				ret.append({"id": strings[0], strings[1]:strings[2], strings[3]:strings[4]})
 		
 		except Exception as e:
