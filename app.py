@@ -18,6 +18,7 @@ from notion.operations import build_operation
 
 import upwork
 from upwork.routers.messages import Api as msAPI
+from upwork.routers.auth import Api as authAPI
 
 
 timezone = "Europe/Kiev"
@@ -32,20 +33,14 @@ test_page_url = "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c"
 @app.route('/upwork_test', methods=["GET"])
 def upwork_test():
   
-	config = upwork.Config({\
-			'consumer_key': os.environ.get('ConsumerKey'),\
-			'consumer_secret': os.environ.get('ConsumerSecret'),\
-			'access_token': os.environ.get('AccessToken'),\
-			'access_token_secret': os.environ.get('AccessSecret')})
-
-	client = upwork.Client(config)
 	
 	tokens = os.environ.get('TOKENS')
+	print(tokens[0])
+
 	rooms = [] # format: {"id": roomid, "name": room_name, "freelancers": [id1,id2]}
 
-	ms = msAPI(client)
-	print(tokens[0])
-	print(ms.get_rooms(tokens[0]))
+#	ms = msAPI(client)
+#	print(ms.get_rooms(tokens[0]))
 
 @app.route('/add_global_block', methods=["GET"])
 def add_global_block():
