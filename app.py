@@ -69,7 +69,7 @@ def upwork_test():
 
 	team = teamsAPI(client)
 
-	print(team.get_users_in_team(os.environ.get("TeamId")))
+	print(team.get_users_in_team(os.environ.get("TeamID")))
 
 @app.route('/add_global_block', methods=["GET"])
 def add_global_block():
