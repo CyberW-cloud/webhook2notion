@@ -39,7 +39,7 @@ def parse_tokens(tokens):
 	ret = []
 	for i in range(len(tokens)):
 		try:
-			strings = re.search('".+?(?=")+"', tokens[i]).groups()
+			strings = re.match('".+?(?=")+"', tokens[i]).groups()
 			ret.append({"id": strings[0], strings[1]:strings[2], strings[3]:strings[4]})
 		except Exception:
 			continue
