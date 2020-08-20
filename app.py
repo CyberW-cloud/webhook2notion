@@ -33,7 +33,7 @@ test_page_url = "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c"
 
 #accepted users should be an array of id's or "all" for accepting all users
 def parse_tokens(tokens, accepted_users = "all"):
-	tokens = str(tokens)
+	
 	tokens = [x.group() for x in re.finditer("({})*.+?(?=})", tokens)]
 
 	ret = []
@@ -74,7 +74,7 @@ def upwork_test():
 	
 	freelancer_ids = []
 	for reference in company_ref:
-		print(company.get_users(reference))
+		company.get_users(reference)
 
 
 	return str(company_ref)
