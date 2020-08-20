@@ -42,6 +42,9 @@ def parse_tokens(tokens):
 		except Exception:
 			continue
 
+	return ret
+
+	
 @app.route('/upwork_test', methods=["GET"])
 def upwork_test():
   
