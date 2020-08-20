@@ -16,7 +16,7 @@ from notion_helpers import *
 from notion.utils import extract_id
 from notion.operations import build_operation
 import upwork
-from upwork.routers.messages import API as msAPI
+from upwork.routers.messages import Api as msAPI
 timezone = "Europe/Kiev"
 
 app = Flask(__name__)
