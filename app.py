@@ -19,7 +19,7 @@ from notion.operations import build_operation
 import upwork
 from upwork.routers.messages import Api as msAPI
 from upwork.routers.auth import Api as authAPI
-from upwork.routers.organization.companies import Api as companyAPI
+from upwork.routers.organization.teams import Api as teamsAPI
 
 
 timezone = "Europe/Kiev"
@@ -34,7 +34,6 @@ test_page_url = "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c"
 #accepted users should be an array of id's or "all" for accepting all users
 def parse_tokens(tokens, accepted_users = "all"):
 	tokens = str(tokens)
-	print(tokens)
 	tokens = [x.group() for x in re.finditer("({})*.+?(?=})", tokens)]
 
 	ret = []
@@ -68,9 +67,10 @@ def upwork_test():
 
 	client = upwork.Client(login_config)
 
-	company = companyAPI(client)
+	team = teamsAPI(client)
 
-	print(company.get_list())
+	print(team.get_users_in_team(os.environ.get("TeamId")))
+
 @app.route('/add_global_block', methods=["GET"])
 def add_global_block():
 	token = os.environ.get("TOKEN")
