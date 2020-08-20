@@ -69,7 +69,14 @@ def upwork_test():
 
 	company = companyAPI(client)
 
+	#get all references
 	company_ref = [x["reference"] for x in company.get_list()["companies"]]
+	
+	freelancer_ids = []
+	for reference in company_ref:
+		print(company.get_users(reference))
+
+
 	return str(company_ref)
 
 @app.route('/add_global_block', methods=["GET"])
