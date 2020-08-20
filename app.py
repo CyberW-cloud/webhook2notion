@@ -75,13 +75,15 @@ def upwork_test():
 	unique_freelancer_ids = []
 	for reference in company_ref:
 		get_users = company.get_users(reference)
+
 		if "users" in get_users.keys():
 			for user in get_users["users"]:
 				user_id = user["public_url"].split("/")[-1]
+
 				if user_id not in unique_freelancer_ids:
 					unique_freelancer_ids.append(user_id)
 
-	return unique_freelancer_ids
+	return str(unique_freelancer_ids)
 
 @app.route('/add_global_block', methods=["GET"])
 def add_global_block():
