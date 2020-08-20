@@ -89,6 +89,7 @@ def upwork_test():
 
 	for reference in company_ref:
 		print(messages.get_rooms(company_ref))
+		time.sleep(1)
 
 	return str(unique_freelancer_ids)
 
