@@ -33,16 +33,17 @@ test_page_url = "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c"
 def parse_tokens(tokens):
 	tokens = str(tokens)
 	print(tokens)
-	tokens = re.match("({})*.+?(?=})", tokens).groups()
-	print(len(tokens))
-	
+	tokens = [x.group() for x in re.finditer("({})*.+?(?=})", tokens)]
+
 	ret = []
 	for i in range(len(tokens)):
 		try:
-			strings = re.match('".+?(?=")+"', tokens[i]).groups()
+			strings = [x.group()[1:-1] for x in re.finditer('".+?(?=")+"', tokens[i])]
+			
+			print(strings)
 			ret.append({"id": strings[0], strings[1]:strings[2], strings[3]:strings[4]})
-		except Exception:
-			continue
+		except Exception as e:
+			print(e)
 
 	return ret
 
