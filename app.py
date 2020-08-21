@@ -58,7 +58,6 @@ def upwork_test():
 	contracts = notion_client.get_collection_view("https://www.notion.so/5a95fb63129242a5b5b48f18e16ef19a?v=81afe49071ef41bba4c85922ff134407")
 	
 
-	get_room_chats()
 	tokens = os.environ.get('TOKENS')
 
 	parsed_rooms = [] # format: {"id": roomid, "name": room_name, "freelancers": [id1,id2]}
