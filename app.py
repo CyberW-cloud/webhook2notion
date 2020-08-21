@@ -66,9 +66,9 @@ def get_room_chats():
 	room_chat_ids = []
 	for row in result:
 
-		print(row.contract_id)
+		print(row.contract_id.split(, )[0].replace("'",""))
 
-	
+
 	return room_chat_ids
 
 @app.route('/upwork_test', methods=["GET"])
