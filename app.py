@@ -98,7 +98,7 @@ def upwork_test():
 			filter_params = {
 				"filters" : [
 					{
-						"filter": {"value": {"type": "exact", "value": "https://www.upwork.com/messages/rooms/"+room.roomId }, "operator": "enum_is"},
+						"filter": {"value": {"type": "exact", "value": "https://www.upwork.com/messages/rooms/"+room["roomId"] }, "operator": "enum_is"},
 						"property": "Chat URL",
 					}
 				],
