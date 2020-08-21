@@ -57,7 +57,12 @@ def get_room_chats():
 	cv = client.get_collection_view("https://www.notion.so/5a95fb63129242a5b5b48f18e16ef19a?v=81afe49071ef41bba4c85922ff134407")
 	
 	filter_params = {
-		"filters": [],
+		"filters": [
+			{
+				"filter": {"value": {"type": "exact", "value": }, "operator": "enum_is"},
+				"property": "Status",
+			}
+		],
 		"operator": "and",
 	}
 	cv = cv.build_query(filter=filter_params)
@@ -73,7 +78,11 @@ def get_room_chats():
 
 @app.route('/upwork_test', methods=["GET"])
 def upwork_test():
-  
+  	token = os.environ.get("TOKEN")
+	notion_client = NotionClient(token)
+	contracts = client.get_collection_view("https://www.notion.so/5a95fb63129242a5b5b48f18e16ef19a?v=81afe49071ef41bba4c85922ff134407")
+	
+
 	get_room_chats()
 	tokens = os.environ.get('TOKENS')
 
@@ -111,7 +120,18 @@ def upwork_test():
 		
 		user_id = user.get_my_info()["user"]["id"]
 		rooms = messages.get_rooms(user_id)["rooms"]
-
+		for room in rooms:
+			filters: [
+			{
+				"filter": {"value": {"type": "exact", "value": "https://www.upwork.com/messages/rooms/"+room.roomId}, "operator": "text_is"},
+				"property": "Chat URL",
+			}
+		],
+		"operator": "and",
+	}
+			contracts = contracts.build_query(filter=filter_params)
+			result = contracts.execute()
+			
 
 
 	return str(unique_freelancer_ids)
