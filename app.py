@@ -95,6 +95,8 @@ def upwork_test():
 		user_id = user.get_my_info()["user"]["id"]
 		rooms = messages.get_rooms(user_id)["rooms"]
 		for room in rooms:
+			contracts = notion_client.get_collection_view("https://www.notion.so/5a95fb63129242a5b5b48f18e16ef19a?v=81afe49071ef41bba4c85922ff134407")
+	
 			filter_params = {
 				"filters" : [
 					{
