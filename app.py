@@ -59,6 +59,10 @@ def get_room_chats():
 	room_chat_ids = []
 	for row in cv:
 		room_chat_ids.append(row.contract_id.chat_url)
+		print(row.contract_id.chat_url)
+
+
+	return room_chat_ids
 
 @app.route('/upwork_test', methods=["GET"])
 def upwork_test():
