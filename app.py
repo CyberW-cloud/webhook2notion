@@ -71,8 +71,6 @@ def upwork_test():
 	company = companyAPI(client)
 	messages = messageAPI(client)
 
-	#get all references to companies
-	company_ref = [x["reference"] for x in company.get_list()["companies"]]
 	
 	freelancer_ids = [x["public_url"].split("/")[-1] for x in company.get_users(os.environ.get("CompanyRef"))["users"]]
 	
@@ -91,8 +89,8 @@ def upwork_test():
 		user = userAPI(client)
 		messages = messageAPI(client)
 		
-		reference = user.get_my_info()["user"]["reference"]
-		print(messages.get_rooms(reference))
+		user_id = user.get_my_info()["user"]["id"]
+		print(messages.get_rooms(user_id))
 
 
 
