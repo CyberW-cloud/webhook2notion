@@ -96,11 +96,11 @@ def upwork_test():
 		rooms = messages.get_rooms(user_id)["rooms"]
 		for room in rooms:
 			contracts = notion_client.get_collection_view("https://www.notion.so/5a95fb63129242a5b5b48f18e16ef19a?v=81afe49071ef41bba4c85922ff134407")
-	
+			print("https://www.upwork.com/messages/rooms/"+room["roomId"] )
 			filter_params = {
 				"filters" : [
 					{
-						"filter": {"value": {"type": "exact", "value": "https://www.upwork.com/messages/rooms/"+room["roomId"] }, "operator": "enum_is"},
+						"filter": {"value": {"type": "exact", "value": "https://www.upwork.com/messages/rooms/"+room["roomId"] }, "operator": "text_is"},
 						"property": "Chat URL",
 					}
 				],
