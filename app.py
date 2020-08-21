@@ -20,6 +20,7 @@ import upwork
 from upwork.routers.messages import Api as messageAPI
 from upwork.routers.auth import Api as authAPI
 from upwork.routers.organization.companies import Api as companyAPI
+from upwork.routers.organization.users import Api as userAPI
 
 
 timezone = "Europe/Kiev"
@@ -87,9 +88,9 @@ def upwork_test():
             'access_token': freelancer["accessToken"],\
             'access_token_secret': freelancer["accessSecret"]}))
 
-		auth = authAPI(client)
+		user = userAPI(client)
 		messages = messageAPI(client)
-		print(auth.get_user_info())
+		print(user.get_my_info())
 		print(messages.get_rooms(freelancer["id"][1:]))
 
 
