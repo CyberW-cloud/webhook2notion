@@ -50,6 +50,15 @@ def parse_tokens(tokens, accepted_users = "all"):
 
 	return ret
 
+def get_room_chats():
+	token = os.environ.get("TOKEN")
+	client = NotionClient(token)
+
+	cv = client.get_collection_view("https://www.notion.so/5a95fb63129242a5b5b48f18e16ef19a?v=81afe49071ef41bba4c85922ff134407")
+
+	room_chat_ids = []
+	for row in cv:
+		room_chat_ids.append(row.contract_id.chat_url)
 
 @app.route('/upwork_test', methods=["GET"])
 def upwork_test():
@@ -57,7 +66,7 @@ def upwork_test():
 	
 	tokens = os.environ.get('TOKENS')
 
-	rooms = [] # format: {"id": roomid, "name": room_name, "freelancers": [id1,id2]}
+	parsed_rooms = [] # format: {"id": roomid, "name": room_name, "freelancers": [id1,id2]}
 	
 
 	login_config = upwork.Config({\
@@ -90,7 +99,7 @@ def upwork_test():
 		messages = messageAPI(client)
 		
 		user_id = user.get_my_info()["user"]["id"]
-		print(messages.get_rooms(user_id))
+		rooms = messages.get_rooms(user_id)["rooms"]
 
 
 
