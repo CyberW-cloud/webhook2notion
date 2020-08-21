@@ -66,7 +66,7 @@ def get_room_chats():
 	room_chat_ids = []
 	for row in result:
 
-		print(row.contract_id)
+		print(row.end_date)
 
 
 	return room_chat_ids
