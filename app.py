@@ -66,7 +66,7 @@ def get_room_chats():
 	room_chat_ids = []
 	for row in result:
 
-		print(row.contract_id.split(", ")[0].replace("'",""))
+		print(row.contract_id)
 
 
 	return room_chat_ids
