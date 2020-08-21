@@ -96,14 +96,14 @@ def upwork_test():
 		rooms = messages.get_rooms(user_id)["rooms"]
 		for room in rooms:
 			filter_params = {
-				filters: [
+				"filters" : [
 					{
 						"filter": {"value": {"type": "exact", "value": "https://www.upwork.com/messages/rooms/"+room.roomId }, "operator": "enum_is"},
 						"property": "Chat URL",
 					}
 				],
 					"operator": "and",
-				}
+			}
 			contracts = contracts.build_query(filter=filter_params)
 			result = contracts.execute()
 			print(result)
