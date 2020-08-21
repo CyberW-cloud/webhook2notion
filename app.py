@@ -73,14 +73,14 @@ def upwork_test():
 	#get all references to companies
 	company_ref = [x["reference"] for x in company.get_list()["companies"]]
 	
-	unique_freelancer_ids = [x["public_url"].split("/")[-1] for x in company.get_users(os.environ.get("CompanyRef"))["users"]]
+	freelancer_ids = [x["public_url"].split("/")[-1] for x in company.get_users(os.environ.get("CompanyRef"))["users"]]
 	
 
 	tokens = parse_tokens(tokens, unique_freelancer_ids)
 	
 
 	for freelancer in tokens:
-		print(freelancer)
+		#log in as each freelancer
 		client = upwork.Client(upwork.Config({\
             'consumer_key': os.environ.get("ConsumerKey"),\
             'consumer_secret': os.environ.get("ConsumerSecret"),\
@@ -88,7 +88,10 @@ def upwork_test():
             'access_token_secret': freelancer["accessSecret"]}))
 
 		auth = authAPI(client)
+		messages = messageAPI(client)
 		print(auth.get_user_info())
+		print(messages.get_rooms(freelancer["id"]))
+
 
 
 	return str(unique_freelancer_ids)
