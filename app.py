@@ -50,31 +50,6 @@ def parse_tokens(tokens, accepted_users = "all"):
 
 	return ret
 
-def get_room_chats():
-	token = os.environ.get("TOKEN")
-	client = NotionClient(token)
-
-	cv = client.get_collection_view("https://www.notion.so/5a95fb63129242a5b5b48f18e16ef19a?v=81afe49071ef41bba4c85922ff134407")
-	
-	filter_params = {
-		"filters": [
-			{
-				"filter": {"value": {"type": "exact", "value": }, "operator": "enum_is"},
-				"property": "Status",
-			}
-		],
-		"operator": "and",
-	}
-	cv = cv.build_query(filter=filter_params)
-	result = cv.execute()
-
-	room_chat_ids = []
-	for row in result:
-
-		print(row.end_date)
-
-
-	return room_chat_ids
 
 @app.route('/upwork_test', methods=["GET"])
 def upwork_test():
@@ -124,7 +99,7 @@ def upwork_test():
 			filter_params = {
 				filters: [
 					{
-						"filter": {"value": {"type": "exact", "value": "https://www.upwork.com/messages/rooms/"+room.roomId}, "operator": "enum_is"},
+						"filter": {"value": {"type": "exact", "value": "https://www.upwork.com/messages/rooms/"+room.roomId }, "operator": "enum_is"},
 						"property": "Chat URL",
 					}
 				],
