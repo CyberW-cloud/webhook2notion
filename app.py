@@ -90,7 +90,7 @@ def upwork_test():
 		auth = authAPI(client)
 		messages = messageAPI(client)
 		print(auth.get_user_info())
-		print(messages.get_rooms(freelancer["id"]))
+		print(messages.get_rooms(freelancer["id"][1:]))
 
 
 
