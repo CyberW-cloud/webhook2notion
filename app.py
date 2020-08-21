@@ -81,7 +81,7 @@ def upwork_test():
 
 	for freelancer in tokens:
 		print(freelancer)
-		client = upwork.Config(upwork.Config({\
+		client = upwork.Client(upwork.Config({\
             'consumer_key': os.environ.get("ConsumerKey"),\
             'consumer_secret': os.environ.get("ConsumerSecret"),\
             'access_token': freelancer["accessToken"],\
