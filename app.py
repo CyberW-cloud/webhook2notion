@@ -90,8 +90,9 @@ def upwork_test():
 
 		user = userAPI(client)
 		messages = messageAPI(client)
-		print(user.get_my_info())
-		print(messages.get_rooms(freelancer["id"][1:]))
+		
+		reference = user.get_my_info()["user"]["reference"]
+		print(messages.get_rooms(reference))
 
 
 
