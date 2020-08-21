@@ -64,7 +64,7 @@ def get_room_chats():
 	result = cv.execute()
 
 	room_chat_ids = []
-	for row in cv:
+	for row in result:
 		room_chat_ids.append(row.contract_id.chat_url)
 		print(row.contract_id.chat_url)
 
