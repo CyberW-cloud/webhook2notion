@@ -132,7 +132,7 @@ def upwork_test():
 				}
 			contracts = contracts.build_query(filter=filter_params)
 			result = contracts.execute()
-			
+			print(result)
 
 
 	return str(unique_freelancer_ids)
