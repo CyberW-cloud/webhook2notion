@@ -73,17 +73,8 @@ def upwork_test():
 	#get all references to companies
 	company_ref = [x["reference"] for x in company.get_list()["companies"]]
 	
-	unique_freelancer_ids = []
-	for reference in company_ref:
-		client = upwork.Client(login_config)
-		get_users = company.get_users(reference)
-
-		if "users" in get_users.keys():
-			for user in get_users["users"]:
-				user_id = user["public_url"].split("/")[-1]
-
-				if user_id not in unique_freelancer_ids:
-					unique_freelancer_ids.append(user_id)
+	unique_freelancer_ids = [x["public_url"].split("/")[-1] for x in company.get_users(os.environ.get("CompanyRef"))["users"]]
+	
 
 	tokens = parse_tokens(tokens, unique_freelancer_ids)
 	
