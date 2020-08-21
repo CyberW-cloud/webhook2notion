@@ -76,7 +76,7 @@ def upwork_test():
 	freelancer_ids = [x["public_url"].split("/")[-1] for x in company.get_users(os.environ.get("CompanyRef"))["users"]]
 	
 
-	tokens = parse_tokens(tokens, unique_freelancer_ids)
+	tokens = parse_tokens(tokens, freelancer_ids)
 	
 
 	for freelancer in tokens:
