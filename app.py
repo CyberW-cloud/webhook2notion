@@ -67,7 +67,7 @@ def get_room_chats():
 @app.route('/upwork_test', methods=["GET"])
 def upwork_test():
   
-	
+	get_room_chats()
 	tokens = os.environ.get('TOKENS')
 
 	parsed_rooms = [] # format: {"id": roomid, "name": room_name, "freelancers": [id1,id2]}
