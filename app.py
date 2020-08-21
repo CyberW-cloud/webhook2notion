@@ -53,7 +53,7 @@ def parse_tokens(tokens, accepted_users = "all"):
 
 @app.route('/upwork_test', methods=["GET"])
 def upwork_test():
-  	token = os.environ.get("TOKEN")
+	token = os.environ.get("TOKEN")
 	notion_client = NotionClient(token)
 	contracts = client.get_collection_view("https://www.notion.so/5a95fb63129242a5b5b48f18e16ef19a?v=81afe49071ef41bba4c85922ff134407")
 	
