@@ -107,7 +107,7 @@ def upwork_test():
 
 			with_client = contracts.collection.get_rows(search = room["roomName"].split(", ")[0])
 			for result in with_client:
-				if result.contract_name == room["topic"]
+				if result.contract_name == room["topic"]:
 					print(room)
 
 
