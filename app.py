@@ -111,7 +111,7 @@ def upwork_test():
 		user_id = user_data["user"]["id"]
 
 		try:
-			rooms = messages.get_rooms(user_id, {"activeSince": str(now())[:-3]})
+			rooms = messages.get_rooms(user_id)
 
 		except Exception as e:
 			raise e
