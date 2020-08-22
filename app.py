@@ -109,7 +109,22 @@ def upwork_test():
 
 		for room in rooms:
 			
-			with_client = contracts.collection.get_rows(search = room["roomName"].split(", ")[0])
+			#very slow
+			#with_client = contracts.collection.get_rows(search = room["roomName"].split(", ")[0])
+			
+			filter_params = {
+				"filters": [
+					{
+						"filter": {"value": {"type": "exact", "value": room["roomName"].split(", ")[0]}, "operator": "contains"},
+						"property": "Client name",
+					}
+				],
+				"operator": "and",
+			}
+			result = contracts.build_query(filter=filter_params)
+			result = result.execute()
+
+
 			for result in with_client:
 				if result.contract_name == room["topic"]:
 					print(room)
