@@ -110,11 +110,10 @@ def upwork_test():
 		print(user_data)
 		user_id = user_data["user"]["id"]
 
-		try:
-			rooms = messages.get_rooms(user_id)
 
-		except Exception as e:
-			raise e
+		yesterday = datetime.date.today() - datetime.timedelta(1)
+		yesterday = yesterday.strftime("%s")
+		rooms = messages.get_rooms(user_id, {"activeSince": str(yesterday)[:-3]})
 
 		if "rooms" not in rooms.keys():
 			continue
