@@ -57,6 +57,7 @@ def upwork_test():
 	notion_client = NotionClient(token)
 	contracts = notion_client.get_collection_view("https://www.notion.so/5a95fb63129242a5b5b48f18e16ef19a?v=81afe49071ef41bba4c85922ff134407")
 	
+	print(now())
 
 	tokens = os.environ.get('TOKENS')
 
