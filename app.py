@@ -125,7 +125,7 @@ def upwork_test():
 			result = result.execute()
 
 
-			for result in with_client:
+			for res in result:
 				if result.contract_name == room["topic"]:
 					print(room)
 
