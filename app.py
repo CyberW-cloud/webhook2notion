@@ -95,7 +95,12 @@ def upwork_test():
 		user_id = user.get_my_info()
 		print(user_id)
 		user_id = user_id["user"]["id"]
-		rooms = messages.get_rooms(user_id, {"activeSince": str(now())[:-3]})
+
+		try:
+			rooms = messages.get_rooms(user_id, {"activeSince": str(now())[:-3]})
+
+		except Exception as e:
+			raise e
 
 		if "rooms" not in rooms.keys():
 			continue
@@ -103,8 +108,7 @@ def upwork_test():
 			rooms = rooms["rooms"]
 
 		for room in rooms:
-			contracts = notion_client.get_collection_view("https://www.notion.so/5a95fb63129242a5b5b48f18e16ef19a?v=81afe49071ef41bba4c85922ff134407")
-
+			
 			with_client = contracts.collection.get_rows(search = room["roomName"].split(", ")[0])
 			for result in with_client:
 				if result.contract_name == room["topic"]:
