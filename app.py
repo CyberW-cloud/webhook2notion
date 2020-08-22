@@ -55,9 +55,8 @@ def parse_tokens(tokens, accepted_users = "all"):
 def upwork_test():
 	token = os.environ.get("TOKEN")
 	notion_client = NotionClient(token)
-	contracts = notion_client.get_collection_view("https://www.notion.so/5a95fb63129242a5b5b48f18e16ef19a?v=81afe49071ef41bba4c85922ff134407")
+	contracts = notion_client.get_block("https://www.notion.so/5a95fb63129242a5b5b48f18e16ef19a?v=81afe49071ef41bba4c85922ff134407")
 	
-	print(now())
 
 	tokens = os.environ.get('TOKENS')
 
@@ -99,18 +98,8 @@ def upwork_test():
 		rooms = messages.get_rooms(user_id, {"activeSince": str(now())[:-3]})["rooms"]
 		for room in rooms:
 			contracts = notion_client.get_collection_view("https://www.notion.so/5a95fb63129242a5b5b48f18e16ef19a?v=81afe49071ef41bba4c85922ff134407")
-			print(room)
-			filter_params = {
-				"filters" : [
-					{
-						"filter": {"value": {"type": "exact", "value": room["roomId"] }, "operator": "contains"},
-						"property": "Chat URL",
-					}
-				],
-					"operator": "and",
-			}
-			contracts = contracts.build_query(filter=filter_params)
-			result = contracts.execute()
+
+			result = contracts.collection.search(room["name"].split(", ")[0])
 			print(result)
 
 
