@@ -92,15 +92,17 @@ def upwork_test():
 		user = userAPI(client)
 		messages = messageAPI(client)
 		
-		user_id = user.get_my_info()["user"]["id"]
-		rooms = messages.get_rooms(user_id)["rooms"]
+		user_id = user.get_my_info()
+		print(user_id)
+		user_id = user_id["user"]["id"]
+		rooms = messages.get_rooms(user_id, {"activeSince": str(now())[:-3]})["rooms"]
 		for room in rooms:
 			contracts = notion_client.get_collection_view("https://www.notion.so/5a95fb63129242a5b5b48f18e16ef19a?v=81afe49071ef41bba4c85922ff134407")
 			print(room)
 			filter_params = {
 				"filters" : [
 					{
-						"filter": {"value": {"type": "exact", "value": "https://www.upwork.com/messages/rooms/"+room["roomId"] }, "operator": "text_is"},
+						"filter": {"value": {"type": "exact", "value": room["roomId"] }, "operator": "contains"},
 						"property": "Chat URL",
 					}
 				],
