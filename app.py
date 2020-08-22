@@ -99,7 +99,7 @@ def upwork_test():
 		for room in rooms:
 			contracts = notion_client.get_collection_view("https://www.notion.so/5a95fb63129242a5b5b48f18e16ef19a?v=81afe49071ef41bba4c85922ff134407")
 
-			result = contracts.collection.get_rows(search = room["name"].split(", ")[0])
+			result = contracts.collection.get_rows(search = room["roomName"].split(", ")[0])
 			print(result)
 
 
