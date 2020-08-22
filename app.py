@@ -125,7 +125,7 @@ def upwork_test():
 			
 			#very slow
 			contracts_found = contracts.collection.get_rows(search = room["roomId"])
-			proposals_found = proposals.collection.get_rows(search = rooms["roomsId"])
+			proposals_found = proposals.collection.get_rows(search = room["roomId"])
 
 			for res in contracts_found:
 				if res.contract_name == room["topic"]:
