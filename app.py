@@ -131,13 +131,13 @@ def upwork_test():
 				if res.contract_name == room["topic"]:
 					if not res.ended:
 						update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Act_Contract", "freelancers": []}, user_data)
-						print("ACTIVE CONTRACT: " + room)
+						print("ACTIVE CONTRACT: " + str(room))
 					else:
 						update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "End_Contract", "freelancers": []}, user_data)
-						print("ENDED CONTRACT: " + room)
+						print("ENDED CONTRACT: " + str(room))
 			for res in proposals_found:
 				update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Proposal", "freelancers":[]}, user_data)
-				print("PROPOSAL: " + room)
+				print("PROPOSAL: " + str(room))
 	return parsed_rooms
 
 @app.route('/add_global_block', methods=["GET"])
