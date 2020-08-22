@@ -50,17 +50,31 @@ def parse_tokens(tokens, accepted_users = "all"):
 
 	return ret
 
+def update_parsed_rooms(parsed_rooms, update, freelancer = None):
+
+	if freelancer!=None:
+		update["freelancer"].append({"id": freelancer["user"]["id"], "name": freelancer["auth_user"]["first_name"] + " " + freelancer["auth_user"]["last_name"]})
+	
+	if update["id"] not in [x["id"] for x in parsed_rooms]:
+		parsed_rooms.append(update)
+		return parsed_rooms
+
+	for room in parsed_rooms:
+		if room["id"] == update["id"]:
+			room["freelancer"].append(update["freelancer"][0])
+			return parsed_rooms
 
 @app.route('/upwork_test', methods=["GET"])
 def upwork_test():
 	token = os.environ.get("TOKEN")
 	notion_client = NotionClient(token)
-	contracts = notion_client.get_collection_view("https://www.notion.so/5a95fb63129242a5b5b48f18e16ef19a?v=81afe49071ef41bba4c85922ff134407")
 	
+	contracts = notion_client.get_collection_view("https://www.notion.so/5a95fb63129242a5b5b48f18e16ef19a?v=81afe49071ef41bba4c85922ff134407")
+	proposals = notion_client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2")
 
 	tokens = os.environ.get('TOKENS')
 
-	parsed_rooms = [] # format: {"id": roomid, "name": room_name, "freelancers": [id1,id2]}
+	parsed_rooms = [] # format: {"room":{upwork room getinfo}, "type":"Act_Contract"/"End_Contract"/"Proposal"/"", "freelancers": [{id, name}]}
 	
 
 	login_config = upwork.Config({\
@@ -92,9 +106,9 @@ def upwork_test():
 		user = userAPI(client)
 		messages = messageAPI(client)
 		
-		user_id = user.get_my_info()
-		print(user_id)
-		user_id = user_id["user"]["id"]
+		user_data = user.get_my_info()
+		print(user_data)
+		user_id = user_data["user"]["id"]
 
 		try:
 			rooms = messages.get_rooms(user_id, {"activeSince": str(now())[:-3]})
@@ -110,14 +124,22 @@ def upwork_test():
 		for room in rooms:
 			
 			#very slow
-			result = contracts.collection.get_rows(search = room["roomId"])
+			contracts_found = contracts.collection.get_rows(search = room["roomId"])
+			proposals_found = proposals.collection.get_rows(search = rooms["roomsId"])
 
-			for res in result:
+			for res in contracts_found:
 				if res.contract_name == room["topic"]:
-					print(room)
+					if not res.ended:
+						update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Act_Contract", "freelancer" = []}, user_data)
+					else:
+						update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "End_Contract", "freelancer" = []}, user_data)
 
+			for res in proposals_found:
+				#check if the room is unique
+				if room["roomId"] not in [x["id"] for x in parsed_rooms]:
+					update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Proposal", freelancers:[]}, user_data)
 
-	return str(unique_freelancer_ids)
+	return parsed_rooms
 
 @app.route('/add_global_block', methods=["GET"])
 def add_global_block():
