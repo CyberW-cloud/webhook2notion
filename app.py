@@ -110,8 +110,7 @@ def upwork_test():
 		for room in rooms:
 			
 			#very slow
-			result = contracts.collection.get_rows(search = room["roomName"].split(", ")[0])
-
+			result = contracts.collection.get_rows(search = room["roomID"])
 
 			for res in result:
 				if result.contract_name == room["topic"]:
