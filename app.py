@@ -135,9 +135,7 @@ def upwork_test():
 						update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "End_Contract", "freelancer" = []}, user_data)
 
 			for res in proposals_found:
-				#check if the room is unique
-				if room["roomId"] not in [x["id"] for x in parsed_rooms]:
-					update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Proposal", freelancers:[]}, user_data)
+				update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Proposal", freelancers:[]}, user_data)
 
 	return parsed_rooms
 
