@@ -53,7 +53,7 @@ def parse_tokens(tokens, accepted_users = "all"):
 def update_parsed_rooms(parsed_rooms, update, freelancer = None):
 
 	if freelancer!=None:
-		update["freelancer"].append({"id": freelancer["user"]["id"], "name": freelancer["auth_user"]["first_name"] + " " + freelancer["auth_user"]["last_name"]})
+		update["freelancers"].append({"id": freelancer["user"]["id"], "name": freelancer["auth_user"]["first_name"] + " " + freelancer["auth_user"]["last_name"]})
 	
 	if update["id"] not in [x["id"] for x in parsed_rooms]:
 		parsed_rooms.append(update)
@@ -61,7 +61,7 @@ def update_parsed_rooms(parsed_rooms, update, freelancer = None):
 
 	for room in parsed_rooms:
 		if room["id"] == update["id"]:
-			room["freelancer"].append(update["freelancer"][0])
+			room["freelancers"].append(update["freelancers"][0])
 			return parsed_rooms
 
 @app.route('/upwork_test', methods=["GET"])
