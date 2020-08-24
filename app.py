@@ -390,12 +390,12 @@ def test_scripts():
 
 		# test_page_url = ""
 
-		# TEST = False
-		# if(log==""):
-		# 	return "Done"
-		# else:
-		# 	print(log)
-		# 	return log
+		TEST = False
+		if(log==""):
+			return "Done"
+		else:
+			print(log)
+			return log
 
 	except Exception as e:
 		TEST = False
