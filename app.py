@@ -29,7 +29,7 @@ app = Flask(__name__)
 
 
 #var used to signify testing
-TEST = False
+TEST = True
 test_page_url = "https://www.notion.so/TEST-68d7198ed4d3437b816386f6da196547"
 
 #accepted users should be an array of id's or "all" for accepting all users
@@ -353,42 +353,42 @@ def test_scripts():
 
 
 
-		# test_page_url = create_page(day_page.get_browseable_url(), "/kickstaff").get_browseable_url()
+		test_page_url = create_page(day_page.get_browseable_url(), "/kickstaff").get_browseable_url()
 
-		# kick_staff()
+		kick_staff()
 
-		# if not check_test_results(test_page_url):
-		# 	log += "TEST FAILED!: kick_staff didn't add todo's correctly!\n"
+		if not check_test_results(test_page_url):
+			log += "TEST FAILED!: kick_staff didn't add todo's correctly!\n"
 
-		# test_page_url = create_page(day_page.get_browseable_url(), "/proposals_check").get_browseable_url()
+		test_page_url = create_page(day_page.get_browseable_url(), "/proposals_check").get_browseable_url()
 
-		# proposals_check()
+		proposals_check()
 
-		# if not check_test_results(test_page_url):
-		# 	log += "TEST FAILED!: proposals_check didn't add todo's correctly!\n"
+		if not check_test_results(test_page_url):
+			log += "TEST FAILED!: proposals_check didn't add todo's correctly!\n"
 
-		# test_page_url = create_page(day_page.get_browseable_url(), "/weekly_todo").get_browseable_url()
+		test_page_url = create_page(day_page.get_browseable_url(), "/weekly_todo").get_browseable_url()
 
-		# weekly_todo()
+		weekly_todo()
 
-		# if not check_test_results(test_page_url):
-		# 	log += "TEST FAILED!: weekly_todo didn't add todo's correctly!\n"
+		if not check_test_results(test_page_url):
+			log += "TEST FAILED!: weekly_todo didn't add todo's correctly!\n"
 
-		# test_page_url = create_page(day_page.get_browseable_url(), "/friday_todo").get_browseable_url()
+		test_page_url = create_page(day_page.get_browseable_url(), "/friday_todo").get_browseable_url()
 
-		# friday_todo()
+		friday_todo()
 
-		# if not check_test_results(test_page_url):
-		# 	log += "TEST FAILED!: friday_todo didn't add todo's correctly!\n"
+		if not check_test_results(test_page_url):
+			log += "TEST FAILED!: friday_todo didn't add todo's correctly!\n"
 
-		# test_page_url = create_page(day_page.get_browseable_url(), "/todo_one").get_browseable_url()
+		test_page_url = create_page(day_page.get_browseable_url(), "/todo_one").get_browseable_url()
 
-		# todo_one()
+		todo_one()
 
-		# if not check_test_results(test_page_url):
-		# 	log += "TEST FAILED!: todo_one didn't add todo's correctly!\n"
+		if not check_test_results(test_page_url):
+			log += "TEST FAILED!: todo_one didn't add todo's correctly!\n"
 
-		# test_page_url = ""
+		test_page_url = ""
 
 		TEST = False
 		if(log==""):
