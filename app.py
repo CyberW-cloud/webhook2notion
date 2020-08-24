@@ -30,7 +30,7 @@ app = Flask(__name__)
 
 #var used to signify testing
 TEST = True
-test_page_url = "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c"
+test_page_url = "https://www.notion.so/TEST-68d7198ed4d3437b816386f6da196547"
 
 #accepted users should be an array of id's or "all" for accepting all users
 def parse_tokens(tokens, accepted_users = "all"):
