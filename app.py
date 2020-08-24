@@ -343,6 +343,7 @@ def test_scripts():
 	
 		test_row = page.views.add_new()
 		test_row = page.collection.add_row()
+		print(test_row.get_browseable_url())
 		test_row.name = "This worked!"
 		page.collection.refresh()
 
