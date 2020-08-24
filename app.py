@@ -29,7 +29,7 @@ app = Flask(__name__)
 
 
 #var used to signify testing
-TEST = True
+TEST = False
 test_page_url = "https://www.notion.so/TEST-68d7198ed4d3437b816386f6da196547"
 
 #accepted users should be an array of id's or "all" for accepting all users
