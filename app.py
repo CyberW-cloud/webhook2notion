@@ -313,7 +313,7 @@ def add_global_block():
 def test_scripts():
 	global TEST
 	global test_page_url
-	parent_page_url = "https://www.notion.so/Test-6745f90a3268473790a8070ec8434d4c"
+	parent_page_url = "https://www.notion.so/TEST-68d7198ed4d3437b816386f6da196547"
 	
 	if TEST:
 		return "Test already running!"	#to avoid any race cases
