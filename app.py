@@ -318,7 +318,7 @@ def test_scripts():
 	if TEST:
 		return "Test already running!"	#to avoid any race cases
 
-	log = "TEST FAILED!: "
+	log = ""
 
 	try:
 		TEST = True	
@@ -352,49 +352,49 @@ def test_scripts():
 
 
 
-		test_page_url = create_page(day_page.get_browseable_url(), "/kickstaff").get_browseable_url()
+		# test_page_url = create_page(day_page.get_browseable_url(), "/kickstaff").get_browseable_url()
 
-		kick_staff()
+		# kick_staff()
 
-		if not check_test_results(test_page_url):
-			log += "TEST FAILED!: kick_staff didn't add todo's correctly!\n"
+		# if not check_test_results(test_page_url):
+		# 	log += "TEST FAILED!: kick_staff didn't add todo's correctly!\n"
 
-		test_page_url = create_page(day_page.get_browseable_url(), "/proposals_check").get_browseable_url()
+		# test_page_url = create_page(day_page.get_browseable_url(), "/proposals_check").get_browseable_url()
 
-		proposals_check()
+		# proposals_check()
 
-		if not check_test_results(test_page_url):
-			log += "TEST FAILED!: proposals_check didn't add todo's correctly!\n"
+		# if not check_test_results(test_page_url):
+		# 	log += "TEST FAILED!: proposals_check didn't add todo's correctly!\n"
 
-		test_page_url = create_page(day_page.get_browseable_url(), "/weekly_todo").get_browseable_url()
+		# test_page_url = create_page(day_page.get_browseable_url(), "/weekly_todo").get_browseable_url()
 
-		weekly_todo()
+		# weekly_todo()
 
-		if not check_test_results(test_page_url):
-			log += "TEST FAILED!: weekly_todo didn't add todo's correctly!\n"
+		# if not check_test_results(test_page_url):
+		# 	log += "TEST FAILED!: weekly_todo didn't add todo's correctly!\n"
 
-		test_page_url = create_page(day_page.get_browseable_url(), "/friday_todo").get_browseable_url()
+		# test_page_url = create_page(day_page.get_browseable_url(), "/friday_todo").get_browseable_url()
 
-		friday_todo()
+		# friday_todo()
 
-		if not check_test_results(test_page_url):
-			log += "TEST FAILED!: friday_todo didn't add todo's correctly!\n"
+		# if not check_test_results(test_page_url):
+		# 	log += "TEST FAILED!: friday_todo didn't add todo's correctly!\n"
 
-		test_page_url = create_page(day_page.get_browseable_url(), "/todo_one").get_browseable_url()
+		# test_page_url = create_page(day_page.get_browseable_url(), "/todo_one").get_browseable_url()
 
-		todo_one()
+		# todo_one()
 
-		if not check_test_results(test_page_url):
-			log += "TEST FAILED!: todo_one didn't add todo's correctly!\n"
+		# if not check_test_results(test_page_url):
+		# 	log += "TEST FAILED!: todo_one didn't add todo's correctly!\n"
 
-		test_page_url = ""
+		# test_page_url = ""
 
-		TEST = False
-		if(log==""):
-			return "Done"
-		else:
-			print(log)
-			return log
+		# TEST = False
+		# if(log==""):
+		# 	return "Done"
+		# else:
+		# 	print(log)
+		# 	return log
 
 	except Exception as e:
 		TEST = False
@@ -1423,7 +1423,7 @@ def create_pcj(token, collection_url, subject, description, invite_to, link):
 		urllib.parse.quote(subject[:-9])
 	)
 	row.id = item_id.group()[3:]
-
+	return row
 
 @app.route("/pcj", methods=["POST"])
 def pcj():
@@ -1434,8 +1434,8 @@ def pcj():
 	invite_to = request.form.get("inviteto")
 	link = request.form.get("link")
 	print(f"add {subject} {link}")
-	create_pcj(token_v2, collection_url, subject, description, invite_to, link)
-	return f"added {subject} receipt to Notion"
+	pcj = create_pcj(token_v2, collection_url, subject, description, invite_to, link)
+	return f"added {subject} receipt to " + pcj.get_browseable_url()
 
 
 def create_invite(token, collection_url, subject, description, invite_to):
@@ -1452,7 +1452,7 @@ def create_invite(token, collection_url, subject, description, invite_to):
 	row.to = invite_to
 	row.link = url
 	row.id = item_id.group()
-
+	return row
 
 @app.route("/invites", methods=["POST"])
 def invites():
@@ -1462,8 +1462,8 @@ def invites():
 	token_v2 = os.environ.get("TOKEN")
 	invite_to = request.form.get("inviteto")
 	print(f"add {subject}")
-	create_invite(token_v2, collection_url, subject, description, invite_to)
-	return f"added {subject} receipt to Notion"
+	invite = create_invite(token_v2, collection_url, subject, description, invite_to)
+	return f"added {subject} receipt to" + invite.get_browseable_url()
 
 
 def create_response(type, data):
