@@ -113,7 +113,7 @@ def upwork_test():
 		user_id = user_data["user"]["id"]
 
 
-		yesterday = datetime.date.today() - datetime.timedelta(1)
+		yesterday = datetime.date.today() + datetime.timedelta(1)
 		yesterday = yesterday.strftime("%s")
 		rooms = messages.get_rooms(user_id, {"activeSince": str(yesterday)[:-3]})
 
@@ -130,7 +130,6 @@ def upwork_test():
 
 
 			messages = messages_api.get_room_messages(user_id, room["roomId"], {"limit":3})
-			print(messages)
 
 			if len(contracts_found)>0:
 				if not contracts_found[0].ended:
@@ -148,8 +147,8 @@ def upwork_test():
 				update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "No info", "link":"", "messages":messages,"freelancers":[]}, user_data)
 				print("NO DATA " + str(room))
 
-		date = str(datetime.datetime.now().day) + " " + str(datetime.datetime.now().month) + " " + str(datetime.datetime.now().year)
-		target_page = create_page("", "message review for " + date)
+	date = str(datetime.datetime.now().day) + " " + str(datetime.datetime.now().month) + " " + str(datetime.datetime.now().year)
+	target_page = create_page(message_review_page, "message review for " + date)
 
 	print("finished parsing rooms")
 
