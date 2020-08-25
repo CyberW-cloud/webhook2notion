@@ -171,16 +171,16 @@ def upwork_test():
 
 	for room in parsed_rooms:
 		link = "https://www.upwork.com/messages/rooms/" + room["id"]
-		link_text = "["+link+"](Room)"
+		link_text = "[Room]("+link+")"
 		
 		if room["type"] == "No info":
 			type_text = "No info"
 		else:
-			type_text = "["+room["link"]+"]("+room["type"]+")" 
+			type_text = "["+room["type"]+"]("+room["link"]+")" 
 
 
-		text_block = target_page.children.add_new(TextBlock, title = room["room"]["roomName"]+" "+room["room"]["topic"])
-		text_block = text_block.children.add_new(TextBlock, title =type_text+", "+link_text)
+		text_block = target_page.children.add_new(TextBlock, title = room["room"]["roomName"]+"\n"+room["room"]["topic"])
+		text_block = text_block.children.add_new(TextBlock, title =type_text+" , "+link_text)
 
 		# we have to use range() to go in reverse
 		stories = room["messages"]["stories_list"]["stories"]
