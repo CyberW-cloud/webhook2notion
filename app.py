@@ -141,7 +141,7 @@ def upwork_test():
 					update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Ended Contract", "messages":messages, "link":contracts_found[0].get_browseable_url(), "freelancers": []}, user_data)
 					print("ENDED CONTRACT: " + str(room))
 		
-			elif len(contracts_found)>0:		
+			elif len(proposals_found)>0:		
 				update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Proposal", "messages":messages, "link":proposals_found[0].get_browseable_url(), "freelancers":[]}, user_data)
 				print("PROPOSAL: " + str(room))
 
