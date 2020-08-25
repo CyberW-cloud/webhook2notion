@@ -151,7 +151,7 @@ def upwork_test():
 		date = str(datetime.datetime.now().day) + " " + str(datetime.datetime.now().month) + " " + str(datetime.datetime.now().year)
 		target_page = create_page("", "message review for " + date)
 
-	print(finished parsing rooms)
+	print("finished parsing rooms")
 
 	for room in parsed_rooms:
 		link = "https://www.upwork.com/messages/rooms/" + room["id"]
