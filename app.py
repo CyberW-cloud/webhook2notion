@@ -115,7 +115,7 @@ def upwork_test():
 
 		yesterday = datetime.datetime.utcnow() - datetime.timedelta(1)
 		yesterday = yesterday.strftime("%s")*1000
-		
+		print(yesterday)
 
 		rooms = messages_api.get_rooms(user_id, {"activeSince": str(yesterday)})	
 
