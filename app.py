@@ -129,7 +129,7 @@ def upwork_test():
 			proposals_found = proposals.collection.get_rows(search = room["roomId"])
 
 
-			messages = messages_api.get_room_messages(user_id, room["roomId"], {"limit:3"})
+			messages = messages_api.get_room_messages(user_id, room["roomId"], {"limit":3})
 			print(messages)
 
 			if len(contracts_found)>0:
