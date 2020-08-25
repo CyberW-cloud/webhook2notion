@@ -113,7 +113,7 @@ def upwork_test():
 		user_id = user_data["user"]["id"]
 
 
-		yesterday = datetime.date.today() + datetime.timedelta(1)
+		yesterday = datetime.date.today() - datetime.timedelta(1)
 		yesterday = yesterday.strftime("%s")
 		rooms = messages.get_rooms(user_id, {"activeSince": str(yesterday)[:-3]})
 
@@ -123,7 +123,9 @@ def upwork_test():
 			rooms = rooms["rooms"]
 
 		for room in rooms:
-			
+		
+			if room["latest_story"]["updated"]<=int(yesterday):
+				continue
 			#pretty slow, but idk how to do this faster (download db?)
 			contracts_found = contracts.collection.get_rows(search = room["roomId"])
 			proposals_found = proposals.collection.get_rows(search = room["roomId"])
