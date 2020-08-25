@@ -166,7 +166,7 @@ def upwork_test():
 			text_block = target_page.children.add_new(TextBlock, room["room"]["roomName"]+" "+room["room"]["roomTopic"])
 			text_block = text_block.children.add_new(TextBlock, type_text+", "+link_text)
 
- 			for message in room["messages"]["stories_list"]["stories"]:
+			for message in room["messages"]["stories_list"]["stories"]:
  				pass
 
 
