@@ -185,6 +185,10 @@ def upwork_test():
 		# we have to use range() to go in reverse
 		stories = room["messages"]["stories_list"]["stories"]
 		for i in range(len(stories)-1, 0 , -1):
+			if stories[i]["message"] == None:
+				print(stories[i])
+				continue
+
 			time = datetime.datetime.fromtimestamp(stories[i]["updated"]/1000).strftime('%Y-%m-%d %H:%M:%S')
 			text = "["+time+"]\n"
 
