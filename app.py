@@ -115,7 +115,6 @@ def upwork_test():
 
 		yesterday = datetime.datetime.now() - datetime.timedelta(1)
 		yesterday = int(yesterday.timestamp())*1000
-		print(yesterday)
 
 		rooms = messages_api.get_rooms(user_id, {"activeSince": str(yesterday)})	
 
@@ -139,7 +138,10 @@ def upwork_test():
 				contracts_found = []
 				proposals_found = []
 
-			messages = messages_api.get_room_messages(user_id, room["roomId"], {"limit":3})
+			try:
+				messages = messages_api.get_room_messages(user_id, room["roomId"], {"limit":3})
+			except Exception as e:
+				messages = []
 			
 			
 			if len(contracts_found)>0:
