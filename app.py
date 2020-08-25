@@ -66,6 +66,8 @@ def update_parsed_rooms(parsed_rooms, update, freelancer = None):
 
 @app.route('/upwork_test', methods=["GET"])
 def upwork_test():
+	message_review_page = "https://www.notion.so/Message-Review-33cbe6e92b9e4894890d768f1ea7b970"
+
 	token = os.environ.get("TOKEN")
 	notion_client = NotionClient(token)
 	
@@ -104,7 +106,7 @@ def upwork_test():
 			'access_token_secret': freelancer["accessSecret"]}))
 
 		user = userAPI(client)
-		messages = messageAPI(client)
+		messages_api = messageAPI(client)
 		
 		user_data = user.get_my_info()
 		print(user_data)
@@ -122,21 +124,52 @@ def upwork_test():
 
 		for room in rooms:
 			
-			#very slow
+			#pretty slow, but idk how to do this faster (download db?)
 			contracts_found = contracts.collection.get_rows(search = room["roomId"])
 			proposals_found = proposals.collection.get_rows(search = room["roomId"])
 
-			for res in contracts_found:
-				if res.contract_name == room["topic"]:
-					if not res.ended:
-						update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Act_Contract", "freelancers": []}, user_data)
+
+			messages = messages_api.get_room_messages(user_id, room["roomId"], {"limit:3"})
+			print(messages)
+
+			if len(contracts_found)>0:
+				if room["roomId"] in contracts_found[0].chat_url:
+					if not contracts_found[0].ended:
+						update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Active Contract", "messages":messages, "link":contracts_found[0].get_browseable_url(), "freelancers": []}, user_data)
 						print("ACTIVE CONTRACT: " + str(room))
 					else:
-						update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "End_Contract", "freelancers": []}, user_data)
+						update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Ended Contract", "messages":messages, "link":contracts_found[0].get_browseable_url(), "freelancers": []}, user_data)
 						print("ENDED CONTRACT: " + str(room))
-			for res in proposals_found:
-				update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Proposal", "freelancers":[]}, user_data)
-				print("PROPOSAL: " + str(room))
+			
+			elif len(contracts_found)>0:
+				if room["roomId"] in proposals_found[0].chat_link: 
+					update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Proposal", "messages":messages, "link":proposals_found[0].get_browseable_url(), "freelancers":[]}, user_data)
+					print("PROPOSAL: " + str(room))
+
+			else:
+				update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "No info", "link":"", "messages":messages,"freelancers":[]}, user_data)
+				print("NO DATA " + str(room))
+
+		date = str(datetime.datetime.now().day) + " " + str(datetime.datetime.now().month) + " " + str(datetime.datetime.now().year)
+		target_page = create_page("", "message review for " + date)
+
+		for room in parsed_rooms:
+			link = "https://www.upwork.com/messages/rooms/" + room["id"]
+			link_text = "["+link+"](Room)"
+			
+			if room["type"] == "No info":
+				type_text = "No info"
+			else
+				type_text = "["+room["link"]+"]("+room["type"]+")" 
+
+
+			text_block = target_page.children.add_new(TextBlock, room["room"]["roomName"]+" "+room["room"]["roomTopic"])
+ 			text_block = text_block.children.add_new(TextBlock, type_text+", "+link_text)
+
+ 			for message in room["messages"]["stories_list"]["stories"]:
+ 				pass
+
+
 	return parsed_rooms
 
 @app.route('/add_global_block', methods=["GET"])
@@ -1464,7 +1497,7 @@ def invites():
 	invite_to = request.form.get("inviteto")
 	print(f"add {subject}")
 	invite = create_invite(token_v2, collection_url, subject, description, invite_to)
-	return f"added {subject} receipt to" + invite.get_browseable_url()
+	return f"added {subject} receipt to " + invite.get_browseable_url()
 
 
 def create_response(type, data):
