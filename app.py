@@ -129,10 +129,15 @@ def upwork_test():
 		
 			if room["latestStory"]["updated"]<=int(yesterday):
 				continue
-			#pretty slow, but idk how to do this faster (download db?)
-			contracts_found = contracts.collection.get_rows(search = room["roomId"])
-			proposals_found = proposals.collection.get_rows(search = room["roomId"])
-
+			
+			#sometimes throws an error
+			try:
+				#pretty slow, but idk how to do this faster (download db?)
+				contracts_found = contracts.collection.get_rows(search = room["roomId"])
+				proposals_found = proposals.collection.get_rows(search = room["roomId"])
+			except Exception as e:
+				contracts_found = []
+				proposals_found = []
 
 			messages = messages_api.get_room_messages(user_id, room["roomId"], {"limit":3})
 			
