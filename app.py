@@ -113,7 +113,7 @@ def upwork_test():
 		user_id = user_data["user"]["id"]
 
 
-		yesterday = datetime.datetime.utcnow() - datetime.timedelta(1)
+		yesterday = datetime.datetime.now() - datetime.timedelta(1)
 		yesterday = yesterday.strftime("%s")*1000
 		print(yesterday)
 
