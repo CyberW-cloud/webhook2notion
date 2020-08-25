@@ -173,7 +173,7 @@ def upwork_test():
 			type_text = "["+room["link"]+"]("+room["type"]+")" 
 
 
-		text_block = target_page.children.add_new(TextBlock, room["room"]["roomName"]+" "+room["room"]["roomTopic"])
+		text_block = target_page.children.add_new(TextBlock, room["room"]["roomName"]+" "+room["room"]["topic"])
 		text_block = text_block.children.add_new(TextBlock, type_text+", "+link_text)
 
 		# we have to use range() to go in reverse
