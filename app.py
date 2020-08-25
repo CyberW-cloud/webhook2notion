@@ -94,7 +94,7 @@ def upwork_test():
 	freelancer_ids = [x["public_url"].split("/")[-1] for x in company.get_users(os.environ.get("CompanyRef"))["users"]]
 	
 	#skip owner to parse quicker
-	tokens = parse_tokens(tokens, freelancer_ids)[1:]
+	tokens = parse_tokens(tokens, freelancer_ids)[1:2]
 	
 
 	for freelancer in tokens:
@@ -130,7 +130,7 @@ def upwork_test():
 			if room["latestStory"]["updated"]<=int(yesterday):
 				continue
 			
-			#sometimes throws an error
+			#sometimes throws an error, just default to no info
 			try:
 				#pretty slow, but idk how to do this faster (download db?)
 				contracts_found = contracts.collection.get_rows(search = room["roomId"])
