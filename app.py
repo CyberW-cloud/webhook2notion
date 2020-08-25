@@ -930,60 +930,61 @@ def message():
 
 
 def create_pcj(token, collection_url, subject, description, invite_to, link):
-    # notion
-    item_id = re.search("%7E[\w]+", link)
-    client = NotionClient(token)
-    cv = client.get_collection_view(collection_url)
-    row = cv.collection.add_row()
-    row.name = subject[:-9]
-    row.description = description
-    row.status = "New"
-    row.to = invite_to
-    row.link = "https://www.upwork.com/ab/jobs/search/?previous_clients=all&q={}&sort=recency".format(
-        urllib.parse.quote(subject[:-9])
-    )
-    row.id = item_id.group()[3:]
-
+	# notion
+	item_id = re.search("%7E[\w]+", link)
+	client = NotionClient(token)
+	cv = client.get_collection_view(collection_url)
+	row = cv.collection.add_row()
+	row.name = subject[:-9]
+	row.description = description
+	row.status = "New"
+	row.to = invite_to
+	row.link = "https://www.upwork.com/ab/jobs/search/?previous_clients=all&q={}&sort=recency".format(
+		urllib.parse.quote(subject[:-9])
+	)
+	row.id = item_id.group()[3:]
+	return row
 
 @app.route("/pcj", methods=["POST"])
 def pcj():
-    collection_url = request.form.get("collectionURL")
-    description = request.form.get("description")
-    subject = request.form.get("subject")
-    token_v2 = os.environ.get("TOKEN")
-    invite_to = request.form.get("inviteto")
-    link = request.form.get("link")
-    print(f"add {subject} {link}")
-    create_pcj(token_v2, collection_url, subject, description, invite_to, link)
-    return f"added {subject} receipt to Notion"
+	collection_url = request.form.get("collectionURL")
+	description = request.form.get("description")
+	subject = request.form.get("subject")
+	token_v2 = os.environ.get("TOKEN")
+	invite_to = request.form.get("inviteto")
+	link = request.form.get("link")
+	print(f"add {subject} {link}")
+	pcj = create_pcj(token_v2, collection_url, subject, description, invite_to, link)
+	return f"added {subject} receipt to " + pcj.get_browseable_url()
+
 
 
 def create_invite(token, collection_url, subject, description, invite_to):
-    # notion
-    match = re.search("https://upwork.com/applications/\d+", description)
-    url = match.group()
-    item_id = re.search("\d+", url)
-    client = NotionClient(token)
-    cv = client.get_collection_view(collection_url)
-    row = cv.collection.add_row()
-    row.name = subject
-    row.description = description
-    row.status = "New"
-    row.to = invite_to
-    row.link = url
-    row.id = item_id.group()
-
+	# notion
+	match = re.search("https://upwork.com/applications/\d+", description)
+	url = match.group()
+	item_id = re.search("\d+", url)
+	client = NotionClient(token)
+	cv = client.get_collection_view(collection_url)
+	row = cv.collection.add_row()
+	row.name = subject
+	row.description = description
+	row.status = "New"
+	row.to = invite_to
+	row.link = url
+	row.id = item_id.group()
+	return row
 
 @app.route("/invites", methods=["POST"])
 def invites():
-    collection_url = request.form.get("collectionURL")
-    description = request.form.get("description")
-    subject = request.form.get("subject")
-    token_v2 = os.environ.get("TOKEN")
-    invite_to = request.form.get("inviteto")
-    print(f"add {subject}")
-    create_invite(token_v2, collection_url, subject, description, invite_to)
-    return f"added {subject} receipt to Notion"
+	collection_url = request.form.get("collectionURL")
+	description = request.form.get("description")
+	subject = request.form.get("subject")
+	token_v2 = os.environ.get("TOKEN")
+	invite_to = request.form.get("inviteto")
+	print(f"add {subject}")
+	invite = create_invite(token_v2, collection_url, subject, description, invite_to)
+	return f"added {subject} receipt to " + invite.get_browseable_url()
 
 
 def create_response(type, data):
