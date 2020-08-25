@@ -174,7 +174,7 @@ def upwork_test():
 
 			name = "Client"
 			for freelancer in room["freelancers"]:
-				if stories[i]["userId"] == freelancer["id"]
+				if stories[i]["userId"] == freelancer["id"]:
 					name = freelancer["name"]
 
 			text += name+":\n"
