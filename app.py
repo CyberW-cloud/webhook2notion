@@ -127,7 +127,7 @@ def upwork_test():
 
 		for room in rooms:
 		
-			if room["latestStory"]["updated"]<=int(yesterday):
+			if room["latestStory"]["updated"]/1000<=int(yesterday):
 				continue
 			
 			#sometimes throws an error, just default to no info
