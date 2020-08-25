@@ -115,8 +115,12 @@ def upwork_test():
 
 		yesterday = datetime.date.today() - datetime.timedelta(1)
 		yesterday = yesterday.strftime("%s")
-		rooms = messages.get_rooms(user_id, {"activeSince": str(yesterday)[:-3]})
-
+		
+		try:
+			rooms = messages.get_rooms(user_id, {"activeSince": str(yesterday)[:-3]})	
+		except Exception as e:
+			continue
+		
 		if "rooms" not in rooms.keys():
 			continue
 		else: 
@@ -130,9 +134,11 @@ def upwork_test():
 			contracts_found = contracts.collection.get_rows(search = room["roomId"])
 			proposals_found = proposals.collection.get_rows(search = room["roomId"])
 
-
-			messages = messages_api.get_room_messages(user_id, room["roomId"], {"limit":3})
-
+			try:
+				messages = messages_api.get_room_messages(user_id, room["roomId"], {"limit":3})
+			except Exception as e:
+				continue
+			
 			if len(contracts_found)>0:
 				if not contracts_found[0].ended:
 					update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Active Contract", "messages":messages, "link":contracts_found[0].get_browseable_url(), "freelancers": []}, user_data)
