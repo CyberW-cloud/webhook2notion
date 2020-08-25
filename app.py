@@ -53,7 +53,7 @@ def parse_tokens(tokens, accepted_users = "all"):
 def update_parsed_rooms(parsed_rooms, update, freelancer = None):
 
 	if freelancer!=None:
-		update["freelancers"].append({"id": freelancer["user"]["id"], "name": freelancer["auth_user"]["first_name"] + " " + freelancer["auth_user"]["last_name"]})
+		update["freelancers"].append({"id": freelancer["user"]["public_url"].split("/")[-1], "name": freelancer["auth_user"]["first_name"] + " " + freelancer["auth_user"]["last_name"]})
 	
 	if update["id"] not in [x["id"] for x in parsed_rooms]:
 		parsed_rooms.append(update)
@@ -133,18 +133,16 @@ def upwork_test():
 			print(messages)
 
 			if len(contracts_found)>0:
-				if room["roomId"] in contracts_found[0].chat_url:
-					if not contracts_found[0].ended:
-						update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Active Contract", "messages":messages, "link":contracts_found[0].get_browseable_url(), "freelancers": []}, user_data)
-						print("ACTIVE CONTRACT: " + str(room))
-					else:
-						update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Ended Contract", "messages":messages, "link":contracts_found[0].get_browseable_url(), "freelancers": []}, user_data)
-						print("ENDED CONTRACT: " + str(room))
-			
-			elif len(contracts_found)>0:
-				if room["roomId"] in proposals_found[0].chat_link: 
-					update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Proposal", "messages":messages, "link":proposals_found[0].get_browseable_url(), "freelancers":[]}, user_data)
-					print("PROPOSAL: " + str(room))
+				if not contracts_found[0].ended:
+					update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Active Contract", "messages":messages, "link":contracts_found[0].get_browseable_url(), "freelancers": []}, user_data)
+					print("ACTIVE CONTRACT: " + str(room))
+				else:
+					update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Ended Contract", "messages":messages, "link":contracts_found[0].get_browseable_url(), "freelancers": []}, user_data)
+					print("ENDED CONTRACT: " + str(room))
+		
+			elif len(contracts_found)>0:		
+				update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Proposal", "messages":messages, "link":proposals_found[0].get_browseable_url(), "freelancers":[]}, user_data)
+				print("PROPOSAL: " + str(room))
 
 			else:
 				update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "No info", "link":"", "messages":messages,"freelancers":[]}, user_data)
@@ -153,23 +151,38 @@ def upwork_test():
 		date = str(datetime.datetime.now().day) + " " + str(datetime.datetime.now().month) + " " + str(datetime.datetime.now().year)
 		target_page = create_page("", "message review for " + date)
 
-		for room in parsed_rooms:
-			link = "https://www.upwork.com/messages/rooms/" + room["id"]
-			link_text = "["+link+"](Room)"
-			
-			if room["type"] == "No info":
-				type_text = "No info"
-			else:
-				type_text = "["+room["link"]+"]("+room["type"]+")" 
+	print(finished parsing rooms)
+
+	for room in parsed_rooms:
+		link = "https://www.upwork.com/messages/rooms/" + room["id"]
+		link_text = "["+link+"](Room)"
+		
+		if room["type"] == "No info":
+			type_text = "No info"
+		else:
+			type_text = "["+room["link"]+"]("+room["type"]+")" 
 
 
-			text_block = target_page.children.add_new(TextBlock, room["room"]["roomName"]+" "+room["room"]["roomTopic"])
-			text_block = text_block.children.add_new(TextBlock, type_text+", "+link_text)
+		text_block = target_page.children.add_new(TextBlock, room["room"]["roomName"]+" "+room["room"]["roomTopic"])
+		text_block = text_block.children.add_new(TextBlock, type_text+", "+link_text)
 
-			for message in room["messages"]["stories_list"]["stories"]:
- 				pass
+		# we have to use range() to go in reverse
+		stories = room["messages"]["stories_list"]["stories"]
+		for i in range(len(stories), 0 , -1):
+			time = datetime.utcfromtimestamp(stories[i]["updated"]).strftime('%Y-%m-%d %H:%M:%S')
+			text = "["+time+"]\n"
 
+			name = "Client"
+			for freelancer in room["freelancers"]:
+				if stories[i]["userId"] == freelancer["id"]
+					name = freelancer["name"]
 
+			text += name+":\n"
+			text += stories[i]["message"]
+
+			text_block.children.add_new(TextBlock, text)
+
+	print("all done")	
 	return parsed_rooms
 
 @app.route('/add_global_block', methods=["GET"])
