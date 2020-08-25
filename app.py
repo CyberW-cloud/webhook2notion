@@ -117,7 +117,7 @@ def upwork_test():
 		yesterday = yesterday.strftime("%s")
 		
 		try:
-			rooms = messages.get_rooms(user_id, {"activeSince": str(yesterday)[:-3]})	
+			rooms = messages_api.get_rooms(user_id, {"activeSince": str(yesterday)[:-3]})	
 		except Exception as e:
 			continue
 		
