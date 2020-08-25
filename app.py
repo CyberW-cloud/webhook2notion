@@ -113,8 +113,8 @@ def upwork_test():
 		user_id = user_data["user"]["id"]
 
 
-		yesterday = datetime.date.today() - datetime.timedelta(1)
-		yesterday = yesterday.strftime("%s")
+		yesterday = datetime.datetime.utcnow() - datetime.timedelta(1)
+		yesterday = yesterday.strftime("%s")*1000
 		
 
 		rooms = messages_api.get_rooms(user_id, {"activeSince": str(yesterday)})	
@@ -127,7 +127,7 @@ def upwork_test():
 
 		for room in rooms:
 		
-			if room["latestStory"]["updated"]/1000<=int(yesterday):
+			if room["latestStory"]["updated"]<=int(yesterday):
 				continue
 			
 			#sometimes throws an error, just default to no info
