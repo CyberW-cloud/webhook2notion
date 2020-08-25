@@ -124,7 +124,7 @@ def upwork_test():
 
 		for room in rooms:
 		
-			if room["latest_story"]["updated"]<=int(yesterday):
+			if room["latestStory"]["updated"]<=int(yesterday):
 				continue
 			#pretty slow, but idk how to do this faster (download db?)
 			contracts_found = contracts.collection.get_rows(search = room["roomId"])
