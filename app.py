@@ -143,7 +143,7 @@ def upwork_test():
 				proposals_found = []
 
 			try:
-				messages = messages_api.get_room_messages(user_id, room["roomId"], {"limit":3})
+				messages = messages_api.get_room_messages(user_id, room["roomId"], {"limit":4})
 			except Exception as e:
 				messages = []
 			
@@ -185,7 +185,7 @@ def upwork_test():
 		# we have to use range() to go in reverse
 		stories = room["messages"]["stories_list"]["stories"]
 		for i in range(len(stories)-1, 0 , -1):
-			if stories[i]["message"] == None:
+			if stories[i]["message"] == None or re.match(stories[i]["message"],"[A-Z][a-z]* [A-Z]\."):
 				print(stories[i])
 				continue
 
