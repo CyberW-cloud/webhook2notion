@@ -117,7 +117,7 @@ def upwork_test():
 		yesterday = yesterday.strftime("%s")
 		
 
-		rooms = messages_api.get_rooms(user_id, {"activeSince": str(yesterday)[:-3]})	
+		rooms = messages_api.get_rooms(user_id, {"activeSince": str(yesterday)})	
 
 		
 		if "rooms" not in rooms.keys():
