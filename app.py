@@ -116,7 +116,11 @@ def upwork_test():
 		yesterday = datetime.datetime.now() - datetime.timedelta(1)
 		yesterday = int(yesterday.timestamp())*1000
 
-		rooms = messages_api.get_rooms(user_id, {"activeSince": str(yesterday)})	
+		try:
+			rooms = messages_api.get_rooms(user_id, {"activeSince": str(yesterday)})	
+		except Exception as e:
+			rooms = []
+			
 
 		
 		if "rooms" not in rooms.keys():
