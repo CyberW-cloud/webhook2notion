@@ -188,7 +188,7 @@ def upwork_test():
 		for i in range(len(stories)-1, 0 , -1):
 			if not isinstance(stories[i]["message"],str):
 				print(stories[i])
-			
+				continue
 			#if the message ends in a sinature like [Line Start][Capital][* amount of lowercase][space][Capital][Dot][EOF] 
 			if re.findall("^[A-Z][a-z]* [A-Z]\.\Z", stories[i]["message"], re.M):
 				parent_text_block.remove(permanently = True)
