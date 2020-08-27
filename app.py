@@ -185,7 +185,7 @@ def upwork_test():
 			type_text = "["+room["type"]+"]("+room["link"]+")" 
 
 
-		parent_text_block = target_page.children.add_new(TextBlock, title = room["room"]["roomName"]+"\n"+room["room"]["topic"])
+		parent_text_block = target_page.children.add_new(TextBlock, title = room["room"]["roomName"]+", **"+room["room"]["topic"] + "**")
 		text_block = parent_text_block.children.add_new(TextBlock, title =type_text+" , "+link_text)
 
 		# we have to use range() to go in reverse
@@ -203,8 +203,7 @@ def upwork_test():
 			time = datetime.datetime.fromtimestamp(stories[i]["updated"]/1000).strftime('%Y-%m-%d %H:%M:%S')
 			text = "["+time+"]\n"
 
-			user = profileApi.get_specific(stories[i]["userId"])["profile"]["dev_short_name"]
-			name = user["first_name"] + " " + user["last_name"]	
+			name = profileApi.get_specific(stories[i]["userId"])["profile"]["dev_short_name"]
 
 			text += "**"+name+":**\n"
 			text += stories[i]["message"]
