@@ -157,7 +157,7 @@ def upwork_test():
 
 			else:
 				update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "No info", "link":"", "messages":messages})
-			#	print("NO DATA " + str(room))
+			#	print("NO DATA " + str(room)) 
 
 	date = str(datetime.datetime.now().day) + " " + str(datetime.datetime.now().month) + " " + str(datetime.datetime.now().year)
 	target_page = create_page(message_review_page, "message review for " + date)
