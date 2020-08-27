@@ -50,19 +50,12 @@ def parse_tokens(tokens, accepted_users = "all"):
 
 	return ret
 
-def update_parsed_rooms(parsed_rooms, update, freelancer = None):
+def update_parsed_rooms(parsed_rooms, update):
 
-	if freelancer!=None:
-		update["freelancers"].append({"id": freelancer["user"]["public_url"].split("/")[-1], "name": freelancer["auth_user"]["first_name"] + " " + freelancer["auth_user"]["last_name"]})
-	
 	if update["id"] not in [x["id"] for x in parsed_rooms]:
 		parsed_rooms.append(update)
 		return parsed_rooms
 
-	for room in parsed_rooms:
-		if room["id"] == update["id"]:
-			room["freelancers"].append(update["freelancers"][0])
-			return parsed_rooms
 
 @app.route('/upwork_test', methods=["GET"])
 def upwork_test():
@@ -150,18 +143,18 @@ def upwork_test():
 			
 			if len(contracts_found)>0:
 				if not contracts_found[0].ended:
-					update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Active Contract", "messages":messages, "link":contracts_found[0].get_browseable_url(), "freelancers": []}, user_data)
+					update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Active Contract", "messages":messages, "link":contracts_found[0].get_browseable_url()})
 					print("ACTIVE CONTRACT: " + str(room))
 				else:
-					update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Ended Contract", "messages":messages, "link":contracts_found[0].get_browseable_url(), "freelancers": []}, user_data)
+					update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Ended Contract", "messages":messages, "link":contracts_found[0].get_browseable_url()})
 					print("ENDED CONTRACT: " + str(room))
 		
 			elif len(proposals_found)>0:		
-				update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Proposal", "messages":messages, "link":proposals_found[0].get_browseable_url(), "freelancers":[]}, user_data)
+				update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Proposal", "messages":messages, "link":proposals_found[0].get_browseable_url()})
 				print("PROPOSAL: " + str(room))
 
 			else:
-				update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "No info", "link":"", "messages":messages,"freelancers":[]}, user_data)
+				update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "No info", "link":"", "messages":messages})
 				print("NO DATA " + str(room))
 
 	date = str(datetime.datetime.now().day) + " " + str(datetime.datetime.now().month) + " " + str(datetime.datetime.now().year)
