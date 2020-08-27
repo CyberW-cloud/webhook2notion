@@ -200,7 +200,7 @@ def upwork_test():
 			text = "["+time+"]\n"
 
 			user = userApi.get_specific(stories[i]["userId"])
-			name = user["user"]["first_name"] + " " + user["user"]["last_name"]	
+			name = user["first_name"] + " " + user["last_name"]	
 
 			text += "**"+name+":**\n"
 			text += stories[i]["message"]
