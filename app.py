@@ -102,7 +102,7 @@ def upwork_test():
 		userApi = userAPI(client)
 		messages_api = messageAPI(client)
 		
-		user_data = user.get_my_info()
+		user_data = userApi.get_my_info()
 		print(user_data)
 		user_id = user_data["user"]["id"]
 
