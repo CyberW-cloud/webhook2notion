@@ -51,6 +51,16 @@ def parse_tokens(tokens, accepted_users = "all"):
 
 	return ret
 
+def parse_cache(cache):
+	ret = {}
+	cache = cache.split(",")
+
+	for name_id_pair in cache:
+		pair = re.findall(name_id_pair, "('|\").*?('|\")")
+		ret[pair[0]] = pair[1]
+
+	return cache
+
 def update_parsed_rooms(parsed_rooms, update):
 
 	#check if the record already exists
@@ -62,7 +72,9 @@ def update_parsed_rooms(parsed_rooms, update):
 @app.route('/upwork_test', methods=["GET"])
 def upwork_test():
 
-	
+	cache = os.environ.get("name_cache")
+	cache = parse_cache(cache)
+
 	token = os.environ.get("TOKEN")
 	notion_client = NotionClient(token)
 	
@@ -83,7 +95,6 @@ def upwork_test():
 
 	target_row = messages_review.children.add_new()
 	target_row.title = date + " - " + str(active_since_hours)
-	target_row.tags = "Interview"
 
 
 	login_config = upwork.Config({\
@@ -174,6 +185,7 @@ def upwork_test():
 
 		
 	print("finished parsing rooms")
+	target_page = create_page("https://www.notion.so/Message-Review-33cbe6e92b9e4894890d768f1ea7b970","testing without the db for now")
 
 	for room in parsed_rooms:
 		client = upwork.Client(upwork.Config({\
@@ -213,14 +225,19 @@ def upwork_test():
 			time = datetime.datetime.fromtimestamp(stories[i]["updated"]/1000).strftime('%Y-%m-%d %H:%M:%S')
 			text = "["+time+"]\n"
 
-			name = profileApi.get_specific(stories[i]["userId"])["profile"]["dev_short_name"][:-1]
+			if stories[i]["user_id"] not in cache.keys(): 
+				name = profileApi.get_specific(stories[i]["userId"])["profile"]["dev_short_name"][:-1]
+				cache[stories[i]["user_id"]] = name
+			else
+				name = cache[stories[i]["user_id"]]
 
 			text += "**"+name+":**\n"
 			text += stories[i]["message"]
 
 			text_block.children.add_new(TextBlock, title = text)
 
-	print("all done, saving cashe to ")	
+	print("all done, saving cache to heroku")	
+	os.system('heroku config:set ' + "name_cache" + '=' + str(cache))
 
 	return str(parsed_rooms)
 
