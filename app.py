@@ -52,6 +52,7 @@ def parse_tokens(tokens, accepted_users = "all"):
 
 def update_parsed_rooms(parsed_rooms, update):
 
+	#check if the record already exists
 	if update["id"] not in [x["id"] for x in parsed_rooms]:
 		parsed_rooms.append(update)
 		return parsed_rooms
@@ -136,7 +137,8 @@ def upwork_test():
 				proposals_found = []
 
 			try:
-				messages = messages_api.get_room_messages(user_id, room["roomId"], {"limit":4})
+				messages = messages_api.get_room_details(user_id, room["roomId"], {"limit":4, "returnUsers":"true", "returnStories":"true", "returnUserRoles":"true"})
+				print(messages)
 			except Exception as e:
 				messages = []
 			
@@ -144,18 +146,18 @@ def upwork_test():
 			if len(contracts_found)>0:
 				if not contracts_found[0].ended:
 					update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Active Contract", "messages":messages, "link":contracts_found[0].get_browseable_url()})
-					print("ACTIVE CONTRACT: " + str(room))
+				#	print("ACTIVE CONTRACT: " + str(room))
 				else:
 					update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Ended Contract", "messages":messages, "link":contracts_found[0].get_browseable_url()})
-					print("ENDED CONTRACT: " + str(room))
+				#	print("ENDED CONTRACT: " + str(room))
 		
 			elif len(proposals_found)>0:		
 				update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Proposal", "messages":messages, "link":proposals_found[0].get_browseable_url()})
-				print("PROPOSAL: " + str(room))
+			#	print("PROPOSAL: " + str(room))
 
 			else:
 				update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "No info", "link":"", "messages":messages})
-				print("NO DATA " + str(room))
+			#	print("NO DATA " + str(room))
 
 	date = str(datetime.datetime.now().day) + " " + str(datetime.datetime.now().month) + " " + str(datetime.datetime.now().year)
 	target_page = create_page(message_review_page, "message review for " + date)
