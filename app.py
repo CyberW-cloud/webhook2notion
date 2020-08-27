@@ -76,8 +76,13 @@ def upwork_test():
 	
 	date = str(datetime.datetime.now().day) + " " + str(datetime.datetime.now().month) + " " + str(datetime.datetime.now().year)
 	
+	active_since_hours =  int(request.args.get("activeSince", "24"))jr
+	activeSince = datetime.datetime.now() - datetime.timedelta(hours = active_since_hours)
+	activeSince = int(activeSince.timestamp())*1000
+
+
 	target_row = messages_review.children.add_new()
-	target_row.title = date
+	target_row.title = date + " - " + str(active_since_hours)
 	target_row.tags = "Interview"
 
 
@@ -97,7 +102,6 @@ def upwork_test():
 	
 	#skip owner to parse quicker
 	tokens = parse_tokens(tokens, freelancer_ids)[1:]
-	
 
 	for freelancer in tokens:
 		#log in as each freelancer
@@ -117,12 +121,10 @@ def upwork_test():
 
 		profileApi = profileAPI(client)
 		
-		active_since_hours =  int(request.args.get("activeSince", "24"))jr
-		yesterday = datetime.datetime.now() - datetime.timedelta(hours = active_since_hours)
-		yesterday = int(yesterday.timestamp())*1000
+
 
 		try:
-			rooms = messages_api.get_rooms(user_id, {"activeSince": str(yesterday)})	
+			rooms = messages_api.get_rooms(user_id, {"activeSince": str(activeSince)})	
 		except Exception as e:
 			rooms = {}
 			
@@ -135,7 +137,7 @@ def upwork_test():
 
 		for room in rooms:
 			
-			if room["latestStory"]["updated"]<=int(yesterday):
+			if room["latestStory"]["updated"]<=int(activeSince):
 				continue
 
 			#sometimes throws an error, just default to no info
