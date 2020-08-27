@@ -21,6 +21,7 @@ from upwork.routers.messages import Api as messageAPI
 from upwork.routers.auth import Api as authAPI
 from upwork.routers.organization.companies import Api as companyAPI
 from upwork.routers.organization.users import Api as userAPI
+from upwork.routers.freelancers.profile import Api as profileAPI
 
 
 timezone = "Europe/Kiev"
@@ -105,7 +106,8 @@ def upwork_test():
 		user_data = userApi.get_my_info()
 		print(user_data)
 		user_id = user_data["user"]["id"]
-
+		
+		print(profileAPI().get_specific(user_id))
 
 		yesterday = datetime.datetime.now() - datetime.timedelta(1)
 		yesterday = int(yesterday.timestamp())*1000
@@ -130,7 +132,7 @@ def upwork_test():
 			print(user)
 			#sometimes throws an error, just default to no info
 			try:
-				#pretty slow, but idk how to do this faster (download db?) 
+				#pretty slow, but idk how to do this faster (download db?)
 				contracts_found = contracts.collection.get_rows(search = room["roomId"])
 				proposals_found = proposals.collection.get_rows(search = room["roomId"])
 			except Exception as e:
@@ -138,8 +140,7 @@ def upwork_test():
 				proposals_found = []
 
 			try:
-				messages = messages_api.get_room_details(user_id, room["roomId"], {"limit":4, "returnUsers": "true"})["room"]
-				print(messages)
+				messages = messages_api.get_room_messages(user_id, room["roomId"], {"limit":4})
 			except Exception as e:
 				messages = []
 			
@@ -172,7 +173,7 @@ def upwork_test():
 			'access_token': os.environ.get("AccessToken"),\
 			'access_token_secret': os.environ.get("AccessSecret")}))
 
-		userApi = userAPI(client)
+		profileApi = profileAPI(client)
 
 		link = "https://www.upwork.com/messages/rooms/" + room["id"]
 		link_text = "[Room]("+link+")"
