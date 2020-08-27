@@ -123,10 +123,10 @@ def upwork_test():
 			rooms = rooms["rooms"]
 
 		for room in rooms:
-		
+			
 			if room["latestStory"]["updated"]<=int(yesterday):
 				continue
-			
+			user = userApi.get_specific(room["roomId"])
 			#sometimes throws an error, just default to no info
 			try:
 				#pretty slow, but idk how to do this faster (download db?)
