@@ -99,7 +99,7 @@ def upwork_test():
 			'access_token': freelancer["accessToken"],\
 			'access_token_secret': freelancer["accessSecret"]}))
 
-		user = userAPI(client)
+		userApi = userAPI(client)
 		messages_api = messageAPI(client)
 		
 		user_data = user.get_my_info()
