@@ -109,7 +109,7 @@ def upwork_test():
 
 
 		profileApi = profileAPI(client)
-		print(profileApi.get_specific(user_data["user"]["profile_key"])["profile"]["dev_short_name"])
+		
 
 		yesterday = datetime.datetime.now() - datetime.timedelta(1)
 		yesterday = int(yesterday.timestamp())*1000
@@ -130,8 +130,7 @@ def upwork_test():
 			
 			if room["latestStory"]["updated"]<=int(yesterday):
 				continue
-			user = userApi.get_specific(user_id)
-			print(user)
+
 			#sometimes throws an error, just default to no info
 			try:
 				#pretty slow, but idk how to do this faster (download db?)
@@ -204,7 +203,7 @@ def upwork_test():
 			time = datetime.datetime.fromtimestamp(stories[i]["updated"]/1000).strftime('%Y-%m-%d %H:%M:%S')
 			text = "["+time+"]\n"
 
-			user = userApi.get_specific(stories[i]["userId"])
+			user = profileApi.get_specific(stories[i]["userId"])["profile"]["dev_short_name"]
 			name = user["first_name"] + " " + user["last_name"]	
 
 			text += "**"+name+":**\n"
