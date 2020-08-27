@@ -186,7 +186,7 @@ def upwork_test():
 		skip = False
 		stories = room["messages"]["stories_list"]["stories"]
 		for i in range(len(stories)-1, 0 , -1):
-			if stories[i]["message"] == None:
+			if not isinstance(stories[i]["message"],str):
 				print(stories[i])
 			
 			#if the message ends in a sinature like [Line Start][Capital][* amount of lowercase][space][Capital][Dot][EOF] 
