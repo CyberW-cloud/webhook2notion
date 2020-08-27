@@ -137,8 +137,7 @@ def upwork_test():
 				proposals_found = []
 
 			try:
-				messages = messages_api.get_room_details(user_id, room["roomId"], {"limit":4, "returnUsers":"true", "returnStories":"true", "returnUserRoles":"true"})
-				print(messages)
+				messages = messages_api.get_room_messages(user_id, room["roomId"], {"limit":4})
 			except Exception as e:
 				messages = []
 			
@@ -146,18 +145,18 @@ def upwork_test():
 			if len(contracts_found)>0:
 				if not contracts_found[0].ended:
 					update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Active Contract", "messages":messages, "link":contracts_found[0].get_browseable_url()})
-				#	print("ACTIVE CONTRACT: " + str(room))
+					print("ACTIVE CONTRACT: " + str(room))
 				else:
 					update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Ended Contract", "messages":messages, "link":contracts_found[0].get_browseable_url()})
-				#	print("ENDED CONTRACT: " + str(room))
+					print("ENDED CONTRACT: " + str(room))
 		
 			elif len(proposals_found)>0:		
 				update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Proposal", "messages":messages, "link":proposals_found[0].get_browseable_url()})
-			#	print("PROPOSAL: " + str(room))
+				print("PROPOSAL: " + str(room))
 
 			else:
 				update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "No info", "link":"", "messages":messages})
-			#	print("NO DATA " + str(room)) 
+				print("NO DATA " + str(room))
 
 	date = str(datetime.datetime.now().day) + " " + str(datetime.datetime.now().month) + " " + str(datetime.datetime.now().year)
 	target_page = create_page(message_review_page, "message review for " + date)
@@ -165,6 +164,14 @@ def upwork_test():
 	print("finished parsing rooms")
 
 	for room in parsed_rooms:
+		client = upwork.Client(upwork.Config({\
+			'consumer_key': os.environ.get("ConsumerKey"),\
+			'consumer_secret': os.environ.get("ConsumerSecret"),\
+			'access_token': os.environ.get("AccessToken"),\
+			'access_token_secret': os.environ.get("AccessSecret")}))
+
+		userApi = userAPI(client)
+
 		link = "https://www.upwork.com/messages/rooms/" + room["id"]
 		link_text = "[Room]("+link+")"
 		
@@ -192,12 +199,10 @@ def upwork_test():
 			time = datetime.datetime.fromtimestamp(stories[i]["updated"]/1000).strftime('%Y-%m-%d %H:%M:%S')
 			text = "["+time+"]\n"
 
-			name = "Client"
-			for freelancer in room["freelancers"]:
-				if stories[i]["userId"] == freelancer["id"]:
-					name = freelancer["name"]
+			user = userApi.get_specific(stories[i]["userId"])
+			name = user["user"]["first_name"] + " " + user["user"]["last_name"]	
 
-			text += name+":\n"
+			text += "**"+name+":**\n"
 			text += stories[i]["message"]
 
 			text_block.children.add_new(TextBlock, title = text)
