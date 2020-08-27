@@ -106,8 +106,8 @@ def upwork_test():
 		user_data = userApi.get_my_info()
 		print(user_data)
 		user_id = user_data["user"]["id"]
-		
-		print(profileAPI().get_specific(user_id))
+
+		print(profileAPI(client).get_specific(user_id))
 
 		yesterday = datetime.datetime.now() - datetime.timedelta(1)
 		yesterday = int(yesterday.timestamp())*1000
