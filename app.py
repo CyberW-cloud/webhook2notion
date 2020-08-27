@@ -61,18 +61,25 @@ def update_parsed_rooms(parsed_rooms, update):
 
 @app.route('/upwork_test', methods=["GET"])
 def upwork_test():
-	message_review_page = "https://www.notion.so/Message-Review-33cbe6e92b9e4894890d768f1ea7b970"
 
+	
 	token = os.environ.get("TOKEN")
 	notion_client = NotionClient(token)
 	
 	contracts = notion_client.get_collection_view("https://www.notion.so/5a95fb63129242a5b5b48f18e16ef19a?v=81afe49071ef41bba4c85922ff134407")
 	proposals = notion_client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
+	message_review = notion_client.get_collection_view("https://www.notion.so/d134162fbfb14449a7ae426487f56127?v=159b522f95fc460f9171dfdca6d1f6d8")
 
 	tokens = os.environ.get('TOKENS')
 
 	parsed_rooms = [] # format: {"room":{upwork room getinfo}, "type":"Act_Contract"/"End_Contract"/"Proposal"/"", "freelancers": [{id, name}]}
 	
+	date = str(datetime.datetime.now().day) + " " + str(datetime.datetime.now().month) + " " + str(datetime.datetime.now().year)
+	
+	target_row = messages_review.children.add_new()
+	target_row.title = date
+	target_row.tags = "Interview"
+
 
 	login_config = upwork.Config({\
 			'consumer_key': os.environ.get("ConsumerKey"),\
@@ -110,8 +117,8 @@ def upwork_test():
 
 		profileApi = profileAPI(client)
 		
-
-		yesterday = datetime.datetime.now() - datetime.timedelta(1)
+		active_since_hours =  int(request.args.get("activeSince", "24"))jr
+		yesterday = datetime.datetime.now() - datetime.timedelta(hours = active_since_hours)
 		yesterday = int(yesterday.timestamp())*1000
 
 		try:
@@ -162,9 +169,8 @@ def upwork_test():
 				update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "No info", "link":"", "messages":messages})
 				print("NO DATA " + str(room))
 
-	date = str(datetime.datetime.now().day) + " " + str(datetime.datetime.now().month) + " " + str(datetime.datetime.now().year)
-	target_page = create_page(message_review_page, "message review for " + date)
 
+		
 	print("finished parsing rooms")
 
 	for room in parsed_rooms:
@@ -185,6 +191,7 @@ def upwork_test():
 			type_text = "["+room["type"]+"]("+room["link"]+")" 
 
 
+
 		parent_text_block = target_page.children.add_new(TextBlock, title = room["room"]["roomName"]+", **"+room["room"]["topic"] + "**")
 		text_block = parent_text_block.children.add_new(TextBlock, title =type_text+" , "+link_text)
 
@@ -200,17 +207,19 @@ def upwork_test():
 				parent_text_block.remove(permanently = True)
 				break
 
+
 			time = datetime.datetime.fromtimestamp(stories[i]["updated"]/1000).strftime('%Y-%m-%d %H:%M:%S')
 			text = "["+time+"]\n"
 
-			name = profileApi.get_specific(stories[i]["userId"])["profile"]["dev_short_name"]
+			name = profileApi.get_specific(stories[i]["userId"])["profile"]["dev_short_name"][:-1]
 
 			text += "**"+name+":**\n"
 			text += stories[i]["message"]
 
 			text_block.children.add_new(TextBlock, title = text)
 
-	print("all done")	
+	print("all done, saving cashe to ")	
+
 	return str(parsed_rooms)
 
 @app.route('/add_global_block', methods=["GET"])
