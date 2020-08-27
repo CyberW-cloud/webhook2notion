@@ -126,7 +126,7 @@ def upwork_test():
 			
 			if room["latestStory"]["updated"]<=int(yesterday):
 				continue
-			user = userApi.get_specific(room["roomId"])
+			user = userApi.get_specific(user_id)
 			print(user)
 			#sometimes throws an error, just default to no info
 			try:
