@@ -130,7 +130,7 @@ def upwork_test():
 			print(user)
 			#sometimes throws an error, just default to no info
 			try:
-				#pretty slow, but idk how to do this faster (download db?)
+				#pretty slow, but idk how to do this faster (download db?) 
 				contracts_found = contracts.collection.get_rows(search = room["roomId"])
 				proposals_found = proposals.collection.get_rows(search = room["roomId"])
 			except Exception as e:
