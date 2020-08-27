@@ -179,15 +179,20 @@ def upwork_test():
 			type_text = "["+room["type"]+"]("+room["link"]+")" 
 
 
-		text_block = target_page.children.add_new(TextBlock, title = room["room"]["roomName"]+"\n"+room["room"]["topic"])
-		text_block = text_block.children.add_new(TextBlock, title =type_text+" , "+link_text)
+		parent_text_block = target_page.children.add_new(TextBlock, title = room["room"]["roomName"]+"\n"+room["room"]["topic"])
+		text_block = parent_text_block.children.add_new(TextBlock, title =type_text+" , "+link_text)
 
 		# we have to use range() to go in reverse
+		skip = False
 		stories = room["messages"]["stories_list"]["stories"]
 		for i in range(len(stories)-1, 0 , -1):
-			if stories[i]["message"] == None or re.match(stories[i]["message"],"[A-Z][a-z]* [A-Z]\."):
+			if stories[i]["message"] == None:
 				print(stories[i])
-				continue
+			
+			#if the message ends in a sinature like [Capital][* amount of lowercase][space][Capital][Dot][EOF] 
+			if re.match("\n[A-Z][a-z]* [A-Z]\.\Z", stories[i]["message"]):
+				parent_text_block.remove(permanently = True)
+				break
 
 			time = datetime.datetime.fromtimestamp(stories[i]["updated"]/1000).strftime('%Y-%m-%d %H:%M:%S')
 			text = "["+time+"]\n"
