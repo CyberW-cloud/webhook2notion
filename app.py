@@ -210,6 +210,7 @@ def upwork_test():
 			#if the message ends in a sinature like [Line Start][Capital][* amount of lowercase][space][Capital][Dot][EOF] 
 			if re.findall("^[A-Z][a-z]* [A-Z]\.\Z", stories[i]["message"], re.M):
 				parent_text_block.remove(permanently = True)
+				skip = True
 				break
 
 
@@ -229,7 +230,11 @@ def upwork_test():
 			message.language = "Plain text"
 			message.wrap = True
 
-		target_page.children.add_new(TextBlock, title = "\n---")
+		if skip:
+			continue
+
+		parent_text_block.children.add_new(TextBlock)
+		target_page.children.add_new(DividerBlock)
 
 	print("all done!")	
 	print(cache)
