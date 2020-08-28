@@ -83,8 +83,8 @@ def upwork_test():
 	activeSince = int(activeSince.timestamp())*1000
 
 
-#	target_row = message_review.children.add_new()
-#	target_row.title = date + " - " + str(active_since_hours)
+	target_row = message_review.children.add_new()
+	target_row.title = date + " - " + str(active_since_hours)
 
 
 	login_config = upwork.Config({\
@@ -198,7 +198,7 @@ def upwork_test():
 
 
 
-		parent_text_block = target_page.children.add_new(TextBlock, title = room["room"]["roomName"]+", **"+room["room"]["topic"] + "**")
+		parent_text_block = target_row.children.add_new(TextBlock, title = room["room"]["roomName"]+", **"+room["room"]["topic"] + "**")
 		text_block = parent_text_block.children.add_new(TextBlock, title =type_text+" , "+link_text)
 
 		# we have to use range() to go in reverse
@@ -235,7 +235,7 @@ def upwork_test():
 			continue
 
 		parent_text_block.children.add_new(TextBlock)
-		target_page.children.add_new(DividerBlock)
+		target_row.children.add_new(DividerBlock)
 
 	print("all done!")	
 	print(cache)
