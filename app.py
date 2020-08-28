@@ -83,7 +83,7 @@ def upwork_test():
 	activeSince = int(activeSince.timestamp())*1000
 
 
-	target_row = message_review.children.add_new()
+	target_row = message_review.views.add_new()
 	target_row.title = date + " - " + str(active_since_hours)
 
 
