@@ -74,7 +74,7 @@ def upwork_test():
 
 	cache = os.environ.get("name_cache")
 	cache = parse_cache(cache)
-
+	print(cache)
 	token = os.environ.get("TOKEN")
 	notion_client = NotionClient(token)
 	
