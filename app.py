@@ -28,6 +28,7 @@ timezone = "Europe/Kiev"
 
 app = Flask(__name__)
 
+cache = {}
 
 #var used to signify testing
 TEST = True
@@ -51,16 +52,6 @@ def parse_tokens(tokens, accepted_users = "all"):
 
 	return ret
 
-def parse_cache(cache):
-	ret = {}
-	cache = cache.split(",")
-
-	for name_id_pair in cache:
-		pair = re.findall(name_id_pair, "('|\").*?('|\")")
-		ret[pair[0]] = pair[1]
-
-	return ret
-
 def update_parsed_rooms(parsed_rooms, update):
 
 	#check if the record already exists
@@ -72,9 +63,8 @@ def update_parsed_rooms(parsed_rooms, update):
 @app.route('/upwork_test', methods=["GET"])
 def upwork_test():
 
-	cache = os.environ.get("name_cache")
-	cache = parse_cache(cache)
-	print(cache)
+	
+
 	token = os.environ.get("TOKEN")
 	notion_client = NotionClient(token)
 	
@@ -131,6 +121,7 @@ def upwork_test():
 		print(user_data)
 		user_id = user_data["user"]["id"]
 
+		cache[user_data["user"]["profile_key"]] = user_data["user"]["first_name"] + " " + user_data["user"]["last_name"]
 
 		profileApi = profileAPI(client)
 		
@@ -238,9 +229,7 @@ def upwork_test():
 
 			parent_text_block.children.add_new(CodeBlock, title = text)
 
-	print("all done, saving cache to heroku")	
-	os.system('heroku config:set ' + "name_cache" + '=' + str(cache))
-
+	print("all done!")	
 	return str(parsed_rooms)
 
 @app.route('/add_global_block', methods=["GET"])
