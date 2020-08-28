@@ -104,7 +104,7 @@ def upwork_test():
 	freelancer_ids = [x["public_url"].split("/")[-1] for x in company.get_users(os.environ.get("CompanyRef"))["users"]]
 	
 	#skip owner to parse quicker
-	tokens = parse_tokens(tokens, freelancer_ids)[1:15]
+	tokens = parse_tokens(tokens, freelancer_ids)[1:]
 
 	for freelancer in tokens:
 		#log in as each freelancer
@@ -230,6 +230,8 @@ def upwork_test():
 			parent_text_block.children.add_new(CodeBlock, title = text)
 
 	print("all done!")	
+	print(cache)
+
 	return str(parsed_rooms)
 
 @app.route('/add_global_block', methods=["GET"])
