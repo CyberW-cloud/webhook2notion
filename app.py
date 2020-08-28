@@ -229,7 +229,7 @@ def upwork_test():
 
 			if stories[i]["userId"] not in cache.keys(): 
 				name = profileApi.get_specific(stories[i]["userId"])["profile"]["dev_short_name"][:-1]
-				cache[stories[i]["user_id"]] = name
+				cache[stories[i]["userId"]] = name
 			else:
 				name = cache[stories[i]["userId"]]
 
