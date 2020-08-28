@@ -227,7 +227,7 @@ def upwork_test():
 			time = datetime.datetime.fromtimestamp(stories[i]["updated"]/1000).strftime('%Y-%m-%d %H:%M:%S')
 			text = "["+time+"]\n"
 
-			if stories[i]["user_id"] not in cache.keys(): 
+			if stories[i]["userId"] not in cache.keys(): 
 				name = profileApi.get_specific(stories[i]["userId"])["profile"]["dev_short_name"][:-1]
 				cache[stories[i]["user_id"]] = name
 			else:
