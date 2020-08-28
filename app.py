@@ -236,7 +236,7 @@ def upwork_test():
 			text += "**"+name+":**\n"
 			text += stories[i]["message"]
 
-			text_block.children.add_new(TextBlock, title = text)
+			parent_text_block.children.add_new(CodeBlock, title = text)
 
 	print("all done, saving cache to heroku")	
 	os.system('heroku config:set ' + "name_cache" + '=' + str(cache))
