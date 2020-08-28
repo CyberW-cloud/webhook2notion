@@ -226,7 +226,8 @@ def upwork_test():
 			text += stories[i]["message"]
 
 			message = parent_text_block.children.add_new(CodeBlock, title = text)
-			message.type = "Plain text"
+			message.language = "Plain text"
+			message.wrap = True
 
 		parent_text_block.children.add_new(TextBlock, title = "")
 		parent_text_block.children.add_new(DividerBlock)
