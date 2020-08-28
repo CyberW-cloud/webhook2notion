@@ -202,7 +202,7 @@ def upwork_test():
 		link_text = "[Room]("+link+")"
 		
 		if room["type"] == "No info":
-			type_text = "No info"
+			type_text = "***No info***"
 		else:
 			type_text = "["+room["type"]+"]("+room["link"]+")" 
 
