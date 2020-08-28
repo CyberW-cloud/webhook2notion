@@ -84,7 +84,7 @@ def upwork_test():
 
 
 	target_row = message_review.views.add_new()
-	target_row.title = date + " - " + str(active_since_hours)
+	target_row.name = date + " - " + str(active_since_hours)
 
 
 	login_config = upwork.Config({\
