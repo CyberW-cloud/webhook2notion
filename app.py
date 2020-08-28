@@ -231,7 +231,7 @@ def upwork_test():
 				name = profileApi.get_specific(stories[i]["userId"])["profile"]["dev_short_name"][:-1]
 				cache[stories[i]["user_id"]] = name
 			else:
-				name = cache[stories[i]["user_id"]]
+				name = cache[stories[i]["userId"]]
 
 			text += "**"+name+":**\n"
 			text += stories[i]["message"]
