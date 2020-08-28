@@ -59,7 +59,7 @@ def parse_cache(cache):
 		pair = re.findall(name_id_pair, "('|\").*?('|\")")
 		ret[pair[0]] = pair[1]
 
-	return cache
+	return ret
 
 def update_parsed_rooms(parsed_rooms, update):
 
