@@ -90,7 +90,7 @@ def upwork_test():
 	
 	date = str(datetime.datetime.now().day) + " " + str(datetime.datetime.now().month) + " " + str(datetime.datetime.now().year)
 	
-	active_since_hours =  int(request.args.get("activeSince", "24"))jr
+	active_since_hours =  int(request.args.get("activeSince", "24"))
 	activeSince = datetime.datetime.now() - datetime.timedelta(hours = active_since_hours)
 	activeSince = int(activeSince.timestamp())*1000
 
