@@ -229,7 +229,7 @@ def upwork_test():
 			message.language = "Plain text"
 			message.wrap = True
 
-		parent_text_block.children.add_new(TextBlock, title = "")
+		parent_text_block.children.add_new(TextBlock)
 		target_page.children.add_new(DividerBlock)
 
 	print("all done!")	
