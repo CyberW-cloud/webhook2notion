@@ -103,7 +103,7 @@ def upwork_test():
 	freelancer_ids = [x["public_url"].split("/")[-1] for x in company.get_users(os.environ.get("CompanyRef"))["users"]]
 	
 	#skip owner to parse quicker
-	tokens = parse_tokens(tokens, freelancer_ids)[1:5]
+	tokens = parse_tokens(tokens, freelancer_ids)[1:15]
 
 	for freelancer in tokens:
 		#log in as each freelancer
@@ -154,7 +154,7 @@ def upwork_test():
 				proposals_found = []
 
 			try:
-				messages = messages_api.get_room_messages(user_id, room["roomId"], {"limit":10})
+				messages = messages_api.get_room_messages(user_id, room["roomId"], {"limit":4})
 			except Exception as e:
 				messages = []
 			
