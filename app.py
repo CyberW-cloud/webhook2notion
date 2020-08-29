@@ -217,7 +217,7 @@ def upwork_test():
 		# we have to use range() to go in reverse
 		skip = False
 		stories = room["messages"]["stories_list"]["stories"]
-		for i in range(len(stories)-1, 0 , -1):
+		for i in range(len(stories), 0 , -1):
 			if not isinstance(stories[i]["message"],str):
 				print(stories[i])
 				continue
