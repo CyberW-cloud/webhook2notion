@@ -217,7 +217,7 @@ def upwork_test():
 		stories = room["messages"]["stories_list"]["stories"]
 
 		#if the message ends in a sinature like [Line Start][Capital][* amount of lowercase][space][Capital][Dot][EOF] 
-		if re.findall("^[A-Z][a-z]* [A-Z]\.\Z", stories[0]["message"], re.M) and room["type"] == "Interview":
+		if isinstance(stories[0]["message"], str) and re.findall("^[A-Z][a-z]* [A-Z]\.\Z", stories[0]["message"], re.M) and room["type"] == "Interview":
 			parent_text_block.remove(permanently = True)
 			print("bot detected, skipped")
 			continue
