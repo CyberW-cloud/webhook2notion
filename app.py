@@ -54,7 +54,7 @@ def parse_tokens(tokens, accepted_users = "all"):
 
 def update_parsed_rooms(parsed_rooms, update):
 
-	#check if the record already exists
+	#check if the record doesn't exist
 	if update["id"] not in [x["id"] for x in parsed_rooms]:
 		parsed_rooms.append(update)
 		return parsed_rooms
@@ -74,19 +74,17 @@ def upwork_test():
 
 	tokens = os.environ.get('TOKENS')
 
-	parsed_rooms = [] # format: {"room":{upwork room getinfo}, "type":"Act_Contract"/"End_Contract"/"Proposal"/"", "freelancers": [{id, name}]}
+	parsed_rooms = []
 	
-	date = str(datetime.datetime.now().day) + " " + str(datetime.datetime.now().month) + " " + str(datetime.datetime.now().year)
 	
 	active_since_hours =  int(request.args.get("activeSince", "24"))
 	activeSince = datetime.datetime.now() - datetime.timedelta(hours = active_since_hours)
 	activeSince = int(activeSince.timestamp())*1000
 
+	date = str(datetime.datetime.now().day) + " " + str(datetime.datetime.now().month) + " " + str(datetime.datetime.now().year)
+	row_name = date + " - " + str(active_since_hours)
 
-	target_row = message_review.views.add_new()
-	target_row = message_review.collection.add_row()
-	target_row.name = date + " - " + str(active_since_hours)
-
+	rows = {}
 
 	login_config = upwork.Config({\
 			'consumer_key': os.environ.get("ConsumerKey"),\
@@ -161,14 +159,14 @@ def upwork_test():
 			
 			if len(contracts_found)>0:
 				if not contracts_found[0].ended:
-					update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Active Contract", "messages":messages, "link":contracts_found[0].get_browseable_url()})
+					update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Contract", "messages":messages, "link":contracts_found[0].get_browseable_url()})
 					print("ACTIVE CONTRACT: " + str(room))
 				else:
-					update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Ended Contract", "messages":messages, "link":contracts_found[0].get_browseable_url()})
+					update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Ended contract", "messages":messages, "link":contracts_found[0].get_browseable_url()})
 					print("ENDED CONTRACT: " + str(room))
 		
 			elif len(proposals_found)>0:		
-				update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Proposal", "messages":messages, "link":proposals_found[0].get_browseable_url()})
+				update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Interview", "messages":messages, "link":proposals_found[0].get_browseable_url()})
 				print("PROPOSAL: " + str(room))
 
 			else:
@@ -194,10 +192,20 @@ def upwork_test():
 		
 		if room["type"] == "No info":
 			type_text = "***No info***"
+			#to add to the interview column
+			room["type"] = "Interview"
+
 		else:
 			type_text = "["+room["type"]+"]("+room["link"]+")" 
 
 
+		if room["type"] not in rows.keys()
+			rows[room["type"]] = message_review.views.add_new()
+			rows[room["type"]] = message_review.collection.add_row()
+			rows[room["type"]].name = row_name
+			rows[room["type"]].tags = room["type"]
+
+		target_row = rows[room["type"]]
 
 		parent_text_block = target_row.children.add_new(TextBlock, title = room["room"]["roomName"]+", **"+room["room"]["topic"] + "**")
 		text_block = parent_text_block.children.add_new(TextBlock, title =type_text+" , "+link_text)
