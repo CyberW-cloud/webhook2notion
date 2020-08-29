@@ -196,7 +196,10 @@ def upwork_test():
 			room["type"] = "Interview"
 
 		else:
-			type_text = "["+room["type"]+"]("+room["link"]+")" 
+			if room["type"] == "Interview":
+				type_text = "[Proposal]("+room["link"]+")"
+			else:
+				type_text = "["+room["type"]+"]("+room["link"]+")" 
 
 
 		if room["type"] not in rows.keys():
