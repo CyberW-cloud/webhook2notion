@@ -230,7 +230,8 @@ def upwork_test():
 				print(stories[i])
 				continue
 
-
+			if written>3:
+				break
 
 			time = datetime.datetime.fromtimestamp(i["updated"]/1000).strftime('%Y-%m-%d %H:%M:%S')
 			text = "["+time+"]\n"
