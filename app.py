@@ -199,7 +199,7 @@ def upwork_test():
 			type_text = "["+room["type"]+"]("+room["link"]+")" 
 
 
-		if room["type"] not in rows.keys()
+		if room["type"] not in rows.keys():
 			rows[room["type"]] = message_review.views.add_new()
 			rows[room["type"]] = message_review.collection.add_row()
 			rows[room["type"]].name = row_name
