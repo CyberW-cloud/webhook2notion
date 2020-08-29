@@ -152,9 +152,9 @@ def upwork_test():
 				proposals_found = []
 
 			try:
-				messages = messages_api.get_room_messages(user_id, room["roomId"], {"limit":15})
+				messages = messages_api.get_room_messages(os.environ.get("TeamID"), room["roomId"], {"limit":15})
 				if "stories_list" not in messages.keys():
-					messages = messages_api.get_room_messages(os.environ.get("TeamID"), room["roomId"], {"limit":15})
+					messages = messages_api.get_room_messages(user_id, room["roomId"], {"limit":15})
 			except Exception as e:
 				messages = {}
 			
@@ -211,6 +211,12 @@ def upwork_test():
 			rows[room["type"]].tags = room["type"]
 
 		target_row = rows[room["type"]]
+
+		if room["room"]["roomName"] == None:
+			room["room"]["roomName"] == "None"
+
+		if room["room"]["topic"] == None:
+			room["room"]["topic"] == "None"
 
 		parent_text_block = target_row.children.add_new(TextBlock, title = room["room"]["roomName"]+", **"+room["room"]["topic"] + "**")
 		text_block = parent_text_block.children.add_new(TextBlock, title =type_text+" , "+link_text)
