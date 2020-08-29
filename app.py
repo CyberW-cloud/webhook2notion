@@ -127,6 +127,7 @@ def upwork_test():
 
 		try:
 			rooms = messages_api.get_rooms(user_id, {"activeSince": "1598650483193"})	
+			print(rooms)
 		except Exception as e:
 			rooms = {}
 			
@@ -139,9 +140,6 @@ def upwork_test():
 
 		for room in rooms:
 			
-			if room["latestStory"]["updated"]<=int(activeSince):
-				continue
-
 			#sometimes throws an error, just default to no info
 			try:
 				#pretty slow, but idk how to do this faster (download db?)
