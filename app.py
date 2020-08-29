@@ -84,6 +84,7 @@ def upwork_test():
 
 
 	target_row = message_review.views.add_new()
+	target_row = message_review.collection.add_row()
 	target_row.name = date + " - " + str(active_since_hours)
 
 
@@ -102,7 +103,7 @@ def upwork_test():
 	freelancer_ids = [x["public_url"].split("/")[-1] for x in company.get_users(os.environ.get("CompanyRef"))["users"]]
 	
 	#skip owner to parse quicker
-	tokens = parse_tokens(tokens, freelancer_ids)[1:]
+	tokens = parse_tokens(tokens, freelancer_ids)[1:5]
 
 	for freelancer in tokens:
 		#log in as each freelancer
@@ -446,7 +447,6 @@ def test_scripts():
 	
 		test_row = page.views.add_new()
 		test_row = page.collection.add_row()
-		print(test_row.get_browseable_url())
 		test_row.name = "This worked!"
 		page.collection.refresh()
 
