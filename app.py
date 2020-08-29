@@ -153,8 +153,10 @@ def upwork_test():
 
 			try:
 				messages = messages_api.get_room_messages(user_id, room["roomId"], {"limit":15})
+				if "stories_list" not in messages.keys():
+					messages = messages_api.get_room_messages(os.environ.get("TeamID"), room["roomId"], {"limit":15})
 			except Exception as e:
-				messages = messages_api.get_room_messages(os.environ.get("TeamID"), room["roomId"], {"limit":15})
+				messages = {}
 			
 			
 			if len(contracts_found)>0:
