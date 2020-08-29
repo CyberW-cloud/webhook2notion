@@ -14,12 +14,232 @@ from notion_helpers import *
 timezone = "Europe/Kiev"
 
 app = Flask(__name__)
-
+cache = {}
 #Source : Date/Datetime, the start of the search
 #Targets : Can be an int or an String array. 
 #          the int array has to be from 0 (mon) to 6 (sun)
 #          the String array has to contain only the strings inside the week array
 #Returns timedelta that has an amount of days from source to the closest weekday
+
+
+@app.route('/messages_review', methods=["GET"])
+def messages_review():
+
+	
+
+	token = os.environ.get("TOKEN")
+	notion_client = NotionClient(token)
+	
+	contracts = notion_client.get_collection_view("https://www.notion.so/5a95fb63129242a5b5b48f18e16ef19a?v=81afe49071ef41bba4c85922ff134407")
+	proposals = notion_client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
+	message_review = notion_client.get_block("https://www.notion.so/d134162fbfb14449a7ae426487f56127?v=159b522f95fc460f9171dfdca6d1f6d8")
+
+	tokens = os.environ.get('TOKENS')
+
+	parsed_rooms = []
+	
+	
+	active_since_hours =  int(request.args.get("activeSince", "24"))
+	activeSince = datetime.datetime.now() - datetime.timedelta(hours = active_since_hours)
+	activeSince = int(activeSince.timestamp())*1000
+
+	date = str(datetime.datetime.now().day) + "." + str(datetime.datetime.now().month) + "." + str(datetime.datetime.now().year) + "h"
+	row_name = date + " -" + str(active_since_hours)
+
+	rows = {}
+
+	login_config = upwork.Config({\
+			'consumer_key': os.environ.get("ConsumerKey"),\
+			'consumer_secret': os.environ.get("ConsumerSecret"),\
+			'access_token': os.environ.get("AccessToken"),\
+			'access_token_secret': os.environ.get("AccessSecret")})
+
+	client = upwork.Client(login_config)
+
+	company = companyAPI(client)
+	messages = messageAPI(client)
+
+	
+	freelancer_ids = [x["public_url"].split("/")[-1] for x in company.get_users(os.environ.get("CompanyRef"))["users"]]
+	
+	#skip owner to parse quicker
+	tokens = parse_tokens(tokens, freelancer_ids)
+
+	for freelancer in tokens:
+		#log in as each freelancer
+		client = upwork.Client(upwork.Config({\
+			'consumer_key': os.environ.get("ConsumerKey"),\
+			'consumer_secret': os.environ.get("ConsumerSecret"),\
+			'access_token': freelancer["accessToken"],\
+			'access_token_secret': freelancer["accessSecret"]}))
+
+		userApi = userAPI(client)
+		messages_api = messageAPI(client)
+		
+		user_data = userApi.get_my_info()
+		print(user_data)
+		user_id = user_data["user"]["id"]
+
+		if user_data["user"]["profile_key"] not in cache.keys():
+			cache[user_data["user"]["profile_key"]] = user_data["user"]["first_name"] + " " + user_data["user"]["last_name"]
+
+		profileApi = profileAPI(client)
+		
+
+
+		try:
+			rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": "1598650483193", "includeHidden":"true", "type":"all"})	
+			user_rooms = messages_api.get_rooms(user_id, {"activeSince": "1598650483193"})	
+			if "rooms" not in rooms.keys() or "rooms" not in user_rooms.keys():
+				continue
+			 
+			rooms = rooms["rooms"] + user_rooms["rooms"]
+			
+		except Exception as e:
+			rooms = []
+			
+
+		
+
+
+		for room in rooms:
+			
+			#sometimes throws an error, just default to no info
+			try:
+				#pretty slow, but idk how to do this faster (download db?)
+				contracts_found = contracts.collection.get_rows(search = room["roomId"])
+				proposals_found = proposals.collection.get_rows(search = room["roomId"])
+			except Exception as e:
+				contracts_found = []
+				proposals_found = []
+
+			try:
+				messages = messages_api.get_room_messages(os.environ.get("TeamID"), room["roomId"], {"limit":15})
+				if "stories_list" not in messages.keys():
+					messages = messages_api.get_room_messages(user_id, room["roomId"], {"limit":15})
+			except Exception as e:
+				messages = {}
+			
+			
+			if len(contracts_found)>0:
+				if not contracts_found[0].status == "Ended":
+					update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Contract", "messages":messages, "link":contracts_found[0].get_browseable_url()})
+					print("ACTIVE CONTRACT: " + str(room))
+				else:
+					update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Ended contract", "messages":messages, "link":contracts_found[0].get_browseable_url()})
+					print("ENDED CONTRACT: " + str(room))
+		
+			elif len(proposals_found)>0:		
+				update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Interview", "messages":messages, "link":proposals_found[0].get_browseable_url()})
+				print("PROPOSAL: " + str(room))
+
+			else:
+				update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "No info", "link":"", "messages":messages})
+				print("NO DATA " + str(room))
+
+
+		
+	print("finished parsing rooms")
+	target_page = create_page("https://www.notion.so/Message-Review-33cbe6e92b9e4894890d768f1ea7b970","testing without the db for now")
+
+	for room in parsed_rooms:
+		client = upwork.Client(upwork.Config({\
+			'consumer_key': os.environ.get("ConsumerKey"),\
+			'consumer_secret': os.environ.get("ConsumerSecret"),\
+			'access_token': os.environ.get("AccessToken"),\
+			'access_token_secret': os.environ.get("AccessSecret")}))
+
+		profileApi = profileAPI(client)
+
+		link = "https://www.upwork.com/messages/rooms/" + room["id"]
+		link_text = "[Room]("+link+")"
+		
+		if room["type"] == "No info":
+			type_text = "***No info***"
+			#to add to the interview column
+			room["type"] = "Interview"
+
+		else:
+			if room["type"] == "Interview":
+				type_text = "[Proposal]("+room["link"]+")"
+			else:
+				type_text = "["+room["type"]+"]("+room["link"]+")" 
+
+
+		if room["type"] not in rows.keys():
+			rows[room["type"]] = message_review.views.add_new()
+			rows[room["type"]] = message_review.collection.add_row()
+			rows[room["type"]].name = row_name
+			rows[room["type"]].tags = room["type"]
+
+		target_row = rows[room["type"]]
+
+		if room["room"]["roomName"] == None:
+			room["room"]["roomName"] == "None"
+
+		if room["room"]["topic"] == None:
+			room["room"]["topic"] == "None"
+
+		try:
+			title = room["room"]["roomName"]+", **"+room["room"]["topic"] + "**"
+		except Exception:
+			print(room)
+			continue
+
+		parent_text_block = target_row.children.add_new(TextBlock, title = title)
+		text_block = parent_text_block.children.add_new(TextBlock, title =type_text+" , "+link_text)
+
+		try:
+			stories = room["messages"]["stories_list"]["stories"]
+		except Exception:
+			print(room["messages"])
+
+		#if the message ends in a sinature like [Line Start][Capital][* amount of lowercase][space][Capital][Dot][EOF] 
+		if isinstance(stories[0]["message"], str) and re.findall("^[A-Z][a-z]* [A-Z]\.\Z", stories[0]["message"], re.M) and room["type"] == "Interview":
+			parent_text_block.remove(permanently = True)
+			print("bot detected, skipped")
+			continue
+
+
+		written = 0
+		for i in stories:
+			if not isinstance(i["message"],str) or i["message"] == "":
+				print(i)
+				continue
+
+			if written>=3:
+				break
+
+			time = datetime.datetime.fromtimestamp(i["updated"]/1000).strftime('%Y-%m-%d %H:%M:%S')
+			text = "["+time+"]\n"
+
+			if i["userId"] not in cache.keys(): 
+				name = profileApi.get_specific(i["userId"])["profile"]["dev_short_name"][:-1]
+				cache[i["userId"]] = name
+			else:
+				name = cache[i["userId"]]
+
+			text += "**"+name+":**\n"
+			text += i["message"]
+
+			message = parent_text_block.children.add_new(CodeBlock, title = text)
+			message.language = "Plain text"
+			message.wrap = True
+
+			message.move_to(parent_text_block, position = "first-child")
+
+
+			written +=1
+
+		text_block.move_to(parent_text_block, position = "first-child")
+		parent_text_block.children.add_new(TextBlock)
+		target_row.children.add_new(DividerBlock)
+
+	print("all done!")	
+	print(cache)
+
+	return str(parsed_rooms)
+
 def get_offset_to_closest_weekday(source, targets):
     
     #check if we got an int or string array
