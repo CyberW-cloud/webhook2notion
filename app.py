@@ -153,7 +153,6 @@ def upwork_test():
 
 			try:
 				messages = messages_api.get_room_messages(user_id, room["roomId"], {"limit":5})
-				print(messages)
 			except Exception as e:
 				messages = []
 			
@@ -227,7 +226,7 @@ def upwork_test():
 		written = 0
 		for i in stories:
 			if not isinstance(i["message"],str) or i["message"] == "":
-				print(stories[i])
+				print(i)
 				continue
 
 			if written>3:
