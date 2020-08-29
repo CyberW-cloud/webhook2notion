@@ -127,6 +127,7 @@ def upwork_test():
 
 		try:
 			rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": "1598650483193", "includeHidden":"true", "type":"all"})	
+			rooms = rooms + messages_api.get_rooms(user_id, {"activeSince": "1598650483193", "includeHidden":"true", "type":"all"})	
 		except Exception as e:
 			rooms = {}
 			
@@ -155,8 +156,6 @@ def upwork_test():
 			
 			
 			if len(contracts_found)>0:
-				print(contracts_found[0].ended)
-				print(contracts_found[0].status)
 				if not contracts_found[0].status == "Ended":
 					update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Contract", "messages":messages, "link":contracts_found[0].get_browseable_url()})
 					print("ACTIVE CONTRACT: " + str(room))
@@ -212,8 +211,10 @@ def upwork_test():
 		parent_text_block = target_row.children.add_new(TextBlock, title = room["room"]["roomName"]+", **"+room["room"]["topic"] + "**")
 		text_block = parent_text_block.children.add_new(TextBlock, title =type_text+" , "+link_text)
 
-		
-		stories = room["messages"]["stories_list"]["stories"]
+		try:
+			stories = room["messages"]["stories_list"]["stories"]
+		except Exception:
+			print(room["messages"])
 
 		#if the message ends in a sinature like [Line Start][Capital][* amount of lowercase][space][Capital][Dot][EOF] 
 		if isinstance(stories[0]["message"], str) and re.findall("^[A-Z][a-z]* [A-Z]\.\Z", stories[0]["message"], re.M) and room["type"] == "Interview":
