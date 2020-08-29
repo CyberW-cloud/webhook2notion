@@ -81,7 +81,7 @@ def upwork_test():
 	activeSince = datetime.datetime.now() - datetime.timedelta(hours = active_since_hours)
 	activeSince = int(activeSince.timestamp())*1000
 
-	date = str(datetime.datetime.now().day) + "." + str(datetime.datetime.now().month) + "." + str(datetime.datetime.now().year)
+	date = str(datetime.datetime.now().day) + "." + str(datetime.datetime.now().month) + "." + str(datetime.datetime.now().year) + "h"
 	row_name = date + " -" + str(active_since_hours)
 
 	rows = {}
@@ -263,7 +263,7 @@ def add_global_block():
 	page = client.get_block("https://www.notion.so/TEST-2-e00c343340c34f919d8460b3cbe26245")
 	target = client.get_block("https://www.notion.so/TEST-43d74c611dab4fd0b088a9508f1b46b7")
 
-	page.add_alias(target)
+	page.children.add_alias(target)
 
 
 	
