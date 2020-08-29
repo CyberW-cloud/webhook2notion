@@ -81,8 +81,8 @@ def upwork_test():
 	activeSince = datetime.datetime.now() - datetime.timedelta(hours = active_since_hours)
 	activeSince = int(activeSince.timestamp())*1000
 
-	date = str(datetime.datetime.now().day) + " " + str(datetime.datetime.now().month) + " " + str(datetime.datetime.now().year)
-	row_name = date + " - " + str(active_since_hours)
+	date = str(datetime.datetime.now().day) + "." + str(datetime.datetime.now().month) + "." + str(datetime.datetime.now().year)
+	row_name = date + " -" + str(active_since_hours)
 
 	rows = {}
 
