@@ -127,7 +127,7 @@ def upwork_test():
 
 		try:
 			rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": "1598650483193", "includeHidden":"true", "type":"all"})	
-			user_rooms = messages_api.get_rooms(user_id, {"activeSince": "1598650483193", "includeHidden":"true", "type":"all"})	
+			user_rooms = messages_api.get_rooms(user_id, {"activeSince": "1598650483193"})	
 			if "rooms" not in rooms.keys() or "rooms" not in user_rooms.keys():
 				continue
 			 
