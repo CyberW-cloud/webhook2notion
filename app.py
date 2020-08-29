@@ -126,7 +126,7 @@ def upwork_test():
 
 
 		try:
-			rooms = messages_api.get_rooms(user_id, {"activeSince": "1598650483193", "includeHidden":"true", "type":"all"})	
+			rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": "1598650483193", "includeHidden":"true", "type":"all"})	
 			print(rooms)
 		except Exception as e:
 			rooms = {}
