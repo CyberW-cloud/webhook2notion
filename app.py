@@ -220,7 +220,9 @@ def upwork_test():
 
 		print(len(stories))
 		print(stories)
-		for i in range(len(stories), 0 , -1):
+		for i in range(len(stories)-1, 0 , -1):
+			print(i)
+			print(stories[i])
 			if not isinstance(stories[i]["message"],str):
 				print(stories[i])
 				continue
