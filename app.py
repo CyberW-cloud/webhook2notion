@@ -60,8 +60,8 @@ def update_parsed_rooms(parsed_rooms, update):
 		return parsed_rooms
 
 
-@app.route('/upwork_test', methods=["GET"])
-def upwork_test():
+@app.route('/messages_review', methods=["GET"])
+def messages_review():
 
 	
 
@@ -218,7 +218,13 @@ def upwork_test():
 		if room["room"]["topic"] == None:
 			room["room"]["topic"] == "None"
 
-		parent_text_block = target_row.children.add_new(TextBlock, title = room["room"]["roomName"]+", **"+room["room"]["topic"] + "**")
+		try:
+			title = room["room"]["roomName"]+", **"+room["room"]["topic"] + "**"
+		except Exception:
+			print(room)
+			continue
+
+		parent_text_block = target_row.children.add_new(TextBlock, title = title)
 		text_block = parent_text_block.children.add_new(TextBlock, title =type_text+" , "+link_text)
 
 		try:
