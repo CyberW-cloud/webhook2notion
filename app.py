@@ -101,7 +101,7 @@ def upwork_test():
 	freelancer_ids = [x["public_url"].split("/")[-1] for x in company.get_users(os.environ.get("CompanyRef"))["users"]]
 	
 	#skip owner to parse quicker
-	tokens = parse_tokens(tokens, freelancer_ids)[1:10]
+	tokens = parse_tokens(tokens, freelancer_ids)[1:]
 
 	for freelancer in tokens:
 		#log in as each freelancer
@@ -218,11 +218,8 @@ def upwork_test():
 		skip = False
 		stories = room["messages"]["stories_list"]["stories"]
 
-		print(len(stories))
-		print(stories)
+
 		for i in range(len(stories)-1, -1 , -1):
-			print(i)
-			print(stories[i])
 			if not isinstance(stories[i]["message"],str):
 				print(stories[i])
 				continue
