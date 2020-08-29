@@ -226,7 +226,7 @@ def upwork_test():
 
 		written = 0
 		for i in stories:
-			if not isinstance(i["message"],str) or i["message"] = "":
+			if not isinstance(i["message"],str) or i["message"] == "":
 				print(stories[i])
 				continue
 
