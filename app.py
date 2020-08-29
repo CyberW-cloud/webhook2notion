@@ -220,7 +220,7 @@ def upwork_test():
 
 		print(len(stories))
 		print(stories)
-		for i in range(len(stories)-1, 0 , -1):
+		for i in range(len(stories)-1, -1 , -1):
 			print(i)
 			print(stories[i])
 			if not isinstance(stories[i]["message"],str):
@@ -230,6 +230,7 @@ def upwork_test():
 			if re.findall("^[A-Z][a-z]* [A-Z]\.\Z", stories[i]["message"], re.M):
 				parent_text_block.remove(permanently = True)
 				skip = True
+				print("bot detected, skipped")
 				break
 
 
