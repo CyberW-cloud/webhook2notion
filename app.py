@@ -127,7 +127,6 @@ def upwork_test():
 
 		try:
 			rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": "1598650483193", "includeHidden":"true", "type":"all"})	
-			print(rooms)
 		except Exception as e:
 			rooms = {}
 			
@@ -156,7 +155,9 @@ def upwork_test():
 			
 			
 			if len(contracts_found)>0:
-				if not contracts_found[0].ended:
+				print(contracts_found[0].ended)
+				print(contracts_found[0].status)
+				if not contracts_found[0].status == "Ended":
 					update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Contract", "messages":messages, "link":contracts_found[0].get_browseable_url()})
 					print("ACTIVE CONTRACT: " + str(room))
 				else:
