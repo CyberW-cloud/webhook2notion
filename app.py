@@ -152,7 +152,7 @@ def upwork_test():
 				proposals_found = []
 
 			try:
-				messages = messages_api.get_room_messages(user_id, room["roomId"], {"limit":4})
+				messages = messages_api.get_room_messages(user_id, room["roomId"], {"limit":3})
 				print(messages)
 			except Exception as e:
 				messages = []
