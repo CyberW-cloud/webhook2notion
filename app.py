@@ -127,16 +127,18 @@ def upwork_test():
 
 		try:
 			rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": "1598650483193", "includeHidden":"true", "type":"all"})	
-			rooms = rooms + messages_api.get_rooms(user_id, {"activeSince": "1598650483193", "includeHidden":"true", "type":"all"})	
+			user_rooms = messages_api.get_rooms(user_id, {"activeSince": "1598650483193", "includeHidden":"true", "type":"all"})	
+			if "rooms" not in rooms.keys() or "rooms" not in user_rooms.keys():
+				continue
+			 
+			rooms = rooms["rooms"] + user_rooms["rooms"]
+			
 		except Exception as e:
-			rooms = {}
+			rooms = []
 			
 
 		
-		if "rooms" not in rooms.keys():
-			continue
-		else: 
-			rooms = rooms["rooms"]
+
 
 		for room in rooms:
 			
