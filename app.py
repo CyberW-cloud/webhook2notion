@@ -152,7 +152,7 @@ def upwork_test():
 				proposals_found = []
 
 			try:
-				messages = messages_api.get_room_messages(user_id, room["roomId"], {"limit":3})
+				messages = messages_api.get_room_messages(user_id, room["roomId"], {"limit":5})
 				print(messages)
 			except Exception as e:
 				messages = []
@@ -214,41 +214,45 @@ def upwork_test():
 		parent_text_block = target_row.children.add_new(TextBlock, title = room["room"]["roomName"]+", **"+room["room"]["topic"] + "**")
 		text_block = parent_text_block.children.add_new(TextBlock, title =type_text+" , "+link_text)
 
-		# we have to use range() to go in reverse
-		skip = False
+		
 		stories = room["messages"]["stories_list"]["stories"]
 
+		#if the message ends in a sinature like [Line Start][Capital][* amount of lowercase][space][Capital][Dot][EOF] 
+		if re.findall("^[A-Z][a-z]* [A-Z]\.\Z", stories[0]["message"], re.M) and room["type"] == "Interview":
+			parent_text_block.remove(permanently = True)
+			print("bot detected, skipped")
+			continue
 
-		for i in range(len(stories)-1, -1 , -1):
-			if not isinstance(stories[i]["message"],str):
+
+		written = 0
+		for i in stories:
+			if not isinstance(i["message"],str) or i["message"] = "":
 				print(stories[i])
 				continue
-			#if the message ends in a sinature like [Line Start][Capital][* amount of lowercase][space][Capital][Dot][EOF] 
-			if re.findall("^[A-Z][a-z]* [A-Z]\.\Z", stories[i]["message"], re.M):
-				parent_text_block.remove(permanently = True)
-				skip = True
-				print("bot detected, skipped")
-				break
 
 
-			time = datetime.datetime.fromtimestamp(stories[i]["updated"]/1000).strftime('%Y-%m-%d %H:%M:%S')
+
+			time = datetime.datetime.fromtimestamp(i["updated"]/1000).strftime('%Y-%m-%d %H:%M:%S')
 			text = "["+time+"]\n"
 
-			if stories[i]["userId"] not in cache.keys(): 
-				name = profileApi.get_specific(stories[i]["userId"])["profile"]["dev_short_name"][:-1]
-				cache[stories[i]["userId"]] = name
+			if i["userId"] not in cache.keys(): 
+				name = profileApi.get_specific(i["userId"])["profile"]["dev_short_name"][:-1]
+				cache[i["userId"]] = name
 			else:
-				name = cache[stories[i]["userId"]]
+				name = cache[i["userId"]]
 
 			text += "**"+name+":**\n"
-			text += stories[i]["message"]
+			text += i["message"]
 
 			message = parent_text_block.children.add_new(CodeBlock, title = text)
 			message.language = "Plain text"
 			message.wrap = True
 
-		if skip:
-			continue
+			message.move_to(parent_text_block, position = "first-child")
+
+
+			written +=1
+
 
 		parent_text_block.children.add_new(TextBlock)
 		target_row.children.add_new(DividerBlock)
