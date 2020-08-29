@@ -229,7 +229,7 @@ def upwork_test():
 				print(i)
 				continue
 
-			if written>3:
+			if written>=3:
 				break
 
 			time = datetime.datetime.fromtimestamp(i["updated"]/1000).strftime('%Y-%m-%d %H:%M:%S')
@@ -253,7 +253,7 @@ def upwork_test():
 
 			written +=1
 
-
+		text_block.move_to(parent_text_block, position = "first-child")
 		parent_text_block.children.add_new(TextBlock)
 		target_row.children.add_new(DividerBlock)
 
