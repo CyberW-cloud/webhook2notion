@@ -60,8 +60,8 @@ def update_parsed_rooms(parsed_rooms, update):
 		return parsed_rooms
 
 
-@app.route('/messages_review', methods=["GET"])
-def messages_review():
+@app.route('/message_review', methods=["GET"])
+def message_review():
 
 	
 
@@ -81,8 +81,8 @@ def messages_review():
 	activeSince = datetime.datetime.now() - datetime.timedelta(hours = active_since_hours)
 	activeSince = int(activeSince.timestamp())*1000
 
-	date = str(datetime.datetime.now().day) + "." + str(datetime.datetime.now().month) + "." + str(datetime.datetime.now().year) + "h"
-	row_name = date + " -" + str(active_since_hours)
+	date = str(datetime.datetime.now().day) + "." + str(datetime.datetime.now().month) + "." + str(datetime.datetime.now().year)
+	row_name = date + " -" + str(active_since_hours) + "h"
 
 	rows = {}
 
@@ -126,8 +126,8 @@ def messages_review():
 
 
 		try:
-			rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": "1598650483193", "includeHidden":"true", "type":"all"})	
-			user_rooms = messages_api.get_rooms(user_id, {"activeSince": "1598650483193"})	
+			rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": str(activeSince), "includeHidden":"true", "type":"all"})	
+			user_rooms = messages_api.get_rooms(user_id, {"activeSince": str(activeSince)})	
 			if "rooms" not in rooms.keys() or "rooms" not in user_rooms.keys():
 				continue
 			 
@@ -468,7 +468,7 @@ def get_offset_to_closest_weekday(source, targets):
 def Hb_tasks():
    
 	#connect to the desk
-	site = "https://www.notion.so/Head-board-749105cdfebe4d0282469b04191a24c8"
+	site = request.args.get("target_site", "https://www.notion.so/Head-board-749105cdfebe4d0282469b04191a24c8")
 	token_v2 = os.environ.get("TOKEN")
 
 	#get all tasks
