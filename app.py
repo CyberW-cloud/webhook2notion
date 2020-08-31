@@ -213,8 +213,8 @@ def message_review():
 
 
 		if room["type"] not in rows.keys():
-			rows[room["type"]] = message_review.views.add_new()
-			rows[room["type"]] = message_review.collection.add_row()
+			rows[room["type"]] = auto_retry_lambda(message_review.views.add_new())
+			rows[room["type"]] = auto_retry_lambda(message_review.collection.add_row())
 			rows[room["type"]].name = row_name
 			rows[room["type"]].tags = room["type"]
 
@@ -232,8 +232,8 @@ def message_review():
 			print(room)
 			continue
 
-		parent_text_block = target_row.children.add_new(TextBlock, title = title)
-		text_block = parent_text_block.children.add_new(TextBlock, title =type_text+" , "+link_text)
+		parent_text_block = auto_retry_lambda(target_row.children.add_new(),TextBlock, title = title)
+		text_block = auto_retry_lambda(parent_text_block.children.add_new(),TextBlock, title =type_text+" , "+link_text)
 
 		try:
 			stories = room["messages"]["stories_list"]["stories"]
@@ -242,7 +242,7 @@ def message_review():
 
 		#if the message ends in a sinature like [Line Start][Capital][* amount of lowercase][space][Capital][Dot][EOF] 
 		if isinstance(stories[0]["message"], str) and re.findall("^[A-Z][a-z]* [A-Z]\.\Z", stories[0]["message"], re.M) and room["type"] == "Interview":
-			parent_text_block.remove(permanently = True)
+			auto_retry_lambda(parent_text_block.remove(),permanently = True)
 			print("bot detected, skipped")
 			continue
 
@@ -268,18 +268,18 @@ def message_review():
 			text += "**"+name+":**\n"
 			text += i["message"]
 
-			message = parent_text_block.children.add_new(CodeBlock, title = text)
+			message = auto_retry_lambda(parent_text_block.children.add_new(),CodeBlock, title = text)
 			message.language = "Plain text"
 			message.wrap = True
 
-			message.move_to(parent_text_block, position = "first-child")
+			auto_retry_lambda(message.move_to(),parent_text_block, position = "first-child")
 
 
 			written +=1
 
-		text_block.move_to(parent_text_block, position = "first-child")
-		parent_text_block.children.add_new(TextBlock)
-		target_row.children.add_new(DividerBlock)
+		auto_retry_lambda(text_block.move_to(),parent_text_block, position = "first-child")
+		auto_retry_lambda(parent_text_block.children.add_new(),TextBlock)
+		auto_retry_lambda(target_row.children.add_new(),DividerBlock)
 
 	print("all done!")	
 	print(cache)

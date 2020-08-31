@@ -10,7 +10,7 @@ def auto_retry_lambda(fun, *args, **kwargs):
 
 	# making them function arguments would mess with *args and **kwargs if not given
 	retries = 5
-	log = False
+	log = True
 	sleep = 1
 
 	while 1:
