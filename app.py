@@ -81,6 +81,8 @@ def message_review():
 	activeSince = datetime.datetime.now() - datetime.timedelta(hours = active_since_hours)
 	activeSince = int(activeSince.timestamp())*1000
 
+	print(activeSince)
+
 	date = str(datetime.datetime.now().day) + "." + str(datetime.datetime.now().month) + "." + str(datetime.datetime.now().year)
 	row_name = date + " -" + str(active_since_hours) + "h"
 
@@ -126,8 +128,8 @@ def message_review():
 
 
 		try:
-			rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": str(activeSince), "includeHidden":"true", "type":"all"})	
-			user_rooms = messages_api.get_rooms(user_id, {"activeSince": str(activeSince)})	
+			rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": str(activeSince), "includeFavoritesIfActiveSinceSet": "false"})	
+			user_rooms = messages_api.get_rooms(user_id, {"activeSince": str(activeSince), "includeFavoritesIfActiveSinceSet": "false"})	
 			if "rooms" not in rooms.keys() or "rooms" not in user_rooms.keys():
 				continue
 			 
