@@ -213,8 +213,8 @@ def message_review():
 
 
 		if room["type"] not in rows.keys():
-			rows[room["type"]] = auto_retry_lambda(message_review.views.add_new())
-			rows[room["type"]] = auto_retry_lambda(message_review.collection.add_row())
+			rows[room["type"]] = auto_retry_lambda(message_review.views.add_new)
+			rows[room["type"]] = auto_retry_lambda(message_review.collection.add_row)
 			rows[room["type"]].name = row_name
 			rows[room["type"]].tags = room["type"]
 
