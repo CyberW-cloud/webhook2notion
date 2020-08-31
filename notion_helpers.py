@@ -6,7 +6,12 @@ import pandas as pd
 from notion.block import HeaderBlock, TextBlock, TodoBlock
 from notion.collection import NotionDate, TableView, TableQueryResult
 
-def auto_retry_lambda(fun, retries = 5, log = False, sleep = 0, *args, **kwargs):
+def auto_retry_lambda(fun, *args, **kwargs):
+
+    # making them function arguments would mess with *args and **kwargs if not given
+    retries = 5
+    log = False
+    sleep = 1
 
     try:
         fun(*args, **kwargs)
