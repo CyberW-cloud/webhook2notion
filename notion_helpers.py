@@ -6,6 +6,20 @@ import pandas as pd
 from notion.block import HeaderBlock, TextBlock, TodoBlock
 from notion.collection import NotionDate, TableView, TableQueryResult
 
+def auto_retry_lambda(fun, retries = 5, log = False, *args, **kwargs):
+
+    try:
+        fun(*args, **kwargs)
+    except Exception e:
+        if log:
+            print("Retrying due to:" + str(e))
+
+        if retries <= 0:
+            raise e
+
+        retries -= 1
+
+
 
 def get_date_from_title(title):
     if isinstance(title, list):  # instance must be list
