@@ -13,17 +13,18 @@ def auto_retry_lambda(fun, *args, **kwargs):
     log = False
     sleep = 1
 
-    try:
-        fun(*args, **kwargs)
-    except Exception as e:
-        if log:
-            print("Retrying due to:" + str(e))
+    while 1:
+        try:
+            return fun(*args, **kwargs)
+        except Exception as e:
+            if log:
+                print("Retrying due to:" + str(e))
 
-        if retries <= 0:
-            raise e
+            if retries <= 0:
+                raise e
 
-        retries -= 1
-        time.sleep(sleep)
+            retries -= 1
+            time.sleep(sleep)
 
 
 def get_date_from_title(title):
