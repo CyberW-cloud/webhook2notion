@@ -36,7 +36,7 @@ TEST = True
 test_page_url = "https://www.notion.so/TEST-68d7198ed4d3437b816386f6da196547"
 
 @app.route('/test', methods=["GET"])
-def update_db_contracts(table_url):
+def update_db_contracts():
 	DATABASE_URL = os.environ['DATABASE_URL']
 
 	conn = psycopg2.connect(DATABASE_URL, sslmode='require')
@@ -45,7 +45,7 @@ def update_db_contracts(table_url):
 	cur.execute("""SELECT * from test""")
 	result = cur.fetchall()[0]
 	print(result[0])
-
+	return result[0]
 #accepted users should be an array of id's or "all" for accepting all users
 def parse_tokens(tokens, accepted_users = "all"):
 	
