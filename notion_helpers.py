@@ -16,6 +16,7 @@ def auto_retry_lambda(fun, *args, **kwargs):
     while 1:
         try:
             return fun(*args, **kwargs)
+        
         except Exception as e:
             if log:
                 print("Retrying due to:" + str(e))
@@ -125,11 +126,11 @@ def create_new_task(page, header, date, text, timezone, tasks):
             title.append([" "])
             title.append([header])
         new_child = page.children.add_new(HeaderBlock, title=" . ")
-        #        time.sleep(3)
+        #      time.sleep(3)
         prop = new_child.get("properties")
-        #       if prop is None:
-        #           time.sleep(3)
-        #           prop = new_child.get('properties')
+        #      if prop is None:
+        #         time.sleep(3)
+        #         prop = new_child.get('properties')
         prop["title"] = title
         new_child.set("properties", prop)
         ret = {"header": new_child, "to-do": list()}
