@@ -36,7 +36,7 @@ TEST = True
 test_page_url = "https://www.notion.so/TEST-68d7198ed4d3437b816386f6da196547"
 
 @app.route('/test', methods=["GET"])
-def update_db_contracts(table_url)
+def update_db_contracts(table_url):
 	DATABASE_URL = os.environ['DATABASE_URL']
 
 	conn = psycopg2.connect(DATABASE_URL, sslmode='require')
