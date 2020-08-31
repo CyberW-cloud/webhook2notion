@@ -44,8 +44,8 @@ def update_db_contracts():
 	""" SINCE WHEN IS 3 " NOT A COMMENT?!?!?!?!?!?!? """
 	cur.execute("""SELECT * from test""")
 	result = cur.fetchall()[0]
-	print(result[0])
-	return result[0]
+	print(result[1])
+	return result[1]
 #accepted users should be an array of id's or "all" for accepting all users
 def parse_tokens(tokens, accepted_users = "all"):
 	
