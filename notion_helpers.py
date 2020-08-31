@@ -10,7 +10,7 @@ def auto_retry_lambda(fun, retries = 5, log = False, sleep = 0, *args, **kwargs)
 
     try:
         fun(*args, **kwargs)
-    except Exception e:
+    except Exception as e:
         if log:
             print("Retrying due to:" + str(e))
 
