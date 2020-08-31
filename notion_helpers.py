@@ -6,7 +6,7 @@ import pandas as pd
 from notion.block import HeaderBlock, TextBlock, TodoBlock
 from notion.collection import NotionDate, TableView, TableQueryResult
 
-def auto_retry_lambda(fun, retries = 5, log = False, *args, **kwargs):
+def auto_retry_lambda(fun, retries = 5, log = False, sleep = 0, *args, **kwargs):
 
     try:
         fun(*args, **kwargs)
@@ -18,7 +18,7 @@ def auto_retry_lambda(fun, retries = 5, log = False, *args, **kwargs):
             raise e
 
         retries -= 1
-
+        time.sleep(sleep)
 
 
 def get_date_from_title(title):
