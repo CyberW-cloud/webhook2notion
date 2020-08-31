@@ -70,7 +70,7 @@ def message_review():
 	
 	contracts = notion_client.get_collection_view("https://www.notion.so/5a95fb63129242a5b5b48f18e16ef19a?v=81afe49071ef41bba4c85922ff134407")
 	proposals = notion_client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
-	message_review = auto_retry_lambda(notion_client.get_block(),"https://www.notion.so/d134162fbfb14449a7ae426487f56127?v=159b522f95fc460f9171dfdca6d1f6d8")
+	message_review = auto_retry_lambda(notion_client.get_block,"https://www.notion.so/d134162fbfb14449a7ae426487f56127?v=159b522f95fc460f9171dfdca6d1f6d8")
 
 	tokens = os.environ.get('TOKENS')
 
@@ -232,8 +232,8 @@ def message_review():
 			print(room)
 			continue
 
-		parent_text_block = auto_retry_lambda(target_row.children.add_new(),TextBlock, title = title)
-		text_block = auto_retry_lambda(parent_text_block.children.add_new(),TextBlock, title =type_text+" , "+link_text)
+		parent_text_block = auto_retry_lambda(target_row.children.add_new,TextBlock, title = title)
+		text_block = auto_retry_lambda(parent_text_block.children.add_new,TextBlock, title =type_text+" , "+link_text)
 
 		try:
 			stories = room["messages"]["stories_list"]["stories"]
@@ -242,7 +242,7 @@ def message_review():
 
 		#if the message ends in a sinature like [Line Start][Capital][* amount of lowercase][space][Capital][Dot][EOF] 
 		if isinstance(stories[0]["message"], str) and re.findall("^[A-Z][a-z]* [A-Z]\.\Z", stories[0]["message"], re.M) and room["type"] == "Interview":
-			auto_retry_lambda(parent_text_block.remove(),permanently = True)
+			auto_retry_lambda(parent_text_block.remove,permanently = True)
 			print("bot detected, skipped")
 			continue
 
@@ -268,18 +268,18 @@ def message_review():
 			text += "**"+name+":**\n"
 			text += i["message"]
 
-			message = auto_retry_lambda(parent_text_block.children.add_new(),CodeBlock, title = text)
+			message = auto_retry_lambda(parent_text_block.children.add_new,CodeBlock, title = text)
 			message.language = "Plain text"
 			message.wrap = True
 
-			auto_retry_lambda(message.move_to(),parent_text_block, position = "first-child")
+			auto_retry_lambda(message.move_to,parent_text_block, position = "first-child")
 
 
 			written +=1
 
-		auto_retry_lambda(text_block.move_to(),parent_text_block, position = "first-child")
-		auto_retry_lambda(parent_text_block.children.add_new(),TextBlock)
-		auto_retry_lambda(target_row.children.add_new(),DividerBlock)
+		auto_retry_lambda(text_block.move_to,parent_text_block, position = "first-child")
+		auto_retry_lambda(parent_text_block.children.add_new,TextBlock)
+		auto_retry_lambda(target_row.children.add_new,DividerBlock)
 
 	print("all done!")	
 	print(cache)
