@@ -8,7 +8,7 @@ from notion.collection import NotionDate, TableView, TableQueryResult
 
 def auto_retry_lambda(fun, *args, **kwargs):
 
-	# making them function arguments would mess with *args and **kwargs if not given
+	# making them function arguments would mess with *args and **kwargs if not always given
 	retries = 5
 	log = True
 	sleep = 1

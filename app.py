@@ -23,6 +23,7 @@ from upwork.routers.organization.companies import Api as companyAPI
 from upwork.routers.organization.users import Api as userAPI
 from upwork.routers.freelancers.profile import Api as profileAPI
 
+import psycopg2
 
 timezone = "Europe/Kiev"
 
@@ -33,6 +34,17 @@ cache = {}
 #var used to signify testing
 TEST = True
 test_page_url = "https://www.notion.so/TEST-68d7198ed4d3437b816386f6da196547"
+
+@app.route('/test', methods=["GET"])
+def update_db_contracts(table_url)
+	DATABASE_URL = os.environ['DATABASE_URL']
+
+	conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+	cur = conn.cursor()
+	""" SINCE WHEN IS 3 " NOT A COMMENT?!?!?!?!?!?!? """
+	cur.execute("""SELECT * from test""")
+	result = cur.fetchall()[0]
+	print(result[0])
 
 #accepted users should be an array of id's or "all" for accepting all users
 def parse_tokens(tokens, accepted_users = "all"):
