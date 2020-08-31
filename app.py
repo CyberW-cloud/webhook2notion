@@ -143,7 +143,13 @@ def message_review():
 
 
 		for room in rooms:
-			
+			# double check activeSince
+			if int(room["latestStory"]["updated"])<activeSince:
+				print("ERROR: activeSince did not filter a room")
+				continue
+
+
+
 			#sometimes throws an error, just default to no info
 			try:
 				#pretty slow, but idk how to do this faster (download db?)
