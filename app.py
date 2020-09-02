@@ -35,17 +35,38 @@ cache = {}
 TEST = True
 test_page_url = "https://www.notion.so/TEST-68d7198ed4d3437b816386f6da196547"
 
-@app.route('/test', methods=["GET"])
+@app.route('/refresh_db', methods=["GET"])
 def update_db_contracts():
-	DATABASE_URL = os.environ['DATABASE_URL']
+	token = os.environ.get("TOKEN")
+	notion_client = NotionClient(token)
 
+	contracts = notion_client.get_collection_view("https://www.notion.so/5a95fb63129242a5b5b48f18e16ef19a?v=81afe49071ef41bba4c85922ff134407")
+	proposals = notion_client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
+
+	
+	DATABASE_URL = os.environ['DATABASE_URL']
 	conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 	cur = conn.cursor()
+
+	
 	""" SINCE WHEN IS 3 " NOT A COMMENT?!?!?!?!?!?!? """
-	cur.execute("""SELECT * from test""")
-	result = cur.fetchall()[0]
-	print(result[1])
-	return result[1]
+	start_from_contracts = cur.execute("""Select MAX(Date) from contracts""")
+	start_from_proposals = cur.execute("""Select MAX(Date) from proposals""")
+
+	filter_params = {
+		"property": "Date"
+		"comparator": "Is After"
+		"value":datetime.utcfromtimestamp(start_from_contracts).strftime('%Y-%m-%d %H:%M')
+	}
+
+	contracts = contracts.build_query(filter=filter_params)
+	result = contracts.execute()
+
+	print len(result)
+	
+
+
+
 #accepted users should be an array of id's or "all" for accepting all users
 def parse_tokens(tokens, accepted_users = "all"):
 	
