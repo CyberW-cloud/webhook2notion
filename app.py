@@ -57,7 +57,7 @@ def update_db_contracts():
 
 	print(start_from_contracts)
 	filter_params = {
-		"property": "Created",
+		"property": "created",
 		"comparator": "is_after",
 		"value":datetime.datetime.utcfromtimestamp(start_from_contracts).strftime('%Y-%m-%d %H:%M')
 	}
