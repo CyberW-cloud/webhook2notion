@@ -62,7 +62,7 @@ def update_db_contracts():
 	contracts = contracts.build_query(filter=filter_params)
 	result = contracts.execute()
 
-	print len(result)
+	print(len(result))
 	
 
 
