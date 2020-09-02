@@ -82,14 +82,16 @@ def update_db_contracts():
 	
 	for row in result:
 		contract_id = str(row.contract_id)
-		if contract_id == "":
+		if contract_id == '':
 			contract_id == "-999"
 
-
-		cur.execute("""Insert into contracts ("contract_id", "chat_url", "ended", "added_to_db", "date") values ('"""+ contract_id +"""','"""+ str(row.chat_url) +"""','"""+ str(row.status == "Ended") +"""','"""+ str(int(datetime.datetime.now().timestamp())) +"""','"""+ str(int(row.created.timestamp())) +"""')""")
-		conn.commit()
-		print(cur.query)
-
+		try:
+			cur.execute("""Insert into contracts ("contract_id", "chat_url", "ended", "added_to_db", "date") values ('"""+ contract_id +"""','"""+ str(row.chat_url) +"""','"""+ str(row.status == "Ended") +"""','"""+ str(int(datetime.datetime.now().timestamp())) +"""','"""+ str(int(row.created.timestamp())) +"""')""")
+			conn.commit()
+			print(cur.query)
+	
+		except Exception as e:
+			pass	
 
 
 #accepted users should be an array of id's or "all" for accepting all users
