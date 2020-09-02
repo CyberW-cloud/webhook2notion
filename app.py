@@ -59,7 +59,7 @@ def update_db_contracts():
 	filter_params = {
 		"property": "created",
 		"comparator": "date_is_after",
-		"value":datetime.utcfromtimestamp(start_from_contracts).strftime('%Y-%m-%d')
+		"value":datetime.datetime.utcfromtimestamp(start_from_contracts).strftime('%Y-%m-%d')
 	}
 	sort_params = [{"direction": "ascending", "property": "Created"}]
 
