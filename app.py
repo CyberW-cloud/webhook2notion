@@ -54,8 +54,8 @@ def update_db_contracts():
 	start_from_proposals = cur.execute("""Select MAX(Date) from proposals""")
 
 	filter_params = {
-		"property": "Date"
-		"comparator": "Is After"
+		"property": "Date",
+		"comparator": "Is After",
 		"value":datetime.utcfromtimestamp(start_from_contracts).strftime('%Y-%m-%d %H:%M')
 	}
 
