@@ -60,12 +60,12 @@ def update_db_contracts():
 		"comparator": "Is After",
 		"value":datetime.datetime.utcfromtimestamp(start_from_contracts).strftime('%Y-%m-%d %H:%M')
 	}
+	sort_params = [{"direction": "ascending", "property": "Created"}]
 
-	contracts = contracts.build_query(filter=filter_params)
+	contracts = contracts.build_query(filter=filter_params, sort = sort_params)
 	result = contracts.execute()
 
-	result = sorted(result, key = lambda x: int(x.created.timestamp()))
-	print("sorted")
+	
 	for row in result:
 		cur.execute("""Insert into contracts ("contract_id", "chat_url", "ended", "added_to_db", "date") values ('"""+ str(row.contract_id) +"""','"""+ str(row.chat_url) +"""','"""+ str(row.status == "Ended") +"""','"""+ str(int(datetime.datetime.now().timestamp())) +"""','"""+ str(int(row.created.timestamp())) +"""')""")
 		cur.commit()
