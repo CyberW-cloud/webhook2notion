@@ -53,6 +53,8 @@ def update_db_contracts():
 	start_from_contracts = cur.execute("""Select MAX(Date) from contracts""")
 	start_from_proposals = cur.execute("""Select MAX(Date) from proposals""")
 
+	start_from_contracts = 0
+
 	filter_params = {
 		"property": "Date",
 		"comparator": "Is After",
