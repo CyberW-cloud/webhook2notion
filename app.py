@@ -56,6 +56,12 @@ def update_db_contracts():
 	start_from_proposals = cur.fetchone()[0]
 
 	print(start_from_contracts)
+	if start_from_contracts == None:
+		start_from_contracts = 0
+
+	if start_from_proposals == None:
+		start_from_proposals = 0
+
 	filter_params = {
 		"filters": [
 			{
