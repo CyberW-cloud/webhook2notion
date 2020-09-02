@@ -64,7 +64,8 @@ def update_db_contracts():
 	contracts = contracts.build_query(filter=filter_params)
 	result = contracts.execute()
 
-	print(len(result))
+	for row in result:
+		cur.execute("""Insert into contracts ("contract_id", "proposal_id", "chat_url", "ended", "added_to_db", "date") values ('"""+ str(row.contract_id) +"""','"""+ str(row.proposal_id) +"""','"""+ str(row.chat_url) +"""','"""+ str(row.status == "Ended") +"""','"""+ str(datetime.datetime.now().timestamp()) +"""','"""+ str(row.date.start) +"""')""")
 	
 
 
