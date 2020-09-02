@@ -93,6 +93,12 @@ def update_db_contracts():
 		except Exception as e:
 			pass	
 
+	cur.execute("""DELETE FROM
+    				contracts a
+        				USING contracts b
+					WHERE
+    					a.id < b.id
+    					AND a.contract_id = b.contract_id;""")
 
 #accepted users should be an array of id's or "all" for accepting all users
 def parse_tokens(tokens, accepted_users = "all"):
