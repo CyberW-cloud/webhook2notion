@@ -49,7 +49,7 @@ def update_db_contracts():
 	cur = conn.cursor()
 
 	
-	""" SINCE WHEN IS 3 " NOT A COMMENT?!?!?!?!?!?!? """
+	""" SINCE WHEN IS 3 " NOT A COMMENT?!?!?!?!?!?!?  """
 	cur.execute("""Select MAX(Date) from contracts""")
 	start_from_contracts = cur.fetchone()[0]
 	cur.execute("""Select MAX(Date) from proposals""")
