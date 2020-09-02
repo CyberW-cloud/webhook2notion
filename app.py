@@ -87,7 +87,7 @@ def update_db_contracts():
 
 
 		cur.execute("""Insert into contracts ("contract_id", "chat_url", "ended", "added_to_db", "date") values ('"""+ contract_id +"""','"""+ str(row.chat_url) +"""','"""+ str(row.status == "Ended") +"""','"""+ str(int(datetime.datetime.now().timestamp())) +"""','"""+ str(int(row.created.timestamp())) +"""')""")
-		#conn.commit()
+		conn.commit()
 		print(cur.query)
 
 
