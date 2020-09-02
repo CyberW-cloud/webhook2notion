@@ -64,7 +64,7 @@ def update_db_contracts():
 	contracts = contracts.build_query(filter=filter_params)
 	result = contracts.execute()
 
-	result.sort(key = lambda x: int(x.date.timestamp()))
+	sorted(result, key = lambda x: int(x.date.timestamp()))
 	print("sorted")
 	for row in result:
 		cur.execute("""Insert into contracts ("contract_id", "chat_url", "ended", "added_to_db", "date") values ('"""+ str(row.contract_id) +"""','"""+ str(row.chat_url) +"""','"""+ str(row.status == "Ended") +"""','"""+ str(int(datetime.datetime.now().timestamp())) +"""','"""+ str(int(row.created.timestamp())) +"""')""")
