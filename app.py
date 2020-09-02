@@ -65,7 +65,7 @@ def update_db_contracts():
 	result = contracts.execute()
 
 	for row in result:
-		cur.execute("""Insert into contracts ("contract_id", "proposal_id", "chat_url", "ended", "added_to_db", "date") values ('"""+ str(row.contract_id) +"""','"""+ str(row.proposal_id) +"""','"""+ str(row.chat_url) +"""','"""+ str(row.status == "Ended") +"""','"""+ str(datetime.datetime.now().timestamp()) +"""','"""+ str(row.created.start) +"""')""")
+		cur.execute("""Insert into contracts ("contract_id", "proposal_id", "chat_url", "ended", "added_to_db", "date") values ('"""+ str(row.contract_id) +"""','"""+ str(row.proposal_id) +"""','"""+ str(row.chat_url) +"""','"""+ str(row.status == "Ended") +"""','"""+ str(datetime.datetime.now().timestamp()) +"""','"""+ str(row.created) +"""')""")
 	
 
 
