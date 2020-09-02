@@ -57,9 +57,15 @@ def update_db_contracts():
 
 	print(start_from_contracts)
 	filter_params = {
-		"property": "Created",
-		"comparator": "date_is_after",
-		"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.utcfromtimestamp(start_from_contracts).strftime('%Y-%m-%d')}}
+		"filters": [
+			{
+				"filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.utcfromtimestamp(start_from_contracts).strftime('%Y-%m-%d')}}, "operator": "date_is_after"},
+				"property": "Created",
+			}
+		],
+		"operator": "and",
+		
+		
 	}
 	sort_params = [{"direction": "ascending", "property": "Created"}]
 
