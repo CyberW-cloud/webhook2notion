@@ -53,7 +53,6 @@ def update_db_contracts():
 	start_from_contracts = cur.execute("""Select MAX(Date) from contracts""")
 	start_from_proposals = cur.execute("""Select MAX(Date) from proposals""")
 
-	start_from_contracts = 0
 
 	filter_params = {
 		"property": "Created",
@@ -67,7 +66,12 @@ def update_db_contracts():
 
 	
 	for row in result:
-		cur.execute("""Insert into contracts ("contract_id", "chat_url", "ended", "added_to_db", "date") values ('"""+ str(row.contract_id) +"""','"""+ str(row.chat_url) +"""','"""+ str(row.status == "Ended") +"""','"""+ str(int(datetime.datetime.now().timestamp())) +"""','"""+ str(int(row.created.timestamp())) +"""')""")
+		contract_id = str(row.contract_id)
+		if contract_id == "":
+			contract_id == "-999"
+
+
+		cur.execute("""Insert into contracts ("contract_id", "chat_url", "ended", "added_to_db", "date") values ('"""+ contract_id +"""','"""+ str(row.chat_url) +"""','"""+ str(row.status == "Ended") +"""','"""+ str(int(datetime.datetime.now().timestamp())) +"""','"""+ str(int(row.created.timestamp())) +"""')""")
 		conn.commit()
 		print(cur.query)
 
