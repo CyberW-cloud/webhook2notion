@@ -50,8 +50,10 @@ def update_db_contracts():
 
 	
 	""" SINCE WHEN IS 3 " NOT A COMMENT?!?!?!?!?!?!? """
-	start_from_contracts = cur.execute("""Select MAX(Date) from contracts""").fetchone()[0]
-	start_from_proposals = cur.execute("""Select MAX(Date) from proposals""").fetchone()[0]
+	cur.execute("""Select MAX(Date) from contracts""")
+	start_from_contracts = cur.fetchone()[0]
+	cur.execute("""Select MAX(Date) from proposals""")
+	start_from_proposals = cur.fetchone()[0]
 
 	print(start_from_contracts)
 	filter_params = {
