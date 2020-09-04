@@ -126,7 +126,7 @@ def update_db_contracts():
 	
 	for row in result:
 
-		proposal_id = str(proposal_id)
+		proposal_id = str(row.proposal_id)
 
 		
 		try:
