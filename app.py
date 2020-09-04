@@ -123,6 +123,7 @@ def update_db_contracts():
 
 	print(len(result))
 	prev_time = 0
+	
 	for row in result:
 
 		proposal_id = str(row.proposal_id)
