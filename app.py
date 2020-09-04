@@ -126,14 +126,8 @@ def update_db_contracts():
 	
 	for row in result:
 
-		proposal_id = re.findall("[0-9]{9,}",str(row.proposal_id))
-		if isinstance(proposal_id, list):
-			if(len(proposal_id)>0):
-				proposal_id = proposal_id[0]
-			else:
-				proposal_id == "-999"
-		else:
-			proposal_id == "-999"
+		proposal_id = str(proposal_id)
+
 		
 		try:
 			cur.execute("""Insert into proposals ("proposal_id", "chat_url", "declined", "added_to_db", "date") values ('"""+ proposal_id +"""','"""+ str(row.chat_link) +"""','"""+ str(row.decline_reason != None) +"""','"""+ str(int(datetime.datetime.now().timestamp())) +"""','"""+ str(int(row.date.timestamp())) +"""')""")
