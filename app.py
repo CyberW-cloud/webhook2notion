@@ -104,7 +104,7 @@ def update_db_contracts():
 
 	print("Contracts Done!")
 	# ----------------- START DOWNLOADING PROPOSALS TODO TODO TODO ------------------
-	#get only updates
+	#get only updates 
 	filter_params = {
 		"filters": [
 			{
