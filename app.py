@@ -82,11 +82,6 @@ def update_db_contracts():
 	prev_time = 0
 	for row in result:
 
-		if (1578528000<=int(row.created.timestamp())):
-			return "test shutdown"
-		
-
-
 		contract_id = str(row.contract_id)
 		if contract_id == '':
 			contract_id == "-999"
