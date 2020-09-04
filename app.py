@@ -79,8 +79,14 @@ def update_db_contracts():
 	result = contracts.execute()
 
 	print(len(result))
-	
+	prev_time = 0
 	for row in result:
+
+		if (prev_time>int(row.created.timestamp())):
+			print("ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR")
+		prev_time = int(row.created.timestamp())
+
+
 		contract_id = str(row.contract_id)
 		if contract_id == '':
 			contract_id == "-999"
