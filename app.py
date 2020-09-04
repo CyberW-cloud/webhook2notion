@@ -65,7 +65,7 @@ def update_db_contracts():
 	filter_params = {
 		"filters": [
 			{
-				"filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.utcfromtimestamp(start_from_contracts).strftime('%Y-%m-%d')}}, "operator": "date_is_on_or_after"},
+				"filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.fromtimestamp(start_from_contracts).strftime('%Y-%m-%d')}}, "operator": "date_is_on_or_after"},
 				"property": "Created",
 			}
 		],
@@ -82,8 +82,8 @@ def update_db_contracts():
 	prev_time = 0
 	for row in result:
 
-		if (prev_time>int(row.created.timestamp())):
-			print("ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR")
+		if (1567296000<=int(row.created.timestamp())):
+			return "test shutdown"
 		prev_time = int(row.created.timestamp())
 
 
