@@ -140,7 +140,7 @@ def update_db_contracts():
 			pass	
 
 
-	#remove duplicates (based on contract_id) 
+	#remove duplicates (based on contract_id)  
 	cur.execute("""DELETE FROM proposals a USING proposals b WHERE a.id < b.id AND a.proposal_id = b.proposal_id;""")
 	conn.commit()
 
