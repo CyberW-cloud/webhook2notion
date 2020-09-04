@@ -81,10 +81,10 @@ def update_db_contracts():
 	print(len(result))
 	prev_time = 0
 	for row in result:
-
+		print(int(row.created.timestamp()))
 		if (1567296000<=int(row.created.timestamp())):
 			return "test shutdown"
-		prev_time = int(row.created.timestamp())
+		
 
 
 		contract_id = str(row.contract_id)
@@ -97,6 +97,7 @@ def update_db_contracts():
 			print(cur.query)
 	
 		except Exception as e:
+			print(e)
 			pass	
 
 
