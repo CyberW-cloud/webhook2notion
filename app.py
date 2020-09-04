@@ -128,7 +128,10 @@ def update_db_contracts():
 
 		proposal_id = re.findall("[0-9]{9,}",str(row.proposal_id))
 		if isinstance(proposal_id, list):
-			proposal_id = proposal_id[0]
+			if(len(proposal_id)>0)
+				proposal_id = proposal_id[0]
+			else:
+				proposal_id == "-999"
 		else:
 			proposal_id == "-999"
 		
