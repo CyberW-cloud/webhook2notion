@@ -93,6 +93,8 @@ def update_db_contracts():
 		except Exception as e:
 			pass	
 
+
+	#remove duplicates (based on contract_id)
 	cur.execute("""DELETE FROM
     				contracts a
         				USING contracts b
