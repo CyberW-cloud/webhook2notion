@@ -82,7 +82,7 @@ def update_db_contracts():
 	prev_time = 0
 	for row in result:
 
-		if (1567296000>=int(row.created.timestamp())):
+		if (1567296000<=int(row.created.timestamp())):
 			return "test shutdown"
 		prev_time = int(row.created.timestamp())
 
