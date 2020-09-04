@@ -68,14 +68,14 @@ def update_db_contracts():
 		"filters": [
 			{
 				"filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.fromtimestamp(start_from_contracts).strftime('%Y-%m-%d')}}, "operator": "date_is_on_or_after"},
-				"property": "Created",
+				"property": "Date",
 			}
 		],
 		"operator": "and",
 		
 		
 	}
-	sort_params = [{"direction": "ascending", "property": "Created"}]
+	sort_params = [{"direction": "ascending", "property": "Date"}]
 
 	contracts = contracts.build_query(filter=filter_params, sort = sort_params)
 	result = contracts.execute()
