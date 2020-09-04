@@ -133,7 +133,7 @@ def update_db_contracts():
 			proposal_id == "-999"
 		
 		try:
-			cur.execute("""Insert into proposals ("proposal_id", "chat_url", "declined", "added_to_db", "date") values ('"""+ proposal_id +"""','"""+ str(row.chat_link) +"""','"""+ str(row.declined == "No") +"""','"""+ str(int(datetime.datetime.now().timestamp())) +"""','"""+ str(int(row.date.timestamp())) +"""')""")
+			cur.execute("""Insert into proposals ("proposal_id", "chat_url", "declined", "added_to_db", "date") values ('"""+ proposal_id +"""','"""+ str(row.chat_link) +"""','"""+ str(row.declined.lower() == "no") +"""','"""+ str(int(datetime.datetime.now().timestamp())) +"""','"""+ str(int(row.date.timestamp())) +"""')""")
 			conn.commit()
 			print(cur.query)
 	
