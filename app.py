@@ -100,7 +100,7 @@ def update_db_contracts():
 			pass	
 
 
-	#remove duplicates (based on contract_id)
+	#remove duplicates (based on contract_id) 
 	cur.execute("""DELETE FROM
     				contracts a
         				USING contracts b
