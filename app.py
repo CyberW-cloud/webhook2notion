@@ -62,6 +62,8 @@ def update_db_contracts():
 	if start_from_proposals == None:
 		start_from_proposals = 0
 
+	# ----------------- START DOWNLOADING CONTRACTS ------------------
+	#get only updates
 	filter_params = {
 		"filters": [
 			{
@@ -100,6 +102,48 @@ def update_db_contracts():
 	cur.execute("""DELETE FROM contracts a USING contracts b WHERE a.id < b.id AND a.contract_id = b.contract_id;""")
 	conn.commit()
 
+	print("Contracts Done!")
+	# ----------------- START DOWNLOADING PROPOSALS TODO TODO TODO ------------------
+	#get only updates
+	filter_params = {
+		"filters": [
+			{
+				"filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.fromtimestamp(start_from_proposals).strftime('%Y-%m-%d')}}, "operator": "date_is_on_or_after"},
+				"property": "Created",
+			}
+		],
+		"operator": "and",
+		
+		
+	}
+	sort_params = [{"direction": "ascending", "property": "Created"}]
+
+	proposals = proposals.build_query(filter=filter_params, sort = sort_params)
+	result = proposals.execute()
+
+	print(len(result))
+	prev_time = 0
+	for row in result:
+
+		proposal_id = str(row.proposal_id)
+		if proposal_id == '':
+			proposal_id == "-999"
+
+		try:
+			cur.execute("""Insert into proposals ("proposal_id", "chat_url", "declined", "added_to_db", "date") values ('"""+ proposal_id +"""','"""+ str(row.chat_url) +"""','"""+ str(row.declined) +"""','"""+ str(int(datetime.datetime.now().timestamp())) +"""','"""+ str(int(row.date.timestamp())) +"""')""")
+			conn.commit()
+			print(cur.query)
+	
+		except Exception as e:
+			print(e)
+			pass	
+
+
+	#remove duplicates (based on contract_id) 
+	cur.execute("""DELETE FROM proposals a USING proposals b WHERE a.id < b.id AND a.proposal_id = b.proposal_id;""")
+	conn.commit()
+
+	print("Proposals Done!")
 #accepted users should be an array of id's or "all" for accepting all users
 def parse_tokens(tokens, accepted_users = "all"):
 	
