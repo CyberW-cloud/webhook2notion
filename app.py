@@ -89,7 +89,7 @@ def update_db_contracts():
 			contract_id == "-999"
 
 		try:
-			cur.execute("""Insert into contracts ("contract_id", "chat_url", "ended", "added_to_db", "date") values ('"""+ contract_id +"""','"""+ str(row.chat_url) +"""','"""+ str(row.status == "Ended") +"""','"""+ str(int(datetime.datetime.now().timestamp())) +"""','"""+ str(int(row.created.timestamp())) +"""')""")
+			cur.execute("""Insert into contracts ("contract_id", "chat_url", "contract_url", "ended", "added_to_db", "date") values ('"""+ contract_id +"""','"""+ str(row.chat_url) +"""','"""+ str(row.get_browseable_url()) +"""','"""+ str(row.status == "Ended") +"""','"""+ str(int(datetime.datetime.now().timestamp())) +"""','"""+ str(int(row.created.timestamp())) +"""')""")
 			conn.commit()
 			print(cur.query)
 	
@@ -130,7 +130,7 @@ def update_db_contracts():
 
 		
 		try:
-			cur.execute("""Insert into proposals ("proposal_id", "chat_url", "declined", "added_to_db", "date") values ('"""+ proposal_id +"""','"""+ str(row.chat_link) +"""','"""+ str(row.decline_reason != None) +"""','"""+ str(int(datetime.datetime.now().timestamp())) +"""','"""+ str(int(row.date.timestamp())) +"""')""")
+			cur.execute("""Insert into proposals ("proposal_id", "chat_url", "proposal_url", "added_to_db", "date") values ('"""+ proposal_id +"""','"""+ str(row.chat_link) +"""','"""+ str(row.get_browseable_url()) +"""','"""+ str(int(datetime.datetime.now().timestamp())) +"""','"""+ str(int(row.date.timestamp())) +"""')""")
 			conn.commit()
 			print(cur.query)
 	
