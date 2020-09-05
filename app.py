@@ -303,7 +303,7 @@ def message_review():
 				update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "No info", "link":"", "messages":messages})
 				print("NO DATA " + str(room))
 
-			time.sleep(1)
+			time.sleep(3)
 		
 	print("finished parsing rooms")
 	target_page = create_page("https://www.notion.so/Message-Review-33cbe6e92b9e4894890d768f1ea7b970","testing without the db for now")
