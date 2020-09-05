@@ -99,7 +99,7 @@ def update_db_contracts():
 
 
 	#remove duplicates (based on contract_id) 
-	cur.execute("""DELETE FROM contracts a USING contracts b WHERE a.id < b.id AND a.contract_id = b.contract_id;""")
+	cur.execute("""DELETE FROM contracts a USING contracts b WHERE a.id < b.id AND a.contract_id = b.contract_id and a.chat_url = b.chat_url;""")
 	conn.commit()
 
 	print("Contracts Done!")
@@ -140,10 +140,12 @@ def update_db_contracts():
 
 
 	#remove duplicates (based on contract_id)   
-	cur.execute("""DELETE FROM proposals a USING proposals b WHERE a.id < b.id AND a.proposal_id = b.proposal_id;""")
+	cur.execute("""DELETE FROM proposals a USING proposals b WHERE a.id < b.id AND a.proposal_id = b.proposal_id and a.chat_url = b.chat_url;""")
 	conn.commit()
 
 	print("Proposals Done!")
+
+
 #accepted users should be an array of id's or "all" for accepting all users
 def parse_tokens(tokens, accepted_users = "all"):
 	
