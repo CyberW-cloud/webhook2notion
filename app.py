@@ -250,6 +250,7 @@ def message_review():
 			rooms = rooms["rooms"] + user_rooms["rooms"]
 			
 		except Exception as e:
+			print(str(e) + " 4")
 			rooms = []
 			
 
@@ -269,14 +270,14 @@ def message_review():
 				db.execute("""select * from contracts where chat_url like '%"""+room["roomId"]+"""%'""")
 				contracts_found = db.fetchall()
 			except Exception as e:
-				print(e + "1")
+				print(str(e) + " 1")
 				contracts_found = []
 			
 			try:	
 				db.execute("""select * from proposals where chat_url like '%"""+room["roomId"]+"""%'""")
 				proposals_found = db.fetchall()
 			except Exception as e:
-				print(e + "2")
+				print(str(e) + " 2")
 				proposals_found = []
 
 			try:
@@ -284,7 +285,7 @@ def message_review():
 				if "stories_list" not in messages.keys():
 					messages = messages_api.get_room_messages(user_id, room["roomId"], {"limit":15})
 			except Exception as e:
-				print(e + "3")
+				print(str(e) + " 3")
 				messages = {}
 			
 			
