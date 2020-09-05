@@ -266,7 +266,7 @@ def message_review():
 
 			#sometimes throws an error, just default to no info
 			try:
-				db.execute("""select * from contracts where chat_url like '%"""+room["roomId"]+"""%'""").fetchall()
+				db.execute("""select * from contracts where chat_url like '%"""+room["roomId"]+"""%'""")
 				contracts_found = db.fetchall()
 			except Exception as e:
 				print(e)
