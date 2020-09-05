@@ -269,14 +269,14 @@ def message_review():
 				db.execute("""select * from contracts where chat_url like '%"""+room["roomId"]+"""%'""")
 				contracts_found = db.fetchall()
 			except Exception as e:
-				print(e)
+				print(e + "1")
 				contracts_found = []
 			
 			try:	
 				db.execute("""select * from proposals where chat_url like '%"""+room["roomId"]+"""%'""")
 				proposals_found = db.fetchall()
 			except Exception as e:
-				print(e)
+				print(e + "2")
 				proposals_found = []
 
 			try:
@@ -284,7 +284,7 @@ def message_review():
 				if "stories_list" not in messages.keys():
 					messages = messages_api.get_room_messages(user_id, room["roomId"], {"limit":15})
 			except Exception as e:
-				print(e)
+				print(e + "3")
 				messages = {}
 			
 			
@@ -304,7 +304,7 @@ def message_review():
 				update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "No info", "link":"", "messages":messages})
 				print("NO DATA " + str(room))
 
-
+			time.sleep(1)
 		
 	print("finished parsing rooms")
 	target_page = create_page("https://www.notion.so/Message-Review-33cbe6e92b9e4894890d768f1ea7b970","testing without the db for now")
