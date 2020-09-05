@@ -289,15 +289,15 @@ def message_review():
 			
 			
 			if len(contracts_found)>0:
-				if not contracts_found[0][3]:
-					update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Contract", "messages":messages, "link":contracts_found[0].get_browseable_url()})
+				if not contracts_found[0][4]:
+					update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Contract", "messages":messages, "link":contracts_found[0][3]})
 					print("ACTIVE CONTRACT: " + str(room))
 				else:
-					update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Ended contract", "messages":messages, "link":contracts_found[0].get_browseable_url()})
+					update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Ended contract", "messages":messages, "link":contracts_found[0][3]})
 					print("ENDED CONTRACT: " + str(room))
 		
 			elif len(proposals_found)>0:		
-				update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Interview", "messages":messages, "link":proposals_found[0].get_browseable_url()})
+				update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Interview", "messages":messages, "link":proposals_found[0][3]})
 				print("PROPOSAL: " + str(room))
 
 			else:
