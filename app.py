@@ -175,7 +175,9 @@ def update_parsed_rooms(parsed_rooms, update):
 @app.route('/message_review', methods=["GET"])
 def message_review():
 
-	
+	DATABASE_URL = os.environ['DATABASE_URL']
+	conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+	db = conn.cursor()
 
 	token = os.environ.get("TOKEN")
 	notion_client = NotionClient(token)
@@ -265,10 +267,15 @@ def message_review():
 			#sometimes throws an error, just default to no info
 			try:
 				#pretty slow, but idk how to do this faster (download db?)
-				contracts_found = contracts.collection.get_rows(search = room["roomId"])
-				proposals_found = proposals.collection.get_rows(search = room["roomId"])
+				contracts_found = db.execute("""select * from contracts where chat_url like '%"""+room["roomId"]+"""%'""").fetchall()
 			except Exception as e:
+				print(e)
 				contracts_found = []
+			
+			try:	
+				proposals_found = db.execute("""select * from proposals where chat_url like '%"""+room["roomId"]+"""%'""").fetchall()
+			except Exception as e:
+				print(e)
 				proposals_found = []
 
 			try:
@@ -276,6 +283,7 @@ def message_review():
 				if "stories_list" not in messages.keys():
 					messages = messages_api.get_room_messages(user_id, room["roomId"], {"limit":15})
 			except Exception as e:
+				print(e)
 				messages = {}
 			
 			
