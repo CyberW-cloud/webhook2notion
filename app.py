@@ -266,14 +266,15 @@ def message_review():
 
 			#sometimes throws an error, just default to no info
 			try:
-				#pretty slow, but idk how to do this faster (download db?)
-				contracts_found = db.execute("""select * from contracts where chat_url like '%"""+room["roomId"]+"""%'""").fetchall()
+				db.execute("""select * from contracts where chat_url like '%"""+room["roomId"]+"""%'""").fetchall()
+				contracts_found = db.fetchall()
 			except Exception as e:
 				print(e)
 				contracts_found = []
 			
 			try:	
-				proposals_found = db.execute("""select * from proposals where chat_url like '%"""+room["roomId"]+"""%'""").fetchall()
+				db.execute("""select * from proposals where chat_url like '%"""+room["roomId"]+"""%'""")
+				proposals_found = db.fetchall()
 			except Exception as e:
 				print(e)
 				proposals_found = []
