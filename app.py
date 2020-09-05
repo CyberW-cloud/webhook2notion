@@ -288,7 +288,7 @@ def message_review():
 			
 			
 			if len(contracts_found)>0:
-				if not contracts_found[0].status == "Ended":
+				if not contracts_found[0][3]:
 					update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Contract", "messages":messages, "link":contracts_found[0].get_browseable_url()})
 					print("ACTIVE CONTRACT: " + str(room))
 				else:
