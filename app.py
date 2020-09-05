@@ -81,7 +81,6 @@ def update_db_contracts():
 	result = contracts.execute()
 
 	print(len(result))
-	prev_time = 0
 	for row in result:
 
 		contract_id = str(row.contract_id)
@@ -122,7 +121,6 @@ def update_db_contracts():
 	result = proposals.execute()
 
 	print(len(result))
-	prev_time = 0
 	
 	for row in result:
 
@@ -378,8 +376,8 @@ def message_review():
 			if written>=3:
 				break
 
-			time = datetime.datetime.fromtimestamp(i["updated"]/1000).strftime('%Y-%m-%d %H:%M:%S')
-			text = "["+time+"]\n"
+			message_time = datetime.datetime.fromtimestamp(i["updated"]/1000).strftime('%Y-%m-%d %H:%M:%S')
+			text = "["+message_time+"]\n"
 
 			if i["userId"] not in cache.keys(): 
 				name = profileApi.get_specific(i["userId"])["profile"]["dev_short_name"][:-1]
