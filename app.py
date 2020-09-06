@@ -73,10 +73,20 @@ def collect_proposal_text():
 	get_for_hours = int(request.args.get("get_for_hours", "24"))
 	get_for_timestamp = (datetime.datetime.now() - datetime.timedelta(hours = get_for_hours)).timestamp()
 	
-	for proposal in result:
+	for row in result:
+		try:
+			upwork_proposal = applications.get_specific(int(row.proposal_id))["data"]
 
-		print(applications.get_specific(proposal.proposal_id))
+			print(row.job_url + "to -> " + upwork_proposal["openingCiphertext"])
+			print(row.job_name + "to -> " + upwork_proposal["opening_title"])
+			
+			body = "**Application:**\n" + upwork_proposal["coverLetter"] + "\n**Questions:**\n" + upwork_proposal["questionsAnswers"]
+			print(body)
 
+		except Exception as e:
+			#we skip the row if the proposal id can't be cast to int
+			continue
+		
 
 
 @app.route('/refresh_db', methods=["GET"])
