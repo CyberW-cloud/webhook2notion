@@ -53,6 +53,9 @@ def collect_proposal_text():
 	client = upwork.Client(login_config)
 	applications = applicationAPI(client)
 
+		get_for_hours = int(request.args.get("get_for_hours", "24"))
+	get_for_timestamp = (datetime.datetime.now() - datetime.timedelta(hours = get_for_hours)).timestamp()
+
 	#get only updates 
 	filter_params = {
 		"filters": [
@@ -70,8 +73,7 @@ def collect_proposal_text():
 	proposals = proposals.build_query(filter=filter_params, sort = sort_params)
 	result = proposals.execute()
 
-	get_for_hours = int(request.args.get("get_for_hours", "24"))
-	get_for_timestamp = (datetime.datetime.now() - datetime.timedelta(hours = get_for_hours)).timestamp()
+
 	
 	for row in result:
 		try:
