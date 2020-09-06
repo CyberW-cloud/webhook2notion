@@ -79,13 +79,14 @@ def collect_proposal_text():
 		try:
 			upwork_proposal = applications.get_specific(int(row.proposal_id))["data"]
 
-			print(row.job_url + "to -> " + upwork_proposal["openingCiphertext"])
-			print(row.job_name + "to -> " + upwork_proposal["opening_title"])
+			print(row.job_url + " url to -> " + upwork_proposal["openingCiphertext"])
+			print(row.job_name + " name to -> " + upwork_proposal["opening_title"])
 			
 			body = "**Application:**\n" + upwork_proposal["coverLetter"] + "\n**Questions:**\n" + upwork_proposal["questionsAnswers"]
-			print(body)
+			print(body + "to")
 
 		except Exception as e:
+			print(e)
 			#we skip the row if the proposal id can't be cast to int
 			continue
 		
