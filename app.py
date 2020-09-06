@@ -249,7 +249,7 @@ def message_review():
 			
 		except Exception as e:
 			print(str(e) + " 4")
-			print(user_rooms)
+			print("         " + str(user_rooms))
 			rooms = []
 			
 
@@ -285,7 +285,7 @@ def message_review():
 					messages = messages_api.get_room_messages(user_id, room["roomId"], {"limit":15})
 			except Exception as e:
 				print(str(e) + " 3")
-				print(messages)
+				print("        " + str(messages))
 				messages = {}
 			
 			
