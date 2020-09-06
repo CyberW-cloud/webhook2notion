@@ -121,7 +121,7 @@ def update_db():
 	filter_params = {
 		"filters": [
 			{
-				"filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.fromtimestamp(start_from_contracts).strftime('%Y-%m-%d')}}, "operator": "date_is_on_or_after"},
+				"filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.fromtimestamp(get_for_timestamp).strftime('%Y-%m-%d')}}, "operator": "date_is_on_or_after"},
 				"property": "Created",
 			}
 		],
