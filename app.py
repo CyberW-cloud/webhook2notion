@@ -172,6 +172,8 @@ def update_parsed_rooms(parsed_rooms, update):
 
 @app.route('/message_review', methods=["GET"])
 def message_review():
+	#download updates to the database we are using
+	refresh_db()
 
 	DATABASE_URL = os.environ['DATABASE_URL']
 	conn = psycopg2.connect(DATABASE_URL, sslmode='require')
