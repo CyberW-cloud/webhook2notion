@@ -59,7 +59,7 @@ def collect_proposal_text():
 	client = upwork.Client(login_config)
 
 	get_for_hours = request.args.get("get_for_hours", "24")
-	get_for_timestamp = (datetime.datetime.now() - datetime.deltatime(hours = get_for_hours)).timestamp()
+	get_for_timestamp = (datetime.datetime.now() - datetime.timedelta(hours = get_for_hours)).timestamp()
 
 	db.execute("""Select * from proposals Where date < """ + str(get_for_timestamp))
 	result = db.fetchall()
