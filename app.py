@@ -420,7 +420,7 @@ def add_global_block():
 
 
 	page = client.get_block("https://www.notion.so/TEST-2-e00c343340c34f919d8460b3cbe26245")
-	target = client.get_block("https://www.notion.so/TEST-43d74c611dab4fd0b088a9508f1b46b7")
+	target = client.get_block("https://www.notion.so/decd284ad3d34f53944f78b36e00d9a4")
 
 	page.children.add_alias(target)
 
