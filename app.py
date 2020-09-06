@@ -36,7 +36,7 @@ TEST = True
 test_page_url = "https://www.notion.so/TEST-68d7198ed4d3437b816386f6da196547"
 
 @app.route('/refresh_db', methods=["GET"])
-def update_db_contracts():
+def update_db():
 	token = os.environ.get("TOKEN")
 	notion_client = NotionClient(token)
 
@@ -173,7 +173,7 @@ def update_parsed_rooms(parsed_rooms, update):
 @app.route('/message_review', methods=["GET"])
 def message_review():
 	#download updates to the database we are using
-	refresh_db()
+	update_db()
 
 	DATABASE_URL = os.environ['DATABASE_URL']
 	conn = psycopg2.connect(DATABASE_URL, sslmode='require')
