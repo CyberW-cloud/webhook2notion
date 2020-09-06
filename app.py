@@ -304,6 +304,7 @@ def message_review():
 				print("NO DATA " + str(room))
 
 			time.sleep(1.6)
+		time.sleep(1.4)
 	print("finished parsing rooms")
 	target_page = create_page("https://www.notion.so/Message-Review-33cbe6e92b9e4894890d768f1ea7b970","testing without the db for now")
 
