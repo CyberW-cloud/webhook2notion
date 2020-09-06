@@ -38,18 +38,11 @@ test_page_url = "https://www.notion.so/TEST-68d7198ed4d3437b816386f6da196547"
 
 @app.route("/proposals_texts_collect", methods=["GET"])
 def collect_proposal_text():
-	#should be updated by now using message_review, but it doesn't take long and makes it safe to use without message_review before it
-	update_db()
 
 	token = os.environ.get("TOKEN")
 	notion_client = NotionClient(token)
 
 	proposals = notion_client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
-
-	#use our new db instead of notion for speed and stablility	
-	DATABASE_URL = os.environ['DATABASE_URL']
-	conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-	db = conn.cursor()
 
 	login_config = upwork.Config({\
 			'consumer_key': os.environ.get("ConsumerKey"),\
@@ -60,15 +53,31 @@ def collect_proposal_text():
 	client = upwork.Client(login_config)
 	applications = applicationAPI(client)
 
+	#get only updates 
+	filter_params = {
+		"filters": [
+			{
+				"filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.fromtimestamp(start_from_proposals).strftime('%Y-%m-%d')}}, "operator": "date_is_on_or_after"},
+				"property": "Date",
+			}
+		],
+		"operator": "and",
+		
+		
+	}
+	sort_params = [{"direction": "ascending", "property": "Date"}]
+
+	proposals = proposals.build_query(filter=filter_params, sort = sort_params)
+	result = proposals.execute()
 
 	get_for_hours = int(request.args.get("get_for_hours", "24"))
 	get_for_timestamp = (datetime.datetime.now() - datetime.timedelta(hours = get_for_hours)).timestamp()
-
-	db.execute("""Select * from proposals Where date > """ + str(get_for_timestamp))
-	result = db.fetchall()
 	
 	for proposal in result:
-		print(applications.get_specific(proposal[1]))
+
+		print(applications.get_specific(proposal.proposal_id))
+
+
 
 @app.route('/refresh_db', methods=["GET"])
 def update_db():
