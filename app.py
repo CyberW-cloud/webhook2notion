@@ -35,6 +35,36 @@ cache = {}
 TEST = True
 test_page_url = "https://www.notion.so/TEST-68d7198ed4d3437b816386f6da196547"
 
+@app.route("/proposals_texts_collect", methods=["GET"])
+def collect_proposal_text():
+	#should be updated by now using message_review, but it doesn't take long and makes it safe to use without message_review before it
+	update_db()
+
+	token = os.environ.get("TOKEN")
+	notion_client = NotionClient(token)
+
+	proposals = notion_client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
+
+	#use our new db instead of notion for speed and stablility	
+	DATABASE_URL = os.environ['DATABASE_URL']
+	conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+	db = conn.cursor()
+
+	login_config = upwork.Config({\
+			'consumer_key': os.environ.get("ConsumerKey"),\
+			'consumer_secret': os.environ.get("ConsumerSecret"),\
+			'access_token': os.environ.get("AccessToken"),\
+			'access_token_secret': os.environ.get("AccessSecret")})
+
+	client = upwork.Client(login_config)
+
+	get_for_hours = request.args.get("get_for_hours", "24")
+	get_for_timestamp = (datetime.datetime.now() - datetime.deltatime(hours = get_for_hours)).timestamp()
+
+	db.execute("""Select * from proposals Where date < """ + str(get_for_timestamp))
+	result = db.fetchall()
+	return len(result)
+
 @app.route('/refresh_db', methods=["GET"])
 def update_db():
 	token = os.environ.get("TOKEN")
