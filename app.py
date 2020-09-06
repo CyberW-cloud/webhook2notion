@@ -61,7 +61,7 @@ def collect_proposal_text():
 	get_for_hours = int(request.args.get("get_for_hours", "24"))
 	get_for_timestamp = (datetime.datetime.now() - datetime.timedelta(hours = get_for_hours)).timestamp()
 
-	db.execute("""Select * from proposals Where date < """ + str(get_for_timestamp))
+	db.execute("""Select * from proposals Where date > """ + str(get_for_timestamp))
 	result = db.fetchall()
 	return str(len(result))
 
