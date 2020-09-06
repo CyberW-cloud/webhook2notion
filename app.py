@@ -22,7 +22,7 @@ from upwork.routers.auth import Api as authAPI
 from upwork.routers.organization.companies import Api as companyAPI
 from upwork.routers.organization.users import Api as userAPI
 from upwork.routers.freelancers.profile import Api as profileAPI
-from upwork.routers.freelancers.applications import Api as applicationAPI
+from upwork.routers.hr.freelancers.applications import Api as applicationAPI
 
 import psycopg2
 
