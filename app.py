@@ -53,7 +53,7 @@ def collect_proposal_text():
 	client = upwork.Client(login_config)
 	applications = applicationAPI(client)
 
-		get_for_hours = int(request.args.get("get_for_hours", "24"))
+	get_for_hours = int(request.args.get("get_for_hours", "24"))
 	get_for_timestamp = (datetime.datetime.now() - datetime.timedelta(hours = get_for_hours)).timestamp()
 
 	#get only updates 
