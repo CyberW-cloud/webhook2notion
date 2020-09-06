@@ -22,6 +22,7 @@ from upwork.routers.auth import Api as authAPI
 from upwork.routers.organization.companies import Api as companyAPI
 from upwork.routers.organization.users import Api as userAPI
 from upwork.routers.freelancers.profile import Api as profileAPI
+from upwork.routers.freelancers.applications import Api as applicationAPI
 
 import psycopg2
 
@@ -57,13 +58,17 @@ def collect_proposal_text():
 			'access_token_secret': os.environ.get("AccessSecret")})
 
 	client = upwork.Client(login_config)
+	applications = applicationAPI(client)
+
 
 	get_for_hours = int(request.args.get("get_for_hours", "24"))
 	get_for_timestamp = (datetime.datetime.now() - datetime.timedelta(hours = get_for_hours)).timestamp()
 
 	db.execute("""Select * from proposals Where date > """ + str(get_for_timestamp))
 	result = db.fetchall()
-	return str(len(result))
+	
+	for proposal in result:
+		print(applications.get_specific(proposal[1]))
 
 @app.route('/refresh_db', methods=["GET"])
 def update_db():
