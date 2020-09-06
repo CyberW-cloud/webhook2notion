@@ -63,7 +63,7 @@ def collect_proposal_text():
 
 	db.execute("""Select * from proposals Where date < """ + str(get_for_timestamp))
 	result = db.fetchall()
-	return len(result)
+	return str(len(result))
 
 @app.route('/refresh_db', methods=["GET"])
 def update_db():
