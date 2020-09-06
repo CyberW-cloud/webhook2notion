@@ -249,6 +249,7 @@ def message_review():
 			
 		except Exception as e:
 			print(str(e) + " 4")
+			print(rooms)
 			rooms = []
 			
 
