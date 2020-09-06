@@ -243,6 +243,7 @@ def message_review():
 			rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": str(activeSince), "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})	
 			user_rooms = messages_api.get_rooms(user_id, {"activeSince": str(activeSince), "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})	
 			if "rooms" not in rooms.keys() or "rooms" not in user_rooms.keys():
+				time.sleep(1.6)
 				continue
 			 
 			rooms = rooms["rooms"] + user_rooms["rooms"]
@@ -250,7 +251,8 @@ def message_review():
 		except Exception as e:
 			print(str(e) + " 4")
 			print("         " + str(user_rooms))
-			rooms = []
+			time.sleep(1.6)
+			continue
 			
 
 		
