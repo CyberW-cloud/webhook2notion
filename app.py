@@ -79,6 +79,8 @@ def collect_proposal_text():
 		try:
 			upwork_proposal = applications.get_specific(int(row.proposal_id))["data"]
 
+			print(upwork_proposal)
+
 			print(row.job_url + " url to -> " + upwork_proposal["openingCiphertext"])
 			print(row.job_name + " name to -> " + upwork_proposal["opening_title"])
 			
