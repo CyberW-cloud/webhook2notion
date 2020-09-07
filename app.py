@@ -441,6 +441,15 @@ def get_offset_to_closest_weekday(source, targets):
         return datetime.timedelta(target_day-day)
     
 
+def create_page(parent_url, title):
+    token = os.environ.get("TOKEN")
+    client = NotionClient(token)
+
+    parent = client.get_block(parent_url)
+    parent.children.add_new(PageBlock, title=title)
+
+    return parent.children[-1]
+
 @app.route("/hb_tasks", methods=["GET"])
 def Hb_tasks():
    
