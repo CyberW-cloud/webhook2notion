@@ -28,6 +28,8 @@ import psycopg2
 timezone = "Europe/Kiev"
 
 app = Flask(__name__)
+cache = {}
+
 @app.route('/refresh_db', methods=["GET"])
 def update_db():
     token = os.environ.get("TOKEN")
