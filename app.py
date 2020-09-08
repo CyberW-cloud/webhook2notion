@@ -920,6 +920,7 @@ def get_projects(token, days_before):
 			continue
 		else:
 			res.append(project)
+
 	return res
 
 
