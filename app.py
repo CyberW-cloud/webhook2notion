@@ -533,23 +533,23 @@ def test_scripts():
 
 
 
-		day_page.children.add_new(CollectionViewPageBlock, title = "table")
-		page = day_page.children[-1]
+		# day_page.children.add_new(CollectionViewPageBlock, title = "table")
+		# page = day_page.children[-1]
 
 
-		schema = client.get_block("https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=375e91212fc4482c815f0b4419cbf5e3").collection.get("schema")
+		# schema = client.get_block("https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=375e91212fc4482c815f0b4419cbf5e3").collection.get("schema")
 
-		collection = client.get_collection(client.create_record("collection", parent=page, schema=schema))
-		page.collection = collection
+		# collection = client.get_collection(client.create_record("collection", parent=page, schema=schema))
+		# page.collection = collection
 
 	
-		test_row = page.views.add_new()
-		test_row = page.collection.add_row()
-		test_row.name = "This worked!"
-		page.collection.refresh()
+		# test_row = page.views.add_new()
+		# test_row = page.collection.add_row()
+		# test_row.name = "This worked!"
+		# page.collection.refresh()
 
-		if test_row.name != "This worked!":
-			log += "TEST FAILED!: Notion seems to be down for tables!\n"
+		# if test_row.name != "This worked!":
+		# 	log += "TEST FAILED!: Notion seems to be down for tables!\n"
 
 
 
