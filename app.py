@@ -918,7 +918,7 @@ def get_projects(token, days_before):
 
 		print(project)
 		#the only thing assigned up until now is person
-		if "person" not in project.keys():
+		if "person" in project.keys():
 			if project["person"]:
 				project["person_name"] = project["person"].name.replace("\xa0", "")
 		else:
