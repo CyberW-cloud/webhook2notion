@@ -912,12 +912,17 @@ def get_projects(token, days_before):
 					if contract.coordinator[0].name != "selfCC" and contract.status == "In Progress":
 						project["person"] = contract.coordinator[0]
 						break
-		if "person" in project.keys() and project["person"]:
+					else:
+						continue
+				else:
+					continue
+
+		if project["person"]:
 			project["person_name"] = project["person"].name.replace("\xa0", "")
 		project["client"] = row["client_name"][0] if row["client_name"] else None
 		project["url"] = row["name"].replace("\xa0", ""), row["row"].get_browseable_url()
 		
-		if "person" not in project.keys() and project["person"] is None:
+		if project["person"] is None:
 			continue
 		else:
 			res.append(project)
