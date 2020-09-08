@@ -900,6 +900,8 @@ def get_projects(token, days_before):
 	res = []
 	# for every project get person and client
 	# for row in result:
+
+	print(result)
 	for index, row in result.iterrows():
 		project = dict()
 		if row["pm"]:
