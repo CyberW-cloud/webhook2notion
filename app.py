@@ -480,10 +480,12 @@ def Hb_tasks():
     
     #s can be used to get debug output
     s = ""
-    page = client.get_block(site)
     changes = []
     for todo in result:
-
+        
+        if todo.set_date.start == None:
+            todo.set_date.start = todo.created
+        
         if isinstance(todo.set_date.start, datetime.datetime):
             set_start = todo.set_date.start.date()
         else:
@@ -552,7 +554,7 @@ def Hb_tasks():
             elif("m" in period[0]):
                 if("1t/m" == period[0]):
                     months = 1
-                    offset = 1    
+                    offset = 1  
                 else:
                     months = int(period[0][3])
                     offset = 2
@@ -579,17 +581,22 @@ def Hb_tasks():
             if change["id"] == record.id:
                 record.set_property("Due Date", change["due"])
                 record.set_property("Set date", change["set"])
-
+                record.set_property("Completed", record.updated)
                 #we refresh the change so we can use the updated result in the next for
                 record.refresh()
             
 
     #go over all tasks and change the status to TODO if the task should be set today    
     for todo in result:
+        if todo.set_date.start == None:
+            todo.set_date.start = todo.created
+
         if isinstance(todo.set_date.start, datetime.datetime):
             set_start = todo.set_date.start.date()
         else:
             set_start = todo.set_date.start
+
+
 
 
         if(set_start == datetime.datetime.now().date()):
