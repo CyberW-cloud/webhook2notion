@@ -916,7 +916,8 @@ def get_projects(token, days_before):
 			project["person_name"] = project["person"].name.replace("\xa0", "")
 		project["client"] = row["client_name"][0] if row["client_name"] else None
 		project["url"] = row["name"].replace("\xa0", ""), row["row"].get_browseable_url()
-		if project["person"] is None:
+		
+		if "person" not in project.keys() and project["person"] is None:
 			continue
 		else:
 			res.append(project)
