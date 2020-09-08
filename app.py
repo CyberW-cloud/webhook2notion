@@ -483,8 +483,8 @@ def Hb_tasks():
     changes = []
     for todo in result:
         
-        if todo.set_date.start == None:
-            todo.set_date.start = todo.created
+        if todo.set_date == None:
+            todo.set_date = NotionDate(todo.created)
         
         if isinstance(todo.set_date.start, datetime.datetime):
             set_start = todo.set_date.start.date()
@@ -494,11 +494,13 @@ def Hb_tasks():
         n = datetime.datetime.now()
         period = todo.periodicity
 
-        if (todo.due_date.start != None):
-            due_start = datetime.datetime(todo.due_date.start.year, todo.due_date.start.month, todo.due_date.start.day, 17)
-        else:
-            due_start = todo.updated.date()
+        if (todo.due_date == None):
+            todo.due_date = NotionDate(todo.updated)
 
+
+        due_start = datetime.datetime(todo.due_date.start.year, todo.due_date.start.month, todo.due_date.start.day, 17)
+        
+        
 
         # if weekdays / periodicity has not been set up
         if(len(period)<=1):
