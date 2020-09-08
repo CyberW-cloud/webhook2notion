@@ -915,14 +915,13 @@ def get_projects(token, days_before):
 						print("assigned coordinator[0]")
 						break
 
-
-		print(project)
 		#the only thing assigned up until now is person
 		if "person" in project.keys():
 			if project["person"]:
 				project["person_name"] = project["person"].name.replace("\xa0", "")
 		else:
 			project["person"] = None
+			print(row.get_browseable_url() + "     " + "error row url")
 		project["client"] = row["client_name"][0] if row["client_name"] else None
 		project["url"] = row["name"].replace("\xa0", ""), row["row"].get_browseable_url()
 		
