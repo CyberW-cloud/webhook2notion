@@ -23,6 +23,7 @@ from upwork.routers.organization.companies import Api as companyAPI
 from upwork.routers.organization.users import Api as userAPI
 from upwork.routers.freelancers.profile import Api as profileAPI
 from upwork.routers.hr.freelancers.applications import Api as applicationAPI
+from upwork.routers.hr.jobs import Api as jobsAPI
 
 import psycopg2
 
@@ -33,7 +34,7 @@ app = Flask(__name__)
 cache = {}
 
 #var used to signify testing
-TEST = True
+TEST = False
 test_page_url = "https://www.notion.so/TEST-68d7198ed4d3437b816386f6da196547"
 
 @app.route("/proposals_texts_collect", methods=["GET"])
@@ -82,10 +83,12 @@ def collect_proposal_text():
 			print(upwork_proposal)
 
 			print(row.job_url + " url to -> " + upwork_proposal["openingCiphertext"])
-			print(row.job_name + " name to -> " + upwork_proposal["opening_title"])
 			
-			body = "**Application:**\n" + upwork_proposal["coverLetter"] + "\n**Questions:**\n" + upwork_proposal["questionsAnswers"]
-			print(body + "to")
+
+			#print(row.job_name + " name to -> " + upwork_proposal["opening_title"])
+			
+			body = "**Application:**\n" + upwork_proposal["coverLetter"] + "\n**Questions:**\n" 
+			print(body + "\n BODY END")
 
 		except Exception as e:
 			print(e)
@@ -477,12 +480,30 @@ def add_global_block():
 	token = os.environ.get("TOKEN")
 	client = NotionClient(token)
 
+	proposals = notion_client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
 
 	page = client.get_block("https://www.notion.so/TEST-2-e00c343340c34f919d8460b3cbe26245")
-	target = client.get_block("https://www.notion.so/decd284ad3d34f53944f78b36e00d9a4")
 
-	page.children.add_alias(target)
+	#get only updates 
+	filter_params = {
+		"filters": [
+			{
+				"filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.fromtimestamp(get_for_timestamp).strftime('%Y-%m-%d')}}, "operator": "date_is_on_or_after"},
+				"property": "Date",
+			}
+		],
+		"operator": "and",
+		
+		
+	}
+	sort_params = [{"direction": "ascending", "property": "Date"}]
 
+	active_since_hours =  int(request.args.get("activeSince", "24"))
+	activeSince = datetime.datetime.now() - datetime.timedelta(hours = active_since_hours)
+	activeSince = int(activeSince.timestamp())
+
+	proposals = proposals.build_query(filter=filter_params, sort = sort_params)
+	result = proposals.execute()
 
 	
 	
