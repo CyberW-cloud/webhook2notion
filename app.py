@@ -494,9 +494,12 @@ def Hb_tasks():
         n = datetime.datetime.now()
         period = todo.periodicity
 
-        
-        due_start = datetime.datetime(todo.due_date.start.year, todo.due_date.start.month, todo.due_date.start.day, 17)
-        
+        if (todo.due_date.start != None):
+            due_start = datetime.datetime(todo.due_date.start.year, todo.due_date.start.month, todo.due_date.start.day, 17)
+        else:
+            due_start = todo.updated.date()
+
+
         # if weekdays / periodicity has not been set up
         if(len(period)<=1):
 
