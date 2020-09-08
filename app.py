@@ -917,8 +917,11 @@ def get_projects(token, days_before):
 
 
 		print(project)
-		if project["person"]:
+		#the only thing assigned up until now is person
+		if str(project) != '{}' and project["person"]:
 			project["person_name"] = project["person"].name.replace("\xa0", "")
+		else:
+			project["person"] = None
 		project["client"] = row["client_name"][0] if row["client_name"] else None
 		project["url"] = row["name"].replace("\xa0", ""), row["row"].get_browseable_url()
 		
