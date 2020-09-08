@@ -901,7 +901,7 @@ def get_projects(token, days_before):
 	# for every project get person and client
 	# for row in result:
 
-	print(result)
+
 	for index, row in result.iterrows():
 		project = dict()
 		if row["pm"]:
@@ -915,6 +915,8 @@ def get_projects(token, days_before):
 						print("assigned coordinator[0]")
 						break
 
+
+		print(project)
 		if project["person"]:
 			project["person_name"] = project["person"].name.replace("\xa0", "")
 		project["client"] = row["client_name"][0] if row["client_name"] else None
