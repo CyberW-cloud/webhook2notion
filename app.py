@@ -68,7 +68,7 @@ def add_global_block():
 	# proposals = proposals.build_query(filter=filter_params, sort = sort_params)
 	# result = proposals.execute()
 	data = {
-		"SpaceID":client.current_space.id,
+		"spaceID":client.current_space.id,
 		"navigableBlockId":page.id,
 		"limit":20
 	}
