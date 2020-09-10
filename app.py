@@ -69,8 +69,6 @@ def add_global_block():
 	# result = proposals.execute() 
 	
 	target_time = (datetime.datetime.now()-datetime.timedelta(1)).timestamp()
-
-	return get_activity_log_ids(client,page)
 	last_activity_id = None
 	while 1:
 		tmp = get_activity_log_ids(client, page, 10, last_activity_id)
