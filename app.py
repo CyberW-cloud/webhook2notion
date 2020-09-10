@@ -45,7 +45,7 @@ def add_global_block():
 
 	# proposals = notion_client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
 
-	page = client.get_block("https://www.notion.so/TEST-2-e00c343340c34f919d8460b3cbe26245")
+	page = client.get_block("https://www.notion.so/1977159-783c493291a84bc5a660b628f4ffc077")
 
 	# #get only updates 
 	# filter_params = {
