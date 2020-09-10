@@ -785,6 +785,7 @@ def Hb_tasks():
 					months = 1
 					offset = 1	
 				else:
+					print(period[0])
 					months = int(period[0][3])
 					offset = 2
 
