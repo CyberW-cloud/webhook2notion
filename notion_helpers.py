@@ -30,13 +30,16 @@ def auto_retry_lambda(fun, *args, **kwargs):
 def add_global_block(parent, target):
 	parent.children.add_alias(target)
 
-def get_activity_log(client, target_page):
+def get_activity_log_ids(client, target_page):
 	data = {
 		"spaceId":client.current_space.id,
 		"navigableBlockId":target_page.id,
 		"limit":20
 	}
-	return client.post("getActivityLog", data).json()["recordMap"]["activity"].values()
+	block_ids = []
+	log = client.post("getActivityLog", data).json()["recordMap"]["activity"].values()
+	for activity in log:
+		block_ids.append(activity["edits"]["block_id"])
 
 def get_date_from_title(title):
 	if isinstance(title, list):  # instance must be list
