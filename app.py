@@ -282,7 +282,7 @@ def message_review():
 	tokens = parse_tokens(tokens, freelancer_ids)
 
 	for freelancer in tokens:
-		#log in as each freelancer
+		#log in as each freelancer 
 		client = upwork.Client(upwork.Config({\
 			'consumer_key': os.environ.get("ConsumerKey"),\
 			'consumer_secret': os.environ.get("ConsumerSecret"),\
@@ -376,7 +376,7 @@ def message_review():
 				print("NO DATA " + str(room))
 
 			time.sleep(1.6)
-		time.sleep(1.6)
+		time.sleep(3.2)
 	print("finished parsing rooms")
 	target_page = create_page("https://www.notion.so/Message-Review-33cbe6e92b9e4894890d768f1ea7b970","testing without the db for now")
 
@@ -405,7 +405,6 @@ def message_review():
 
 
 		if room["type"] not in rows.keys():
-			rows[room["type"]] = auto_retry_lambda(message_review.views.add_new)
 			rows[room["type"]] = auto_retry_lambda(message_review.collection.add_row)
 			rows[room["type"]].name = row_name
 			rows[room["type"]].tags = room["type"]
