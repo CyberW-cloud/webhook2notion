@@ -237,21 +237,26 @@ def message_review():
 
 
         try:
-            rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": str(activeSince), "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})  
-            user_rooms = messages_api.get_rooms(user_id, {"activeSince": str(activeSince), "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})  
-            if "rooms" not in rooms.keys() or "rooms" not in user_rooms.keys():
-                time.sleep(1.6)
-                continue
-             
-            rooms = rooms["rooms"] + user_rooms["rooms"]
-            
+            rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": str(activeSince), "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})
         except Exception as e:
             print(str(e) + " 4")
-            print("         " + str(user_rooms))
-            time.sleep(1.6)
+            print("      " + str(rooms))
+            time.sleep(3.2)
             continue
             
+        try:
+            user_rooms = messages_api.get_rooms(user_id, {"activeSince": str(activeSince), "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})  
+        except Exception as e:
+            print(str(e) + " 5")
+            print("      " + str(user_rooms))
+            time.sleep(3.2)
+            continue
 
+        if "rooms" not in rooms.keys() or "rooms" not in user_rooms.keys():
+            time.sleep(3.2)
+            continue
+
+        rooms = rooms["rooms"] + user_rooms["rooms"]
         
 
 
@@ -278,6 +283,7 @@ def message_review():
                 print(str(e) + " 2")
                 proposals_found = []
 
+            time.sleep(1.6)
             try:
                 messages = messages_api.get_room_messages(os.environ.get("TeamID"), room["roomId"], {"limit":15})
                 if "stories_list" not in messages.keys():
@@ -305,8 +311,7 @@ def message_review():
                 update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "No info", "link":"", "messages":messages})
                 print("NO DATA " + str(room))
 
-            time.sleep(1.6)
-        time.sleep(1.6)
+    time.sleep(3.2)
     print("finished parsing rooms")
     target_page = create_page("https://www.notion.so/Message-Review-33cbe6e92b9e4894890d768f1ea7b970","testing without the db for now")
 
@@ -533,7 +538,7 @@ def Hb_tasks():
                     break
             #if we didn't break already, skip this row
             continue
-            
+
         #skip result if we already handled it or if periodicity has not been set
         if(n.date()>set_start and period[0] != "No Period"):
             
