@@ -41,6 +41,7 @@ def get_activity_log_ids(client, target_page):
 	for activity in log:
 		block_ids.append(activity["edits"]["block_id"])
 
+	return block_ids
 def get_date_from_title(title):
 	if isinstance(title, list):  # instance must be list
 		for el in title:
