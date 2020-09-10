@@ -755,7 +755,7 @@ def Hb_tasks():
 			continue
 
 		#skip result if we already handled it or if periodicity has not been set
-		if(n.date()>set_start and period[0] != "No Period":
+		if(n.date()>set_start and period[0] != "No Period"):
 			
 			if("Daily" == period[0]):
 				
