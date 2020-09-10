@@ -72,7 +72,7 @@ def add_global_block():
 		"navigableBlockId":page.id,
 		"limit":20
 	}
-	print(client.post("/api/v3/getActivityLog", data))
+	print(client.post("getActivityLog", data))
 	
 
 @app.route("/proposals_texts_collect", methods=["GET"])
