@@ -45,9 +45,9 @@ def get_activity_log_ids(client, target_page, limit = 10, start_id = None):
 	for activity in log:
 		for edit in activity["value"]["edits"]:
 			if "block_id" in edit:
-				print(edit)
+
 				if edit["block_id"] not in block_ids:
-					block_ids.append(edit["block_id"])
+					block_ids.append([edit["block_id"], edit["timestamp"]])
 
 	return [block_ids, response["activityIds"][-1]]
 

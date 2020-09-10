@@ -67,18 +67,24 @@ def add_global_block():
 
 	# proposals = proposals.build_query(filter=filter_params, sort = sort_params)
 	# result = proposals.execute() 
+	
+	target_time = datetime.datetime.now-
+
 	return get_activity_log_ids(client,page)
 	last_activity_id = None
 	while 1:
 		tmp = get_activity_log_ids(client, page, 10, last_activity_id)
 		updated_blocks = tmp[0]
 		last_activity_id = tmp[1]
-		for block_id in updated_blocks:
-			block = client.get_block(block_id)
-			if "**`Progress`**" in block.title:
-				print("we got em")
+		for block_id_and_time in updated_blocks:
+			block = client.get_block(block_id_and_time[0])
+			
+			if block_id_and_time[1]/1000<target_time:
 				reached_past_end_date = True
 				break
+
+			if "**`Progress`**" in block.title:
+				print(block.parent.id)
 
 		if reached_past_end_date:
 			break
