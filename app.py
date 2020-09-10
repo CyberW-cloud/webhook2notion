@@ -67,9 +67,21 @@ def add_global_block():
 
 	# proposals = proposals.build_query(filter=filter_params, sort = sort_params)
 	# result = proposals.execute() 
-	print(client.get_block("https://www.notion.so/249ddcb5e02644308fbc6093fc757528").title)
-	return str(get_activity_log_ids(client, page, 10, "b8c4a03c-53d7-4c99-9550-b8fce29665a2")[0])
-	
+	print(page.get("Last Updated", None))
+	last_activity_id = None
+	while 1:
+		tmp = get_activity_log_ids(client, page, 10, last_activity_id)
+		updated_blocks = tmp[0]
+		last_activity_id = tmp[1]
+		for block_id in updated_blocks:
+			block = client.get_block(block_id)
+			if "**`Progress`**" in block.title:
+				print("we got em")
+				reached_past_end_date = True
+				break
+
+		if reached_past_end_date:
+			break
 
 @app.route("/proposals_texts_collect", methods=["GET"])
 def collect_proposal_text():
