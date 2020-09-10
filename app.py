@@ -30,391 +30,12 @@ import psycopg2
 timezone = "Europe/Kiev"
 
 app = Flask(__name__)
+
 cache = {}
 
 #var used to signify testing
 TEST = False
 test_page_url = "https://www.notion.so/TEST-68d7198ed4d3437b816386f6da196547"
-
-
-@app.route('/refresh_db', methods=["GET"])
-def update_db():
-    token = os.environ.get("TOKEN")
-    notion_client = NotionClient(token)
-
-    contracts = notion_client.get_collection_view("https://www.notion.so/5a95fb63129242a5b5b48f18e16ef19a?v=81afe49071ef41bba4c85922ff134407")
-    proposals = notion_client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
-
-    
-    DATABASE_URL = os.environ['DATABASE_URL']
-    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-    cur = conn.cursor()
-
-    
-    """ SINCE WHEN IS 3 " NOT A COMMENT?!?!?!?!?!?!?"""
-    cur.execute("""Select MAX(Date) from contracts""")
-    start_from_contracts = cur.fetchone()[0]
-    cur.execute("""Select MAX(Date) from proposals""")
-    start_from_proposals = cur.fetchone()[0]
-
-    print(start_from_contracts)
-    if start_from_contracts == None:
-        start_from_contracts = 0
-
-    if start_from_proposals == None:
-        start_from_proposals = 0
-
-    # ----------------- START DOWNLOADING CONTRACTS ------------------
-    #get only updates
-    filter_params = {
-        "filters": [
-            {
-                "filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.fromtimestamp(start_from_contracts).strftime('%Y-%m-%d')}}, "operator": "date_is_on_or_after"},
-                "property": "Created",
-            }
-        ],
-        "operator": "and",
-        
-        
-    }
-    sort_params = [{"direction": "ascending", "property": "Created"}]
-
-    contracts = contracts.build_query(filter=filter_params, sort = sort_params)
-    result = contracts.execute()
-
-    print(len(result))
-    for row in result:
-
-        contract_id = str(row.contract_id)
-        if contract_id == '':
-            contract_id == "-999"
-
-        try:
-            cur.execute("""Insert into contracts ("contract_id", "chat_url", "contract_url", "ended", "added_to_db", "date") values ('"""+ contract_id +"""','"""+ str(row.chat_url) +"""','"""+ str(row.get_browseable_url()) +"""','"""+ str(row.status == "Ended") +"""','"""+ str(int(datetime.datetime.now().timestamp())) +"""','"""+ str(int(row.created.timestamp())) +"""')""")
-            conn.commit()
-            print(cur.query)
-    
-        except Exception as e:
-            print(e)
-            pass    
-
-
-    #remove duplicates (based on contract_id) 
-    cur.execute("""DELETE FROM contracts a USING contracts b WHERE a.id < b.id AND a.contract_id = b.contract_id and a.chat_url = b.chat_url;""")
-    conn.commit()
-
-    print("Contracts Done!")
-    # ----------------- START DOWNLOADING PROPOSALS TODO TODO TODO ------------------
-    #get only updates 
-    filter_params = {
-        "filters": [
-            {
-                "filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.fromtimestamp(start_from_proposals).strftime('%Y-%m-%d')}}, "operator": "date_is_on_or_after"},
-                "property": "Date",
-            }
-        ],
-        "operator": "and",
-        
-        
-    }
-    sort_params = [{"direction": "ascending", "property": "Date"}]
-
-    proposals = proposals.build_query(filter=filter_params, sort = sort_params)
-    result = proposals.execute()
-
-    print(len(result))
-    
-    for row in result:
-
-        proposal_id = str(row.proposal_id)
-
-        
-        try:
-            cur.execute("""Insert into proposals ("proposal_id", "chat_url", "proposal_url", "added_to_db", "date") values ('"""+ proposal_id +"""','"""+ str(row.chat_link) +"""','"""+ str(row.get_browseable_url()) +"""','"""+ str(int(datetime.datetime.now().timestamp())) +"""','"""+ str(int(row.date.timestamp())) +"""')""")
-            conn.commit()
-            print(cur.query)
-    
-        except Exception as e:
-            print(e)
-            pass    
-
-
-    #remove duplicates (based on contract_id)   
-    cur.execute("""DELETE FROM proposals a USING proposals b WHERE a.id < b.id AND a.proposal_id = b.proposal_id and a.chat_url = b.chat_url;""")
-    conn.commit()
-
-    print("Proposals Done!")
-
-
-#accepted users should be an array of id's or "all" for accepting all users
-def parse_tokens(tokens, accepted_users = "all"):
-    
-    tokens = [x.group() for x in re.finditer("({})*.+?(?=})", tokens)]
-
-    ret = []
-    for i in range(len(tokens)):
-        try:
-            strings = [x.group()[1:-1] for x in re.finditer('".+?(?=")+"', tokens[i])]
-
-            if strings[0] in accepted_users or accepted_users == "all":
-                ret.append({"id": strings[0], strings[1]:strings[2], strings[3]:strings[4]})
-        
-        except Exception as e:
-            pass
-
-    return ret
-
-def update_parsed_rooms(parsed_rooms, update):
-
-    #check if the record doesn't exist
-    if update["id"] not in [x["id"] for x in parsed_rooms]:
-        parsed_rooms.append(update)
-        return parsed_rooms
-
-
-@app.route('/message_review', methods=["GET"])
-def message_review():
-    #download updates to the database we are using
-    update_db()
-
-    DATABASE_URL = os.environ['DATABASE_URL']
-    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-    db = conn.cursor()
-
-    token = os.environ.get("TOKEN")
-    notion_client = NotionClient(token)
-    
-    contracts = notion_client.get_collection_view("https://www.notion.so/5a95fb63129242a5b5b48f18e16ef19a?v=81afe49071ef41bba4c85922ff134407")
-    proposals = notion_client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
-    message_review = auto_retry_lambda(notion_client.get_block,"https://www.notion.so/d134162fbfb14449a7ae426487f56127?v=159b522f95fc460f9171dfdca6d1f6d8")
-
-    tokens = os.environ.get('TOKENS')
-
-    parsed_rooms = []
-    
-    
-    active_since_hours =  int(request.args.get("activeSince", "24"))
-    activeSince = datetime.datetime.now() - datetime.timedelta(hours = active_since_hours)
-    activeSince = int(activeSince.timestamp())*1000
-
-    print(activeSince)
-
-    date = str(datetime.datetime.now().day) + "." + str(datetime.datetime.now().month) + "." + str(datetime.datetime.now().year)
-    row_name = date + " -" + str(active_since_hours) + "h"
-
-    rows = {}
-
-    login_config = upwork.Config({\
-            'consumer_key': os.environ.get("ConsumerKey"),\
-            'consumer_secret': os.environ.get("ConsumerSecret"),\
-            'access_token': os.environ.get("AccessToken"),\
-            'access_token_secret': os.environ.get("AccessSecret")})
-
-    client = upwork.Client(login_config)
-
-    company = companyAPI(client)
-    messages = messageAPI(client)
-
-    
-    freelancer_ids = [x["public_url"].split("/")[-1] for x in company.get_users(os.environ.get("CompanyRef"))["users"]]
-    
-    #skip owner to parse quicker
-    tokens = parse_tokens(tokens, freelancer_ids)
-
-    for freelancer in tokens:
-        #log in as each freelancer
-        client = upwork.Client(upwork.Config({\
-            'consumer_key': os.environ.get("ConsumerKey"),\
-            'consumer_secret': os.environ.get("ConsumerSecret"),\
-            'access_token': freelancer["accessToken"],\
-            'access_token_secret': freelancer["accessSecret"]}))
-
-        userApi = userAPI(client)
-        messages_api = messageAPI(client)
-        
-        user_data = userApi.get_my_info()
-        print(user_data)
-        user_id = user_data["user"]["id"]
-
-        if user_data["user"]["profile_key"] not in cache.keys():
-            cache[user_data["user"]["profile_key"]] = user_data["user"]["first_name"] + " " + user_data["user"]["last_name"]
-
-        profileApi = profileAPI(client)
-        
-
-
-        try:
-            rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": str(activeSince), "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})  
-            user_rooms = messages_api.get_rooms(user_id, {"activeSince": str(activeSince), "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})  
-            if "rooms" not in rooms.keys() or "rooms" not in user_rooms.keys():
-                time.sleep(1.6)
-                continue
-             
-            rooms = rooms["rooms"] + user_rooms["rooms"]
-            
-        except Exception as e:
-            print(str(e) + " 4")
-            print("         " + str(user_rooms))
-            time.sleep(1.6)
-            continue
-            
-
-        
-
-
-        for room in rooms:
-            # double check activeSince
-            if int(room["latestStory"]["updated"])<activeSince:
-                print("ERROR: activeSince did not filter a room")
-                continue
-
-
-
-            #sometimes throws an error, just default to no info
-            try:
-                db.execute("""select * from contracts where chat_url like '%"""+room["roomId"]+"""%'""")
-                contracts_found = db.fetchall()
-            except Exception as e:
-                print(str(e) + " 1")
-                contracts_found = []
-            
-            try:    
-                db.execute("""select * from proposals where chat_url like '%"""+room["roomId"]+"""%'""")
-                proposals_found = db.fetchall()
-            except Exception as e:
-                print(str(e) + " 2")
-                proposals_found = []
-
-            try:
-                messages = messages_api.get_room_messages(os.environ.get("TeamID"), room["roomId"], {"limit":15})
-                if "stories_list" not in messages.keys():
-                    messages = messages_api.get_room_messages(user_id, room["roomId"], {"limit":15})
-            except Exception as e:
-                print(str(e) + " 3")
-                print("        " + str(messages))
-                messages = {}
-            
-            time.sleep(1.6)
-            
-            if len(contracts_found)>0:
-                if not contracts_found[0][4]:
-                    update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Contract", "messages":messages, "link":contracts_found[0][3]})
-                    print("ACTIVE CONTRACT: " + str(room))
-                else:
-                    update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Ended contract", "messages":messages, "link":contracts_found[0][3]})
-                    print("ENDED CONTRACT: " + str(room))
-        
-            elif len(proposals_found)>0:        
-                update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Interview", "messages":messages, "link":proposals_found[0][3]})
-                print("PROPOSAL: " + str(room))
-
-            else:
-                update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "No info", "link":"", "messages":messages})
-                print("NO DATA " + str(room))
-
-            time.sleep(1.6)
-        time.sleep(1.6)
-    print("finished parsing rooms")
-    target_page = create_page("https://www.notion.so/Message-Review-33cbe6e92b9e4894890d768f1ea7b970","testing without the db for now")
-
-    for room in parsed_rooms:
-        client = upwork.Client(upwork.Config({\
-            'consumer_key': os.environ.get("ConsumerKey"),\
-            'consumer_secret': os.environ.get("ConsumerSecret"),\
-            'access_token': os.environ.get("AccessToken"),\
-            'access_token_secret': os.environ.get("AccessSecret")}))
-
-        profileApi = profileAPI(client)
-
-        link = "https://www.upwork.com/messages/rooms/" + room["id"]
-        link_text = "[Room]("+link+")"
-        
-        if room["type"] == "No info":
-            type_text = "***No info***"
-            #to add to the interview column
-            room["type"] = "Interview"
-
-        else:
-            if room["type"] == "Interview":
-                type_text = "[Proposal]("+room["link"]+")"
-            else:
-                type_text = "["+room["type"]+"]("+room["link"]+")" 
-
-
-        if room["type"] not in rows.keys():
-            rows[room["type"]] = auto_retry_lambda(message_review.collection.add_row)
-            rows[room["type"]].name = row_name
-            rows[room["type"]].tags = room["type"]
-
-        target_row = rows[room["type"]]
-
-        if room["room"]["roomName"] == None:
-            room["room"]["roomName"] == "None"
-
-        if room["room"]["topic"] == None:
-            room["room"]["topic"] == "None"
-
-        try:
-            title = room["room"]["roomName"]+", **"+room["room"]["topic"] + "**"
-        except Exception:
-            print(room)
-            continue
-
-        parent_text_block = auto_retry_lambda(target_row.children.add_new,TextBlock, title = title)
-        text_block = auto_retry_lambda(parent_text_block.children.add_new,TextBlock, title =type_text+" , "+link_text)
-
-        try:
-            stories = room["messages"]["stories_list"]["stories"]
-        except Exception:
-            print(room["messages"])
-
-        #if the message ends in a sinature like [Line Start][Capital][* amount of lowercase][space][Capital][Dot][EOF] 
-        if isinstance(stories[0]["message"], str) and re.findall("^[A-Z][a-z]* [A-Z]\.\Z", stories[0]["message"], re.M) and room["type"] == "Interview":
-            auto_retry_lambda(parent_text_block.remove,permanently = True)
-            print("bot detected, skipped")
-            continue
-
-
-        written = 0
-        for i in stories:
-            if not isinstance(i["message"],str) or i["message"] == "":
-                print(i)
-                continue
-
-            if written>=3:
-                break
-
-            message_time = datetime.datetime.fromtimestamp(i["updated"]/1000).strftime('%Y-%m-%d %H:%M:%S')
-            text = "["+message_time+"]\n"
-
-            if i["userId"] not in cache.keys(): 
-                name = profileApi.get_specific(i["userId"])["profile"]["dev_short_name"][:-1]
-                cache[i["userId"]] = name
-            else:
-                name = cache[i["userId"]]
-
-            text += "**"+name+":**\n"
-            text += i["message"]
-
-            message = auto_retry_lambda(parent_text_block.children.add_new,CodeBlock, title = text)
-            message.language = "Plain text"
-            message.wrap = True
-
-            auto_retry_lambda(message.move_to,parent_text_block, position = "first-child")
-
-
-            written +=1
-
-        auto_retry_lambda(text_block.move_to,parent_text_block, position = "first-child")
-        auto_retry_lambda(parent_text_block.children.add_new,TextBlock)
-        auto_retry_lambda(target_row.children.add_new,DividerBlock)
-
-    print("all done!")  
-    print(cache)
-
-    return str(parsed_rooms)
-
-
 
 @app.route("/proposals_texts_collect", methods=["GET"])
 def collect_proposal_text():
@@ -912,23 +533,23 @@ def test_scripts():
 
 
 
-		day_page.children.add_new(CollectionViewPageBlock, title = "table")
-		page = day_page.children[-1]
+		# day_page.children.add_new(CollectionViewPageBlock, title = "table")
+		# page = day_page.children[-1]
 
 
-		schema = client.get_block("https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=375e91212fc4482c815f0b4419cbf5e3").collection.get("schema")
+		# schema = client.get_block("https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=375e91212fc4482c815f0b4419cbf5e3").collection.get("schema")
 
-		collection = client.get_collection(client.create_record("collection", parent=page, schema=schema))
-		page.collection = collection
+		# collection = client.get_collection(client.create_record("collection", parent=page, schema=schema))
+		# page.collection = collection
 
 	
-		test_row = page.views.add_new()
-		test_row = page.collection.add_row()
-		test_row.name = "This worked!"
-		page.collection.refresh()
+		# test_row = page.views.add_new()
+		# test_row = page.collection.add_row()
+		# test_row.name = "This worked!"
+		# page.collection.refresh()
 
-		if test_row.name != "This worked!":
-			log += "TEST FAILED!: Notion seems to be down for tables!\n"
+		# if test_row.name != "This worked!":
+		# 	log += "TEST FAILED!: Notion seems to be down for tables!\n"
 
 
 
@@ -1025,7 +646,6 @@ def check_test_results(page):
 #		  the int array has to be from 0 (mon) to 6 (sun)
 #		  the String array has to contain only the strings inside the week array
 #Returns timedelta that has an amount of days from source to the closest weekday
-
 def get_offset_to_closest_weekday(source, targets):
 	
 	#check if we got an int or string array
@@ -1059,19 +679,9 @@ def get_offset_to_closest_weekday(source, targets):
 		return datetime.timedelta(target_day-day)
 	
 
-def create_page(parent_url, title):
-    token = os.environ.get("TOKEN")
-    client = NotionClient(token)
-
-    parent = client.get_block(parent_url)
-    parent.children.add_new(PageBlock, title=title)
-
-    return parent.children[-1]
-
 @app.route("/hb_tasks", methods=["GET"])
 def Hb_tasks():
    
-
 	#connect to the desk
 	site = request.args.get("target_site", "https://www.notion.so/Head-board-749105cdfebe4d0282469b04191a24c8")
 	token_v2 = os.environ.get("TOKEN")
@@ -1133,62 +743,6 @@ def Hb_tasks():
 				period.append("Wed")
 				period.append("Fri")
 
-    #connect to the desk
-    site = request.args.get("target_site", "https://www.notion.so/Head-board-749105cdfebe4d0282469b04191a24c8")
-    token_v2 = os.environ.get("TOKEN")
-
-    #get all tasks
-    client = NotionClient(token_v2)
-    cv = client.get_collection_view(site)
-
-    # filter out projects without TODO status
-    filter_params = {
-        "filters": [
-            {
-                "filter": {"value": {"type": "exact", "value": "DONE"}, "operator": "enum_is"},
-                "property": "Status",
-            }
-        ],
-        "operator": "and",
-    }
-    cv = cv.build_query(filter=filter_params)
-    result = cv.execute()
-            
-
-
-
-    
-    #s can be used to get debug output
-    s = ""
-    changes = []
-    for todo in result:
-        
-        if todo.set_date == None:
-            todo.set_date = NotionDate(todo.created)
-        
-        if isinstance(todo.set_date.start, datetime.datetime):
-            set_start = todo.set_date.start.date()
-        else:
-            set_start = todo.set_date.start
-
-        n = datetime.datetime.now()
-        period = todo.periodicity
-
-        if (todo.due_date == None):
-            todo.due_date = NotionDate(todo.updated)
-
-
-        due_start = datetime.datetime(todo.due_date.start.year, todo.due_date.start.month, todo.due_date.start.day, 17)
-        
-        
-
-        # if weekdays / periodicity has not been set up
-        if(len(period)<=1):
-
-            if(len(period)==0):
-                period.append("No Period")
-
-
 		#skip result if we already handled it or if periodicity has not been set
 		if(n.date()>set_start and period[0] != "No Period"):
 			
@@ -1234,19 +788,9 @@ def Hb_tasks():
 					months = int(period[0][3])
 					offset = 2
 
-
 				#this formula tries to get the closest weekday in 30*month days 
 				#we have to do -1 because get_offset looks from the next day forward
 				due_date = due_start + datetime.timedelta(math.floor(30*months//7) * 7 -1)
-
-            #the format is 1/*m, we just offset by * month(s) and find the closest correct weekday to set it to 
-            elif("m" in period[0]):
-                if("1t/m" == period[0]):
-                    months = 1
-                    offset = 1  
-                else:
-                    months = int(period[0][3])
-                    offset = 2
 
 				#not needed tbh, but it is just a failsafe in case the previous line doesn't land on the day before a chosen weekday
 				#also helps to mitigate a bug (if the previous due_date != target weekday, the previous line doesn't work)
@@ -1282,32 +826,6 @@ def Hb_tasks():
 			set_start = todo.set_date.start
 
 
-    #commit our changes (we find the rows with the id of one of our changes and update it accordingly)
-    for record in cv.collection.get_rows():
-        for change in changes:
-            if change["id"] == record.id:
-                record.set_property("Due Date", change["due"])
-                record.set_property("Set date", change["set"])
-                record.set_property("Completed", record.updated)
-                #we refresh the change so we can use the updated result in the next for
-                record.refresh()
-            
-
-    #go over all tasks and change the status to TODO if the task should be set today    
-    for todo in result:
-        if todo.set_date.start == None:
-            todo.set_date.start = todo.created
-
-        if isinstance(todo.set_date.start, datetime.datetime):
-            set_start = todo.set_date.start.date()
-        else:
-            set_start = todo.set_date.start
-
-
-
-
-        if(set_start == datetime.datetime.now().date()):
-            todo.status = "TO DO"
 
 
 		if(set_start == datetime.datetime.now().date()):
@@ -1670,7 +1188,8 @@ def get_todo_url_by_name(token, name):
 
 
 def create_todo(token, date, link, todo, text):
- 
+
+
 	client = NotionClient(token)
 	# notion
 	if date is not None:  # if date not provided use now()
@@ -1678,14 +1197,14 @@ def create_todo(token, date, link, todo, text):
 			date = datetime.datetime.strptime(urllib.parse.unquote("{}".format(date)), "%Y-%m-%dT%H:%M:%S.%fZ").date()
 	else:
 		date = datetime.datetime.now().date()
+
    
-	client = NotionClient(token)
 	print(link)
 	page = client.get_block(link)
-	tasks = todo 
+	tasks = todo
+
 
 	timeout = time.time()+20 #timeout after 20 seconds 
-	timeout = time.time()+10 #timeout after 10 seconds 
 	added = False
 	while time.time()<timeout:
 		try:
@@ -1833,7 +1352,6 @@ def weekly_todo_cc(token, staff, calendar):
 	print("CCs done")
 
 def weekly_todo_fl(token, staff, calendar):
- 
 	global TEST
 
 	print("Mon Fl's start")
@@ -1849,15 +1367,6 @@ def weekly_todo_fl(token, staff, calendar):
 		todo.append(f"Коментом, тегнув {fl['pa_name']}, напиши свою планируемую загрузку на неделю")
 		create_todo(token, calendar["mon"], fl["todo_url"], todo, text="")
 	print("Mon FL done")
-    print("Mon Fl's start")
-    for fl in staff:
-        print(f"FL {fl['name']} start")
-        # Monday
-        todo = list()
-        todo.append(f"Загрузи [статы](https://bit.ly/30k15In) по [ссылке]({fl['stats_upload']})")
-        todo.append(f"Коментом, тегнув {fl['pa_name']}, напиши свою планируемую загрузку на неделю")
-        create_todo(token, calendar["mon"], fl["todo_url"], todo, text="")
-    print("Mon FL done")
 
 def friday_todo_fl(token, staff, calendar):
 	global TEST
@@ -2152,8 +1661,6 @@ def pcj():
 	pcj = create_pcj(token_v2, collection_url, subject, description, invite_to, link)
 	return f"added {subject} receipt to " + pcj.get_browseable_url()
 
-
- 
 
 def create_invite(token, collection_url, subject, description, invite_to):
 	# notion
