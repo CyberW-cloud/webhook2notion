@@ -67,7 +67,7 @@ def add_global_block():
 
 	# proposals = proposals.build_query(filter=filter_params, sort = sort_params)
 	# result = proposals.execute() 
-	print(page.last_edited_time)
+	print(page.get("last_edited_time,None))
 	last_activity_id = None
 	while 1:
 		tmp = get_activity_log_ids(client, page, 10, last_activity_id)
