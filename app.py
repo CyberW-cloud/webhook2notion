@@ -68,8 +68,8 @@ def add_global_block():
 	# proposals = proposals.build_query(filter=filter_params, sort = sort_params)
 	# result = proposals.execute()
 	data = {
-		"SpaceID":client.current_space.id
-		"navigableBlockId":page.id
+		"SpaceID":client.current_space.id,
+		"navigableBlockId":page.id,
 		"limit":20
 	}
 	print(client.post("/api/v3/getActivityLog", data))
