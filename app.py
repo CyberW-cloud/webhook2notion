@@ -348,6 +348,11 @@ def message_review():
             room["room"]["topic"] == "None"
 
         try:
+            if room["room"]["roomName"] == None:
+                room["room"]["roomName"] = ""
+
+            if room["room"]["topic"] == None:
+                room["room"]["topic"] = ""
             title = room["room"]["roomName"]+", **"+room["room"]["topic"] + "**"
         except Exception:
             print(room)
@@ -518,6 +523,17 @@ def Hb_tasks():
                 period.append("Wed")
                 period.append("Fri")
 
+        #fix period[0]
+        if("/" not in period[0] and period[0] != "Daily"):
+            for i in range(len(period)):
+                if "/" in period[0] or period[0] == "Daily":
+                    tmp = period[0]
+                    period[0] = period[i]
+                    period[i] = tmp
+                    break
+            #if we didn't break already, skip this row
+            continue
+            
         #skip result if we already handled it or if periodicity has not been set
         if(n.date()>set_start and period[0] != "No Period"):
             
