@@ -45,7 +45,7 @@ def add_global_block():
 
 	# proposals = notion_client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
 
-	page = client.get_block("https://www.notion.so/1977159-783c493291a84bc5a660b628f4ffc077")
+	page = client.get_block("https://www.notion.so/24227261-ab3fe6edbb43422ba7d1b1df50fe3a2a")
 
 	# #get only updates 
 	# filter_params = {
@@ -81,7 +81,7 @@ def add_global_block():
 				reached_past_end_date = True
 				break
 
-			if "**`Progress`**" in block.title:
+			if "**`Progress`**" in block.title and block.alive:
 				print(block.parent.id)
 
 		if reached_past_end_date:
