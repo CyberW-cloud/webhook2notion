@@ -67,7 +67,7 @@ def add_global_block():
 
 	# proposals = proposals.build_query(filter=filter_params, sort = sort_params)
 	# result = proposals.execute() 
-	print(client.get_block("https://www.notion.so/d5a2a1a2673047ef840fb948c352ee7e").title)
+	print(client.get_block("https://www.notion.so/d5a2a1a2673047ef840fb948c352ee7e"))
 	return str(get_activity_log_ids(client, page, 10, "b8c4a03c-53d7-4c99-9550-b8fce29665a2")[0])
 	
 
