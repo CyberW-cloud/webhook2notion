@@ -8,6 +8,7 @@ from notion.collection import NotionDate, TableView, TableQueryResult
 
 def auto_retry_lambda(fun, *args, **kwargs):
 
+<<<<<<< HEAD
 	# making them function arguments would mess with *args and **kwargs if not always given
 	retries = 5
 	log = True
@@ -26,6 +27,26 @@ def auto_retry_lambda(fun, *args, **kwargs):
 
 			retries -= 1
 			time.sleep(sleep)
+=======
+    # making them function arguments would mess with *args and **kwargs if not always given
+    retries = 5
+    log = True
+    sleep = 1
+
+    while 1:
+        try:
+            return fun(*args, **kwargs)
+        
+        except Exception as e:
+            if log:
+                print("Retrying due to:" + str(e))
+
+            if retries <= 0:
+                raise e
+
+            retries -= 1
+            time.sleep(sleep)
+>>>>>>> master
 
 
 def get_date_from_title(title):
