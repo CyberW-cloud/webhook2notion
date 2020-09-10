@@ -314,7 +314,7 @@ def message_review():
 			
 		except Exception as e:
 			print(str(e) + " 4")
-			print("         " + str(user_rooms))
+			print("		 " + str(user_rooms))
 			time.sleep(1.6)
 			continue
 			
@@ -351,7 +351,7 @@ def message_review():
 					messages = messages_api.get_room_messages(user_id, room["roomId"], {"limit":15})
 			except Exception as e:
 				print(str(e) + " 3")
-				print("        " + str(messages))
+				print("		" + str(messages))
 				messages = {}
 			
 			time.sleep(1.6)
@@ -712,8 +712,8 @@ def Hb_tasks():
 	changes = []
 	for todo in result:
 		
-        if todo.set_date == None:
-            todo.set_date = NotionDate(todo.created)
+		if todo.set_date == None:
+			todo.set_date = NotionDate(todo.created)
 		
 		if isinstance(todo.set_date.start, datetime.datetime):
 			set_start = todo.set_date.start.date()
@@ -724,8 +724,8 @@ def Hb_tasks():
 		period = todo.periodicity
 
 		if (todo.due_date == None):
-            todo.due_date = NotionDate(todo.updated)
-            
+			todo.due_date = NotionDate(todo.updated)
+			
 		due_start = datetime.datetime(todo.due_date.start.year, todo.due_date.start.month, todo.due_date.start.day, 17)
 		
 		# if weekdays / periodicity has not been set up
@@ -945,7 +945,7 @@ def get_projects(token, days_before):
 				project["person_name"] = project["person"].name.replace("\xa0", "")
 		else:
 			project["person"] = None
-			print(str(row) + "     " + "error row url")
+			print(str(row) + "	 " + "error row url")
 		project["client"] = row["client_name"][0] if row["client_name"] else None
 		project["url"] = row["name"].replace("\xa0", ""), row["row"].get_browseable_url()
 		
