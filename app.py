@@ -67,7 +67,7 @@ def add_global_block():
 
 	# proposals = proposals.build_query(filter=filter_params, sort = sort_params)
 	# result = proposals.execute()
-	return str(get_activity_log_ids(client, page)[1])
+	return str(get_activity_log_ids(client, page, 10, "b8c4a03c-53d7-4c99-9550-b8fce29665a2")[1])
 	
 
 @app.route("/proposals_texts_collect", methods=["GET"])
