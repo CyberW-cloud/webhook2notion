@@ -39,7 +39,10 @@ def get_activity_log_ids(client, target_page):
 	block_ids = []
 	log = client.post("getActivityLog", data).json()["recordMap"]["activity"].values()
 	for activity in log:
-		block_ids += [x["block_id"] for x in activity["value"]["edits"]]
+		for edit in activity["value"]["edits"]:
+			if "block_id" in edit:
+				if block_id not in block_ids:
+					block_ids.append(x["block_id"])
 
 	return block_ids
 
