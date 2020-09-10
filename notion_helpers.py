@@ -36,7 +36,7 @@ def get_activity_log(client, target_page):
 		"navigableBlockId":target_page.id,
 		"limit":20
 	}
-	client.post("getActivityLog", data).json()["recordMap"]
+	client.post("getActivityLog", data).json()
 
 def get_date_from_title(title):
 	if isinstance(title, list):  # instance must be list
