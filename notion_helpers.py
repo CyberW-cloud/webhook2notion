@@ -27,6 +27,16 @@ def auto_retry_lambda(fun, *args, **kwargs):
 			retries -= 1
 			time.sleep(sleep)
 
+def add_global_block(parent, target):
+	parent.children.add_alias(target)
+
+def get_activity_log(client, target_page):
+	data = {
+		"spaceId":client.current_space.id,
+		"navigableBlockId":target_page.id,
+		"limit":20
+	}
+	return client.post("getActivityLog", data).json()
 
 def get_date_from_title(title):
 	if isinstance(title, list):  # instance must be list
