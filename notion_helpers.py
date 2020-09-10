@@ -42,7 +42,7 @@ def get_activity_log_ids(client, target_page):
 		if "edits" in activity.keys():
 			block_ids.append(activity["value"]["block_id"])
 		else:
-			print(activity)
+			print(activity["value"])
 	return block_ids
 def get_date_from_title(title):
 	if isinstance(title, list):  # instance must be list
