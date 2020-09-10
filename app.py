@@ -305,22 +305,30 @@ def message_review():
 
 		try:
 			rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": str(activeSince), "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})	
-			user_rooms = messages_api.get_rooms(user_id, {"activeSince": str(activeSince), "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})	
-			if "rooms" not in rooms.keys() or "rooms" not in user_rooms.keys():
-				time.sleep(1.6)
-				continue
+			
+			
 			 
-			rooms = rooms["rooms"] + user_rooms["rooms"]
+			
 			
 		except Exception as e:
 			print(str(e) + " 4")
-			print("		 " + str(user_rooms))
-			time.sleep(1.6)
+			print("		 " + str(rooms))
+			time.sleep(3.2)
 			continue
 			
+		try:
+			user_rooms = messages_api.get_rooms(user_id, {"activeSince": str(activeSince), "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})	
+		except Exception as e:
+			print(str(e) + " 5")
+			print("		 " + str(user_rooms))
+			time.sleep(3.2)
+			continue
 
-		
+		if "rooms" not in rooms.keys() or "rooms" not in user_rooms.keys():
+			time.sleep(3.2)
+			continue
 
+		rooms = rooms["rooms"] + user_rooms["rooms"]
 
 		for room in rooms:
 			# double check activeSince
@@ -725,7 +733,7 @@ def Hb_tasks():
 
 		if (todo.due_date == None):
 			todo.due_date = NotionDate(todo.updated)
-			
+
 		due_start = datetime.datetime(todo.due_date.start.year, todo.due_date.start.month, todo.due_date.start.day, 17)
 		
 		# if weekdays / periodicity has not been set up
@@ -747,7 +755,7 @@ def Hb_tasks():
 
 		#fix period[0]
 		if("/" not in period[0] and period[0] != "Daily"):
-			for i in range(len(period)):
+			for i in range(1,len(period)):
 				if "/" in period[0] or period[0] == "Daily":
 					tmp = period[0]
 					period[0] = period[i]
