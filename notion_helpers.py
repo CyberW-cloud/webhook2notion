@@ -39,11 +39,11 @@ def get_activity_log_ids(client, target_page):
 	block_ids = []
 	log = client.post("getActivityLog", data).json()["recordMap"]["activity"].values()
 	for activity in log:
-		if "block_id" in activity["value"].keys():
-			block_ids.append(activity["value"]["block_id"])
-		else:
-			print(activity["value"])
+		block_ids.append(activity["value"]["block_id"])
+
 	return block_ids
+
+
 def get_date_from_title(title):
 	if isinstance(title, list):  # instance must be list
 		for el in title:
