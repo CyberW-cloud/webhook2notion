@@ -130,7 +130,7 @@ def update_db():
 		"filters": [
 			{
 				"filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.fromtimestamp(start_from_contracts).strftime('%Y-%m-%d')}}, "operator": "date_is_on_or_after"},
-				"property": "Created",
+				"property": "Updated",
 			}
 		],
 		"operator": "and",
@@ -160,17 +160,17 @@ def update_db():
 
 
 	#remove duplicates (based on contract_id) 
-	cur.execute("""DELETE FROM contracts a USING contracts b WHERE a.id < b.id AND a.contract_id = b.contract_id and a.chat_url = b.chat_url;""")
+	cur.execute("""DELETE FROM contracts a USING contracts b WHERE a.id < b.id AND a.contract_id = b.contract_id;""")
 	conn.commit()
 
 	print("Contracts Done!")
-	# ----------------- START DOWNLOADING PROPOSALS TODO TODO TODO ------------------
+	# ----------------- START DOWNLOADING PROPOSALS------------------
 	#get only updates 
 	filter_params = {
 		"filters": [
 			{
 				"filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.fromtimestamp(start_from_proposals).strftime('%Y-%m-%d')}}, "operator": "date_is_on_or_after"},
-				"property": "Date",
+				"property": "Modified",
 			}
 		],
 		"operator": "and",
@@ -200,7 +200,7 @@ def update_db():
 
 
 	#remove duplicates (based on contract_id)   
-	cur.execute("""DELETE FROM proposals a USING proposals b WHERE a.id < b.id AND a.proposal_id = b.proposal_id and a.chat_url = b.chat_url;""")
+	cur.execute("""DELETE FROM proposals a USING proposals b WHERE a.id < b.id AND a.proposal_id = b.proposal_id;""")
 	conn.commit()
 
 	print("Proposals Done!")
