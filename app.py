@@ -113,7 +113,7 @@ def head_summary():
 					break
 
 				if "**`Progress`**" in block.title and block.alive:
-					add_aliases_to_summary([block.parent], target, block.parent.parent)
+					add_aliases_to_summary([block.parent], target, row)
 
 			if reached_past_end_date:
 				break
