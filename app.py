@@ -68,7 +68,7 @@ def add_global_block():
 	proposals = proposals.build_query(filter=filter_params, sort = sort_params)
 	result = proposals.execute() 
 
-	
+	i = 0  
 	for row in result:
 		last_activity_id = None
 		reached_past_end_date = False
@@ -76,7 +76,9 @@ def add_global_block():
 		print(row.get_browseable_url())
 		while 1:
 			tmp = get_activity_log_ids(client, row, 10, last_activity_id)
+
 			if tmp == None:
+				print(i)
 				break
 
 			updated_blocks = tmp[0]
@@ -96,6 +98,7 @@ def add_global_block():
 
 			if reached_past_end_date:
 				break
+			i+=1
 
 @app.route("/proposals_texts_collect", methods=["GET"])
 def collect_proposal_text():
