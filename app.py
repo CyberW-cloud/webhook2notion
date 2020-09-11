@@ -72,6 +72,8 @@ def add_global_block():
 	for row in result:
 		last_activity_id = None
 		reached_past_end_date = False
+		print(row.title)
+		print(row.get_browseable_url())
 		while 1:
 			tmp = get_activity_log_ids(client, row, 10, last_activity_id)
 			if tmp == None:
@@ -82,11 +84,7 @@ def add_global_block():
 			for block_id_and_time in updated_blocks:
 				block = client.get_block(block_id_and_time[0])
 				
-				try:
-					print(block.title)
-				
-				except Exception as e:
-					print(type(block))
+
 
 
 				if block_id_and_time[1]/1000<activeSince:
