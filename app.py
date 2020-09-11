@@ -75,7 +75,7 @@ def add_global_block():
 		while 1:
 			tmp = get_activity_log_ids(client, row, 10, last_activity_id)
 			if tmp == None:
-				continue
+				break
 
 			updated_blocks = tmp[0]
 			last_activity_id = tmp[1]
