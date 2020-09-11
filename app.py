@@ -847,7 +847,7 @@ def Hb_tasks():
 
 	#go over all tasks and change the status to TODO if the task should be set today	
 	for todo in result:
-		if todo.set_date.start == None:
+		if todo.set_date == None:
 			todo.set_date.start = todo.created
 
 		if isinstance(todo.set_date.start, datetime.datetime):
@@ -857,7 +857,8 @@ def Hb_tasks():
 
 
 
-
+		print(set_start)
+		print(datetime.date.now())
 		if(set_start == datetime.datetime.now().date()):
 			todo.status = "TO DO"
 
