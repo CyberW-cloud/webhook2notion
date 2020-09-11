@@ -92,7 +92,7 @@ def add_global_block():
 					break
 
 				if "**`Progress`**" in block.title and block.alive:
-					print(block.parent.id)
+					print("BLOCK: " + block.parent.get_browseable_url())
 
 			if reached_past_end_date:
 				break
