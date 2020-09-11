@@ -717,8 +717,10 @@ def get_projects(token, days_before):
                     if contract.coordinator[0].name != "selfCC" and contract.status == "In Progress":
                         project["person"] = contract.coordinator[0]
                         break
-        if project["person"]:
+        if "person" in project.keys():
             project["person_name"] = project["person"].name.replace("\xa0", "")
+        else:
+            project["person"] = None
         project["client"] = row["client_name"][0] if row["client_name"] else None
         project["url"] = row["name"].replace("\xa0", ""), row["row"].get_browseable_url()
         if project["person"] is None:
