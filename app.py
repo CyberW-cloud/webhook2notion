@@ -43,9 +43,9 @@ def add_aliases_to_summary(aliases, page, parent_row):
 
 	if parent_row.client != None and len(parent_row.client)>0:
 		print(parent_row)
-		parent_text = parent_row.client[0].name + ", (" +  parent_row.get_browseable_url() + ")[**" + parent_row.title + "**]"
+		parent_text = parent_row.client[0].name + ", [**" + parent_row.title + "**](" +  parent_row.get_browseable_url() + ")"
 	else:
-		parent_text = "**(" +  parent_row.title + ")[" + parent_row.get_browseable_url() + "]**"
+		parent_text = "[**" + parent_row.title + "**](" +  parent_row.get_browseable_url() + ")"
 
 	print(parent_row)	
 
