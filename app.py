@@ -82,7 +82,7 @@ def add_global_block():
 			for block_id_and_time in updated_blocks:
 				block = client.get_block(block_id_and_time[0])
 				
-				print(block_id_and_time[1])
+				print(block.title)
 				if block_id_and_time[1]/1000<activeSince:
 					reached_past_end_date = True
 					break
