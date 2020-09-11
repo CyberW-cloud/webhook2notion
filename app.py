@@ -70,7 +70,7 @@ def update_db():
         
         
     }
-    sort_params = [{"direction": "ascending", "property": "Created"}]
+    sort_params = [{"direction": "ascending", "property": "Updated"}]
 
     contracts = contracts.build_query(filter=filter_params, sort = sort_params)
     result = contracts.execute()
@@ -83,7 +83,7 @@ def update_db():
             contract_id == "-999"
 
         try:
-            cur.execute("""Insert into contracts ("contract_id", "chat_url", "contract_url", "ended", "added_to_db", "date") values ('"""+ contract_id +"""','"""+ str(row.chat_url) +"""','"""+ str(row.get_browseable_url()) +"""','"""+ str(row.status == "Ended") +"""','"""+ str(int(datetime.datetime.now().timestamp())) +"""','"""+ str(int(row.created.timestamp())) +"""')""")
+            cur.execute("""Insert into contracts ("contract_id", "chat_url", "contract_url", "ended", "added_to_db", "date") values ('"""+ contract_id +"""','"""+ str(row.chat_url) +"""','"""+ str(row.get_browseable_url()) +"""','"""+ str(row.status == "Ended") +"""','"""+ str(int(datetime.datetime.now().timestamp())) +"""','"""+ str(int(row.updated.timestamp())) +"""')""")
             conn.commit()
             print(cur.query)
     
@@ -110,7 +110,7 @@ def update_db():
         
         
     }
-    sort_params = [{"direction": "ascending", "property": "Date"}]
+    sort_params = [{"direction": "ascending", "property": "Modified"}]
 
     proposals = proposals.build_query(filter=filter_params, sort = sort_params)
     result = proposals.execute()
@@ -123,13 +123,14 @@ def update_db():
 
         
         try:
-            cur.execute("""Insert into proposals ("proposal_id", "chat_url", "proposal_url", "added_to_db", "date") values ('"""+ proposal_id +"""','"""+ str(row.chat_link) +"""','"""+ str(row.get_browseable_url()) +"""','"""+ str(int(datetime.datetime.now().timestamp())) +"""','"""+ str(int(row.date.timestamp())) +"""')""")
+            cur.execute("""Insert into proposals ("proposal_id", "chat_url", "proposal_url", "added_to_db", "date") values ('"""+ proposal_id +"""','"""+ str(row.chat_link) +"""','"""+ str(row.get_browseable_url()) +"""','"""+ str(int(datetime.datetime.now().timestamp())) +"""','"""+ str(int(row.modified.timestamp())) +"""')""")
             conn.commit()
             print(cur.query)
     
         except Exception as e:
             print(e)
-            pass
+            pass    
+
 
     #remove duplicates (based on contract_id)   
     cur.execute("""DELETE FROM proposals a USING proposals b WHERE a.id < b.id AND a.proposal_id = b.proposal_id;""")
