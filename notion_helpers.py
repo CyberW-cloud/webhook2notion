@@ -46,7 +46,7 @@ def get_activity_log_ids(client, target_page, limit = 10, start_id = None):
 		for edit in activity["value"]["edits"]:
 			if "block_id" in edit:
 
-				if edit["block_id"] not in block_ids and edit["type"] == "block-created":
+				if edit["block_id"] not in [x[0] for x in block_ids] and edit["type"] == "block-created":
 					block_ids.append([edit["block_id"], edit["timestamp"]])
 
 	return [block_ids, response["activityIds"][-1]]

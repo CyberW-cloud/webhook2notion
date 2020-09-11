@@ -43,49 +43,51 @@ def add_global_block():
 	token = os.environ.get("TOKEN")
 	client = NotionClient(token)
 
-	# proposals = notion_client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
+	proposals = notion_client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
 
 	page = client.get_block("https://www.notion.so/24227261-ab3fe6edbb43422ba7d1b1df50fe3a2a")
 
-	# #get only updates 
-	# filter_params = {
-	# 	"filters": [
-	# 		{
-	# 			"filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.fromtimestamp(get_for_timestamp).strftime('%Y-%m-%d')}}, "operator": "date_is_on_or_after"},
-	# 			"property": "Date",
-	# 		}
-	# 	],
-	# 	"operator": "and",
+	#get only updates 
+	filter_params = {
+		"filters": [
+			{
+				"filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.fromtimestamp(get_for_timestamp).strftime('%Y-%m-%d')}}, "operator": "date_is_on_or_after"},
+				"property": "Date",
+			}
+		],
+		"operator": "and",
 		
 		
-	# }
-	# sort_params = [{"direction": "ascending", "property": "Date"}]
+	}
+	sort_params = [{"direction": "ascending", "property": "Date"}]
 
-	# active_since_hours =  int(request.args.get("activeSince", "24"))
-	# activeSince = datetime.datetime.now() - datetime.timedelta(hours = active_since_hours)
-	# activeSince = int(activeSince.timestamp())
+	active_since_hours =  int(request.args.get("activeSince", "24"))
+	activeSince = datetime.datetime.now() - datetime.timedelta(hours = active_since_hours)
+	activeSince = int(activeSince.timestamp())
 
-	# proposals = proposals.build_query(filter=filter_params, sort = sort_params)
-	# result = proposals.execute() 
+	proposals = proposals.build_query(filter=filter_params, sort = sort_params)
+	result = proposals.execute() 
+
 	
-	target_time = (datetime.datetime.now()-datetime.timedelta(10)).timestamp()
-	last_activity_id = None
-	while 1:
-		tmp = get_activity_log_ids(client, page, 10, last_activity_id)
-		updated_blocks = tmp[0]
-		last_activity_id = tmp[1]
-		for block_id_and_time in updated_blocks:
-			block = client.get_block(block_id_and_time[0])
-			
-			if block_id_and_time[1]/1000<target_time:
-				reached_past_end_date = True
+	for row in result:
+		last_activity_id = None
+		while 1:
+			tmp = get_activity_log_ids(client, page, 10, last_activity_id)
+			updated_blocks = tmp[0]
+			last_activity_id = tmp[1]
+			for block_id_and_time in updated_blocks:
+				block = client.get_block(block_id_and_time[0])
+				
+				print(block_id_and_time[1])
+				if block_id_and_time[1]/1000<activeSince:
+					reached_past_end_date = True
+					break
+
+				if "**`Progress`**" in block.title and block.alive:
+					print(block.parent.id)
+
+			if reached_past_end_date:
 				break
-
-			if "**`Progress`**" in block.title and block.alive:
-				print(block.parent.id)
-
-		if reached_past_end_date:
-			break
 
 @app.route("/proposals_texts_collect", methods=["GET"])
 def collect_proposal_text():
@@ -187,7 +189,7 @@ def update_db():
 		
 		
 	}
-	sort_params = [{"direction": "ascending", "property": "Created"}]
+	sort_params = [{"direction": "ascending", "property": "Updated"}]
 
 	contracts = contracts.build_query(filter=filter_params, sort = sort_params)
 	result = contracts.execute()
@@ -200,7 +202,7 @@ def update_db():
 			contract_id == "-999"
 
 		try:
-			cur.execute("""Insert into contracts ("contract_id", "chat_url", "contract_url", "ended", "added_to_db", "date") values ('"""+ contract_id +"""','"""+ str(row.chat_url) +"""','"""+ str(row.get_browseable_url()) +"""','"""+ str(row.status == "Ended") +"""','"""+ str(int(datetime.datetime.now().timestamp())) +"""','"""+ str(int(row.created.timestamp())) +"""')""")
+			cur.execute("""Insert into contracts ("contract_id", "chat_url", "contract_url", "ended", "added_to_db", "date") values ('"""+ contract_id +"""','"""+ str(row.chat_url) +"""','"""+ str(row.get_browseable_url()) +"""','"""+ str(row.status == "Ended") +"""','"""+ str(int(datetime.datetime.now().timestamp())) +"""','"""+ str(int(row.updated.timestamp())) +"""')""")
 			conn.commit()
 			print(cur.query)
 	
@@ -227,7 +229,7 @@ def update_db():
 		
 		
 	}
-	sort_params = [{"direction": "ascending", "property": "Date"}]
+	sort_params = [{"direction": "ascending", "property": "Modified"}]
 
 	proposals = proposals.build_query(filter=filter_params, sort = sort_params)
 	result = proposals.execute()
@@ -240,7 +242,7 @@ def update_db():
 
 		
 		try:
-			cur.execute("""Insert into proposals ("proposal_id", "chat_url", "proposal_url", "added_to_db", "date") values ('"""+ proposal_id +"""','"""+ str(row.chat_link) +"""','"""+ str(row.get_browseable_url()) +"""','"""+ str(int(datetime.datetime.now().timestamp())) +"""','"""+ str(int(row.date.timestamp())) +"""')""")
+			cur.execute("""Insert into proposals ("proposal_id", "chat_url", "proposal_url", "added_to_db", "date") values ('"""+ proposal_id +"""','"""+ str(row.chat_link) +"""','"""+ str(row.get_browseable_url()) +"""','"""+ str(int(datetime.datetime.now().timestamp())) +"""','"""+ str(int(row.modified.timestamp())) +"""')""")
 			conn.commit()
 			print(cur.query)
 	
@@ -763,14 +765,17 @@ def Hb_tasks():
 
 		#fix period[0]
 		if("/" not in period[0] and period[0] != "Daily"):
+			ended = False
 			for i in range(1,len(period)):
 				if "/" in period[0] or period[0] == "Daily":
 					tmp = period[0]
 					period[0] = period[i]
 					period[i] = tmp
+					ended = True
 					break
 			#if we didn't break already, skip this row
-			continue
+			if not ended:
+				continue
 
 		#skip result if we already handled it or if periodicity has not been set
 		if(n.date()>set_start and period[0] != "No Period"):
