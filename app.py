@@ -49,9 +49,9 @@ def add_aliases_to_summary(aliases, page, parent_row):
 
 	print(parent_row)	
 
-	parent_text_block = page.children.add_new(TextBlock, parent_text)
+	parent_text_block = page.children.add_new(TextBlock, title = parent_text)
 
-	parent_text_block.children.add_new(TextBlock, "**Фрилансер:**" + parent_row.fl.name)
+	parent_text_block.children.add_new(TextBlock, title = "**Фрилансер:**" + parent_row.fl.name)
 	
 	for alias in aliases:
 		add_global_block(parent_text_block, alias)
@@ -120,64 +120,6 @@ def head_summary():
 				break
 			i+=1
 
-@app.route("/proposals_texts_collect", methods=["GET"])
-def collect_proposal_text():
-
-	token = os.environ.get("TOKEN")
-	notion_client = NotionClient(token)
-
-	proposals = notion_client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
-
-	login_config = upwork.Config({\
-			'consumer_key': os.environ.get("ConsumerKey"),\
-			'consumer_secret': os.environ.get("ConsumerSecret"),\
-			'access_token': os.environ.get("AccessToken"),\
-			'access_token_secret': os.environ.get("AccessSecret")})
-
-	client = upwork.Client(login_config)
-	applications = applicationAPI(client)
-
-	get_for_hours = int(request.args.get("get_for_hours", "24"))
-	get_for_timestamp = (datetime.datetime.now() - datetime.timedelta(hours = get_for_hours)).timestamp()
-
-	#get only updates 
-	filter_params = {
-		"filters": [
-			{
-				"filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.fromtimestamp(get_for_timestamp).strftime('%Y-%m-%d')}}, "operator": "date_is_on_or_after"},
-				"property": "Date",
-			}
-		],
-		"operator": "and",
-		
-		
-	}
-	sort_params = [{"direction": "ascending", "property": "Date"}]
-
-	proposals = proposals.build_query(filter=filter_params, sort = sort_params)
-	result = proposals.execute()
-
-
-	
-	for row in result:
-		try:
-			upwork_proposal = applications.get_specific(int(row.proposal_id))["data"]
-
-			print(upwork_proposal)
-
-			print(row.job_url + " url to -> " + upwork_proposal["openingCiphertext"])
-			
-
-			#print(row.job_name + " name to -> " + upwork_proposal["opening_title"])
-			
-			body = "**Application:**\n" + upwork_proposal["coverLetter"] + "\n**Questions:**\n" 
-			print(body + "\n BODY END")
-
-		except Exception as e:
-			print(e)
-			#we skip the row if the proposal id can't be cast to int
-			continue
-		
 
 
 @app.route('/refresh_db', methods=["GET"])
