@@ -42,8 +42,9 @@ def get_activity_log_ids(client, target_page, limit = 10, start_id = None):
 	block_ids = []
 	response = client.post("getActivityLog", data).json()
 	if "recordMap" not in response.keys() or "activity" not in response["recordMap"].keys():
-		continue
-		
+		print(response)
+		return
+
 	log = response["recordMap"]["activity"].values()
 	for activity in log:
 		for edit in activity["value"]["edits"]:
