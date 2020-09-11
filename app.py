@@ -857,8 +857,6 @@ def Hb_tasks():
 
 
 
-		print(set_start)
-		print(datetime.date.now())
 		if(set_start == datetime.datetime.now().date()):
 			todo.status = "TO DO"
 
