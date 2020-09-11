@@ -43,12 +43,10 @@ def add_aliases_to_summary(aliases, page, parent_row):
 
 	if parent_row.client != None:
 		parent_text = parent_row.client.title + ", **(" +  parent_row.title + ")[" + parent_row.get_browseable_url() + "]**"
-
-	print(parent_row)
-
 	else:
 		parent_text = "No Client Info" + ", **(" +  parent_row.title + ")[" + parent_row.get_browseable_url() + "]**"
 
+	print(parent_row)	
 
 	parent_text_block = page.children.add_new(TextBlock, parent_text)
 
