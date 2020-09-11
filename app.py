@@ -37,6 +37,23 @@ cache = {}
 TEST = False
 test_page_url = "https://www.notion.so/TEST-68d7198ed4d3437b816386f6da196547"
 
+def add_aliases_to_summary(aliases, page, parent_row):
+	token = os.environ.get("TOKEN")
+	client = NotionClient(token)
+
+	if parent_row.client != None:
+		parent_text = parent_row.client.title + ", **(" +  parent_row.title + ")[" + parent_row.get_browseable_url() + "]**"
+
+	else:
+		parent_text = "No Client Info" + ", **(" +  parent_row.title + ")[" + parent_row.get_browseable_url() + "]**"
+
+
+	parent_text_block = page.children.add_new(TextBlock, parent_text)
+
+	parent_text_block.children.add_new(TextBlock, "**Фрилансер:**" + parent_row.fl.name)
+	
+	for alias in aliases:
+		add_global_block(parent_text_block, alias)
 
 @app.route('/add_global_block', methods=["GET"])
 def head_summary():
@@ -65,7 +82,7 @@ def head_summary():
 		
 		
 	}
-	sort_params = [{"direction": "ascending", "property": "Modified"}]
+	sort_params = [{"direction": "descending", "property": "Modified"}]
 
 	proposals = proposals.build_query(filter=filter_params, sort = sort_params)
 	result = proposals.execute() 
@@ -96,7 +113,7 @@ def head_summary():
 					break
 
 				if "**`Progress`**" in block.title and block.alive:
-					add_global_block(target, block.parent)
+					add_aliases_to_summary([block.parent], target, block.parent.parent)
 
 			if reached_past_end_date:
 				break
