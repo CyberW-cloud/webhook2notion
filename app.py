@@ -529,14 +529,17 @@ def Hb_tasks():
 
         #fix period[0]
         if("/" not in period[0] and period[0] != "Daily"):
-            for i in range(len(period)):
+            ended = False
+            for i in range(1,len(period)):
                 if "/" in period[0] or period[0] == "Daily":
                     tmp = period[0]
                     period[0] = period[i]
                     period[i] = tmp
+                    ended = True
                     break
             #if we didn't break already, skip this row
-            continue
+            if not ended:
+                continue
 
         #skip result if we already handled it or if periodicity has not been set
         if(n.date()>set_start and period[0] != "No Period"):
