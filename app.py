@@ -56,14 +56,14 @@ def add_global_block():
 		"filters": [
 			{
 				"filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.fromtimestamp(activeSince).strftime('%Y-%m-%d')}}, "operator": "date_is_on_or_after"},
-				"property": "Date",
+				"property": "Modified",
 			}
 		],
 		"operator": "and",
 		
 		
 	}
-	sort_params = [{"direction": "ascending", "property": "Date"}]
+	sort_params = [{"direction": "ascending", "property": "Modified"}]
 
 	proposals = proposals.build_query(filter=filter_params, sort = sort_params)
 	result = proposals.execute() 
@@ -76,7 +76,7 @@ def add_global_block():
 			tmp = get_activity_log_ids(client, row, 10, last_activity_id)
 			if tmp == None:
 				continue
-				
+
 			updated_blocks = tmp[0]
 			last_activity_id = tmp[1]
 			for block_id_and_time in updated_blocks:
