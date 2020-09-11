@@ -43,7 +43,7 @@ def add_aliases_to_summary(aliases, page, parent_row):
 
 	if parent_row.client != None:
 		print(parent_row)
-		parent_text = parent_row.client[0].name + ", **(" +  parent_row.title + ")[" + parent_row.get_browseable_url() + "]**"
+		parent_text = parent_row.client[0].name + ", (**" +  parent_row.title + "**)[" + parent_row.get_browseable_url() + "]"
 	else:
 		parent_text = "**(" +  parent_row.title + ")[" + parent_row.get_browseable_url() + "]**"
 
@@ -51,7 +51,8 @@ def add_aliases_to_summary(aliases, page, parent_row):
 
 	parent_text_block = page.children.add_new(TextBlock, title = parent_text)
 
-	parent_text_block.children.add_new(TextBlock, title = "**Фрилансер:**" + parent_row.fl.name)
+	if parent_row.fl != None:
+		parent_text_block.children.add_new(TextBlock, title = "**Фрилансер:**" + parent_row.fl.name)
 	
 	for alias in aliases:
 		add_global_block(parent_text_block, alias)
