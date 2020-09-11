@@ -96,7 +96,7 @@ def head_summary():
 					break
 
 				if "**`Progress`**" in block.title and block.alive:
-					add_global_block(target, block)
+					add_global_block(target, block.parent)
 
 			if reached_past_end_date:
 				break
