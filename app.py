@@ -45,7 +45,11 @@ def add_global_block():
 
 	proposals = client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
 
-	page = client.get_block("https://www.notion.so/24227261-ab3fe6edbb43422ba7d1b1df50fe3a2a")
+	#page = client.get_block("https://www.notion.so/24227261-ab3fe6edbb43422ba7d1b1df50fe3a2a")
+
+	active_since_hours =  int(request.args.get("activeSince", "24"))
+	activeSince = datetime.datetime.now() - datetime.timedelta(hours = active_since_hours)
+	activeSince = int(activeSince.timestamp())
 
 	#get only updates 
 	filter_params = {
@@ -61,10 +65,6 @@ def add_global_block():
 	}
 	sort_params = [{"direction": "ascending", "property": "Date"}]
 
-	active_since_hours =  int(request.args.get("activeSince", "24"))
-	activeSince = datetime.datetime.now() - datetime.timedelta(hours = active_since_hours)
-	activeSince = int(activeSince.timestamp())
-
 	proposals = proposals.build_query(filter=filter_params, sort = sort_params)
 	result = proposals.execute() 
 
@@ -72,7 +72,7 @@ def add_global_block():
 	for row in result:
 		last_activity_id = None
 		while 1:
-			tmp = get_activity_log_ids(client, page, 10, last_activity_id)
+			tmp = get_activity_log_ids(client, row, 10, last_activity_id)
 			updated_blocks = tmp[0]
 			last_activity_id = tmp[1]
 			for block_id_and_time in updated_blocks:
