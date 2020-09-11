@@ -39,10 +39,12 @@ test_page_url = "https://www.notion.so/TEST-68d7198ed4d3437b816386f6da196547"
 
 
 @app.route('/add_global_block', methods=["GET"])
-def add_global_block():
+def head_summary():
 	token = os.environ.get("TOKEN")
 	client = NotionClient(token)
 
+
+	target = create_page("https://www.notion.so/Summary-Test-14b20e80c5874219b55240ef9e901729", 'TEST - 24H')
 	proposals = client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
 
 	#page = client.get_block("https://www.notion.so/24227261-ab3fe6edbb43422ba7d1b1df50fe3a2a")
@@ -78,7 +80,7 @@ def add_global_block():
 			tmp = get_activity_log_ids(client, row, 10, last_activity_id)
 
 			if tmp == None:
-				print(i)
+				print("reached end of edit history, moving on")
 				break
 
 			updated_blocks = tmp[0]
@@ -94,7 +96,7 @@ def add_global_block():
 					break
 
 				if "**`Progress`**" in block.title and block.alive:
-					print("BLOCK: " + block.parent.get_browseable_url())
+					add_global_block(target, block)
 
 			if reached_past_end_date:
 				break
