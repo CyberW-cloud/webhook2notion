@@ -94,7 +94,7 @@ def head_summary():
 		reached_past_end_date = False
 		print(row.title)
 		print(row.get_browseable_url())
-		print(row._get_property_slugs())
+		print(row.fl)
 		while 1:
 			tmp = get_activity_log_ids(client, row, 10, last_activity_id)
 
