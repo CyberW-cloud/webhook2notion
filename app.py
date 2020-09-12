@@ -47,8 +47,6 @@ def add_aliases_to_summary(aliases, page, parent_row):
 	else:
 		parent_text = "[**" + parent_row.title + "**](" +  parent_row.get_browseable_url() + ")"
 
-	print(parent_row)	
-
 	parent_text_block = page.children.add_new(TextBlock, title = parent_text)
 
 	if parent_row.fl != None:
@@ -114,7 +112,7 @@ def head_summary():
 					reached_past_end_date = True
 					break
 
-				if "**`Progress`**" in block.title and block.alive:
+				if isinstance(block, TextBlock) and "**`Progress`**" in block.title and block.alive:
 					add_aliases_to_summary([block.parent], target, row)
 
 			if reached_past_end_date:
