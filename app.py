@@ -81,7 +81,7 @@ def head_summary():
 	target = create_page("https://www.notion.so/Summary-Test-14b20e80c5874219b55240ef9e901729", 'TEST - 24H')
 	proposals = client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
 
-	#page = client.get_block("https://www.notion.so/24227261-ab3fe6edbb43422ba7d1b1df50fe3a2a")
+	#page = client.get_block("https://www.notion.so/24227261-ab3fe6edbb43422ba7d1b1df50fe3a2a") 
 
 	active_since_hours =  int(request.args.get("activeSince", "24"))
 	activeSince = datetime.datetime.now() - datetime.timedelta(hours = active_since_hours)
