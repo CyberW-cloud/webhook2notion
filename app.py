@@ -61,11 +61,11 @@ def add_aliases_to_summary(aliases, page, parent_row):
 
 
 	if len(parent_row.fl) > 0:
-		if parent_row.fl[0].name[-1] == " "
+		if parent_row.fl[0].name[-1] == " ":
 			fl_name = parent_row.fl[0].name[:-1]
 		else:
 			fl_name = str(parent_row.fl[0].name)
-			
+
 		parent_text_block.children.add_new(TextBlock, title = "**Фрилансер: " + fl_name + "**")
 	
 
