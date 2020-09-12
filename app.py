@@ -55,9 +55,9 @@ def add_aliases_to_summary(aliases, page, parent_row):
 		else:
 			cc_name = str(parent_row.cc[0])
 
-		parent_text_block.children.add_new(TextBlock, title = "**Менеджер: " + cc_name + "**")
+		parent_text_block.children.add_new(TextBlock, title = "**Менеджер:** " + cc_name)
 	else:
-		parent_text_block.children.add_new(TextBlock, title = "**Менеджер: " + parent_row.sent_by.full_name + "**")
+		parent_text_block.children.add_new(TextBlock, title = "**Менеджер:** " + parent_row.sent_by.full_name)
 
 
 	if len(parent_row.fl) > 0:
@@ -66,7 +66,7 @@ def add_aliases_to_summary(aliases, page, parent_row):
 		else:
 			fl_name = str(parent_row.fl[0].name)
 
-		parent_text_block.children.add_new(TextBlock, title = "**Фрилансер: " + fl_name + "**")
+		parent_text_block.children.add_new(TextBlock, title = "**Фрилансер:** " + fl_name)
 	
 
 	for alias in aliases:
