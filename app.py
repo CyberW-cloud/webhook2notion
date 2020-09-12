@@ -40,31 +40,27 @@ test_page_url = "https://www.notion.so/TEST-68d7198ed4d3437b816386f6da196547"
 def add_aliases_to_summary(aliases, page, parent_row):
 	token = os.environ.get("TOKEN")
 	client = NotionClient(token)
-
-	if parent_row.client != None and len(parent_row.client)>0:
-		print(parent_row)
-		parent_text = parent_row.client[0].name + ", [**" + parent_row.title + "**](" +  parent_row.get_browseable_url() + ")"
+	#parent_row should be {"client_name", "url", "title", "manager", "freelancer"}
+	if parent_row["client_name"] != None:
+		parent_text = parent_row["client_name"] + ", [**" + parent_row["title"]+ "**](" +  parent_row["url"] + ")"
 	else:
-		parent_text = "[**" + parent_row.title + "**](" +  parent_row.get_browseable_url() + ")"
+		parent_text = "[**" + parent_row["title"] + "**](" +  parent_row["url"] + ")"
 
 	parent_text_block = page.children.add_new(TextBlock, title = parent_text)
 
-	if len(parent_row.cc) > 0:
-		if isinstance(parent_row.cc[0], notion.user.User):
-			cc_name = parent_row.cc[0].full_name
+	if parent_row["manager"] != None:
+		if isinstance(parent_row["manager"], notion.user.User):
+			cc_name = parent_row["manager"].full_name
 		else:
-			cc_name = str(parent_row.cc[0])
+			cc_name = str(parent_row["manager"])
 
 		parent_text_block.children.add_new(TextBlock, title = "**Менеджер:** " + cc_name)
-	else:
-		parent_text_block.children.add_new(TextBlock, title = "**Менеджер:** " + parent_row.sent_by.full_name)
 
-
-	if len(parent_row.fl) > 0:
-		if parent_row.fl[0].name[-1] == " ":
-			fl_name = parent_row.fl[0].name.split(" ")[0] + " " + parent_row.fl[0].name.split(" ")[1]
+	if parent_row["freelancer"] != None:
+		if parent_row["freelancer"].name[-1] == " ":
+			fl_name = parent_row["freelancer"].name.split(" ")[0] + " " + parent_row.fl["freelancer"].name.split(" ")[1]
 		else:
-			fl_name = str(parent_row.fl[0].name)
+			fl_name = str(parent_row["freelancer"].name)
 
 		parent_text_block.children.add_new(TextBlock, title = "**Фрилансер:** " + fl_name)
 	
