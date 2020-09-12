@@ -111,6 +111,7 @@ def head_summary():
 		print(row.title)
 		print(row.get_browseable_url())
 
+		aliases = []
 		while 1:
 			tmp = get_activity_log_ids(client, row, 10, last_activity_id)
 
@@ -131,11 +132,12 @@ def head_summary():
 					break
 
 				if isinstance(block, TextBlock) and "**`Progress`**" in block.title and block.alive:
-					add_aliases_to_summary([block.parent], target, row)
+					aliases.append(block.parent)
 
 			if reached_past_end_date:
 				break
-			i+=1
+		
+		add_aliases_to_summary(aliases, target,row)
 
 
 
