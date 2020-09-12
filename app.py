@@ -50,7 +50,7 @@ def add_aliases_to_summary(aliases, page, parent_row):
 	parent_text_block = page.children.add_new(TextBlock, title = parent_text)
 
 	if parent_row.cc != None:
-		if isinstance(parent_row.cc[0], notion.User):
+		if isinstance(parent_row.cc[0], notion.user.User):
 			cc_name = parent_row.cc[0].full_name()
 		else:
 			cc_name = str(parent_row.cc[0])
