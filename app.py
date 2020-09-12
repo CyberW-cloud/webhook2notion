@@ -137,7 +137,9 @@ def head_summary():
 			if reached_past_end_date:
 				break
 		
-		add_aliases_to_summary(aliases, target,row)
+
+		if len(aliases)>0:
+			add_aliases_to_summary(aliases, target,row)
 
 
 
