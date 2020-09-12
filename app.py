@@ -49,7 +49,7 @@ def add_aliases_to_summary(aliases, page, parent_row):
 
 	parent_text_block = page.children.add_new(TextBlock, title = parent_text)
 
-	if parent_row.fl_export != None:
+	if arent_row.fl[0].name != None:
 		print(parent_row.fl[0].name)
 		parent_text_block.children.add_new(TextBlock, title = "**Фрилансер:**" + parent_row.fl[0].name)
 	
