@@ -62,7 +62,7 @@ def add_aliases_to_summary(aliases, page, parent_row):
 
 	if len(parent_row.fl) > 0:
 		if parent_row.fl[0].name[-1] == " ":
-			fl_name = parent_row.fl[0].name[:-1]
+			fl_name = parent_row.fl[0].name.split(" ")[0] + " " + parent_row.fl[0].name.split(" ")[1]
 		else:
 			fl_name = str(parent_row.fl[0].name)
 
