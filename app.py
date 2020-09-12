@@ -53,8 +53,8 @@ def add_aliases_to_summary(aliases, page, parent_row):
 		if isinstance(parent_row.cc[0], User):
 			cc_name = parent_row.cc[0].full_name()
 		else:
-			cc_name = parent_row.cc[0]
-			
+			cc_name = str(parent_row.cc[0])
+
 		parent_text_block.children.add_new(TextBlock, title = "**Менеджер: " + cc_name + "**")
 	else:
 		parent_text_block.children.add_new(TextBlock, title = "**Менеджер: " + parent_row.sent_by.full_name() + "**")
