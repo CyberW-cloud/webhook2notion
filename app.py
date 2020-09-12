@@ -51,7 +51,7 @@ def add_aliases_to_summary(aliases, page, parent_row):
 
 	if parent_row.cc != None:
 		if isinstance(parent_row.cc[0], notion.user.User):
-			cc_name = parent_row.cc[0].full_name()
+			cc_name = parent_row.cc[0].full_name
 		else:
 			cc_name = str(parent_row.cc[0])
 
