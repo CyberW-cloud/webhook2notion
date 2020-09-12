@@ -135,6 +135,8 @@ def head_summary():
 			if reached_past_end_date:
 				break
 		
+		target_row = {"url":row.get_browseable_url(), "title":row.title, "manager": None, "freelancer":None, "client_name": None}
+		
 
 		if len(aliases)>0:
 			add_aliases_to_summary(aliases, target,row)
