@@ -40,7 +40,7 @@ test_page_url = "https://www.notion.so/TEST-68d7198ed4d3437b816386f6da196547"
 def add_aliases_to_summary(aliases, page, parent_row):
 	token = os.environ.get("TOKEN")
 	client = NotionClient(token)
-	#parent_row should be {"client_name", "url", "title", "manager", "freelancer"}
+	#parent_row should contain {"url", "title", "manager", "freelancer", "client_name"}
 	if parent_row["client_name"] != None:
 		parent_text = parent_row["client_name"] + ", [**" + parent_row["title"]+ "**](" +  parent_row["url"] + ")"
 	else:
