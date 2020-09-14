@@ -41,14 +41,14 @@ def add_aliases_to_summary(aliases, page, parent_row):
 	token = os.environ.get("TOKEN")
 	client = NotionClient(token)
 	#parent_row should contain {"url", "title", "manager", "freelancer", "client_name"}
-	if parent_row["client_name"] != None:
+	if not isinstance(parent_row["client_name"], None):
 		parent_text = parent_row["client_name"] + ", [**" + parent_row["title"]+ "**](" +  parent_row["url"] + ")"
 	else:
 		parent_text = "[**" + parent_row["title"] + "**](" +  parent_row["url"] + ")"
 
 	parent_text_block = page.children.add_new(TextBlock, title = parent_text)
 
-	if parent_row["manager"] != None:
+	if not isinstance(parent_row["manager"], None):
 		if isinstance(parent_row["manager"], notion.user.User):
 			cc_name = parent_row["manager"].full_name
 		else:
@@ -56,7 +56,7 @@ def add_aliases_to_summary(aliases, page, parent_row):
 
 		parent_text_block.children.add_new(TextBlock, title = "**Менеджер:** " + cc_name)
 
-	if parent_row["freelancer"] != None:
+	if not isinstance(parent_row["freelancer"], None):
 		if parent_row["freelancer"].name[-1] == " ":
 			fl_name = parent_row["freelancer"].name.split(" ")[0] + " " + parent_row.fl["freelancer"].name.split(" ")[1]
 		else:
