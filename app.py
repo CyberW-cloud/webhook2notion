@@ -216,8 +216,11 @@ def head_summary():
 			if len(row.pm)>0:
 				target_row["manager"] = row.pm[0]
 
-			if len(row.fls_on_contracts)>0:
-				target_row["freelancer"] = list(row.fls_on_contracts)
+			freelancers = []
+			for contract in row.contracts:
+				if len(contract.freelancer):
+					freelancers.append(contract.freelancer[0])
+			target_row["freelancer"] = freelancers
 
 			if len(row.client_name) > 0:
 				target_row["client_name"] = row.client_name[0].name
