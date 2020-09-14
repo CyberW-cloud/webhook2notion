@@ -110,7 +110,7 @@ def head_summary():
 	sort_params = [{"direction": "descending", "property": "Modified"}]
 
 	proposals = proposals.build_query(filter=filter_params, sort = sort_params)
-	result = proposals.execute() 
+	result += list(proposals.execute()) 
 
 	result.append("Type", "Projects")
 
@@ -129,7 +129,7 @@ def head_summary():
 	sort_params = [{"direction": "descending", "property": "Updated"}]
 
 	projects = projects.build_query(filter=filter_params, sort = sort_params)
-	result += projects.execute() 
+	result += list(projects.execute()) 
 
 
 	result.append("Type", "Contracts")
@@ -149,7 +149,7 @@ def head_summary():
 	sort_params = [{"direction": "descending", "property": "Updated"}]
 
 	contracts = contracts.build_query(filter=filter_params, sort = sort_params)
-	result += contracts.execute() 
+	result += list(contracts.execute()) 
 
 	i = 0  
 	row_type = ""
