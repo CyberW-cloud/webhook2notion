@@ -144,7 +144,7 @@ def head_summary():
 			else:
 				target_row["manager"] = row.sent_by
 
-			if len(row.fl)>0
+			if len(row.fl)>0:
 				target_row["freelancer"] = row.fl[0]
 
 			if len(row.client) > 0:
