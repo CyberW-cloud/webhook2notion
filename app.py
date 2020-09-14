@@ -240,7 +240,6 @@ def message_review():
             rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": str(activeSince), "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})
         except Exception as e:
             print(str(e) + " 4")
-            print("      " + str(rooms))
             time.sleep(3.2)
             continue
             
@@ -248,7 +247,6 @@ def message_review():
             user_rooms = messages_api.get_rooms(user_id, {"activeSince": str(activeSince), "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})  
         except Exception as e:
             print(str(e) + " 5")
-            print("      " + str(user_rooms))
             time.sleep(3.2)
             continue
 
