@@ -139,8 +139,8 @@ def head_summary():
 
 		target_row = {"url":row.get_browseable_url(), "title":row.title, "manager": None, "freelancer":None, "client_name": None}
 		if row_type == "Proposals":
-			if row.cc!=None:
-				target_row["manager"] = row.cc
+			if len(row.cc)>0:
+				target_row["manager"] = row.cc[0]
 			else:
 				target_row["manager"] = row.sent_by
 
