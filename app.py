@@ -156,6 +156,7 @@ def head_summary():
 	for row in result:
 		if isinstance(row, list):
 			row_type = row[1]
+			print("Parsing " + row[1])
 			continue
 
 		last_activity_id = None
