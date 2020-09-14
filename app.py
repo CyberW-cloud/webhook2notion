@@ -214,7 +214,7 @@ def head_summary():
 
 		elif row_type == "Projects":
 			if len(row.pm)>0:
-				target_row["manager"] = row.pm[0]
+				target_row["manager"] = row.pm[0].name
 
 			freelancers = []
 			for contract in row.contracts:
