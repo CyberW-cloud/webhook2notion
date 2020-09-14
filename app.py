@@ -210,7 +210,7 @@ def head_summary():
 				target_row["freelancer"] = row.freelancer[0]
 
 			if len(row.client_name) > 0:
-				target_row["client_name"] = row.client[0].name
+				target_row["client_name"] = row.client_name[0].name
 
 		elif row_type == "Projects":
 			if len(row.pm)>0:
@@ -220,7 +220,7 @@ def head_summary():
 				target_row["freelancer"] = list(row.fls_on_contracts)
 
 			if len(row.client_name) > 0:
-				target_row["client_name"] = row.client[0].name
+				target_row["client_name"] = row.client_name[0].name
 
 		if len(aliases)>0:
 			add_aliases_to_summary(aliases, target, target_row)
