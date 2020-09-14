@@ -353,11 +353,6 @@ def message_review():
             room["room"]["topic"] == "None"
 
         try:
-            if room["room"]["roomName"] == None:
-                room["room"]["roomName"] = ""
-
-            if room["room"]["topic"] == None:
-                room["room"]["topic"] = ""
             title = room["room"]["roomName"]+", **"+room["room"]["topic"] + "**"
         except Exception:
             print(room)
@@ -380,7 +375,7 @@ def message_review():
 
         written = 0
         for i in stories:
-            if not isinstance(i["message"],str) or i["message"] == "":
+            if not isinstance(i["message"],str) or i["message"] == "" or i["userId"] == None or i["isSystemStory"]:
                 print(i)
                 continue
 
@@ -390,11 +385,16 @@ def message_review():
             message_time = datetime.datetime.fromtimestamp(i["updated"]/1000).strftime('%Y-%m-%d %H:%M:%S')
             text = "["+message_time+"]\n"
 
-            if i["userId"] not in cache.keys(): 
-                name = profileApi.get_specific(i["userId"])["profile"]["dev_short_name"][:-1]
-                cache[i["userId"]] = name
-            else:
-                name = cache[i["userId"]]
+            try:
+                if i["userId"] not in cache.keys(): 
+                    name = profileApi.get_specific(i["userId"])["profile"]["dev_short_name"][:-1]
+                    cache[i["userId"]] = name
+                else:
+                    name = cache[i["userId"]]
+            except Exception as e:
+                print(i)
+                print(i["userId"])
+                name = "ERROR"
 
             text += "**"+name+":**\n"
             text += i["message"]
