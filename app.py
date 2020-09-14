@@ -151,7 +151,7 @@ def head_summary():
 				target_row["client_name"] = row.client[0].name
 
 		if len(aliases)>0:
-			add_aliases_to_summary(aliases, target,row)
+			add_aliases_to_summary(aliases, target, target_row)
 
 
 
