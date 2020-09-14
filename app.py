@@ -203,8 +203,8 @@ def head_summary():
 				target_row["client_name"] = row.client[0].name
 
 		elif row_type == "Contracts":
-			if len(row.pm)>0:
-				target_row["manager"] = row.pm[0]
+			if row.pm!= None:
+				target_row["manager"] = row.pm
 
 			if len(row.freelancer)>0:
 				target_row["freelancer"] = row.freelancer[0]
@@ -213,7 +213,7 @@ def head_summary():
 				target_row["client_name"] = row.client[0].name
 
 		elif row_type == "Projects":
-			if not isinstance(row.pm,type(None)) and len(row.pm)>0:
+			if len(row.pm)>0:
 				target_row["manager"] = row.pm[0]
 
 			if len(row.freelancer)>0:
