@@ -63,7 +63,7 @@ def add_aliases_to_summary(aliases, page, parent_row):
 
 		elif isinstance(parent_row["freelancer"], list):
 			fl_name = ""
-			for freelancer in parent_row["freelancer"]
+			for freelancer in parent_row["freelancer"]:
 				fl_name += freelancer.name.split(" ")[0] + " " + freelancer.name.split(" ")[1] + ", "
 			
 			#remove ", " at the end
