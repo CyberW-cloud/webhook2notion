@@ -60,7 +60,7 @@ def add_aliases_to_summary(aliases, page, parent_row):
 
 		if isinstance(parent_row["freelancer"], CollectionRowBlock):
 			fl_name = parent_row["freelancer"].name.split(" ")[:-1]
-			
+
 		elif isinstance(parent_row["freelancer"], list):
 			fl_name = ""
 			for freelancer in parent_row["freelancer"]:
@@ -69,6 +69,7 @@ def add_aliases_to_summary(aliases, page, parent_row):
 			#remove ", " at the end
 			fl_name = fl_name[:-2]
 
+		print(fl_name)
 		parent_text_block.children.add_new(TextBlock, title = "**Фрилансер:** " + fl_name)
 	
 
