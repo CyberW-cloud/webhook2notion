@@ -57,10 +57,17 @@ def add_aliases_to_summary(aliases, page, parent_row):
 		parent_text_block.children.add_new(TextBlock, title = "**Менеджер:** " + cc_name)
 
 	if not isinstance(parent_row["freelancer"], type(None)):
-		if parent_row["freelancer"].name[-1] == " ":
+
+		if isinstance(parent_row["freelancer"], CollectionRowBlock)
 			fl_name = parent_row["freelancer"].name.split(" ")[0] + " " + parent_row.fl["freelancer"].name.split(" ")[1]
-		else:
-			fl_name = str(parent_row["freelancer"].name)
+
+		elif isinstance(parent_row["freelancer"], list):
+			fl_name = ""
+			for freelancer in parent_row["freelancer"]
+				fl_name += freelancer.name.split(" ")[0] + " " + freelancer.name.split(" ")[1] + ", "
+			
+			#remove ", " at the end
+			fl_name = fl_name[:-2]
 
 		parent_text_block.children.add_new(TextBlock, title = "**Фрилансер:** " + fl_name)
 	
@@ -169,9 +176,6 @@ def head_summary():
 			for block_id_and_time in updated_blocks:
 				block = client.get_block(block_id_and_time[0])
 				
-
-
-
 				if block_id_and_time[1]/1000<activeSince:
 					reached_past_end_date = True
 					break
@@ -184,6 +188,7 @@ def head_summary():
 		
 
 		target_row = {"url":row.get_browseable_url(), "title":row.title, "manager": None, "freelancer":None, "client_name": None}
+		
 		if row_type == "Proposals":
 			if len(row.cc)>0:
 				target_row["manager"] = row.cc[0]
@@ -194,6 +199,26 @@ def head_summary():
 				target_row["freelancer"] = row.fl[0]
 
 			if len(row.client) > 0:
+				target_row["client_name"] = row.client[0].name
+
+		elif row_type == "Contracts":
+			if len(row.pm)>0:
+				target_row["manager"] = row.pm[0]
+
+			if len(row.freelancer)>0:
+				target_row["freelancer"] = row.freelancer[0]
+
+			if len(row.client_name) > 0:
+				target_row["client_name"] = row.client[0].name
+
+		elif row_type == "Projects":
+			if len(row.pm)>0:
+				target_row["manager"] = row.pm[0]
+
+			if len(row.freelancer)>0:
+				target_row["freelancer"] = row.freelancer[0]
+
+			if len(row.client_name) > 0:
 				target_row["client_name"] = row.client[0].name
 
 		if len(aliases)>0:
