@@ -103,7 +103,7 @@ def head_summary():
 	result = proposals.execute() 
 
 	i = 0  
-	row_type == "Proposals"
+	row_type = "Proposals"
 	for row in result:
 		last_activity_id = None
 		reached_past_end_date = False
