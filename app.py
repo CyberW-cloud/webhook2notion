@@ -356,7 +356,9 @@ def message_review():
 			print("		 " + str(rooms))
 			time.sleep(3.2)
 			continue
-			
+		
+		time.sleep(1.6)
+
 		try:
 			user_rooms = messages_api.get_rooms(user_id, {"activeSince": str(activeSince), "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})	
 		except Exception as e:
@@ -422,7 +424,7 @@ def message_review():
 				print("NO DATA " + str(room))
 
 			time.sleep(1.6)
-		time.sleep(3.2)
+		time.sleep(1.6)
 	print("finished parsing rooms")
 	target_page = create_page("https://www.notion.so/Message-Review-33cbe6e92b9e4894890d768f1ea7b970","testing without the db for now")
 
@@ -486,7 +488,7 @@ def message_review():
 
 		written = 0
 		for i in stories:
-			if not isinstance(i["message"],str) or i["message"] == "":
+			if not isinstance(i["message"],str) or i["message"] == "" or i["userId"] == None or i["isSystemStory"]:
 				print(i)
 				continue
 
