@@ -103,6 +103,7 @@ def head_summary():
 	result = proposals.execute() 
 
 	i = 0  
+	row_type == "Proposals"
 	for row in result:
 		last_activity_id = None
 		reached_past_end_date = False
@@ -137,7 +138,7 @@ def head_summary():
 		
 
 		target_row = {"url":row.get_browseable_url(), "title":row.title, "manager": None, "freelancer":None, "client_name": None}
-		if row_type = "Proposals":
+		if row_type == "Proposals":
 			if row.cc!=None:
 				target_row["manager"] = row.cc
 			else:
