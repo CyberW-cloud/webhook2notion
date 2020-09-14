@@ -496,11 +496,16 @@ def message_review():
 			message_time = datetime.datetime.fromtimestamp(i["updated"]/1000).strftime('%Y-%m-%d %H:%M:%S')
 			text = "["+message_time+"]\n"
 
-			if i["userId"] not in cache.keys(): 
-				name = profileApi.get_specific(i["userId"])["profile"]["dev_short_name"][:-1]
-				cache[i["userId"]] = name
-			else:
-				name = cache[i["userId"]]
+			try:
+				if i["userId"] not in cache.keys(): 
+					name = profileApi.get_specific(i["userId"])["profile"]["dev_short_name"][:-1]
+					cache[i["userId"]] = name
+				else:
+					name = cache[i["userId"]]
+			except Exception as e:
+				print(i)
+				print(i["userId"])
+				name = "ERROR"
 
 			text += "**"+name+":**\n"
 			text += i["message"]
