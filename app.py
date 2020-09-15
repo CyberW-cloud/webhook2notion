@@ -58,7 +58,7 @@ def add_aliases_to_summary(aliases, page, parent_row):
 
 	if not isinstance(parent_row["freelancer"], type(None)):
 
-		if isinstance(parent_row["freelancer"], CollectionRowBlock):
+		if isinstance(parent_row["freelancer"], CollectionRowBlock) and freelancer.name != "":
 			if parent_row["freelancer"].name[-1] == " ":
 				fl_name = parent_row["freelancer"].name[:-1]
 			else:
@@ -239,7 +239,7 @@ def head_summary():
 				target = target_table.collection.add_row()
 				target.type = row_type
 				add_row = False
-				
+
 			add_aliases_to_summary(aliases, target, target_row)
 
 
