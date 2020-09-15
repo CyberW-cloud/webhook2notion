@@ -57,30 +57,24 @@ def add_aliases_to_summary(aliases, page, parent_row):
 		parent_text_block.children.add_new(TextBlock, title = "**Менеджер:** " + cc_name)
 
 	if not isinstance(parent_row["freelancer"], type(None)):
-		try:
-			if isinstance(parent_row["freelancer"], CollectionRowBlock) and len(parent_row["freelancer"].name) > 0:
-				if parent_row["freelancer"].name[-1] == " ":
-					fl_name = parent_row["freelancer"].name[:-1]
+
+		if isinstance(parent_row["freelancer"], CollectionRowBlock):
+			if parent_row["freelancer"].name[-1] == " ":
+				fl_name = parent_row["freelancer"].name[:-1]
+			else:
+				fl_name = parent_row["freelancer"].name
+
+		elif isinstance(parent_row["freelancer"], list):
+			fl_name = ""
+			for freelancer in parent_row["freelancer"]:
+				print(freelancer.name)
+				if freelancer.name[-1] == " ":
+					fl_name += freelancer.name[:-1]
 				else:
-					fl_name = parent_row["freelancer"].name
+					fl_name += freelancer.name
 
-			elif isinstance(parent_row["freelancer"], list):
-				fl_name = ""
-				for freelancer in parent_row["freelancer"]:
-					if freelancer.name[-1] == " ":
-						fl_name += freelancer.name[:-1]
-					else:
-						fl_name += freelancer.name
-
-				#remove ", " at the end
-				fl_name = fl_name[:-2]
-
-		except Exception as e:
-			print(e)
-			print(parent_row)
-			print(parent_row["freelancer"])
-			print(parent_row["freelancer"].name)
-
+			#remove ", " at the end
+			fl_name = fl_name[:-2]
 
 		parent_text_block.children.add_new(TextBlock, title = "**Фрилансер:** " + fl_name)
 	
@@ -125,7 +119,7 @@ def head_summary():
 	# proposals = proposals.build_query(filter=filter_params, sort = sort_params)
 	# result += list(proposals.execute()) 
 
-	result=[["Type", "Projects"]]
+	result[["Type", "Projects"]]
 
 	#get projects
 	filter_params = {
