@@ -58,7 +58,7 @@ def add_aliases_to_summary(aliases, page, parent_row):
 
 	if not isinstance(parent_row["freelancer"], type(None)):
 
-		if isinstance(parent_row["freelancer"], CollectionRowBlock) and parent_row["freelancer"].name != "":
+		if isinstance(parent_row["freelancer"], CollectionRowBlock) and len(parent_row["freelancer"].name) > 0:
 			if parent_row["freelancer"].name[-1] == " ":
 				fl_name = parent_row["freelancer"].name[:-1]
 			else:
@@ -169,8 +169,6 @@ def head_summary():
 
 		last_activity_id = None
 		reached_past_end_date = False
-		print(row.title)
-		print(row.get_browseable_url())
 
 		aliases = []
 		while 1:
@@ -241,7 +239,7 @@ def head_summary():
 				add_row = False
 
 			add_aliases_to_summary(aliases, target, target_row)
-
+			print(aliases)
 
 
 @app.route('/refresh_db', methods=["GET"])
