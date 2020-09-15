@@ -165,7 +165,6 @@ def head_summary():
 			row_type = row[1]
 			print("Parsing " + row[1])
 			add_row = True
-			target.type = row[1]
 			continue
 
 		last_activity_id = None
@@ -238,8 +237,9 @@ def head_summary():
 			#we do this to not add empty rows
 			if (add_row):
 				target = target_table.collection.add_row()
+				target.type = row_type
 				add_row = False
-
+				
 			add_aliases_to_summary(aliases, target, target_row)
 
 
