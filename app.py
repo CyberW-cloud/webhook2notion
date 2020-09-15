@@ -63,21 +63,24 @@ def add_aliases_to_summary(aliases, page, parent_row):
 					fl_name = parent_row["freelancer"].name[:-1]
 				else:
 					fl_name = parent_row["freelancer"].name
+
+			elif isinstance(parent_row["freelancer"], list):
+				fl_name = ""
+				for freelancer in parent_row["freelancer"]:
+					if freelancer.name[-1] == " ":
+						fl_name += freelancer.name[:-1]
+					else:
+						fl_name += freelancer.name
+
+				#remove ", " at the end
+				fl_name = fl_name[:-2]
+
 		except Exception as e:
 			print(e)
 			print(parent_row)
 			print(parent_row["freelancer"])
 			print(parent_row["freelancer"].name)
-		elif isinstance(parent_row["freelancer"], list):
-			fl_name = ""
-			for freelancer in parent_row["freelancer"]:
-				if freelancer.name[-1] == " ":
-					fl_name += freelancer.name[:-1]
-				else:
-					fl_name += freelancer.name
 
-			#remove ", " at the end
-			fl_name = fl_name[:-2]
 
 		parent_text_block.children.add_new(TextBlock, title = "**Фрилансер:** " + fl_name)
 	
