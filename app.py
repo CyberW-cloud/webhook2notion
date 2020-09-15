@@ -159,11 +159,12 @@ def head_summary():
 
 	i = 0  
 	row_type = ""
+	add_row = False
 	for row in result:
 		if isinstance(row, list):
 			row_type = row[1]
 			print("Parsing " + row[1])
-			target = target_table.collection.add_row()
+			add_row = True
 			target.type = row[1]
 			continue
 
@@ -234,6 +235,11 @@ def head_summary():
 				target_row["client_name"] = row.client_name[0].name
 
 		if len(aliases)>0:
+			#we do this to not add empty rows
+			if (add_row):
+				target = target_table.collection.add_row()
+				add_row = False
+
 			add_aliases_to_summary(aliases, target, target_row)
 
 
