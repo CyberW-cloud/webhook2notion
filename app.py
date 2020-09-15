@@ -936,31 +936,33 @@ def Hb_tasks():
 	for record in cv.collection.get_rows():
 		for change in changes:
 			if change["id"] == record.id:
-				record.set_property("Due Date", change["due"])
-				record.set_property("Set date", change["set"])
+				print(record.title)
+				print(change)
+				# record.set_property("Due Date", change["due"])
+				# record.set_property("Set date", change["set"])
 
-				#we refresh the change so we can use the updated result in the next for
-				record.refresh()
+				# #we refresh the change so we can use the updated result in the next for
+				# record.refresh()
 			
 
-	#go over all tasks and change the status to TODO if the task should be set today	
-	for todo in result:
-		if todo.set_date == None:
-			todo.set_date.start = todo.created
+	# #go over all tasks and change the status to TODO if the task should be set today	
+	# for todo in result:
+	# 	if todo.set_date == None:
+	# 		todo.set_date.start = todo.created
 
-		if isinstance(todo.set_date.start, datetime.datetime):
-			set_start = todo.set_date.start.date()
-		else:
-			set_start = todo.set_date.start
+	# 	if isinstance(todo.set_date.start, datetime.datetime):
+	# 		set_start = todo.set_date.start.date()
+	# 	else:
+	# 		set_start = todo.set_date.start
 
 
 
-		if(set_start == datetime.datetime.now().date()):
-			todo.status = "TO DO"
+	# 	if(set_start == datetime.datetime.now().date()):
+	# 		todo.status = "TO DO"
 
 
 	s+= "changes:  " + str(changes)
-
+	print(s)
 
 	return(s)
 
