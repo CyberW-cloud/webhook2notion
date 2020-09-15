@@ -67,7 +67,9 @@ def add_aliases_to_summary(aliases, page, parent_row):
 		elif isinstance(parent_row["freelancer"], list):
 			fl_name = ""
 			for freelancer in parent_row["freelancer"]:
-				print(freelancer.name)
+				if freelancer.name == "":
+					continue
+
 				if freelancer.name[-1] == " ":
 					fl_name += freelancer.name[:-1]
 				else:
@@ -100,26 +102,26 @@ def head_summary():
 	activeSince = datetime.datetime.now() - datetime.timedelta(hours = active_since_hours)
 	activeSince = int(activeSince.timestamp())
 
-	# result=[["Type", "Proposals"]]
+	result=[["Type", "Proposals"]]
 
-	# #get proposals
-	# filter_params = {
-	# 	"filters": [
-	# 		{
-	# 			"filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.fromtimestamp(activeSince).strftime('%Y-%m-%d')}}, "operator": "date_is_on_or_after"},
-	# 			"property": "Modified",
-	# 		}
-	# 	],
-	# 	"operator": "and",
+	#get proposals
+	filter_params = {
+		"filters": [
+			{
+				"filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.fromtimestamp(activeSince).strftime('%Y-%m-%d')}}, "operator": "date_is_on_or_after"},
+				"property": "Modified",
+			}
+		],
+		"operator": "and",
 		
 		
-	# }
-	# sort_params = [{"direction": "descending", "property": "Modified"}]
+	}
+	sort_params = [{"direction": "descending", "property": "Modified"}]
 
-	# proposals = proposals.build_query(filter=filter_params, sort = sort_params)
-	# result += list(proposals.execute()) 
+	proposals = proposals.build_query(filter=filter_params, sort = sort_params)
+	result += list(proposals.execute()) 
 
-	result=[["Type", "Projects"]]
+	result.append(["Type", "Projects"])
 
 	#get projects
 	filter_params = {
