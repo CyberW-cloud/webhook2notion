@@ -119,7 +119,7 @@ def head_summary():
 	# proposals = proposals.build_query(filter=filter_params, sort = sort_params)
 	# result += list(proposals.execute()) 
 
-	result[["Type", "Projects"]]
+	result=[["Type", "Projects"]]
 
 	#get projects
 	filter_params = {
