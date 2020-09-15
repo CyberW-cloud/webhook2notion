@@ -163,7 +163,7 @@ def head_summary():
 		if isinstance(row, list):
 			row_type = row[1]
 			print("Parsing " + row[1])
-			target = target_row.collection.add_new("")
+			target = target_row.collection.add_new()
 			target.type = row[1]
 			continue
 
