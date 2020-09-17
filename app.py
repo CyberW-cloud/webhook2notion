@@ -182,6 +182,7 @@ def head_summary():
 				print("reached end of blocks, moving on")
 				break
 
+			print(type(row.children[i]))
 			if type(row.children[i]) == "FactoryBlock":
 				continue			
 
