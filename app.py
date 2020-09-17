@@ -178,8 +178,6 @@ def head_summary():
 
 		i = 0
 		while 1:
-			tmp = get_activity_log_ids(client, row, 10, last_activity_id)
-
 			if i >= len(row.children):
 				print("reached end of blocks, moving on")
 				break
