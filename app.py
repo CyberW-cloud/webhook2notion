@@ -183,7 +183,7 @@ def head_summary():
 				break
 
 			print(type(row.children[i]))
-			if type(row.children[i]) == "FactoryBlock":
+			if type(row.children[i]) == "<class 'notion.block.FactoryBlock'>":
 				continue			
 
 			created_time = get_block_create_date(client, row.children[i])
