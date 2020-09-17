@@ -176,17 +176,18 @@ def head_summary():
 		print(row.get_browseable_url())
 
 		aliases = []
-		i = -1
+		i = 0
 		while 1:
 			i+=1
+
 			if i > len(row.children):
 				print("reached end of blocks, moving on")
 				break
 
-			if type(row.children[i]) == FactoryBlock:
+			if type(row.children[i-1]) == FactoryBlock:
 				continue			
 
-			created_time = get_block_create_date(client, row.children[i])
+			created_time = get_block_create_date(client, row.children[i-1])
 
 
 			if created_time/1000<activeSince:
