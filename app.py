@@ -164,7 +164,7 @@ def head_summary():
 	i = 0  
 	row_type = ""
 	add_row = False
-	print(client.get_record_data("block", "2d0495ebf7ca40a0824fb45bcd7093d7", True))
+	print(get_block_edit_date(client, client.get_block("2d0495ebf7ca40a0824fb45bcd7093d7")))
 	# for row in result:
 	# 	if isinstance(row, list):
 	# 		row_type = row[1]
