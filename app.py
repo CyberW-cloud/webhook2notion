@@ -165,19 +165,16 @@ def head_summary():
 	row_type = ""
 	add_row = False
 	for row in result:
-		print(row.title)
-		print(row.get_browseable_url())
 		if isinstance(row, list):
 			row_type = row[1]
 			print("Parsing " + row[1])
 			add_row = True
 			continue
 
-		last_activity_id = None
-
+		print(row.title)
+		print(row.get_browseable_url())
 
 		aliases = []
-
 		i = 0
 		while 1:
 			if i >= len(row.children):
