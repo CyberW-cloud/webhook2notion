@@ -164,81 +164,82 @@ def head_summary():
 	i = 0  
 	row_type = ""
 	add_row = False
-	print(get_block_edit_date(client, client.get_block("2d0495ebf7ca40a0824fb45bcd7093d7")))
-	# for row in result:
-	# 	if isinstance(row, list):
-	# 		row_type = row[1]
-	# 		print("Parsing " + row[1])
-	# 		add_row = True
-	# 		continue
+	for row in result:
+		if isinstance(row, list):
+			row_type = row[1]
+			print("Parsing " + row[1])
+			add_row = True
+			continue
 
-	# 	last_activity_id = None
+		last_activity_id = None
 
 
-	# 	aliases = []
+		aliases = []
 
-	# 	i = 0
-	# 	while 1:
-	# 		tmp = get_activity_log_ids(client, row, 10, last_activity_id)
+		i = 0
+		while 1:
+			tmp = get_activity_log_ids(client, row, 10, last_activity_id)
 
-	# 		if i >= len(row.children):
-	# 			print("reached end of blocks, moving on")
-	# 			break
+			if i >= len(row.children):
+				print("reached end of blocks, moving on")
+				break
 
-						
-	# 		if block_id_and_time[1]/1000<activeSince:
-	# 			break
+			last_edited_time = get_block_edit_date(client, row.children[i])
+
+
+			if last_edited_time/1000<activeSince:
+				break
 				
-	# 		aliases.append(row.children[i])
+			aliases.append(row.children[i])
 
-	# 		i+=1
+			i+=1
 
-	# 	target_row = {"url":row.get_browseable_url(), "title":row.title, "manager": None, "freelancer":None, "client_name": None}
+		target_row = {"url":row.get_browseable_url(), "title":row.title, "manager": None, "freelancer":None, "client_name": None}
 		
-	# 	if row_type == "Proposals":
-	# 		if len(row.cc)>0:
-	# 			target_row["manager"] = row.cc[0]
-	# 		else:
-	# 			target_row["manager"] = row.sent_by
+		if row_type == "Proposals":
+			if len(row.cc)>0:
+				target_row["manager"] = row.cc[0]
+			else:
+				target_row["manager"] = row.sent_by
 
-	# 		if len(row.fl)>0:
-	# 			target_row["freelancer"] = row.fl[0]
+			if len(row.fl)>0:
+				target_row["freelancer"] = row.fl[0]
 
-	# 		if len(row.client) > 0:
-	# 			target_row["client_name"] = row.client[0].name
+			if len(row.client) > 0:
+				target_row["client_name"] = row.client[0].name
 
-	# 	elif row_type == "Contracts":
-	# 		if len(row.coordinator) > 0:
-	# 			target_row["manager"] = row.coordinator[0]
+		elif row_type == "Contracts":
+			if len(row.coordinator) > 0:
+				target_row["manager"] = row.coordinator[0]
 
-	# 		if len(row.freelancer)>0:
-	# 			target_row["freelancer"] = row.freelancer[0]
+			if len(row.freelancer)>0:
+				target_row["freelancer"] = row.freelancer[0]
 
-	# 		if len(row.client_name) > 0:
-	# 			target_row["client_name"] = row.client_name[0].name
+			if len(row.client_name) > 0:
+				target_row["client_name"] = row.client_name[0].name
 
-	# 	elif row_type == "Projects":
-	# 		if len(row.pm)>0:
-	# 			target_row["manager"] = row.pm[0].name
+		elif row_type == "Projects":
+			if len(row.pm)>0:
+				target_row["manager"] = row.pm[0].name
 
-	# 		freelancers = []
-	# 		for contract in row.contracts:
-	# 			if len(contract.freelancer):
-	# 				freelancers.append(contract.freelancer[0])
-	# 		target_row["freelancer"] = freelancers
+			freelancers = []
+			for contract in row.contracts:
+				if len(contract.freelancer):
+					freelancers.append(contract.freelancer[0])
+			target_row["freelancer"] = freelancers
 
-	# 		if len(row.client_name) > 0:
-	# 			target_row["client_name"] = row.client_name[0].name
+			if len(row.client_name) > 0:
+				target_row["client_name"] = row.client_name[0].name
 
-	# 	if len(aliases)>0:
-	# 		#we do this to not add empty rows
-	# 		if (add_row):
-	# 			target = target_table.collection.add_row()
-	# 			target.type = row_type
-	# 			add_row = False
+		if len(aliases)>0:
+			#we do this to not add empty rows
+			if (add_row):
+				target = target_table.collection.add_row()
+				target.type = row_type
+				add_row = False
 
-	# 		add_aliases_to_summary(aliases, target, target_row)
-	# 		print(aliases)
+			add_aliases_to_summary(aliases, target, target_row)
+			print(aliases)
 
 
 @app.route('/refresh_db', methods=["GET"])
