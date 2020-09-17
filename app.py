@@ -182,7 +182,7 @@ def head_summary():
 				print("reached end of blocks, moving on")
 				break
 
-			if type(row.children[i]) = FactoryBlock:
+			if type(row.children[i]) == FactoryBlock:
 				continue			
 
 			created_time = get_block_create_date(client, row.children[i])
