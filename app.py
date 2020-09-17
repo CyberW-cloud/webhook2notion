@@ -178,7 +178,8 @@ def head_summary():
 		aliases = []
 		i = 0
 		while 1:
-			if i >= len(row.children):
+			i+=1
+			if i > len(row.children):
 				print("reached end of blocks, moving on")
 				break
 
@@ -193,7 +194,6 @@ def head_summary():
 				
 			aliases.append(row.children[i])
 
-			i+=1
 
 		target_row = {"url":row.get_browseable_url(), "title":row.title, "manager": None, "freelancer":None, "client_name": None}
 		
