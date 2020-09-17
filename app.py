@@ -176,7 +176,7 @@ def head_summary():
 		print(row.get_browseable_url())
 
 		aliases = []
-		i = 0
+		i = -1
 		while 1:
 			i+=1
 			if i > len(row.children):
