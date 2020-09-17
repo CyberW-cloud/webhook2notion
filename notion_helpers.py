@@ -27,10 +27,13 @@ def auto_retry_lambda(fun, *args, **kwargs):
 			retries -= 1
 			time.sleep(sleep)
 
+def get_block_edit_date(client, block):
+	return int(auto_retry_lambda(client.get_record_data, "block", block.id, True)["last_edited_time"])
+
 def add_global_block(parent, target):
 	parent.children.add_alias(target)
 
-def get_activity_log_ids(client, target_page, limit = 10, start_id = None):
+def get_activity_log_block_ids(client, target_page, limit = 10, start_id = None):
 	data = {
 		"spaceId":client.current_space.id,
 		"navigableBlockId":target_page.id,
