@@ -171,6 +171,7 @@ def head_summary():
 			add_row = True
 			continue
 
+
 		print(row.title)
 		print(row.get_browseable_url())
 
@@ -180,6 +181,9 @@ def head_summary():
 			if i >= len(row.children):
 				print("reached end of blocks, moving on")
 				break
+
+			if type(row.children[i]) == "FactoryBlock":
+				continue			
 
 			created_time = get_block_create_date(client, row.children[i])
 
