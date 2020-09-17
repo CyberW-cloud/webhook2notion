@@ -84,6 +84,7 @@ def add_aliases_to_summary(aliases, page, parent_row):
 	for alias in aliases:
 		add_global_block(parent_text_block, alias)
 
+	page.children.add_new(TextBlock, title = "")
 	page.children.add_new(DividerBlock)
 
 @app.route('/add_global_block', methods=["GET"])
