@@ -215,7 +215,7 @@ def head_summary():
 
 		elif row_type == "Contracts":
 			if len(row.coordinator) > 0:
-				target_row["manager"] = row.coordinator[0]
+				target_row["manager"] = row.coordinator[0].name
 
 			if len(row.freelancer)>0:
 				target_row["freelancer"] = row.freelancer[0]
@@ -233,7 +233,7 @@ def head_summary():
 					freelancers.append(contract.freelancer[0])
 			target_row["freelancer"] = freelancers
 
-			if len(row.client_name) > 0:
+			if len(row.client_name) > 0 and row.client_name[0] != None:
 				target_row["client_name"] = row.client_name[0].name
 
 		if len(aliases)>0:
