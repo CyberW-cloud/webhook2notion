@@ -184,7 +184,8 @@ def head_summary():
 				print("reached end of blocks, moving on")
 				break
 
-			if type(row.children[i]) == FactoryBlock:
+			if type(row.children[i]) == FactoryBlock or type(row.children[i]) == DividerBlock \
+			  or (type(row.children[i]) == TextBlock and row.children[i].title == ""):
 				i+=1
 				continue			
 
