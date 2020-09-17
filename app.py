@@ -178,16 +178,17 @@ def head_summary():
 		aliases = []
 		i = 0
 		while 1:
-			i+=1
+			
 
-			if i > len(row.children):
+			if i >= len(row.children):
 				print("reached end of blocks, moving on")
 				break
 
-			if type(row.children[i-1]) == FactoryBlock:
+			if type(row.children[i]) == FactoryBlock:
+				i+=1
 				continue			
 
-			created_time = get_block_create_date(client, row.children[i-1])
+			created_time = get_block_create_date(client, row.children[i])
 
 
 			if created_time/1000<activeSince:
@@ -195,6 +196,7 @@ def head_summary():
 				
 			aliases.append(row.children[i])
 
+			i+=1
 
 		target_row = {"url":row.get_browseable_url(), "title":row.title, "manager": None, "freelancer":None, "client_name": None}
 		
