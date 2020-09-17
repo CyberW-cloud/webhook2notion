@@ -182,10 +182,10 @@ def head_summary():
 				print("reached end of blocks, moving on")
 				break
 
-			last_edited_time = get_block_edit_date(client, row.children[i])
+			created_time = get_block_create_date(client, row.children[i])
 
 
-			if last_edited_time/1000<activeSince:
+			if created_time/1000<activeSince:
 				break
 				
 			aliases.append(row.children[i])

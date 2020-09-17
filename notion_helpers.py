@@ -30,6 +30,9 @@ def auto_retry_lambda(fun, *args, **kwargs):
 def get_block_edit_date(client, block):
 	return int(auto_retry_lambda(client.get_record_data, "block", block.id, True)["last_edited_time"])
 
+def get_block_create_date(client, block):
+	return int(auto_retry_lambda(client.get_record_data, "block", block.id, True)["created_time"])
+
 def add_global_block(parent, target):
 	parent.children.add_alias(target)
 
