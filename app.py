@@ -233,7 +233,7 @@ def head_summary():
 					freelancers.append(contract.freelancer[0])
 			target_row["freelancer"] = freelancers
 
-			if len(row.client_name) > 0 and row.client_name[0] != None:
+			if len(row.client_name) > 0 and not isinstance(row.client_name[0], None):
 				target_row["client_name"] = row.client_name[0].name
 
 		if len(aliases)>0:
