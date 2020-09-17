@@ -188,9 +188,8 @@ def head_summary():
 				i+=1
 				continue			
 
+
 			created_time = get_block_create_date(client, row.children[i])
-
-
 			if created_time/1000<activeSince:
 				break
 				
