@@ -180,8 +180,8 @@ def head_summary():
 		i = 0
 		while 1:
 			
-
-			if i >= len(row.children):
+			# the 200 limit is just a failsafe to prevent infinite loops
+			if i >= len(row.children) or i == 200:
 				print("reached end of blocks, moving on")
 				break
 
