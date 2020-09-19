@@ -228,7 +228,7 @@ def head_summary():
 				target_row["client_name"] = row.client_name[0].name
 				target_row["client_url"] = row.client_name[0].get_browseable_url()
 
-			if row.job_name != None and row.contract_name == "":
+			if row.job_name != None and row.contract_name != "":
 				target_row["title"] = row.contract_name
 
 		elif row_type == "Projects":
