@@ -87,7 +87,7 @@ def add_aliases_to_summary(aliases, page, parent_row):
 	page.children.add_new(TextBlock, title = "")
 	page.children.add_new(DividerBlock)
 
-@app.route('/head_summary', methods=["GET"])
+@app.route('/updates_check', methods=["GET"])
 def head_summary():
 	token = os.environ.get("TOKEN")
 	client = NotionClient(token)
