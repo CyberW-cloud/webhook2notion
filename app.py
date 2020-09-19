@@ -199,7 +199,7 @@ def head_summary():
 
 			i+=1
 
-		target_row = {"url":row.get_browseable_url(), "title":row.title, "manager": None, "freelancer":None, "client_name": None}
+		target_row = {"url":row.get_browseable_url(), "title":row.title, "manager": None, "freelancer":None, "client_name": None, "client_url":None}
 		
 		if row_type == "Proposals":
 			if len(row.cc)>0:
