@@ -230,7 +230,7 @@ def head_summary():
 				target_row["freelancer"] = row.freelancer[0]
 
 			if len(row.client_name) > 0:
-				if row.client_name[-1] == " "
+				if row.client_name[-1] == " ":
 					target_row["client_name"] = row.client_name[:-1]
 				else:
 					target_row["client_name"] = row.client_name
