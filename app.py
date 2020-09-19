@@ -889,7 +889,7 @@ def Hb_tasks():
 			
 			if("Daily" == period[0]):
 				
-				yesterday = datetime.datetime.combine(datetime.datetime.now().date()-timedelta(1), due_start.time)
+				yesterday = datetime.datetime.combine(datetime.datetime.now().date()-timedelta(1), due_start.time())
 				#limit to working days
 				due_date =  + get_offset_to_closest_weekday(due_start, [0,1,2,3,4])
 
