@@ -42,7 +42,7 @@ def add_aliases_to_summary(aliases, page, parent_row):
 	client = NotionClient(token)
 	#parent_row should contain {"url", "title", "manager", "freelancer", "client_name"}
 	if not isinstance(parent_row["client_name"], type(None)):
-		parent_text = "[**" + parent_row["client_name"] + "**]("+ parent_row["parent_url"] +"), [**" + parent_row["title"]+ "**](" +  parent_row["url"] + ")"
+		parent_text = "[**" + parent_row["client_name"] + "**]("+ parent_row["client_url"] +"), [**" + parent_row["title"]+ "**](" +  parent_row["url"] + ")"
 	else:
 		parent_text = "[**" + parent_row["title"] + "**](" +  parent_row["url"] + ")"
 
