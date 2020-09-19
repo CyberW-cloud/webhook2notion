@@ -891,7 +891,7 @@ def Hb_tasks():
 				
 				yesterday = datetime.datetime.combine(datetime.datetime.now().date()-timedelta(1), due_start.time())
 				#limit to working days
-				due_date =  + get_offset_to_closest_weekday(due_start, [0,1,2,3,4])
+				due_date = yesterday + get_offset_to_closest_weekday(yesterday, [0,1,2,3,4])
 
 				set_date = due_date - datetime.timedelta(0,0,0,0,0,12)
 
