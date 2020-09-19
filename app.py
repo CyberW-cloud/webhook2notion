@@ -229,7 +229,7 @@ def head_summary():
 			if len(row.freelancer)>0:
 				target_row["freelancer"] = row.freelancer[0]
 
-			if len(row.client_name) > 0:
+			if len(row.client_name) > 0 and not isinstance(row.client_name[0], type(None)):
 				if row.client_name[0].name[-1] == " ":
 					target_row["client_name"] = row.client_name[0].name[:-1]
 				else:
