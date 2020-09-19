@@ -211,7 +211,12 @@ def head_summary():
 				target_row["freelancer"] = row.fl[0]
 
 			if len(row.client) > 0:
-				target_row["client_name"] = row.client[0].name
+				if row.job_name[-1] == " "
+					target_row["client_name"] = row.client_name[:-1]
+				else:
+					target_row["client_name"] = row.client_name
+				
+
 				target_row["client_url"] = row.client[0].get_browseable_url()
 
 			if row.job_name != None and row.job_name != "":
@@ -225,7 +230,12 @@ def head_summary():
 				target_row["freelancer"] = row.freelancer[0]
 
 			if len(row.client_name) > 0:
-				target_row["client_name"] = row.client_name[0].name
+				if row.client_name[-1] == " "
+					target_row["client_name"] = row.client_name[:-1]
+				else:
+					target_row["client_name"] = row.client_name
+				
+
 				target_row["client_url"] = row.client_name[0].get_browseable_url()
 
 			if row.contract_name != None and row.contract_name != "":
