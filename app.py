@@ -214,6 +214,9 @@ def head_summary():
 				target_row["client_name"] = row.client[0].name
 				target_row["client_url"] = row.client[0].get_browseable_url()
 
+			if row.job_name != None and row.row_name == "":
+				target_row["title"] = row.job_name
+
 		elif row_type == "Contracts":
 			if len(row.coordinator) > 0:
 				target_row["manager"] = row.coordinator[0].name
@@ -224,6 +227,9 @@ def head_summary():
 			if len(row.client_name) > 0:
 				target_row["client_name"] = row.client_name[0].name
 				target_row["client_url"] = row.client_name[0].get_browseable_url()
+
+			if row.job_name != None and row.contract_name == "":
+				target_row["title"] = row.contract_name
 
 		elif row_type == "Projects":
 			if len(row.pm)>0:
