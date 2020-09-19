@@ -97,51 +97,54 @@ def head_summary():
 	proposals = client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
 	contracts = client.get_collection_view("https://www.notion.so/5a95fb63129242a5b5b48f18e16ef19a?v=48599e7a184a4f32be2469e696367949")
 	projects = client.get_collection_view("https://www.notion.so/addccbcaf545405292db498941c9538a?v=e86f54933acc461ca413afa6a2958cdc")
-	#page = client.get_block("https://www.notion.so/24227261-ab3fe6edbb43422ba7d1b1df50fe3a2a") 
-
+	
+	
 	active_since_hours =  int(request.args.get("activeSince", "24"))
 	activeSince = datetime.datetime.now() - datetime.timedelta(hours = active_since_hours)
 	activeSince = int(activeSince.timestamp())
 
-	# result=[["Type", "Proposals"]]
+	date = str(datetime.datetime.now().day) + " " + str(datetime.datetime.now().month) + " " + str(datetime.datetime.now().year)
+	name = request.args.get("row_name", date + " | " + str(active_since_hours)+"h")
 
-	# #get proposals
-	# filter_params = {
-	# 	"filters": [
-	# 		{
-	# 			"filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.fromtimestamp(activeSince).strftime('%Y-%m-%d')}}, "operator": "date_is_on_or_after"},
-	# 			"property": "Modified",
-	# 		}
-	# 	],
-	# 	"operator": "and",
+
+	result=[["Type", "Proposals"]]
+
+	#get proposals
+	filter_params = {
+		"filters": [
+			{
+				"filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.fromtimestamp(activeSince).strftime('%Y-%m-%d')}}, "operator": "date_is_on_or_after"},
+				"property": "Modified",
+			}
+		],
+		"operator": "and",
 		
 		
-	# }
-	# sort_params = [{"direction": "descending", "property": "Modified"}]
+	}
+	sort_params = [{"direction": "descending", "property": "Modified"}]
 
-	# proposals = proposals.build_query(filter=filter_params, sort = sort_params)
-	# result += list(proposals.execute()) 
+	proposals = proposals.build_query(filter=filter_params, sort = sort_params)
+	result += list(proposals.execute()) 
 
-	# result.append(["Type", "Projects"])
+	result.append(["Type", "Projects"])
 
-	# #get projects
-	# filter_params = {
-	# 	"filters": [
-	# 		{
-	# 			"filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.fromtimestamp(activeSince).strftime('%Y-%m-%d')}}, "operator": "date_is_on_or_after"},
-	# 			"property": "Updated",
-	# 		}
-	# 	],
-	# 	"operator": "and",
+	#get projects
+	filter_params = {
+		"filters": [
+			{
+				"filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.fromtimestamp(activeSince).strftime('%Y-%m-%d')}}, "operator": "date_is_on_or_after"},
+				"property": "Updated",
+			}
+		],
+		"operator": "and",
 		
 		
-	# }
-	# sort_params = [{"direction": "descending", "property": "Updated"}]
+	}
+	sort_params = [{"direction": "descending", "property": "Updated"}]
 
-	# projects = projects.build_query(filter=filter_params, sort = sort_params)
-	# result += list(projects.execute()) 
+	projects = projects.build_query(filter=filter_params, sort = sort_params)
+	result += list(projects.execute()) 
 
-	result=[]
 	result.append(["Type", "Contracts"])
 
 	#get projects
