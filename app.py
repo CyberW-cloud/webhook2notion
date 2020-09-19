@@ -42,7 +42,7 @@ def add_aliases_to_summary(aliases, page, parent_row):
 	client = NotionClient(token)
 	#parent_row should contain {"url", "title", "manager", "freelancer", "client_name"}
 	if not isinstance(parent_row["client_name"], type(None)):
-		parent_text = parent_row["client_name"] + ", [**" + parent_row["title"]+ "**](" +  parent_row["url"] + ")"
+		parent_text = "[**" + parent_row["client_name"] + "**]("+ parent_row["parent_url"] +"), [**" + parent_row["title"]+ "**](" +  parent_row["url"] + ")"
 	else:
 		parent_text = "[**" + parent_row["title"] + "**](" +  parent_row["url"] + ")"
 
@@ -214,6 +214,7 @@ def head_summary():
 
 			if len(row.client) > 0:
 				target_row["client_name"] = row.client[0].name
+				target_row["client_url"] = row.client[0].get_browseable_url()
 
 		elif row_type == "Contracts":
 			if len(row.coordinator) > 0:
@@ -224,6 +225,7 @@ def head_summary():
 
 			if len(row.client_name) > 0:
 				target_row["client_name"] = row.client_name[0].name
+				target_row["client_url"] = row.client_name[0].get_browseable_url()
 
 		elif row_type == "Projects":
 			if len(row.pm)>0:
@@ -237,6 +239,7 @@ def head_summary():
 
 			if len(row.client_name) > 0 and not isinstance(row.client_name[0], None):
 				target_row["client_name"] = row.client_name[0].name
+				target_row["client_url"] = row.client_name[0].get_browseable_url()
 
 		if len(aliases)>0:
 			#we do this to not add empty rows
