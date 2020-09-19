@@ -199,7 +199,7 @@ def head_summary():
 
 			i+=1
 
-		target_row = {"url":row.get_browseable_url(), "title":row.title, "manager": None, "freelancer":None, "client_name": None, "client_url":None}
+		target_row = {"url":row.get_browseable_url(), "title":row.title, "manager": None, "freelancer":None, "client_name": None}
 		
 		if row_type == "Proposals":
 			if len(row.cc)>0:
@@ -211,10 +211,10 @@ def head_summary():
 				target_row["freelancer"] = row.fl[0]
 
 			if len(row.client) > 0:
-				if row.job_name[-1] == " ":
-					target_row["client_name"] = row.client_name[:-1]
+				if row.client[0].name[-1] == " ":
+					target_row["client_name"] = row.client[0].name[:-1]
 				else:
-					target_row["client_name"] = row.client_name
+					target_row["client_name"] = row.client[0].name
 				
 
 				target_row["client_url"] = row.client[0].get_browseable_url()
@@ -230,10 +230,10 @@ def head_summary():
 				target_row["freelancer"] = row.freelancer[0]
 
 			if len(row.client_name) > 0:
-				if row.client_name[-1] == " ":
-					target_row["client_name"] = row.client_name[:-1]
+				if row.client_name[0].name[-1] == " ":
+					target_row["client_name"] = row.client_name[0].name[:-1]
 				else:
-					target_row["client_name"] = row.client_name
+					target_row["client_name"] = row.client_name[0].name
 				
 
 				target_row["client_url"] = row.client_name[0].get_browseable_url()
