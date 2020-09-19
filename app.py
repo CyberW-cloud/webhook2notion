@@ -958,7 +958,7 @@ def Hb_tasks():
 				# #we refresh the change so we can use the updated result in the next for
 				# record.refresh()
 			
-
+	i = 1/0 # use debugger
 	# #go over all tasks and change the status to TODO if the task should be set today	
 	# for todo in result:
 	# 	if todo.set_date == None:
