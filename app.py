@@ -107,7 +107,7 @@ def get_proposals_reject_reason():
 				print(application)
 				print("IDK, but this could be the withdrawable ended proposal")
 
-
+		print("--------------------------------------------------------------------------------")
 		time.sleep(3.2)
 
 	application = applicationAPI(client)
