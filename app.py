@@ -79,11 +79,10 @@ def get_proposals_reject_reason():
 			print(application.get_list({"cursor_limit": 20, "status":"archived"}))
 			continue
 
-		
+		print(job_info.get_specific(application[0]["openingCiphertext"]))
+
 		for application in proposals:
 			
-			print(job_info.get_specific(application["openingCiphertext"]))
-
 			if application["status"] == "7":
 				continue
 			
