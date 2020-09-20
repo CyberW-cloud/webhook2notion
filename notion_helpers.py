@@ -27,6 +27,38 @@ def auto_retry_lambda(fun, *args, **kwargs):
             retries -= 1
             time.sleep(sleep)
 
+def get_block_edit_date(client, block):
+    return int(auto_retry_lambda(client.get_record_data, "block", block.id, True)["last_edited_time"])
+
+def get_block_create_date(client, block):
+    return int(auto_retry_lambda(client.get_record_data, "block", block.id, True)["created_time"])
+
+def add_global_block(parent, target):
+    parent.children.add_alias(target)
+
+def get_activity_log_block_ids(client, target_page, limit = 10, start_id = None):
+    data = {
+        "spaceId":client.current_space.id,
+        "navigableBlockId":target_page.id,
+        "limit":limit
+    }
+    if start_id != None:
+        data["startingAfterId"] = start_id
+
+    block_ids = []
+    response = client.post("getActivityLog", data).json()
+    if "recordMap" not in response.keys() or "activity" not in response["recordMap"].keys():
+        return
+
+    log = response["recordMap"]["activity"].values()
+    for activity in log:
+        for edit in activity["value"]["edits"]:
+            if "block_id" in edit:
+
+                if edit["block_id"] not in [x[0] for x in block_ids] and edit["type"] == "block-created":
+                    block_ids.append([edit["block_id"], edit["timestamp"]])
+
+    return [block_ids, response["activityIds"][-1]]
 
 def get_date_from_title(title):
     if isinstance(title, list):  # instance must be list
