@@ -73,12 +73,13 @@ def get_proposals_reject_reason():
 		job_info = jobInfoAPI(client)
 
 		try:
-			proposals = application.get_list({"cursor_limit": 20, "status":"archived"})["data"]["applications"]
+			proposal_request = application.get_list({"cursor_limit": 20, "status":"archived"})
+			proposals = proposal_request["data"]["applications"]
 		except Exception as e:
 			print(application.get_list({"cursor_limit": 20, "status":"archived"}))
 			continue
 
-		print(job_info.get_specific(proposals["openingCiphertext"]))
+		print(job_info.get_specific(proposal_request["openingCiphertext"]))
 		for application in proposals:
 			
 			if application["status"] == "7":
