@@ -44,6 +44,7 @@ def get_proposals_reject_reason():
 	token = os.environ.get("TOKEN")
 	notion_client = NotionClient(token)
 
+
 	login_config = upwork.Config({\
 			'consumer_key': os.environ.get("ConsumerKey"),\
 			'consumer_secret': os.environ.get("ConsumerSecret"),\
@@ -51,7 +52,25 @@ def get_proposals_reject_reason():
 			'access_token_secret': os.environ.get("AccessSecret")})
 
 	client = upwork.Client(login_config)
+	
+
 	job_info = jobInfoAPI(client)
+
+	freelancer_ids = [x["public_url"].split("/")[-1] for x in company.get_users(os.environ.get("CompanyRef"))["users"]]
+	tokens = parse_tokens(tokens, freelancer_ids)
+	for freelancer in tokens:
+		#log in as each freelancer 
+		client = upwork.Client(upwork.Config({\
+			'consumer_key': os.environ.get("ConsumerKey"),\
+			'consumer_secret': os.environ.get("ConsumerSecret"),\
+			'access_token': freelancer["accessToken"],\
+			'access_token_secret': freelancer["accessSecret"]}))
+		
+		application = applicationAPI(client)
+
+		print(application.get_list())
+
+	
 	application = applicationAPI(client)
 
 	i = 1/0 # debugger
@@ -477,8 +496,7 @@ def message_review():
 
 	
 	freelancer_ids = [x["public_url"].split("/")[-1] for x in company.get_users(os.environ.get("CompanyRef"))["users"]]
-	
-	#skip owner to parse quicker
+
 	tokens = parse_tokens(tokens, freelancer_ids)
 
 	for freelancer in tokens:
