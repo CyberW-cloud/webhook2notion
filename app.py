@@ -104,68 +104,72 @@ def head_summary():
 	activeSince = int(activeSince.timestamp())
 
 	select_dbs = request.args.get("types", "Proposals,Contracts,Projects").lower().split(",")
-	print(select_dbs)
-	return "hi"
+
 	date = str(datetime.datetime.now().day) + " " + str(datetime.datetime.now().month) + " " + str(datetime.datetime.now().year)
 	name = request.args.get("row_name", date + " | " + str(active_since_hours)+"h")
 
+	result = []
 
-	result=[["Type", "Proposals"]]
+	if "proposals" in select_dbs:
+		result.append(["Type", "Proposals"])
 
-	#get proposals
-	filter_params = {
-		"filters": [
-			{
-				"filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.fromtimestamp(activeSince).strftime('%Y-%m-%d')}}, "operator": "date_is_on_or_after"},
-				"property": "Modified",
-			}
-		],
-		"operator": "and",
-		
-		
-	}
-	sort_params = [{"direction": "descending", "property": "Modified"}]
+		#get proposals
+		filter_params = {
+			"filters": [
+				{
+					"filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.fromtimestamp(activeSince).strftime('%Y-%m-%d')}}, "operator": "date_is_on_or_after"},
+					"property": "Modified",
+				}
+			],
+			"operator": "and",
+			
+			
+		}
+		sort_params = [{"direction": "descending", "property": "Modified"}]
 
-	proposals = proposals.build_query(filter=filter_params, sort = sort_params)
-	result += list(proposals.execute()) 
+		proposals = proposals.build_query(filter=filter_params, sort = sort_params)
+		result += list(proposals.execute()) 
 
-	result.append(["Type", "Projects"])
+	
+	elif "projects" in select_dbs:
+		result.append(["Type", "Projects"])
 
-	#get projects
-	filter_params = {
-		"filters": [
-			{
-				"filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.fromtimestamp(activeSince).strftime('%Y-%m-%d')}}, "operator": "date_is_on_or_after"},
-				"property": "Updated",
-			}
-		],
-		"operator": "and",
-		
-		
-	}
-	sort_params = [{"direction": "descending", "property": "Updated"}]
+		#get projects
+		filter_params = {
+			"filters": [
+				{
+					"filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.fromtimestamp(activeSince).strftime('%Y-%m-%d')}}, "operator": "date_is_on_or_after"},
+					"property": "Updated",
+				}
+			],
+			"operator": "and",
+			
+			
+		}
+		sort_params = [{"direction": "descending", "property": "Updated"}]
 
-	projects = projects.build_query(filter=filter_params, sort = sort_params)
-	result += list(projects.execute()) 
+		projects = projects.build_query(filter=filter_params, sort = sort_params)
+		result += list(projects.execute()) 
 
-	result.append(["Type", "Contracts"])
+	elif "contracts" in select_dbs:
+		result.append(["Type", "Contracts"])
 
-	#get projects
-	filter_params = {
-		"filters": [
-			{
-				"filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.fromtimestamp(activeSince).strftime('%Y-%m-%d')}}, "operator": "date_is_on_or_after"},
-				"property": "Updated",
-			}
-		],
-		"operator": "and",
-		
-		
-	}
-	sort_params = [{"direction": "descending", "property": "Updated"}]
+		#get projects
+		filter_params = {
+			"filters": [
+				{
+					"filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.fromtimestamp(activeSince).strftime('%Y-%m-%d')}}, "operator": "date_is_on_or_after"},
+					"property": "Updated",
+				}
+			],
+			"operator": "and",
+			
+			
+		}
+		sort_params = [{"direction": "descending", "property": "Updated"}]
 
-	contracts = contracts.build_query(filter=filter_params, sort = sort_params)
-	result += list(contracts.execute()) 
+		contracts = contracts.build_query(filter=filter_params, sort = sort_params)
+		result += list(contracts.execute()) 
 
 
 	i = 0  
