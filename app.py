@@ -78,31 +78,31 @@ def get_proposals_reject_reason():
 
 		for application in proposals:
 			
-			if application["status"] == 7:
+			if application["status"] == "7":
 				continue
 			
-			elif application["status"] == 4:
-				if application["withdrawReason"]["rid"] == 144:
+			elif application["status"] == "4":
+				if application["withdrawReason"]["rid"] == "144":
 					print("there is withdraw reason, unresponsive, standard reason")
-				elif application["withdrawReason"]["rid"] == 146:
+				elif application["withdrawReason"]["rid"] == "146":
 					print("there is withdraw reason, unresponsive, manual reason")
 				else:
 					print("withdraw, unknown withdraw reason")
 
-			elif application["status"] == 2:
+			elif application["status"] == "2":
 				print("bid/proposal sent ")
 
-			elif application["status"] == 8:
+			elif application["status"] == "8":
 				print("job no longer available ")
 
-			elif application["status"] == 3:
+			elif application["status"] == "3":
 				print("Invite Declined by client")
 
-			elif application["status"] == 2:
+			elif application["status"] == "2":
 				print(application)
 				print("IDK, but this could be the withdrawable ended proposal")
 
-				
+
 		time.sleep(1.6)
 
 	application = applicationAPI(client)
