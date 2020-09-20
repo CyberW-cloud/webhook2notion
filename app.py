@@ -73,7 +73,7 @@ def get_proposals_reject_reason():
 
 		proposals = application.get_list({"cursor_limit": 20})["data"]["applications"]
 		for application in proposals:
-			if(application["status"]!=7):
+			if(application["status"]!="7"):
 				print(application["openingUID"])
 				print(application["status"])
 
