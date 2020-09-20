@@ -30,6 +30,246 @@ timezone = "Europe/Kiev"
 app = Flask(__name__)
 cache = {}
 
+def add_aliases_to_summary(aliases, page, parent_row):
+    token = os.environ.get("TOKEN")
+    client = NotionClient(token)
+    #parent_row should contain {"url", "title", "manager", "freelancer", "client_name"}
+    if not isinstance(parent_row["client_name"], type(None)):
+        parent_text = "[**" + parent_row["client_name"] + "**]("+ parent_row["client_url"] +"), [**" + parent_row["title"]+ "**](" +  parent_row["url"] + ")"
+    else:
+        parent_text = "[**" + parent_row["title"] + "**](" +  parent_row["url"] + ")"
+
+    parent_text_block = page.children.add_new(TextBlock, title = parent_text)
+
+    if not isinstance(parent_row["manager"], type(None)):
+        if isinstance(parent_row["manager"], notion.user.User):
+            cc_name = parent_row["manager"].full_name
+        else:
+            cc_name = str(parent_row["manager"])
+
+        parent_text_block.children.add_new(TextBlock, title = "**Менеджер:** " + cc_name)
+
+    if not isinstance(parent_row["freelancer"], type(None)):
+
+        if isinstance(parent_row["freelancer"], CollectionRowBlock):
+            if parent_row["freelancer"].name[-1] == " ":
+                fl_name = parent_row["freelancer"].name[:-1]
+            else:
+                fl_name = parent_row["freelancer"].name
+
+        elif isinstance(parent_row["freelancer"], list):
+            fl_name = ""
+            for freelancer in parent_row["freelancer"]:
+                if freelancer.name == "":
+                    continue
+
+                if freelancer.name[-1] == " ":
+                    fl_name += freelancer.name[:-1]
+                else:
+                    fl_name += freelancer.name
+
+            #remove ", " at the end
+            fl_name = fl_name[:-2]
+
+        parent_text_block.children.add_new(TextBlock, title = "**Фрилансер:** " + fl_name)
+    
+    parent_text_block.children.add_new(DividerBlock)
+    for alias in aliases:
+        add_global_block(parent_text_block, alias)
+
+    page.children.add_new(TextBlock, title = "")
+    page.children.add_new(DividerBlock)
+
+@app.route('/updates_check', methods=["GET"])
+def head_summary():
+    token = os.environ.get("TOKEN")
+    client = NotionClient(token)
+
+
+    target_table = client.get_block(request.args.get("table", "https://www.notion.so/96a6a203a3a446e4a8e0673682a2304b?v=81f1740cd5df439b9bf2ba3a25313dbb"))
+    proposals = client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
+    contracts = client.get_collection_view("https://www.notion.so/5a95fb63129242a5b5b48f18e16ef19a?v=48599e7a184a4f32be2469e696367949")
+    projects = client.get_collection_view("https://www.notion.so/addccbcaf545405292db498941c9538a?v=e86f54933acc461ca413afa6a2958cdc")
+    
+
+    active_since_hours =  int(request.args.get("activeSince", "24"))
+    activeSince = datetime.datetime.now() - datetime.timedelta(hours = active_since_hours)
+    activeSince = int(activeSince.timestamp())
+
+    select_dbs = request.args.get("types", "Proposals,Contracts,Projects").lower().split(",")
+
+    date = str(datetime.datetime.now().day) + " " + str(datetime.datetime.now().month) + " " + str(datetime.datetime.now().year)
+    name = request.args.get("row_name", date + " | " + str(active_since_hours)+"h")
+
+    result = []
+
+    if "proposals" in select_dbs:
+        result.append(["Type", "Proposals"])
+
+        #get proposals
+        filter_params = {
+            "filters": [
+                {
+                    "filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.fromtimestamp(activeSince).strftime('%Y-%m-%d')}}, "operator": "date_is_on_or_after"},
+                    "property": "Modified",
+                }
+            ],
+            "operator": "and",
+            
+            
+        }
+        sort_params = [{"direction": "descending", "property": "Modified"}]
+
+        proposals = proposals.build_query(filter=filter_params, sort = sort_params)
+        result += list(proposals.execute()) 
+
+    
+    if "projects" in select_dbs:
+        result.append(["Type", "Projects"])
+
+        #get projects
+        filter_params = {
+            "filters": [
+                {
+                    "filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.fromtimestamp(activeSince).strftime('%Y-%m-%d')}}, "operator": "date_is_on_or_after"},
+                    "property": "Updated",
+                }
+            ],
+            "operator": "and",
+            
+            
+        }
+        sort_params = [{"direction": "descending", "property": "Updated"}]
+
+        projects = projects.build_query(filter=filter_params, sort = sort_params)
+        result += list(projects.execute()) 
+
+    if "contracts" in select_dbs:
+        result.append(["Type", "Contracts"])
+
+        #get projects
+        filter_params = {
+            "filters": [
+                {
+                    "filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.fromtimestamp(activeSince).strftime('%Y-%m-%d')}}, "operator": "date_is_on_or_after"},
+                    "property": "Updated",
+                }
+            ],
+            "operator": "and",
+            
+            
+        }
+        sort_params = [{"direction": "descending", "property": "Updated"}]
+
+        contracts = contracts.build_query(filter=filter_params, sort = sort_params)
+        result += list(contracts.execute()) 
+
+
+    i = 0  
+    row_type = ""
+    add_row = False
+    for row in result:
+        if isinstance(row, list):
+            row_type = row[1]
+            print("Parsing " + row[1])
+            add_row = True
+            continue
+
+
+        print(row.title)
+        print(row.get_browseable_url())
+
+        aliases = []
+        i = 0
+        while 1:
+            
+            # the 200 limit is just a failsafe to prevent infinite loops 
+            if i >= len(row.children) or i == 200:
+                print("reached end of blocks, moving on")
+                break
+
+            if type(row.children[i]) == FactoryBlock \
+              or (type(row.children[i]) == TextBlock and row.children[i].title == ""):
+                i+=1
+                continue            
+
+
+            created_time = get_block_create_date(client, row.children[i])
+            if created_time/1000<activeSince:
+                break
+                
+            aliases.append(row.children[i])
+
+            i+=1
+
+        target_row = {"url":row.get_browseable_url(), "title":row.title, "manager": None, "freelancer":None, "client_name": None}
+        
+        if row_type == "Proposals":
+            if len(row.cc)>0:
+                target_row["manager"] = row.cc[0]
+            else:
+                target_row["manager"] = row.sent_by
+
+            if len(row.fl)>0:
+                target_row["freelancer"] = row.fl[0]
+
+            if len(row.client) > 0:
+                if row.client[0].name[-1] == " ":
+                    target_row["client_name"] = row.client[0].name[:-1]
+                else:
+                    target_row["client_name"] = row.client[0].name
+                
+
+                target_row["client_url"] = row.client[0].get_browseable_url()
+
+            if row.job_name != None and row.job_name != "":
+                target_row["title"] += ", " + row.job_name
+
+        elif row_type == "Contracts":
+            if len(row.coordinator) > 0:
+                target_row["manager"] = row.coordinator[0].name
+
+            if len(row.freelancer)>0:
+                target_row["freelancer"] = row.freelancer[0]
+
+            if len(row.client_name) > 0 and not isinstance(row.client_name[0], type(None)):
+                if row.client_name[0].name[-1] == " ":
+                    target_row["client_name"] = row.client_name[0].name[:-1]
+                else:
+                    target_row["client_name"] = row.client_name[0].name
+                
+
+                target_row["client_url"] = row.client_name[0].get_browseable_url()
+
+            if row.contract_name != None and row.contract_name != "":
+                target_row["title"] += ", " + row.contract_name
+
+        elif row_type == "Projects":
+            if len(row.pm)>0:
+                target_row["manager"] = row.pm[0].name
+
+            freelancers = []
+            for contract in row.contracts:
+                if len(contract.freelancer):
+                    freelancers.append(contract.freelancer[0])
+            target_row["freelancer"] = freelancers
+
+            if len(row.client_name) > 0 and not isinstance(row.client_name[0], type(None)):
+                target_row["client_name"] = row.client_name[0].name
+                target_row["client_url"] = row.client_name[0].get_browseable_url()
+
+        if len(aliases)>0:
+            #we do this to not add empty rows
+            if (add_row):
+                target = target_table.collection.add_row()
+                target.type = row_type
+                target.title = name
+                add_row = False
+
+            add_aliases_to_summary(aliases, target, target_row)
+            print(aliases)
+
+
 @app.route('/refresh_db', methods=["GET"])
 def update_db():
     token = os.environ.get("TOKEN")
