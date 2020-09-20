@@ -78,7 +78,7 @@ def get_proposals_reject_reason():
 
 		for application in proposals:
 			if(application["status"]!="7"):
-				print(application["openingUID"])
+				print(application)
 				print(application["status"])
 
 		time.sleep(1.6)
