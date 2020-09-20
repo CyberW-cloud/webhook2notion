@@ -52,8 +52,8 @@ def get_proposals_reject_reason():
 
 	client = upwork.Client(login_config)
 	job_info = jobInfoAPI(client)
+	application = applicationAPI(client)
 
-	print(job_info.get_specific("~0142482b4845ebfe87"))
 	i = 1/0 # debugger
 
 
