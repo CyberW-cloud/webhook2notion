@@ -76,7 +76,7 @@ def get_proposals_reject_reason():
 			print(application["openingUID"])
 			print(application["status"])
 
-
+		time.sleep(1.6)
 	application = applicationAPI(client)
 
 	i = 1/0 # debugger
