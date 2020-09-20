@@ -71,9 +71,9 @@ def get_proposals_reject_reason():
 		
 		application = applicationAPI(client)
 		try:
-			proposals = application.get_list({"cursor_limit": 20, "status":"archived,submitted"})["data"]["applications"]
+			proposals = application.get_list({"cursor_limit": 20, "status":"archived"})["data"]["applications"]
 		except Exception as e:
-			print(application.get_list({"cursor_limit": 20, "status":"archived,submitted"}))
+			print(application.get_list({"cursor_limit": 20, "status":"archived"}))
 			continue
 
 		for application in proposals:
