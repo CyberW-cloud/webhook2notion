@@ -71,7 +71,10 @@ def get_proposals_reject_reason():
 		
 		application = applicationAPI(client)
 
-		print(application.get_list({"cursor_limit": 20}))
+		proposals = application.get_list({"cursor_limit": 20})["data"]["applications"]
+		for application in proposals:
+			print(application["openingUID"])
+			print(application["status"])
 
 
 	application = applicationAPI(client)
