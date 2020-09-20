@@ -54,7 +54,7 @@ def get_proposals_reject_reason():
 	client = upwork.Client(login_config)
 	
 	company = companyAPI(client)
-	job_info = jobInfoAPI(client)
+	
 
 	freelancer_ids = [x["public_url"].split("/")[-1] for x in company.get_users(os.environ.get("CompanyRef"))["users"]]
 	
@@ -70,12 +70,15 @@ def get_proposals_reject_reason():
 			'access_token_secret': freelancer["accessSecret"]}))
 		
 		application = applicationAPI(client)
+		job_info = jobInfoAPI(client)
+
 		try:
 			proposals = application.get_list({"cursor_limit": 20, "status":"archived"})["data"]["applications"]
 		except Exception as e:
 			print(application.get_list({"cursor_limit": 20, "status":"archived"}))
 			continue
 
+		print(job_info.get_specific(proposals["openingCiphertext"]))
 		for application in proposals:
 			
 			if application["status"] == "7":
