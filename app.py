@@ -98,11 +98,14 @@ def head_summary():
 	contracts = client.get_collection_view("https://www.notion.so/5a95fb63129242a5b5b48f18e16ef19a?v=48599e7a184a4f32be2469e696367949")
 	projects = client.get_collection_view("https://www.notion.so/addccbcaf545405292db498941c9538a?v=e86f54933acc461ca413afa6a2958cdc")
 	
-	
+
 	active_since_hours =  int(request.args.get("activeSince", "24"))
 	activeSince = datetime.datetime.now() - datetime.timedelta(hours = active_since_hours)
 	activeSince = int(activeSince.timestamp())
 
+	select_dbs = request.args.get("types", "Proposals,Contracts,Projects").lower().split(",")
+	print(select_dbs)
+	return "hi"
 	date = str(datetime.datetime.now().day) + " " + str(datetime.datetime.now().month) + " " + str(datetime.datetime.now().year)
 	name = request.args.get("row_name", date + " | " + str(active_since_hours)+"h")
 
