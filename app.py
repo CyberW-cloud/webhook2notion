@@ -57,7 +57,10 @@ def get_proposals_reject_reason():
 	job_info = jobInfoAPI(client)
 
 	freelancer_ids = [x["public_url"].split("/")[-1] for x in company.get_users(os.environ.get("CompanyRef"))["users"]]
+	
+	tokens = os.environ.get('TOKENS')
 	tokens = parse_tokens(tokens, freelancer_ids)
+	
 	for freelancer in tokens:
 		#log in as each freelancer 
 		client = upwork.Client(upwork.Config({\
