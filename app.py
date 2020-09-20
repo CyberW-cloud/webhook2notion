@@ -71,7 +71,7 @@ def get_proposals_reject_reason():
 		
 		application = applicationAPI(client)
 
-		print(application.get_list({"cursor_limit": 99}))
+		print(application.get_list({"cursor_limit": 20}))
 
 
 	application = applicationAPI(client)
