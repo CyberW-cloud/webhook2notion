@@ -70,8 +70,12 @@ def get_proposals_reject_reason():
 			'access_token_secret': freelancer["accessSecret"]}))
 		
 		application = applicationAPI(client)
+		try:
+			proposals = application.get_list({"cursor_limit": 20, "status":"archived,submitted"})["data"]["applications"]
+		except Exception as e:
+			print(application.get_list({"cursor_limit": 20, "status":"archived,submitted"}))
+			continue
 
-		proposals = application.get_list({"cursor_limit": 20, "status":"archived,submitted"})["data"]["applications"]
 		for application in proposals:
 			if(application["status"]!="7"):
 				print(application["openingUID"])
