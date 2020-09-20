@@ -53,7 +53,7 @@ def get_proposals_reject_reason():
 
 	client = upwork.Client(login_config)
 	
-
+	company = companyAPI(client)
 	job_info = jobInfoAPI(client)
 
 	freelancer_ids = [x["public_url"].split("/")[-1] for x in company.get_users(os.environ.get("CompanyRef"))["users"]]
@@ -70,7 +70,7 @@ def get_proposals_reject_reason():
 
 		print(application.get_list())
 
-	
+
 	application = applicationAPI(client)
 
 	i = 1/0 # debugger
