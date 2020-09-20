@@ -73,10 +73,10 @@ def get_proposals_reject_reason():
 		job_info = jobInfoAPI(client)
 
 		try:
-			proposal_request = application.get_list({"cursor_limit": 50, "status":"archived"})
+			proposal_request = application.get_list({"cursor_limit": 40, "status":"archived"})
 			proposals = proposal_request["data"]["applications"]
 		except Exception as e:
-			print(application.get_list({"cursor_limit": 50, "status":"archived"}))
+			print(application.get_list({"cursor_limit": 40, "status":"archived"}))
 			continue
 
 		if len(proposals)>0:
