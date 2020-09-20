@@ -24,6 +24,7 @@ from upwork.routers.organization.users import Api as userAPI
 from upwork.routers.freelancers.profile import Api as profileAPI
 from upwork.routers.hr.freelancers.applications import Api as applicationAPI
 from upwork.routers.hr.jobs import Api as jobsAPI
+from upwork.routers.jobs.profile import Api as jobInfoAPI
 
 import psycopg2
 
@@ -36,6 +37,25 @@ cache = {}
 #var used to signify testing 
 TEST = False
 test_page_url = "https://www.notion.so/TEST-68d7198ed4d3437b816386f6da196547"
+
+@app.route('/get_proposals_reject_reason', methods=["GET"])
+def get_proposals_reject_reason():
+
+	token = os.environ.get("TOKEN")
+	notion_client = NotionClient(token)
+
+	login_config = upwork.Config({\
+			'consumer_key': os.environ.get("ConsumerKey"),\
+			'consumer_secret': os.environ.get("ConsumerSecret"),\
+			'access_token': os.environ.get("AccessToken"),\
+			'access_token_secret': os.environ.get("AccessSecret")})
+
+	client = upwork.Client(login_config)
+	job_info = jobInfoAPI(client)
+
+	print(job_info.get_specific("~0142482b4845ebfe87"))
+	i = 1/0 # debugger
+
 
 def add_aliases_to_summary(aliases, page, parent_row):
 	token = os.environ.get("TOKEN")
