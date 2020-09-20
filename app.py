@@ -73,13 +73,14 @@ def get_proposals_reject_reason():
 		job_info = jobInfoAPI(client)
 
 		try:
-			proposal_request = application.get_list({"cursor_limit": 20, "status":"archived"})
+			proposal_request = application.get_list({"cursor_limit": 50, "status":"archived"})
 			proposals = proposal_request["data"]["applications"]
 		except Exception as e:
-			print(application.get_list({"cursor_limit": 20, "status":"archived"}))
+			print(application.get_list({"cursor_limit": 50, "status":"archived"}))
 			continue
 
-		print(job_info.get_specific(proposals[0]["openingCiphertext"])["profile"]["ui_opening_status"])
+		if len(proposals)>0:
+			print(job_info.get_specific(proposals[0]["openingCiphertext"])["profile"]["ui_opening_status"])
 
 		for application in proposals:
 			
@@ -102,10 +103,6 @@ def get_proposals_reject_reason():
 
 			elif application["status"] == "3":
 				print("Invite Declined by client")
-
-			elif application["status"] == "2":
-				print(application)
-				print("IDK, but this could be the withdrawable ended proposal")
 
 		print("--------------------------------------------------------------------------------")
 		time.sleep(3.2)
