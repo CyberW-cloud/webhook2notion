@@ -101,10 +101,10 @@ def get_proposals_reject_reason():
 
 		for application in proposals:
 			
+			print(application["applicationUID"])
 			if application["status"] == "7":
 				continue
-			
-			print(application["applicationUID"])
+
 			elif application["status"] == "4":
 				if application["withdrawReason"]["rid"] == "144":
 					print("there is withdraw reason, unresponsive, standard reason")
