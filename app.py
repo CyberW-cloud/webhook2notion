@@ -1942,7 +1942,7 @@ def create_invite(token, collection_url, subject, description, invite_to):
 	try:
 		row = cv.collection.add_row()
 	except Exception as e:
-		row = cv[0]
+		row = cv.collection.get_rows()[0]
 
 	row.name = subject
 	row.description = description
