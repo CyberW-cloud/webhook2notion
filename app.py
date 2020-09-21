@@ -40,7 +40,18 @@ test_page_url = "https://www.notion.so/TEST-68d7198ed4d3437b816386f6da196547"
 
 @app.route('/update_token', methods = ["GET"])
 def update_token():
-	print(request.args.get("token", None))
+	
+	token = request.args.get("token", None)
+	if token == None:
+		return
+
+	print(token)
+
+	DATABASE_URL = os.environ['DATABASE_URL']
+	conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+	cur = conn.cursor()
+
+	cur.execute("""UPDATE CONFIG_VARS SET TOKEN='"""+token+"""'' WHERE name = 'token' """)
 
 
 @app.route('/get_proposals_reject_reason', methods=["GET"])
