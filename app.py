@@ -51,7 +51,7 @@ def update_token():
 	conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 	cur = conn.cursor()
 
-	cur.execute("""UPDATE CONFIG_VARS SET TOKEN='"""+token+"""'' WHERE name = 'token' """)
+	cur.execute("""UPDATE CONFIG_VARS SET TOKEN='"""+token+"""' WHERE name = 'token' """)
 
 
 @app.route('/get_proposals_reject_reason', methods=["GET"])
