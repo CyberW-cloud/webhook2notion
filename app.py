@@ -52,7 +52,8 @@ def update_token():
 	cur = conn.cursor()
 
 	cur.execute("""UPDATE CONFIG_VARS SET VALUE='"""+token+"""' WHERE name = 'token' """)
-
+	conn.commit()
+	
 
 @app.route('/get_proposals_reject_reason', methods=["GET"])
 def get_proposals_reject_reason():
