@@ -1939,13 +1939,17 @@ def create_invite(token, collection_url, subject, description, invite_to):
 	item_id = re.search("\d+", url)
 	client = NotionClient(token)
 	cv = client.get_collection_view(collection_url)
-	row = cv.collection.add_row()
-	#row.name = subject
-	#row.description = description
-	#row.status = "New"
-	#row.to = invite_to
-	#row.link = url
-	#row.id = item_id.group()
+	try:
+		row = cv.collection.add_row()
+	except Exception as e:
+		row = cv[0]
+
+	row.name = subject
+	row.description = description
+	row.status = "New"
+	row.to = invite_to
+	row.link = url
+	row.id = item_id.group()
 	return row
 
 @app.route("/invites", methods=["POST", "GET"])
