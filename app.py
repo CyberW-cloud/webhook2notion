@@ -104,6 +104,7 @@ def get_proposals_reject_reason():
 			if application["status"] == "7":
 				continue
 			
+			print(application["applicationUID"])
 			elif application["status"] == "4":
 				if application["withdrawReason"]["rid"] == "144":
 					print("there is withdraw reason, unresponsive, standard reason")
@@ -127,7 +128,7 @@ def get_proposals_reject_reason():
 
 
 		print("--------------------------------------------------------------------------------")
-		i = 1/0 # debugger
+		
 		time.sleep(3.2)
 
 	application = applicationAPI(client)
