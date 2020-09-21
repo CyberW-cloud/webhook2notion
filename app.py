@@ -76,7 +76,7 @@ def get_proposals_reject_reason():
 			proposal_request = application.get_list({"cursor_limit": 40, "status":"archived"})
 			proposals = proposal_request["data"]["applications"]
 		except Exception as e:
-			print(application.get_list({"cursor_limit": 40, "status":"archived"}))
+			time.sleep(3.2)
 			continue
 
 		if len(proposals)>0:
