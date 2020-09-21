@@ -38,6 +38,11 @@ cache = {}
 TEST = False
 test_page_url = "https://www.notion.so/TEST-68d7198ed4d3437b816386f6da196547"
 
+@app.route('/update_token', methods = ["GET"])
+def update_token():
+	print(request.args.get("token", None))
+
+
 @app.route('/get_proposals_reject_reason', methods=["GET"])
 def get_proposals_reject_reason():
 
