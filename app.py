@@ -1949,11 +1949,11 @@ def create_invite(token, collection_url, subject, description, invite_to):
 
 @app.route("/invites", methods=["POST", "GET"])
 def invites():
-	collection_url = request.form.get("collectionURL")
-	description = str(request.form.get("description", "TEST 2"))
-	subject = request.form.get("subject")
+	collection_url = request.args.get("collectionURL")
+	description = request.args.get("description", "TEST 2")
+	subject = request.args.get("subject")
 	token_v2 = os.environ.get("TOKEN")
-	invite_to = request.form.get("inviteto")
+	invite_to = request.args.get("inviteto")
 	print(f"add {subject}")
 	invite = create_invite(token_v2, collection_url, subject, description, invite_to)
 	return f"added {subject} receipt to " + invite.get_browseable_url()
