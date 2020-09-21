@@ -1942,7 +1942,8 @@ def create_invite(token, collection_url, subject, description, invite_to):
 	try:
 		row = cv.collection.add_row()
 	except Exception as e:
-		row = cv.collection.get_rows()[0]
+		sort_params = [{"direction": "ascending", "property": "Date"}]
+		row = cv.build_query(sort = sort_params)[0]
 
 	row.name = subject
 	row.description = description
