@@ -53,7 +53,7 @@ def update_token():
 
 	cur.execute("""UPDATE CONFIG_VARS SET VALUE='"""+token+"""' WHERE name = 'token' """)
 	conn.commit()
-	
+
 
 @app.route('/get_proposals_reject_reason', methods=["GET"])
 def get_proposals_reject_reason():
@@ -125,12 +125,14 @@ def get_proposals_reject_reason():
 				print(application["status"])
 				print(application["openingCiphertext"])
 
+
 		print("--------------------------------------------------------------------------------")
+		i = 1/0 # debugger
 		time.sleep(3.2)
 
 	application = applicationAPI(client)
 
-	i = 1/0 # debugger
+	
 
 
 def add_aliases_to_summary(aliases, page, parent_row):
