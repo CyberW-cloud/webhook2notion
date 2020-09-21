@@ -1947,7 +1947,7 @@ def create_invite(token, collection_url, subject, description, invite_to):
 	row.id = item_id.group()
 	return row
 
-@app.route("/invites", methods=["POST,GET"])
+@app.route("/invites", methods=["POST", "GET"])
 def invites():
 	collection_url = request.form.get("collectionURL")
 	description = request.form.get("description")
