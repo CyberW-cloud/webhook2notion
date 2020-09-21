@@ -784,23 +784,23 @@ def test_scripts():
 
 
 
-		# day_page.children.add_new(CollectionViewPageBlock, title = "table")
-		# page = day_page.children[-1]
+		day_page.children.add_new(CollectionViewPageBlock, title = "table")
+		page = day_page.children[-1]
 
 
-		# schema = client.get_block("https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=375e91212fc4482c815f0b4419cbf5e3").collection.get("schema")
+		schema = client.get_block("https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=375e91212fc4482c815f0b4419cbf5e3").collection.get("schema")
 
-		# collection = client.get_collection(client.create_record("collection", parent=page, schema=schema))
-		# page.collection = collection
+		collection = client.get_collection(client.create_record("collection", parent=page, schema=schema))
+		page.collection = collection
 
 	
-		# test_row = page.views.add_new()
-		# test_row = page.collection.add_row()
-		# test_row.name = "This worked!"
-		# page.collection.refresh()
+		test_row = page.views.add_new()
+		test_row = page.collection.add_row()
+		test_row.name = "This worked!"
+		page.collection.refresh()
 
-		# if test_row.name != "This worked!":
-		# 	log += "TEST FAILED!: Notion seems to be down for tables!\n"
+		if test_row.name != "This worked!":
+			log += "TEST FAILED!: Notion seems to be down for tables!\n"
 
 
 
@@ -1933,15 +1933,16 @@ def pcj():
 
 def create_invite(token, collection_url, subject, description, invite_to):
 	# notion
+	print(description)
 	match = re.search("https://upwork.com/applications/\d+", description)
 	url = match.group()
 	item_id = re.search("\d+", url)
 	client = NotionClient(token)
 	cv = client.get_collection_view(collection_url)
 	row = cv.collection.add_row()
-	row.name = subject
-	row.description = description
-	row.status = "New"
+	#row.name = subject
+	#row.description = description
+	#row.status = "New"
 	row.to = invite_to
 	row.link = url
 	row.id = item_id.group()
@@ -1950,7 +1951,7 @@ def create_invite(token, collection_url, subject, description, invite_to):
 @app.route("/invites", methods=["POST", "GET"])
 def invites():
 	collection_url = request.args.get("collectionURL")
-	description = request.args.get("description", "TEST 2")
+	description = request.args.get("description")
 	subject = request.args.get("subject")
 	token_v2 = os.environ.get("TOKEN")
 	invite_to = request.args.get("inviteto")
