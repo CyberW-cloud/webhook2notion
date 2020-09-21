@@ -1950,7 +1950,7 @@ def create_invite(token, collection_url, subject, description, invite_to):
 @app.route("/invites", methods=["POST", "GET"])
 def invites():
 	collection_url = request.form.get("collectionURL")
-	description = request.form.get("description")
+	description = str(request.form.get("description", "TEST 2"))
 	subject = request.form.get("subject")
 	token_v2 = os.environ.get("TOKEN")
 	invite_to = request.form.get("inviteto")
