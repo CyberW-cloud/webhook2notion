@@ -104,6 +104,10 @@ def get_proposals_reject_reason():
 			elif application["status"] == "3":
 				print("Invite Declined by client")
 
+			else:
+				print(application["status"])
+				print(application["openingCiphertext"])
+
 		print("--------------------------------------------------------------------------------")
 		time.sleep(3.2)
 
