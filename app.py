@@ -1640,7 +1640,13 @@ def create_invite(token, collection_url, subject, description, invite_to):
 	item_id = re.search("\d+", url)
 	client = NotionClient(token)
 	cv = client.get_collection_view(collection_url)
-	row = cv.collection.add_row()
+	try:
+        row = cv.collection.add_row()
+    except Exception as e:
+        sort_params = [{"direction": "ascending", "property": "Date"}]
+        time.sleep(3)
+        row = cv.build_query(sort = sort_params).execute()[-1]
+        
 	row.name = subject
 	row.description = description
 	row.status = "New"
