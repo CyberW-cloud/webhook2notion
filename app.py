@@ -95,7 +95,7 @@ def get_proposals_reject_reason():
 				proposals = proposal_request["data"]["applications"]
 			except Exception as e:
 				time.sleep(3.2)
-				continue
+				break
 
 			if len(proposals)>0:
 				print(job_info.get_specific(proposals[0]["openingCiphertext"])["profile"]["ui_opening_status"])
