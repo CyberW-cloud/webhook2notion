@@ -66,12 +66,15 @@ def get_proposals_reject_reason():
 	filter_params = {
 		"filters": [
 			{
-				"filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.fromtimestamp(activeSince).strftime('%Y-%m-%d')}}, "operator": "date_is_on_or_after"},
-				"property": "Modified",
+				filter: {operator: "is_empty"}
+				"property": "Decline Reason",
 			}
 		],
 		"operator": "and",		
 	}
+
+	proposals = proposals.build_query(filter=filter_params)
+	result = proposals.execute() 
 
 	login_config = upwork.Config({\
 			'consumer_key': os.environ.get("ConsumerKey"),\
@@ -82,67 +85,71 @@ def get_proposals_reject_reason():
 	client = upwork.Client(login_config)
 	
 	company = companyAPI(client)
-	
+	application = applicationAPI(client)
+	job_info = jobInfoAPI(client)
 
 	freelancer_ids = [x["public_url"].split("/")[-1] for x in company.get_users(os.environ.get("CompanyRef"))["users"]]
 	
 	tokens = os.environ.get('TOKENS')
 	tokens = parse_tokens(tokens, freelancer_ids)
 	
-	for freelancer in tokens:
-		#log in as each freelancer 
-		client = upwork.Client(upwork.Config({\
-			'consumer_key': os.environ.get("ConsumerKey"),\
-			'consumer_secret': os.environ.get("ConsumerSecret"),\
-			'access_token': freelancer["accessToken"],\
-			'access_token_secret': freelancer["accessSecret"]}))
+
+	for proposal in result:
+		print(job_info.get_specific(proposal.title))
+	# for freelancer in tokens:
+	# 	#log in as each freelancer 
+	# 	client = upwork.Client(upwork.Config({\
+	# 		'consumer_key': os.environ.get("ConsumerKey"),\
+	# 		'consumer_secret': os.environ.get("ConsumerSecret"),\
+	# 		'access_token': freelancer["accessToken"],\
+	# 		'access_token_secret': freelancer["accessSecret"]}))
 		
-		application = applicationAPI(client)
-		job_info = jobInfoAPI(client)
-		cursor = 0
+	# 	application = applicationAPI(client)
+	# 	job_info = jobInfoAPI(client)
+	# 	cursor = 0
 
-		try:
-			proposal_request = application.get_list({"cursor": cursor, "cursor_limit": 40, "status":"archived"})
-			proposals = proposal_request["data"]["applications"]
-		except Exception as e:
-			time.sleep(3.2)
-			break
+	# 	try:
+	# 		proposal_request = application.get_list({"cursor": cursor, "cursor_limit": 40, "status":"archived"})
+	# 		proposals = proposal_request["data"]["applications"]
+	# 	except Exception as e:
+	# 		time.sleep(3.2)
+	# 		break
 
-		if len(proposals)>0:
-			print(job_info.get_specific(proposals[0]["openingCiphertext"])["profile"]["ui_opening_status"])
+	# 	if len(proposals)>0:
+	# 		print(job_info.get_specific(proposals[0]["openingCiphertext"])["profile"]["ui_opening_status"])
 
-		for application in proposals:
+	# 	for application in proposals:
 			
-			if application["status"] == "7":
-				continue
+	# 		if application["status"] == "7":
+	# 			continue
 
-			elif application["status"] == "4":
-				if application["withdrawReason"]["rid"] == "144":
-					print("there is withdraw reason, unresponsive, standard reason")
-				elif application["withdrawReason"]["rid"] == "146":
-					print("there is withdraw reason, unresponsive, manual reason")
-				else:
-					print("withdraw, unknown withdraw reason")
+	# 		elif application["status"] == "4":
+	# 			if application["withdrawReason"]["rid"] == "144":
+	# 				print("there is withdraw reason, unresponsive, standard reason")
+	# 			elif application["withdrawReason"]["rid"] == "146":
+	# 				print("there is withdraw reason, unresponsive, manual reason")
+	# 			else:
+	# 				print("withdraw, unknown withdraw reason")
 
-			elif application["status"] == "2":
-				print("bid/proposal sent ")
+	# 		elif application["status"] == "2":
+	# 			print("bid/proposal sent ")
 
-			elif application["status"] == "8":
-				print("job no longer available ")
+	# 		elif application["status"] == "8":
+	# 			print("job no longer available ")
 
-			elif application["status"] == "3":
-				print("Invite Declined by client")
+	# 		elif application["status"] == "3":
+	# 			print("Invite Declined by client")
 
-			else:
-				print(application["status"])
-				print(application["openingCiphertext"])
+	# 		else:
+	# 			print(application["status"])
+	# 			print(application["openingCiphertext"])
 
 
-		print("--------------------------------------------------------------------------------")
+	# 	print("--------------------------------------------------------------------------------")
 			
-		time.sleep(3.2)
+	# 	time.sleep(3.2)
 
-	application = applicationAPI(client)
+	# application = applicationAPI(client)
 
 	
 
