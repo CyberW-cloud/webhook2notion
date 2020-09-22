@@ -1326,7 +1326,8 @@ def get_proposals(token, days_before):
 		if row.CC:
 			proposal["person"] = row.CC[0]
 		else:
-			if isinstance(row, CollectionRowBlock):
+			print(row.id)
+			if isinstance(row, CollectionRowBlock) and:
 				proposal["person"] = row.Sent_by 
 			else:
 				proposal["person"] = None
