@@ -1326,7 +1326,10 @@ def get_proposals(token, days_before):
 		if row.CC:
 			proposal["person"] = row.CC[0]
 		else:
-			proposal["person"] = row.Sent_by if isinstance(row, CollectionRowBlock) else None
+			if isinstance(row, CollectionRowBlock):
+				proposal["person"] = row.Sent_by 
+			else:
+				proposal["person"] = None
 		if proposal["person"]:
 			proposal["person_name"] = proposal["person"].full_name.replace("\xa0", "")
 			# person field is class User, so we need linked it to stats DB. Try to Find person in stats DB
