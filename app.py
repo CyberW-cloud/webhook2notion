@@ -88,48 +88,49 @@ def get_proposals_reject_reason():
 		
 		application = applicationAPI(client)
 		job_info = jobInfoAPI(client)
-
-		try:
-			proposal_request = application.get_list({"cursor_limit": 40, "status":"archived"})
-			proposals = proposal_request["data"]["applications"]
-		except Exception as e:
-			time.sleep(3.2)
-			continue
-
-		if len(proposals)>0:
-			print(job_info.get_specific(proposals[0]["openingCiphertext"])["profile"]["ui_opening_status"])
-
-		for application in proposals:
-			
-			print(application["applicationUID"])
-			if application["status"] == "7":
+		cursor = 0
+		while 1:
+			try:
+				proposal_request = application.get_list({"cursor" = cursor, "cursor_limit": 40, "status":"archived"})
+				proposals = proposal_request["data"]["applications"]
+			except Exception as e:
+				time.sleep(3.2)
 				continue
 
-			elif application["status"] == "4":
-				if application["withdrawReason"]["rid"] == "144":
-					print("there is withdraw reason, unresponsive, standard reason")
-				elif application["withdrawReason"]["rid"] == "146":
-					print("there is withdraw reason, unresponsive, manual reason")
+			if len(proposals)>0:
+				print(job_info.get_specific(proposals[0]["openingCiphertext"])["profile"]["ui_opening_status"])
+
+			for application in proposals:
+				
+				i = 1/0 # debug
+				if application["status"] == "7":
+					continue
+
+				elif application["status"] == "4":
+					if application["withdrawReason"]["rid"] == "144":
+						print("there is withdraw reason, unresponsive, standard reason")
+					elif application["withdrawReason"]["rid"] == "146":
+						print("there is withdraw reason, unresponsive, manual reason")
+					else:
+						print("withdraw, unknown withdraw reason")
+
+				elif application["status"] == "2":
+					print("bid/proposal sent ")
+
+				elif application["status"] == "8":
+					print("job no longer available ")
+
+				elif application["status"] == "3":
+					print("Invite Declined by client")
+
 				else:
-					print("withdraw, unknown withdraw reason")
-
-			elif application["status"] == "2":
-				print("bid/proposal sent ")
-
-			elif application["status"] == "8":
-				print("job no longer available ")
-
-			elif application["status"] == "3":
-				print("Invite Declined by client")
-
-			else:
-				print(application["status"])
-				print(application["openingCiphertext"])
+					print(application["status"])
+					print(application["openingCiphertext"])
 
 
-		print("--------------------------------------------------------------------------------")
-		
-		time.sleep(3.2)
+			print("--------------------------------------------------------------------------------")
+			
+			time.sleep(3.2)
 
 	application = applicationAPI(client)
 
