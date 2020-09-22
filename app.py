@@ -61,6 +61,17 @@ def get_proposals_reject_reason():
 	token = os.environ.get("TOKEN")
 	notion_client = NotionClient(token)
 
+	proposals = client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
+
+	filter_params = {
+		"filters": [
+			{
+				"filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.fromtimestamp(activeSince).strftime('%Y-%m-%d')}}, "operator": "date_is_on_or_after"},
+				"property": "Modified",
+			}
+		],
+		"operator": "and",		
+	}
 
 	login_config = upwork.Config({\
 			'consumer_key': os.environ.get("ConsumerKey"),\
@@ -89,48 +100,47 @@ def get_proposals_reject_reason():
 		application = applicationAPI(client)
 		job_info = jobInfoAPI(client)
 		cursor = 0
-		while 1:
-			try:
-				proposal_request = application.get_list({"cursor": cursor, "cursor_limit": 40, "status":"archived"})
-				proposals = proposal_request["data"]["applications"]
-			except Exception as e:
-				time.sleep(3.2)
-				break
 
-			if len(proposals)>0:
-				print(job_info.get_specific(proposals[0]["openingCiphertext"])["profile"]["ui_opening_status"])
-
-			for application in proposals:
-				
-				i = 1/0 # debug
-				if application["status"] == "7":
-					continue
-
-				elif application["status"] == "4":
-					if application["withdrawReason"]["rid"] == "144":
-						print("there is withdraw reason, unresponsive, standard reason")
-					elif application["withdrawReason"]["rid"] == "146":
-						print("there is withdraw reason, unresponsive, manual reason")
-					else:
-						print("withdraw, unknown withdraw reason")
-
-				elif application["status"] == "2":
-					print("bid/proposal sent ")
-
-				elif application["status"] == "8":
-					print("job no longer available ")
-
-				elif application["status"] == "3":
-					print("Invite Declined by client")
-
-				else:
-					print(application["status"])
-					print(application["openingCiphertext"])
-
-
-			print("--------------------------------------------------------------------------------")
-			
+		try:
+			proposal_request = application.get_list({"cursor": cursor, "cursor_limit": 40, "status":"archived"})
+			proposals = proposal_request["data"]["applications"]
+		except Exception as e:
 			time.sleep(3.2)
+			break
+
+		if len(proposals)>0:
+			print(job_info.get_specific(proposals[0]["openingCiphertext"])["profile"]["ui_opening_status"])
+
+		for application in proposals:
+			
+			if application["status"] == "7":
+				continue
+
+			elif application["status"] == "4":
+				if application["withdrawReason"]["rid"] == "144":
+					print("there is withdraw reason, unresponsive, standard reason")
+				elif application["withdrawReason"]["rid"] == "146":
+					print("there is withdraw reason, unresponsive, manual reason")
+				else:
+					print("withdraw, unknown withdraw reason")
+
+			elif application["status"] == "2":
+				print("bid/proposal sent ")
+
+			elif application["status"] == "8":
+				print("job no longer available ")
+
+			elif application["status"] == "3":
+				print("Invite Declined by client")
+
+			else:
+				print(application["status"])
+				print(application["openingCiphertext"])
+
+
+		print("--------------------------------------------------------------------------------")
+			
+		time.sleep(3.2)
 
 	application = applicationAPI(client)
 
@@ -191,7 +201,6 @@ def add_aliases_to_summary(aliases, page, parent_row):
 def head_summary():
 	token = os.environ.get("TOKEN")
 	client = NotionClient(token)
-
 
 	target_table = client.get_block(request.args.get("table", "https://www.notion.so/96a6a203a3a446e4a8e0673682a2304b?v=81f1740cd5df439b9bf2ba3a25313dbb"))
 	proposals = client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
@@ -1317,7 +1326,7 @@ def get_proposals(token, days_before):
 		if row.CC:
 			proposal["person"] = row.CC[0]
 		else:
-			proposal["person"] = row.Sent_by if row.Sent_by else None
+			proposal["person"] = row.Sent_by if isinstance(row, CollectionRowBlock) else None
 		if proposal["person"]:
 			proposal["person_name"] = proposal["person"].full_name.replace("\xa0", "")
 			# person field is class User, so we need linked it to stats DB. Try to Find person in stats DB
