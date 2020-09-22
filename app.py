@@ -91,7 +91,7 @@ def get_proposals_reject_reason():
 		cursor = 0
 		while 1:
 			try:
-				proposal_request = application.get_list({"cursor" = cursor, "cursor_limit": 40, "status":"archived"})
+				proposal_request = application.get_list({"cursor": cursor, "cursor_limit": 40, "status":"archived"})
 				proposals = proposal_request["data"]["applications"]
 			except Exception as e:
 				time.sleep(3.2)
