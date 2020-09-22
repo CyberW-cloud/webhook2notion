@@ -214,8 +214,8 @@ def head_summary():
 
 	select_dbs = request.args.get("types", "Proposals,Contracts,Projects").lower().split(",")
 
-	date = str(datetime.datetime.now().day) + " " + str(datetime.datetime.now().month) + " " + str(datetime.datetime.now().year)
-	name = request.args.get("row_name", date + " | " + str(active_since_hours)+"h")
+	date = str(datetime.datetime.now().day) + "." + str(datetime.datetime.now().month) + "." + str(datetime.datetime.now().year)
+	name = request.args.get("row_name", date + " - " + str(active_since_hours)+"h")
 
 	result = []
 
