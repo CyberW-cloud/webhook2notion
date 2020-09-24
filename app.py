@@ -762,8 +762,8 @@ def message_review():
 			text += i["message"]
 
 			message = auto_retry_lambda(parent_text_block.children.add_new,CodeBlock, title = text)
-			auto_retry_lambda(lambda: message.__setattr__("language", "Plain text")
-			auto_retry_lambda(lambda: message.__setattr__("wrap", True))
+			auto_retry_lambda(lambda: setattr(message, "language", "Plain text"))
+			auto_retry_lambda(lambda: setattr(message, "wrap", True))
 
 			auto_retry_lambda(message.move_to,parent_text_block, position = "first-child")
 
