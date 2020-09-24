@@ -104,7 +104,7 @@ def get_proposals_reject_reason():
 			application = client.get("/hr/v4/contractors/applications/"+ref)
 			
 			if application["status"] == "7":
-				pass
+				print("proposal open")
 
 			elif application["status"] == "4":
 				if application["withdrawReason"]["rid"] == "144":
