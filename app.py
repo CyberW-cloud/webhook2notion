@@ -95,7 +95,7 @@ def get_proposals_reject_reason():
 	
 
 	for proposal in result:
-		try
+		try:
 			if "[" in proposal.title:
 				ref = re.search("(?<=\[).*(?=\])", proposal.title).match
 			else:
