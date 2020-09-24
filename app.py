@@ -102,7 +102,7 @@ def get_proposals_reject_reason():
 				ref = proposal.title
 
 			print(ref)
-			print(client.get("/hr/v4/contractors/applications/"+ref+".json"))	
+			print(client.get("/hr/v4/contractors/applications/"+ref))	
 		except Exception as e:
 			continue
 		
