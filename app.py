@@ -101,7 +101,7 @@ def get_proposals_reject_reason():
 			else:
 				ref = proposal.title
 
-			application = client.get("/hr/v4/contractors/applications/"+ref)
+			application = client.get("/hr/v4/contractors/applications/"+ref)["data"]
 			print(application)
 			if application["status"] == "7":
 				print("proposal open")
