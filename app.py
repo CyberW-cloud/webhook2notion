@@ -1629,7 +1629,7 @@ def create_pcj(token, collection_url, subject, description, invite_to, link):
 		urllib.parse.quote(subject[:-9])
 	)
 	
-	item_id = re.search("[~(%7Е)][0-9][\w]", link)
+	item_id = re.search("%7E[0-9][\w]+", link)
 	row.id = item_id.group()[3:]
 	return row
 
