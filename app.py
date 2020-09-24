@@ -1611,7 +1611,6 @@ def message():
 
 def create_pcj(token, collection_url, subject, description, invite_to, link):
 	# notion
-	item_id = re.search("%7E[\w]+", link)
 	client = NotionClient(token)
 	cv = client.get_collection_view(collection_url)
 	
