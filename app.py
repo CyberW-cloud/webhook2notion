@@ -1622,14 +1622,16 @@ def create_pcj(token, collection_url, subject, description, invite_to, link):
 		time.sleep(3)
 		row = cv.build_query(sort = sort_params).execute()[-1]
 	
-    row.name = subject[:-9]
+	row.name = subject[:-9]
 	row.description = description
 	row.status = "New"
 	row.to = invite_to
 	row.link = "https://www.upwork.com/ab/jobs/search/?previous_clients=all&q={}&sort=recency".format(
 		urllib.parse.quote(subject[:-9])
 	)
-	row.id = item_id.group()[3:]
+	
+	item_id = re.search("~[\w]+", link)
+	row.id = item_id.group()[1:]
 	return row
 
 @app.route("/pcj", methods=["POST"])
