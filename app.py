@@ -95,7 +95,11 @@ def get_proposals_reject_reason():
 	
 
 	for proposal in result:
-		print(job_info.get_specific(proposal.title))
+		try:
+			print(job_info.get_specific(proposal.title))	
+		except Exception as e:
+			print(proposal.title)
+		
 	# for freelancer in tokens:
 	# 	#log in as each freelancer 
 	# 	client = upwork.Client(upwork.Config({\
