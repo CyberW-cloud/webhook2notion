@@ -1942,6 +1942,7 @@ def create_pcj(token, collection_url, subject, description, invite_to, link):
 	row.link = "https://www.upwork.com/ab/jobs/search/?previous_clients=all&q={}&sort=recency".format(
 		urllib.parse.quote(subject[:-9])
 	)
+
 	item_id = re.search("~[\w]+", link)
 	row.id = item_id.group()[1:]
 	return row
