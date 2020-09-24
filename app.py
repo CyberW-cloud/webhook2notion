@@ -102,7 +102,7 @@ def get_proposals_reject_reason():
 				ref = proposal.title
 
 			print(ref)
-			print(job_info.get_specific("1201523548419825665"))	
+			print(job_info.get_specific(1201523548419825665))	
 		except Exception as e:
 			continue
 		
