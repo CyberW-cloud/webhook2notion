@@ -1614,8 +1614,15 @@ def create_pcj(token, collection_url, subject, description, invite_to, link):
 	item_id = re.search("%7E[\w]+", link)
 	client = NotionClient(token)
 	cv = client.get_collection_view(collection_url)
-	row = cv.collection.add_row()
-	row.name = subject[:-9]
+	
+	try:
+		row = cv.collection.add_row()
+	except Exception as e:
+		sort_params = [{"direction": "ascending", "property": "Date"}]
+		time.sleep(3)
+		row = cv.build_query(sort = sort_params).execute()[-1]
+	
+    row.name = subject[:-9]
 	row.description = description
 	row.status = "New"
 	row.to = invite_to
