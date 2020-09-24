@@ -104,7 +104,7 @@ def get_proposals_reject_reason():
 			application = client.get("/hr/v4/contractors/applications/"+ref)
 			
  			if application["status"] == "7":
-				continue
+				pass
 
 			elif application["status"] == "4":
 				if application["withdrawReason"]["rid"] == "144":
@@ -127,8 +127,10 @@ def get_proposals_reject_reason():
 				print(application["status"])
 				print(application["openingCiphertext"])
 
-
+			time.sleep(1.6)
+			
 		except Exception as e:
+			time.sleep(1.6)
 			continue
 		
 	# for freelancer in tokens:
