@@ -703,8 +703,8 @@ def message_review():
 
 		if room["type"] not in rows.keys():
 			rows[room["type"]] = auto_retry_lambda(message_review.collection.add_row)
-			rows[room["type"]].name = row_name
-			rows[room["type"]].tags = room["type"]
+			auto_retry_lambda(lambda: rows[room["type"]].name = row_name)
+			auto_retry_lambda(lambda: rows[room["type"]].tags = room["type"])
 
 		target_row = rows[room["type"]]
 
@@ -762,8 +762,8 @@ def message_review():
 			text += i["message"]
 
 			message = auto_retry_lambda(parent_text_block.children.add_new,CodeBlock, title = text)
-			message.language = "Plain text"
-			message.wrap = True
+			auto_retry_lambda(lambda: message.language = "Plain text")
+			auto_retry_lambda(lambda: message.wrap = True)
 
 			auto_retry_lambda(message.move_to,parent_text_block, position = "first-child")
 
