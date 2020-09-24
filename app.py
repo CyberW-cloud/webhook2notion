@@ -66,8 +66,8 @@ def get_proposals_reject_reason():
 	filter_params = {
 		"filters": [
 			{
-				"filter": {"operator": "is_empty"},
-				"property": "Decline Reason"
+				# "filter": {"operator": "is_empty"},
+				# "property": "Decline Reason"
 			}
 		],
 		"operator": "and",		
