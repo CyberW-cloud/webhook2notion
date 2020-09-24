@@ -95,8 +95,12 @@ def get_proposals_reject_reason():
 	
 
 	for proposal in result:
-		try:
-			ref = re.search("(?<=\[).*(?=\])", proposal.title).match
+		try
+			if "[" in proposal.title:
+				ref = re.search("(?<=\[).*(?=\])", proposal.title).match
+			else:
+				ref = proposal.title
+
 			print(job_info.get_specific(ref))	
 		except Exception as e:
 			print(proposal.title)
