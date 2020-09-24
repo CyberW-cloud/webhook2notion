@@ -101,9 +101,10 @@ def get_proposals_reject_reason():
 			else:
 				ref = proposal.title
 
+			print(ref)
 			print(job_info.get_specific(ref))	
 		except Exception as e:
-			print(proposal.title)
+			continue
 		
 	# for freelancer in tokens:
 	# 	#log in as each freelancer 
