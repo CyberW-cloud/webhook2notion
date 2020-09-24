@@ -97,12 +97,12 @@ def get_proposals_reject_reason():
 	for proposal in result:
 		try:
 			if "[" in proposal.title:
-				ref = re.search("(?<=\[).*(?=\])", proposal.title).match
+				ref = re.search("(?<=\[).*(?=\])", proposal.title).match()
 			else:
 				ref = proposal.title
 
 			application = client.get("/hr/v4/contractors/applications/"+ref)
-			
+			print(application)
 			if application["status"] == "7":
 				print("proposal open")
 
