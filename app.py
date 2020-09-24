@@ -101,8 +101,33 @@ def get_proposals_reject_reason():
 			else:
 				ref = proposal.title
 
-			print(ref)
-			print(client.get("/hr/v4/contractors/applications/"+ref))	
+			application = client.get("/hr/v4/contractors/applications/"+ref)
+			
+ 			if application["status"] == "7":
+				continue
+
+			elif application["status"] == "4":
+				if application["withdrawReason"]["rid"] == "144":
+					print("there is withdraw reason, unresponsive, standard reason")
+				elif application["withdrawReason"]["rid"] == "146":
+					print("there is withdraw reason, unresponsive, manual reason")
+				else:
+					print("withdraw, unknown withdraw reason")
+
+			elif application["status"] == "2":
+				print("bid/proposal sent ")
+
+			elif application["status"] == "8":
+				print("job no longer available ")
+
+			elif application["status"] == "3":
+				print("Invite Declined by client")
+
+			else:
+				print(application["status"])
+				print(application["openingCiphertext"])
+
+
 		except Exception as e:
 			continue
 		
