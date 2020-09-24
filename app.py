@@ -1925,7 +1925,6 @@ def message():
 
 def create_pcj(token, collection_url, subject, description, invite_to, link):
 	# notion
-	item_id = re.search("%7E[\w]+", link)
 	client = NotionClient(token)
 	cv = client.get_collection_view(collection_url)
 	
@@ -1943,7 +1942,8 @@ def create_pcj(token, collection_url, subject, description, invite_to, link):
 	row.link = "https://www.upwork.com/ab/jobs/search/?previous_clients=all&q={}&sort=recency".format(
 		urllib.parse.quote(subject[:-9])
 	)
-	row.id = item_id.group()[3:]
+	item_id = re.search("~[\w]+", link)
+	row.id = item_id.group()[1:]
 	return row
 
 @app.route("/pcj", methods=["GET"])
