@@ -66,8 +66,8 @@ def get_proposals_reject_reason():
 	filter_params = {
 		"filters": [
 			{
-				# "filter": {"operator": "is_empty"},
-				# "property": "Decline Reason"
+				"filter": {"operator": "is_not_empty"},
+				"property": "Decline Reason"
 			}
 		],
 		"operator": "and",		
@@ -124,7 +124,7 @@ def get_proposals_reject_reason():
 				print("Invite Declined by client")
 
 			elif application["status"] == "10":
-				print(proposal.get_browseable_url)
+				print(proposal.get_browseable_url())
 
 			else:
 				print(application["status"])
