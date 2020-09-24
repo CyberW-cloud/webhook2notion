@@ -123,6 +123,9 @@ def get_proposals_reject_reason():
 			elif application["status"] == "3":
 				print("Invite Declined by client")
 
+			elif application["status"] == "10":
+				print(proposal.get_browseable_url)
+
 			else:
 				print(application["status"])
 				print(application["openingCiphertext"])
