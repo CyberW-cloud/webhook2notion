@@ -1868,7 +1868,7 @@ def friday_todo():
 	staff = get_todo_list_by_role(token_v2, roles)
 
 	for fl in staff["FL"]:
-		print(type(fl))
+		print(fl.to_dict())
 
 	print("roles get done")
 
