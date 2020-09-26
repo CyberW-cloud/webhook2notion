@@ -1710,7 +1710,6 @@ def friday_todo_fl(token, staff, calendar):
 
 #		if fl['name'] == 'Denys Safonov':		 
 		print(f"FL {fl['name']} start")
-		print(fl)
 		# Friday
 		todo = list()
 		todo.append(f"Коментом напиши какие day-off ты планируешь на следующую неделю и тегни {fl['pa_name']}, иначе напиши - Не планирую")
@@ -1800,7 +1799,12 @@ def get_todo_list_by_role(token, roles):
 
 			# if person:
 			# d["stats"] = person[0]
+
 			d["todo_url"] = person["todo"].split()[1]
+			#handle links
+			if "[" in d["todo_url"]:
+				d["todo_url"] = re.search("(?<=\().*(?=\))", d["todo_url"]).group()				
+	
 			d["stats_upload"] = person["stats_upload"]
 			d["team"] = person
 			d["name"] = person["name"].replace("\xa0", "")
