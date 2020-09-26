@@ -687,9 +687,15 @@ def message_review():
 				proposals_found = []
 
 			try:
+				time.sleep(1.6)
+				messages = {}
 				messages = messages_api.get_room_messages(os.environ.get("TeamID"), room["roomId"], {"limit":15})
 				if "stories_list" not in messages.keys():
 					messages = messages_api.get_room_messages(user_id, room["roomId"], {"limit":15})
+					if messages != messages_api.get_room_messages(user_id, room["roomId"], {"limit":15}):
+						i = 1/0 #debug
+				else:
+					i = 1/0
 			except Exception as e:
 				print(str(e) + " 3")
 				print("		" + str(messages))
