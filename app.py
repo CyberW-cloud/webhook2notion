@@ -531,6 +531,7 @@ def message_review():
 
             time.sleep(1.6)
             try:
+                messages = {}
                 messages = messages_api.get_room_messages(os.environ.get("TeamID"), room["roomId"], {"limit":15})
                 if "stories_list" not in messages.keys():
                     messages = messages_api.get_room_messages(user_id, room["roomId"], {"limit":15})
