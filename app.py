@@ -692,10 +692,10 @@ def message_review():
 				messages = messages_api.get_room_messages(os.environ.get("TeamID"), room["roomId"], {"limit":15})
 				if "stories_list" not in messages.keys():
 					messages = messages_api.get_room_messages(user_id, room["roomId"], {"limit":15})
-					if messages != messages_api.get_room_messages(user_id, room["roomId"], {"limit":15}):
+					if messages["messages"]["stories_list"]["stories"][0] != messages_api.get_room_messages(user_id, room["roomId"], {"limit":15})["messages"]["stories_list"]["stories"][0]:
 						i = 1/0 #debug
 				else:
-					if messages != messages_api.get_room_messages(os.environ.get("TeamID"), room["roomId"], {"limit":15}):
+					if messages["messages"]["stories_list"]["stories"][0] != messages_api.get_room_messages(os.environ.get("TeamID"), room["roomId"], {"limit":15})["messages"]["stories_list"]["stories"][0]:
 						i = 1/0
 			except Exception as e:
 				if "zero" in str(e):
