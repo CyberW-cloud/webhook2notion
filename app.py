@@ -1867,7 +1867,7 @@ def friday_todo():
 	d = request.args.get("date", datetime.datetime.now().date())
 	staff = get_todo_list_by_role(token_v2, roles)
 
-	for fl in staff:
+	for fl in staff["FL"]:
 		print(fl)
 
 	print("roles get done")
