@@ -1447,6 +1447,10 @@ def get_todo_list_by_role(token, roles):
             # if person:
             # d["stats"] = person[0]
             d["todo_url"] = person["todo"].split()[1]
+            #handle links
+            if "[" in d["todo_url"]:
+                d["todo_url"] = re.search("(?<=\().*(?=\))", d["todo_url"]).group()             
+
             d["stats_upload"] = person["stats_upload"]
             d["team"] = person
             d["name"] = person["name"].replace("\xa0", "")
