@@ -699,6 +699,7 @@ def message_review():
 						i = 1/0
 			except Exception as e:
 				if "zero" in str(e):
+					i = 1/0 #debug
 				print(str(e) + " 3")
 				print("		" + str(messages))
 				messages = {}
