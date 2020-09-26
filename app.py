@@ -1710,6 +1710,7 @@ def friday_todo_fl(token, staff, calendar):
 
 #		if fl['name'] == 'Denys Safonov':		 
 		print(f"FL {fl['name']} start")
+		print(fl)
 		# Friday
 		todo = list()
 		todo.append(f"Коментом напиши какие day-off ты планируешь на следующую неделю и тегни {fl['pa_name']}, иначе напиши - Не планирую")
@@ -1866,9 +1867,6 @@ def friday_todo():
 	token_v2 = os.environ.get("TOKEN")
 	d = request.args.get("date", datetime.datetime.now().date())
 	staff = get_todo_list_by_role(token_v2, roles)
-
-	for fl in staff["FL"]:
-		print(fl.to_dict())
 
 	print("roles get done")
 
