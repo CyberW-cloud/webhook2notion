@@ -85,7 +85,7 @@ def get_proposals_reject_reason():
 	page.collection = collection
 
 
-	test_row = test_page.views.add_new()
+	test_row = page.views.add_new()
 	
 
 	date = str(datetime.datetime.now().day) + "." + str(datetime.datetime.now().month) + "." + str(datetime.datetime.now().year)
