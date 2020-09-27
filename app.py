@@ -81,7 +81,7 @@ def get_proposals_reject_reason():
 
 	schema = notion_client.get_block("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553").collection.get("schema")
 
-	collection = notion_client.get_collection(client.create_record("collection", parent=page, schema=schema))
+	collection = notion_client.get_collection(notion_client.create_record("collection", parent=page, schema=schema))
 	page.collection = collection
 
 
