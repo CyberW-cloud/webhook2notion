@@ -38,6 +38,17 @@ cache = {}
 TEST = False
 test_page_url = "https://www.notion.so/TEST-68d7198ed4d3437b816386f6da196547"
 
+@app.route('/fixasap')
+def t():
+	token = os.environ.get("TOKEN")
+	client = NotionClient(token)
+
+	row = client.get_block(request.args.get("row_url", ""))
+	date_time_str = request.args.get("date", None)
+	date = datetime.datetime.strptime(date_time_str, '%Y-%m-%d')
+
+	row.date_sent = date
+
 @app.route('/update_token', methods = ["GET"])
 def update_token():
 	
