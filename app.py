@@ -54,6 +54,16 @@ def update_token():
 	cur.execute("""UPDATE CONFIG_VARS SET VALUE='"""+token+"""' WHERE name = 'token' """)
 	conn.commit()
 
+def copy_proposal_row(source_row, target_row):
+	
+
+	source_row.date_sent = target_row.date_sent
+	source_row.invite_name = target_row.invite_name
+	source_row.url = target_row.url
+	source_row.sent_by = target_row.sent_by
+	source_row.title = target_row.title
+	source_row.job_url = target_row.job_url
+	#got bored, no need to actually copy everything
 
 @app.route('/get_proposals_reject_reason', methods=["GET"])
 def get_proposals_reject_reason():
@@ -61,7 +71,24 @@ def get_proposals_reject_reason():
 	token = os.environ.get("TOKEN")
 	notion_client = NotionClient(token)
 
+	test_page = notion_client.get_block("https://www.notion.so/proposal-edit-test-7f8d247669c14b3ea5bc602f846cf81f")
+	
+
+	test_page.children.add_new(CollectionViewPageBlock, title = "table")
+	page = day_page.children[-1]
+
 	proposals = notion_client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
+
+	schema = notion_client.get_block("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553").collection.get("schema")
+
+	collection = notion_client.get_collection(client.create_record("collection", parent=page, schema=schema))
+	page.collection = collection
+
+
+	test_row = test_page.views.add_new()
+	
+
+	date = str(datetime.datetime.now().day) + "." + str(datetime.datetime.now().month) + "." + str(datetime.datetime.now().year)
 
 	filter_params = {
 		"filters": [
@@ -95,7 +122,9 @@ def get_proposals_reject_reason():
 	tokens = parse_tokens(tokens, freelancer_ids)
 	
 
-	for proposal in result:
+	for row in result:
+		proposal = page.collection.add_row()
+		copy_proposal_row(row, proposal)
 		try:
 			if "[" in proposal.title:
 				ref = re.search("(?<=\[).*(?=\])", proposal.title).group()
