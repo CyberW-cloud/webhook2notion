@@ -108,20 +108,26 @@ def get_proposals_reject_reason():
 
 			elif application["status"] == "4":
 				if application["withdrawReason"]["rid"] == "144":
-					print("there is withdraw reason, unresponsive, standard reason")
+					pass
+					#print("there is withdraw reason, unresponsive, standard reason")
 				elif application["withdrawReason"]["rid"] == "146":
-					print("there is withdraw reason, unresponsive, manual reason")
+					pass
+					#print("there is withdraw reason, unresponsive, manual reason")
 				else:
-					print("withdraw, unknown withdraw reason")
+					pass
+					#print("withdraw, unknown withdraw reason")
 
 			elif application["status"] == "2":
-				print("bid/proposal sent ")
+				pass
+				#print("bid/proposal sent ")
 
 			elif application["status"] == "8":
-				print("job no longer available ")
+				pass
+				#print("job no longer available ")
 
 			elif application["status"] == "3":
-				print("Invite Declined by client")
+				pass
+				#print("Invite Declined by client")
 
 			elif application["status"] == "10":
 				print(proposal.get_browseable_url())
@@ -129,6 +135,7 @@ def get_proposals_reject_reason():
 			else:
 				print(application["status"])
 				print(application["openingCiphertext"])
+				print(proposal.get_browseable_url())
 
 			time.sleep(1.6)
 
