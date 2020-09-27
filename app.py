@@ -66,13 +66,13 @@ def get_proposals_reject_reason():
 	filter_params = {
 		"filters": [
 			{
-				"filter": {"operator": "is_not_empty"},
+				"filter": {"operator": "is_empty"},
 				"property": "Decline Reason"
 			}
 		],
 		"operator": "and",		
 	}
-	sort_params = [{"direction": "descending", "property": "Modified"}]
+	sort_params = [{"direction": "ascending", "property": "Modified"}]
 
 	proposals = proposals.build_query(filter=filter_params, sort = sort_params)
 	result = proposals.execute() 
