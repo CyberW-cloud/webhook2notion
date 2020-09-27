@@ -119,6 +119,7 @@ def get_proposals_reject_reason():
 					#print("withdraw, unknown withdraw reason") 
 
 			elif application["status"] == "2":
+				print(proposal.get_browseable_url())
 				pass
 				#print("bid/proposal sent ") 
 
