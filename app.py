@@ -99,7 +99,7 @@ def get_proposals_reject_reason():
 	sort_params = [{"direction": "ascending", "property": "Modified"}]
 
 	proposals = proposals.build_query(filter=filter_params, sort = sort_params)
-	result = proposals.execute() 
+	result = proposals.execute()  
 
 	login_config = upwork.Config({\
 			'consumer_key': os.environ.get("ConsumerKey"),\
