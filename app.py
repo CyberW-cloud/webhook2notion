@@ -60,7 +60,6 @@ def copy_proposal_row(source_row, target_row):
 	source_row.date_sent = target_row.date_sent
 	source_row.invite_name = target_row.invite_name
 	source_row.url = target_row.url
-	source_row.sent_by = target_row.sent_by
 	source_row.title = target_row.title
 	source_row.job_url = target_row.job_url
 	#got bored, no need to actually copy everything
