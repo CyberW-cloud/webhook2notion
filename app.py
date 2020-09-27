@@ -115,7 +115,7 @@ def get_proposals_reject_reason():
 					#print("there is withdraw reason, unresponsive, manual reason")
 				else:
 					pass
-					#print("withdraw, unknown withdraw reason")
+					#print("withdraw, unknown withdraw reason") 
 
 			elif application["status"] == "2":
 				pass
