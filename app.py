@@ -45,7 +45,7 @@ def t():
 
 	row = client.get_block(request.args.get("row_url", ""))
 	date_time_str = request.args.get("date", None)
-	date = datetime.datetime.strptime(date_time_str, '%Y-%m-%d')
+	date = datetime.datetime.strptime(date_time_str, '%m/%d/%Y')
 
 	row.date_sent = date
 
