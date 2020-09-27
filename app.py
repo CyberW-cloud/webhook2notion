@@ -75,7 +75,7 @@ def get_proposals_reject_reason():
 	
 
 	test_page.children.add_new(CollectionViewPageBlock, title = "table")
-	page = day_page.children[-1]
+	page = test_page.children[-1]
 
 	proposals = notion_client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
 
