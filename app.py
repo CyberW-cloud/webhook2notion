@@ -689,9 +689,9 @@ def message_review():
 			try:
 				time.sleep(1.6)
 				messages = {}
-				messages = messages_api.get_room_messages(os.environ.get("TeamID"), room["roomId"], {"limit":15})
-				if "stories_list" not in messages.keys():
-					messages = messages_api.get_room_messages(user_id, room["roomId"], {"limit":15})
+				messages = [messages_api.get_room_messages(os.environ.get("TeamID"), room["roomId"], {"limit":15}), room["roomId"]]
+				if "stories_list" not in messages[0].keys():
+					messages = [messages_api.get_room_messages(user_id, room["roomId"], {"limit":15}), room["roomId"]]
 
 			except Exception as e:
 				print(str(e) + " 3")
@@ -722,27 +722,29 @@ def message_review():
 	target_page = create_page("https://www.notion.so/Message-Review-33cbe6e92b9e4894890d768f1ea7b970","testing without the db for now")
 
 	for room in parsed_rooms:
-		client = upwork.Client(upwork.Config({\
-			'consumer_key': os.environ.get("ConsumerKey"),\
-			'consumer_secret': os.environ.get("ConsumerSecret"),\
-			'access_token': os.environ.get("AccessToken"),\
-			'access_token_secret': os.environ.get("AccessSecret")}))
+		if room["messages"][1] not in room["room"].chat_url:
+			i = 1/0
+		# client = upwork.Client(upwork.Config({\
+		# 	'consumer_key': os.environ.get("ConsumerKey"),\
+		# 	'consumer_secret': os.environ.get("ConsumerSecret"),\
+		# 	'access_token': os.environ.get("AccessToken"),\
+		# 	'access_token_secret': os.environ.get("AccessSecret")}))
 
-		profileApi = profileAPI(client)
+		# profileApi = profileAPI(client)
 
-		link = "https://www.upwork.com/messages/rooms/" + room["id"]
-		link_text = "[Room]("+link+")"
+		# link = "https://www.upwork.com/messages/rooms/" + room["id"]
+		# link_text = "[Room]("+link+")"
 		
-		if room["type"] == "No info":
-			type_text = "***No info***"
-			#to add to the interview column
-			room["type"] = "Interview"
+		# if room["type"] == "No info":
+		# 	type_text = "***No info***"
+		# 	#to add to the interview column
+		# 	room["type"] = "Interview"
 
-		else:
-			if room["type"] == "Interview":
-				type_text = "[Proposal]("+room["link"]+")"
-			else:
-				type_text = "["+room["type"]+"]("+room["link"]+")" 
+		# else:
+		# 	if room["type"] == "Interview":
+		# 		type_text = "[Proposal]("+room["link"]+")"
+		# 	else:
+		# 		type_text = "["+room["type"]+"]("+room["link"]+")" 
 
 
 	# 	if room["type"] not in rows.keys():
@@ -767,43 +769,43 @@ def message_review():
 	# 	parent_text_block = auto_retry_lambda(target_row.children.add_new,TextBlock, title = title)
 	# 	text_block = auto_retry_lambda(parent_text_block.children.add_new,TextBlock, title =type_text+" , "+link_text)
 
-		try:
-			stories = room["messages"]["stories_list"]["stories"]
-		except Exception:
-			print(room["messages"])
+		# try:
+		# 	stories = room["messages"][0]["stories_list"]["stories"]
+		# except Exception:
+		# 	print(room["messages"])
 
-		#if the message ends in a sinature like [Line Start][Capital][* amount of lowercase][space][Capital][Dot][EOF] 
-		if isinstance(stories[0]["message"], str) and re.findall("^[A-Z][a-z]* [A-Z]\.\Z", stories[0]["message"], re.M) and room["type"] == "Interview":
-			auto_retry_lambda(parent_text_block.remove,permanently = True)
-			print("bot detected, skipped")
-			continue
+		# #if the message ends in a sinature like [Line Start][Capital][* amount of lowercase][space][Capital][Dot][EOF] 
+		# if isinstance(stories[0]["message"], str) and re.findall("^[A-Z][a-z]* [A-Z]\.\Z", stories[0]["message"], re.M) and room["type"] == "Interview":
+		# 	auto_retry_lambda(parent_text_block.remove,permanently = True)
+		# 	print("bot detected, skipped")
+		# 	continue
 
 
-		written = 0
-		for i in stories:
-			if not isinstance(i["message"],str) or i["message"] == "" or i["userId"] == None or i["isSystemStory"]:
-				print(i)
-				continue
+		# written = 0
+		# for i in stories:
+		# 	if not isinstance(i["message"],str) or i["message"] == "" or i["userId"] == None or i["isSystemStory"]:
+		# 		print(i)
+		# 		continue
 
-			if written>=3:
-				break
+		# 	if written>=3:
+		# 		break
 
-			message_time = datetime.datetime.fromtimestamp(i["updated"]/1000).strftime('%Y-%m-%d %H:%M:%S')
-			text = "["+message_time+"]\n"
+		# 	message_time = datetime.datetime.fromtimestamp(i["updated"]/1000).strftime('%Y-%m-%d %H:%M:%S')
+		# 	text = "["+message_time+"]\n"
 
-			try:
-				if i["userId"] not in cache.keys(): 
-					name = profileApi.get_specific(i["userId"])["profile"]["dev_short_name"][:-1]
-					cache[i["userId"]] = name
-				else:
-					name = cache[i["userId"]]
-			except Exception as e:
-				print(i)
-				print(i["userId"])
-				name = "ERROR"
+		# 	try:
+		# 		if i["userId"] not in cache.keys(): 
+		# 			name = profileApi.get_specific(i["userId"])["profile"]["dev_short_name"][:-1]
+		# 			cache[i["userId"]] = name
+		# 		else:
+		# 			name = cache[i["userId"]]
+		# 	except Exception as e:
+		# 		print(i)
+		# 		print(i["userId"])
+		# 		name = "ERROR"
 
-			text += "**"+name+":**\n"
-			text += i["message"]
+		# 	text += "**"+name+":**\n"
+		# 	text += i["message"]
 
 	# 		message = auto_retry_lambda(parent_text_block.children.add_new,CodeBlock, title = text)
 	# 		auto_retry_lambda(lambda: setattr(message, "language", "Plain text"))
@@ -812,7 +814,7 @@ def message_review():
 	# 		auto_retry_lambda(message.move_to,parent_text_block, position = "first-child")
 
 
-			written +=1
+			# written +=1
 
 	# 	auto_retry_lambda(text_block.move_to,parent_text_block, position = "first-child")
 	# 	auto_retry_lambda(parent_text_block.children.add_new,TextBlock)
