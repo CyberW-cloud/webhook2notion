@@ -721,7 +721,7 @@ def message_review():
 	target_page = create_page("https://www.notion.so/Message-Review-33cbe6e92b9e4894890d768f1ea7b970","testing without the db for now")
 
 	for room in parsed_rooms:
-		if room["messages"][1] not in room["room"].chat_url:
+		if room["messages"][1] not in room["room"]['chat_url']:
 			i = 1/0
 		# client = upwork.Client(upwork.Config({\
 		# 	'consumer_key': os.environ.get("ConsumerKey"),\
@@ -771,10 +771,11 @@ def message_review():
 		# try:
 		# 	stories = room["messages"][0]["stories_list"]["stories"]
 		# except Exception:
+		#   stories = None
 		# 	print(room["messages"])
 
 		# #if the message ends in a sinature like [Line Start][Capital][* amount of lowercase][space][Capital][Dot][EOF] 
-		# if isinstance(stories[0]["message"], str) and re.findall("^[A-Z][a-z]* [A-Z]\.\Z", stories[0]["message"], re.M) and room["type"] == "Interview":
+		# if isinstance(stories[0]["message"], str) and re.findall("^[A-Z][a-z]* [A-Z]\.\Z", stories[0]["message"], re.M) and room["type"] == "Interview" or stories == None:
 		# 	auto_retry_lambda(parent_text_block.remove,permanently = True)
 		# 	print("bot detected, skipped")
 		# 	continue
