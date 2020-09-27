@@ -711,7 +711,6 @@ def message_review():
 			elif len(proposals_found)>0:		
 				update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Interview", "messages":messages, "link":proposals_found[0][3]})
 				print("PROPOSAL: " + str(room))
-				i = 1/0
 			else:
 				update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "No info", "link":"", "messages":messages})
 				print("NO DATA " + str(room))
