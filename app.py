@@ -55,8 +55,6 @@ def update_token():
 	conn.commit()
 
 def copy_proposal_row(source_row, target_row):
-	
-
 	source_row.date_sent = target_row.date_sent
 	source_row.invite_name = target_row.invite_name
 	source_row.url = target_row.url
