@@ -119,7 +119,7 @@ def get_proposals_reject_reason():
 
 			elif application["status"] == "2":
 				pass
-				#print("bid/proposal sent ")
+				#print("bid/proposal sent ") 
 
 			elif application["status"] == "8":
 				pass
