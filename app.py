@@ -105,6 +105,7 @@ def get_proposals_reject_reason():
 			application = client.get("/hr/v4/contractors/applications/"+ref)["data"]
 			
 			if application["status"] == "7":
+				print(proposal.get_browseable_url())
 				print("proposal open")
 
 			elif application["status"] == "4":
@@ -119,7 +120,6 @@ def get_proposals_reject_reason():
 					#print("withdraw, unknown withdraw reason") 
 
 			elif application["status"] == "2":
-				print(proposal.get_browseable_url())
 				pass
 				#print("bid/proposal sent ") 
 
@@ -132,6 +132,7 @@ def get_proposals_reject_reason():
 				#print("Invite Declined by client")
 
 			elif application["status"] == "10":
+				print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 				print(proposal.get_browseable_url())
 
 			else:
