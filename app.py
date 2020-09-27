@@ -74,7 +74,7 @@ def get_proposals_reject_reason():
 	}
 	[{"direction": "ascending", "property": "Modified"}]
 
-	proposals = proposals.build_query(filter=filter_params)
+	proposals = proposals.build_query(filter=filter_params, sort = sort_params)
 	result = proposals.execute() 
 
 	login_config = upwork.Config({\
