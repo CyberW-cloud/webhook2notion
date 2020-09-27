@@ -72,7 +72,7 @@ def get_proposals_reject_reason():
 		],
 		"operator": "and",		
 	}
-	sort_params = [{"direction": "ascending", "property": "Modified"}]
+	sort_params = [{"direction": "descending", "property": "Modified"}]
 
 	proposals = proposals.build_query(filter=filter_params, sort = sort_params)
 	result = proposals.execute() 
