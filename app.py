@@ -130,6 +130,9 @@ def get_proposals_reject_reason():
 
 			application = client.get("/hr/v4/contractors/applications/"+ref)["data"]
 			
+			proposal.upw_status = job_info.get_specific(application["openingCiphertext"])["profile"]["ui_opening_status"]
+		
+
 			if application["status"] == "7":
 				proposal.property = "proposal open"
 
