@@ -130,27 +130,29 @@ def get_proposals_reject_reason():
 
 			application = client.get("/hr/v4/contractors/applications/"+ref)["data"]
 			
-			proposal.upw_status = job_info.get_specific(application["openingCiphertext"])["profile"]["ui_opening_status"]
-		
+			job_info = job_info.get_specific(application["openingCiphertext"])
+			i = 1/0
+			proposal.upw_status = job_info["profile"]["ui_opening_status"]
+
 
 			if application["status"] == "7":
 				proposal.property = "proposal open"
 
 			elif application["status"] == "4":
 				if application["withdrawReason"]["rid"] == "144":
-					proposal.property = "withdraw, unresponsive, standard reason"
+					proposal.property = "Withdraw: standard reason"
 				
 				elif application["withdrawReason"]["rid"] == "146":
-					proposal.property = "withdraw, unresponsive, manual reason"
+					proposal.property = "Withdraw: manual reason"
 				
 				else:
-					proposal.property = "withdraw, unknown withdraw reason" 
+					proposal.property = "Withdraw: unknown reason" 
 
 			elif application["status"] == "2":
-				proposal.property = "bid/proposal sent, can withdraw" 
+				proposal.property = "Can withdraw" 
 
 			elif application["status"] == "8":
-				proposal.property = "job no longer available "
+				proposal.property = "Job no longer available"
 
 			elif application["status"] == "3":
 				proposal.property = "Invite Declined by client"
