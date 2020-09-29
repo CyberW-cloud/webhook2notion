@@ -38,17 +38,6 @@ cache = {}
 TEST = False
 test_page_url = "https://www.notion.so/TEST-68d7198ed4d3437b816386f6da196547"
 
-@app.route('/fixasap')
-def t():
-	token = os.environ.get("TOKEN")
-	client = NotionClient(token)
-
-	row = client.get_block(request.args.get("row_url", ""))
-	date_time_str = request.args.get("date", None)
-	date = datetime.datetime.strptime(date_time_str, '%m/%d/%Y')
-
-	row.date_sent = date
-
 @app.route('/update_token', methods = ["GET"])
 def update_token():
 	
@@ -66,11 +55,11 @@ def update_token():
 	conn.commit()
 
 def copy_proposal_row(source_row, target_row):
-	source_row.date_sent = target_row.date_sent
-	source_row.invite_name = target_row.invite_name
-	source_row.url = target_row.url
-	source_row.title = target_row.title
-	source_row.job_url = target_row.job_url
+	target_row.date_sent = source_row.date_sent
+	target_row.invite_name = source_row.invite_name
+	target_row.url = source_row.url
+	target_row.title = source_row.title
+	target_row.job_url = source_row.job_url
 	#got bored, no need to actually copy everything
 
 @app.route('/get_proposals_reject_reason', methods=["GET"])
@@ -132,7 +121,7 @@ def get_proposals_reject_reason():
 
 	for row in result:
 		proposal = page.collection.add_row()
-		copy_proposal_row(row, proposal)
+		copy_proposal_row(source_row = row, target_row = proposal)
 		try:
 			if "[" in proposal.title:
 				ref = re.search("(?<=\[).*(?=\])", proposal.title).group()
