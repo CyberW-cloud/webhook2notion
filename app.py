@@ -38,6 +38,36 @@ cache = {}
 TEST = False
 test_page_url = "https://www.notion.so/TEST-68d7198ed4d3437b816386f6da196547"
 
+@app.route('/tmp')
+def tmp()
+	print("starting copied kickstaff")
+	date = request.args.get("date", None)
+	contracts_day = request.args.get("contracts_day", 9, type=int)
+	projects_day = request.args.get("projects_day", contracts_day, type=int)
+	client_days_before = request.args.get("client_day", 14, type=int)
+	cc_tag = request.args.get("no_contracts", None)
+	pm_tag = request.args.get("no_projects", None)
+	cc = True if cc_tag is None else False
+	pm = True if pm_tag is None else False
+
+	if cc:
+		contracts = get_contracts(token, contracts_day)
+		print("contracts done")
+	else:
+		contracts = []
+	if pm:
+		projects = get_projects(token, projects_day)
+		print("projects done")
+	else:
+		projects = []
+
+	todo = dict()
+	todo = parse_staff(todo, contracts, "contracts", client_days_before)
+	todo = parse_staff(todo, projects, "projects", client_days_before)
+
+	print(todo)
+	i = 1/0
+
 @app.route('/update_token', methods = ["GET"])
 def update_token():
 	
@@ -469,6 +499,31 @@ def head_summary():
 
 			add_aliases_to_summary(aliases, target, target_row)
 			print(aliases)
+
+	print("starting copied kickstaff")
+	date = request.args.get("date", None)
+	contracts_day = request.args.get("contracts_day", 9, type=int)
+	projects_day = request.args.get("projects_day", contracts_day, type=int)
+	client_days_before = request.args.get("client_day", 14, type=int)
+	cc_tag = request.args.get("no_contracts", None)
+	pm_tag = request.args.get("no_projects", None)
+	cc = True if cc_tag is None else False
+	pm = True if pm_tag is None else False
+
+	if cc:
+		contracts = get_contracts(token, contracts_day)
+		print("contracts done")
+	else:
+		contracts = []
+	if pm:
+		projects = get_projects(token, projects_day)
+		print("projects done")
+	else:
+		projects = []
+
+	todo = dict()
+	todo = parse_staff(todo, contracts, "contracts", client_days_before)
+	todo = parse_staff(todo, projects, "projects", client_days_before)
 
 
 @app.route('/refresh_db', methods=["GET"])
