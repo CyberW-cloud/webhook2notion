@@ -506,18 +506,18 @@ def head_summary():
 
 	for manager in todo.keys():
 		if len(todo[manager]["contracts"])>0:
-			if "Contracts" in rows.keys()
+			if "Contracts" in rows.keys():
 				parent_block = rows["Contracts"].children.add_new(TextBlock, title = "["+manager+": ]("+todo[manager].todo_url+")")
 				for i in todo["manager"]["contracts"]:
 					parent_block.children.add_new(TextBlock, title = "["+i[0]+"]("+i[1]+")")
 				print(todo[manager]["contracts"])			
 
 		if len(todo[manager]["proposals"])>0:
-			if "Proposals" in rows.keys()
+			if "Proposals" in rows.keys():
 				print(todo[manager]["proposals"])	
 			
 		if len(todo[manager]["projects"])>0:
-			if "Projects" in rows.keys()
+			if "Projects" in rows.keys():
 				print(todo[manager]["projects"])
 
 
