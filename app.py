@@ -72,6 +72,9 @@ def tmp():
 			print(manager)
 			print(todo[manager]["contracts"])
 
+		if len(todo[manager]["proposals"])>0:
+			print(manager)
+			print(todo[manager]["proposals"])
 
 
 
