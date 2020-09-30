@@ -504,7 +504,7 @@ def head_summary():
 		projects = []
 
 	if prop:
-		proposals = get_proposals(token_v2, days)
+		proposals = get_proposals(token, proposal_days)
 		print("proposals done")
 	else:
 		proposals = []
