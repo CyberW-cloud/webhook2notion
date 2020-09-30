@@ -76,7 +76,9 @@ def tmp():
 			print(manager)
 			print(todo[manager]["proposals"])
 
-
+		if len(todo[manager]["projects"])>0:
+			print(manager)
+			print(todo[manager]["projects"])
 
 	i = 1/0
 
