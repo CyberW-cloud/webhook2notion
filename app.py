@@ -68,7 +68,7 @@ def tmp():
 	todo = parse_staff(todo, projects, "projects", client_days_before)
 
 	for manager in todo.keys():
-		if (todo[manager]["contracts"])>0:
+		if len(todo[manager]["contracts"])>0:
 			print(manager)
 			print(todo[manager]["contracts"])
 
