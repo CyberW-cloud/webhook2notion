@@ -40,6 +40,8 @@ test_page_url = "https://www.notion.so/TEST-68d7198ed4d3437b816386f6da196547"
 
 @app.route('/tmp')
 def tmp():
+	token = os.environ.get("TOKEN")
+
 	print("starting copied kickstaff")
 	date = request.args.get("date", None)
 	contracts_day = request.args.get("contracts_day", 9, type=int)
