@@ -484,11 +484,14 @@ def head_summary():
 	contracts_day = request.args.get("contracts_day", 9, type=int)
 	projects_day = request.args.get("projects_day", contracts_day, type=int)
 	client_days_before = request.args.get("client_day", 14, type=int)
+	proposal_days = request.args.get("proposals_day", 7, type=int)
 	cc_tag = request.args.get("no_contracts", None)
 	pm_tag = request.args.get("no_projects", None)
+	prop_tag = request.args.get("no_proposals", None)
 	cc = True if cc_tag is None else False
 	pm = True if pm_tag is None else False
-
+	prop = True if prop_tag is None else False
+	
 	if cc:
 		contracts = get_contracts(token, contracts_day)
 		print("contracts done")
@@ -500,10 +503,17 @@ def head_summary():
 	else:
 		projects = []
 
+	if prop:
+		proposals = get_proposals(token_v2, days)
+		print("proposals done")
+	else:
+		proposals = []
+
 	todo = dict()
 	todo = parse_staff(todo, contracts, "contracts", client_days_before)
 	todo = parse_staff(todo, projects, "projects", client_days_before)
-
+	todo = parse_staff(todo, proposals, "proposals", proposal_days)
+	
 	for manager in todo.keys():
 		if len(todo[manager]["contracts"])>0:
 			if "Contracts" in rows.keys():
