@@ -1348,12 +1348,10 @@ def get_projects(token, days_before):
 	for index, row in result.iterrows():
 		project = dict()
 		if row["pm"]:
-			print("assigned pm[0]")
 			project["person"] = row["pm"][0]
 		else:
 			for contract in row["contracts"]:
 				if row["name"] == "Brainy Apps":
-					print(contract)
 				if contract.coordinator[0]:
 					if contract.coordinator[0].name != "selfCC" and contract.status == "In Progress":
 						project["person"] = contract.coordinator[0]
@@ -1366,7 +1364,6 @@ def get_projects(token, days_before):
 				project["person_name"] = project["person"].name.replace("\xa0", "")
 		else:
 			project["person"] = None
-			print(str(row) + "	 " + "error row url")
 		project["client"] = row["client_name"][0] if row["client_name"] else None
 		project["url"] = row["name"].replace("\xa0", ""), row["row"].get_browseable_url()
 		
