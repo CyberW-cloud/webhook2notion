@@ -65,18 +65,16 @@ def tmp():
 
 	todo = dict()
 	todo = parse_staff(todo, contracts, "contracts", client_days_before)
-	
-	for manager in todo.keys():
-		print(todo[manager])
-
-	print("applied contracts")
-	todo = dict()
 	todo = parse_staff(todo, projects, "projects", client_days_before)
 
 	for manager in todo.keys():
-		print(todo[manager])
-		
-	print(todo)
+		if (todo[manager]["contracts"])>0:
+			print(manager)
+			print(todo[manager]["contracts"])
+
+
+
+
 	i = 1/0
 
 @app.route('/update_token', methods = ["GET"])
