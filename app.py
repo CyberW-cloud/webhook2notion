@@ -65,8 +65,17 @@ def tmp():
 
 	todo = dict()
 	todo = parse_staff(todo, contracts, "contracts", client_days_before)
+	
+	for manager in todo.keys():
+		print(todo[manager])
+
+	print("applied contracts")
+	todo = dict()
 	todo = parse_staff(todo, projects, "projects", client_days_before)
 
+	for manager in todo.keys():
+		print(todo[manager])
+		
 	print(todo)
 	i = 1/0
 
