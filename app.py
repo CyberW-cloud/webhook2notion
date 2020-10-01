@@ -135,7 +135,7 @@ def get_proposals_reject_reason():
 			else:
 				ref = proposal.title
 
-			application = client.get("/hr/v4/contractors/applications/"+ref)["data"]
+			application = client.get("/hr/v3/contractors/applications/"+ref)["data"]
 			print(application["status"])
 			i = 1/0
 			job_info_res = job_info.get_specific(application["openingCiphertext"])
