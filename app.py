@@ -525,15 +525,15 @@ def head_summary():
 
 		if len(todo[manager]["proposals"])>0:
 			if "Interviews" in rows.keys():
-				rows["Contracts"].children.add_new(TextBlock, title = "**Not Updated in "+str(proposal_days)+" days:**")
-				parent_block = rows["Proposals"].children.add_new(TextBlock, title = "["+manager+": ]("+todo[manager]["todo_url"]+")")
+				rows["Interviews"].children.add_new(TextBlock, title = "**Not Updated in "+str(proposal_days)+" days:**")
+				parent_block = rows["Interviews"].children.add_new(TextBlock, title = "["+manager+": ]("+todo[manager]["todo_url"]+")")
 				for i in todo[manager]["proposals"]:
 					parent_block.children.add_new(TextBlock, title = "["+i[0]+"]("+i[1]+")")
 				print(todo[manager]["proposals"])	
 			
 		if len(todo[manager]["projects"])>0:
 			if "Projects" in rows.keys():
-				rows["Contracts"].children.add_new(TextBlock, title = "**Not Updated in "+str(client_days_before)+" days:**")
+				rows["Projects"].children.add_new(TextBlock, title = "**Not Updated in "+str(client_days_before)+" days:**")
 				parent_block = rows["Projects"].children.add_new(TextBlock, title = "["+manager+": ]("+todo[manager]["todo_url"]+")")
 				for i in todo[manager]["projects"]:
 					parent_block.children.add_new(TextBlock, title = "["+i[0]+"]("+i[1]+")")
