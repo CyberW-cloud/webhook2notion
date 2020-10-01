@@ -515,15 +515,15 @@ def head_summary():
 	todo = parse_staff(todo, proposals, "proposals", proposal_days)
 	
 	for manager in todo.keys():
-		if len(todo[manager]["Contracts"])>0:
+		if len(todo[manager]["contracts"])>0:
 			if "Contracts" in rows.keys():
 				rows["Contracts"].children.add_new(TextBlock, title = "**Not Updated in "+client_days_before+"days:**")
 				parent_block = rows["Contracts"].children.add_new(TextBlock, title = "["+manager+": ]("+todo[manager]["todo_url"]+")")
-				for i in todo[manager]["contracts"]:
+				for i in todo[manager]["Contracts"]:
 					parent_block.children.add_new(TextBlock, title = "["+i[0]+"]("+i[1]+")")
-				print(todo[manager]["contracts"])			
+				print(todo[manager]["Contracts"])			
 
-		if len(todo[manager]["Interviews"])>0:
+		if len(todo[manager]["interviews"])>0:
 			if "Interviews" in rows.keys():
 				rows["Contracts"].children.add_new(TextBlock, title = "**Not Updated in "+proposal_days+"days:**")
 				parent_block = rows["Proposals"].children.add_new(TextBlock, title = "["+manager+": ]("+todo[manager]["todo_url"]+")")
@@ -531,7 +531,7 @@ def head_summary():
 					parent_block.children.add_new(TextBlock, title = "["+i[0]+"]("+i[1]+")")
 				print(todo[manager]["proposals"])	
 			
-		if len(todo[manager]["Projects"])>0:
+		if len(todo[manager]["projects"])>0:
 			if "Projects" in rows.keys():
 				rows["Contracts"].children.add_new(TextBlock, title = "**Not Updated in "+client_days_before+"days:**")
 				parent_block = rows["Projects"].children.add_new(TextBlock, title = "["+manager+": ]("+todo[manager]["todo_url"]+")")
