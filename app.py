@@ -212,7 +212,7 @@ def head_summary():
 
         target_row = {"url":row.get_browseable_url(), "title":row.title, "manager": None, "freelancer":None, "client_name": None}
         
-        if row_type == "Proposals":
+        if row_type == "Interviews":
             if len(row.cc)>0:
                 target_row["manager"] = row.cc[0]
             else:
