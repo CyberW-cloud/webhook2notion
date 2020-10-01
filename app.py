@@ -294,7 +294,7 @@ def head_summary():
 	token = os.environ.get("TOKEN")
 	client = NotionClient(token)
 
-	target_table = client.get_block(request.args.get("table", "https://www.notion.so/96a6a203a3a446e4a8e0673682a2304b?v=81f1740cd5df439b9bf2ba3a25313dbb"))
+	target_table = client.get_block(request.args.get("table", "https://www.notion.so/d134162fbfb14449a7ae426487f56127?v=159b522f95fc460f9171dfdca6d1f6d8"))
 	proposals = client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
 	contracts = client.get_collection_view("https://www.notion.so/5a95fb63129242a5b5b48f18e16ef19a?v=48599e7a184a4f32be2469e696367949")
 	projects = client.get_collection_view("https://www.notion.so/addccbcaf545405292db498941c9538a?v=e86f54933acc461ca413afa6a2958cdc")
@@ -515,22 +515,25 @@ def head_summary():
 	todo = parse_staff(todo, proposals, "proposals", proposal_days)
 	
 	for manager in todo.keys():
-		if len(todo[manager]["contracts"])>0:
+		if len(todo[manager]["Contracts"])>0:
 			if "Contracts" in rows.keys():
+				rows["Contracts"].children.add_new(TextBlock, title = "**Not Updated in "+client_days_before+"days:**")
 				parent_block = rows["Contracts"].children.add_new(TextBlock, title = "["+manager+": ]("+todo[manager]["todo_url"]+")")
 				for i in todo[manager]["contracts"]:
 					parent_block.children.add_new(TextBlock, title = "["+i[0]+"]("+i[1]+")")
 				print(todo[manager]["contracts"])			
 
-		if len(todo[manager]["proposals"])>0:
+		if len(todo[manager]["Interviews"])>0:
 			if "Interviews" in rows.keys():
+				rows["Contracts"].children.add_new(TextBlock, title = "**Not Updated in "+proposal_days+"days:**")
 				parent_block = rows["Proposals"].children.add_new(TextBlock, title = "["+manager+": ]("+todo[manager]["todo_url"]+")")
 				for i in todo[manager]["proposals"]:
 					parent_block.children.add_new(TextBlock, title = "["+i[0]+"]("+i[1]+")")
 				print(todo[manager]["proposals"])	
 			
-		if len(todo[manager]["projects"])>0:
+		if len(todo[manager]["Projects"])>0:
 			if "Projects" in rows.keys():
+				rows["Contracts"].children.add_new(TextBlock, title = "**Not Updated in "+client_days_before+"days:**")
 				parent_block = rows["Projects"].children.add_new(TextBlock, title = "["+manager+": ]("+todo[manager]["todo_url"]+")")
 				for i in todo[manager]["projects"]:
 					parent_block.children.add_new(TextBlock, title = "["+i[0]+"]("+i[1]+")")
