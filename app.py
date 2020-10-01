@@ -311,7 +311,7 @@ def head_summary():
 
 	result = []
 
-	if "Proposals" in select_dbs:
+	if "proposals" in select_dbs:
 		result.append(["Type", "Interviews"])
 
 		#get proposals
@@ -332,7 +332,7 @@ def head_summary():
 		result += list(proposals.execute()) 
 
 	
-	if "Projects" in select_dbs:
+	if "projects" in select_dbs:
 		result.append(["Type", "Projects"])
 
 		#get projects
@@ -352,7 +352,7 @@ def head_summary():
 		projects = projects.build_query(filter=filter_params, sort = sort_params)
 		result += list(projects.execute()) 
 
-	if "Contracts" in select_dbs:
+	if "contracts" in select_dbs:
 		result.append(["Type", "Contracts"])
 
 		#get projects
