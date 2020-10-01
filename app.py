@@ -521,7 +521,7 @@ def head_summary():
 				parent_block = rows["Contracts"].children.add_new(TextBlock, title = "["+manager+": ]("+todo[manager]["todo_url"]+")")
 				for i in todo[manager]["contracts"]:
 					parent_block.children.add_new(TextBlock, title = "["+i[0]+"]("+i[1]+")")
-				print(todo[manager]["Contracts"])			
+				print(todo[manager]["contracts"])			
 
 		if len(todo[manager]["proposals"])>0:
 			if "Interviews" in rows.keys():
