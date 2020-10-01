@@ -61,7 +61,7 @@ def get_token():
 	conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 	cur = conn.cursor()
 
-	token = cur.execute("""Select value from config_vars where name='token'""")
+	token = cur.execute("""Select value from config_vars where name='token'""")[0]
 	print(token)
 
 def copy_proposal_row(source_row, target_row):
