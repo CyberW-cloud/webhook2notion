@@ -261,7 +261,7 @@ def add_aliases_to_summary(aliases, page, parent_row):
 	if not isinstance(parent_row["freelancer"], type(None)):
 
 		if isinstance(parent_row["freelancer"], CollectionRowBlock):
-			if parent_row["freelancer"].name[-1] == " ":
+			if len(parent_row["freelancer"].name)>1 and parent_row["freelancer"].name[-1] == " ":
 				fl_name = parent_row["freelancer"].name[:-1]
 			else:
 				fl_name = parent_row["freelancer"].name
