@@ -37,13 +37,7 @@ cache = {}
 #var used to signify testing 
 TEST = False
 test_page_url = "https://www.notion.so/TEST-68d7198ed4d3437b816386f6da196547"
-
-@app.route('/tmp')
-def tmp():
-	token = os.environ.get("TOKEN")
-
-
-
+token = ""
 
 @app.route('/update_token', methods = ["GET"])
 def update_token():
@@ -60,6 +54,15 @@ def update_token():
 
 	cur.execute("""UPDATE CONFIG_VARS SET VALUE='"""+token+"""' WHERE name = 'token' """)
 	conn.commit()
+
+@app.route('/tmp')
+def get_token():
+	DATABASE_URL = os.environ['DATABASE_URL']
+	conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+	cur = conn.cursor()
+
+	token = cur.execute("""Select value from config_vars where name='token'""")
+	print(token)
 
 def copy_proposal_row(source_row, target_row):
 	target_row.date_sent = source_row.date_sent
