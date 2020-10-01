@@ -137,8 +137,11 @@ def get_proposals_reject_reason():
 
 			application = client.get("/hr/v4/contractors/applications/"+ref)["data"]
 			
+			print(application["status"])
+			if application["status"] != "Archived":
+				continue
+
 			job_info_res = job_info.get_specific(application["openingCiphertext"])
-			i = 1/0
 			proposal.upw_status = job_info_res["profile"]["ui_opening_status"]
 
 
@@ -176,7 +179,6 @@ def get_proposals_reject_reason():
 			time.sleep(1.6)
 
 		except Exception as e:
-			i = 1/0
 			time.sleep(1.6)
 			print(e)
 			continue
