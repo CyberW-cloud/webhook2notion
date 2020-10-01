@@ -311,8 +311,8 @@ def head_summary():
 
 	result = []
 
-	if "proposals" in select_dbs:
-		result.append(["Type", "Proposals"])
+	if "Proposals" in select_dbs:
+		result.append(["Type", "Interviews"])
 
 		#get proposals
 		filter_params = {
@@ -332,7 +332,7 @@ def head_summary():
 		result += list(proposals.execute()) 
 
 	
-	if "projects" in select_dbs:
+	if "Projects" in select_dbs:
 		result.append(["Type", "Projects"])
 
 		#get projects
@@ -352,7 +352,7 @@ def head_summary():
 		projects = projects.build_query(filter=filter_params, sort = sort_params)
 		result += list(projects.execute()) 
 
-	if "contracts" in select_dbs:
+	if "Contracts" in select_dbs:
 		result.append(["Type", "Contracts"])
 
 		#get projects
@@ -413,7 +413,7 @@ def head_summary():
 
 		target_row = {"url":row.get_browseable_url(), "title":row.title, "manager": None, "freelancer":None, "client_name": None}
 		
-		if row_type == "Proposals":
+		if row_type == "Interviews":
 			if len(row.cc)>0:
 				target_row["manager"] = row.cc[0]
 			else:
@@ -471,7 +471,7 @@ def head_summary():
 			#we do this to not add empty rows
 			if (add_row):
 				target = target_table.collection.add_row()
-				target.type = row_type
+				target.tags = row_type
 				target.title = name
 				rows[row_type] = target
 				add_row = False
@@ -523,7 +523,7 @@ def head_summary():
 				print(todo[manager]["contracts"])			
 
 		if len(todo[manager]["proposals"])>0:
-			if "Proposals" in rows.keys():
+			if "Interviews" in rows.keys():
 				parent_block = rows["Proposals"].children.add_new(TextBlock, title = "["+manager+": ]("+todo[manager]["todo_url"]+")")
 				for i in todo[manager]["proposals"]:
 					parent_block.children.add_new(TextBlock, title = "["+i[0]+"]("+i[1]+")")
@@ -805,14 +805,14 @@ def message_review():
 			
 			if len(contracts_found)>0:
 				if not contracts_found[0][4]:
-					update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Contract", "messages":messages, "link":contracts_found[0][3]})
+					update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Contracts", "messages":messages, "link":contracts_found[0][3]})
 					print("ACTIVE CONTRACT: " + str(room))
 				else:
-					update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Ended contract", "messages":messages, "link":contracts_found[0][3]})
+					update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Ended contracts", "messages":messages, "link":contracts_found[0][3]})
 					print("ENDED CONTRACT: " + str(room))
 		
 			elif len(proposals_found)>0:		
-				update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Interview", "messages":messages, "link":proposals_found[0][3]})
+				update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Interviews", "messages":messages, "link":proposals_found[0][3]})
 				print("PROPOSAL: " + str(room))
 			else:
 				update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "No info", "link":"", "messages":messages})
@@ -840,10 +840,10 @@ def message_review():
 		# if room["type"] == "No info":
 		# 	type_text = "***No info***"
 		# 	#to add to the interview column
-		# 	room["type"] = "Interview"
+		# 	room["type"] = "Interviews"
 
 		# else:
-		# 	if room["type"] == "Interview":
+		# 	if room["type"] == "Interviews":
 		# 		type_text = "[Proposal]("+room["link"]+")"
 		# 	else:
 		# 		type_text = "["+room["type"]+"]("+room["link"]+")" 
