@@ -443,7 +443,8 @@ def message_review():
     print(activeSince)
 
     date = str(datetime.datetime.now().day) + "." + str(datetime.datetime.now().month) + "." + str(datetime.datetime.now().year)
-    row_name = date + " -" + str(active_since_hours) + "h"
+    row_name = request.args.get("row_name", "")
+    row_name = row_name + " " + date + " - " + str(active_since_hours)+"h"
 
     rows = {}
 
