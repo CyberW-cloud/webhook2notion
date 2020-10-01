@@ -85,7 +85,7 @@ def add_aliases_to_summary(aliases, page, parent_row):
 
 
 #параметры ендпоинта - types = Proposals,Contracts,Projects (убери базы которые не надо и запятую), 
-#activeSince = количество часов, за которые надо собирать апдейты
+#activeSince = количество часов, за которые надо собирать апдейты 
 #row_name - имя столбцов добавленых в базу, по дефолту 22.09.2020 - 24h
 @app.route('/updates_check', methods=["GET"])
 def head_summary():
