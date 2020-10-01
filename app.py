@@ -519,7 +519,7 @@ def head_summary():
 			if "Contracts" in rows.keys():
 				rows["Contracts"].children.add_new(TextBlock, title = "**Not Updated in "+str(client_days_before)+" days:**")
 				parent_block = rows["Contracts"].children.add_new(TextBlock, title = "["+manager+": ]("+todo[manager]["todo_url"]+")")
-				for i in todo[manager]["Contracts"]:
+				for i in todo[manager]["contracts"]:
 					parent_block.children.add_new(TextBlock, title = "["+i[0]+"]("+i[1]+")")
 				print(todo[manager]["Contracts"])			
 
