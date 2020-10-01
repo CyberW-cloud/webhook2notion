@@ -580,7 +580,7 @@ def message_review():
             room["type"] = "Interviews"
 
         else:
-            if room["type"] == "Interview":
+            if room["type"] == "Interviews":
                 type_text = "[Proposal]("+room["link"]+")"
             else:
                 type_text = "["+room["type"]+"]("+room["link"]+")" 
