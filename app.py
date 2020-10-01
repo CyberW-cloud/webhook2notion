@@ -514,10 +514,17 @@ def head_summary():
 	todo = parse_staff(todo, projects, "projects", client_days_before)
 	todo = parse_staff(todo, proposals, "proposals", proposal_days)
 	
+	flag_contracts = True
+	flag_proposals = True
+	flag_projects = True
+
 	for manager in todo.keys():
 		if len(todo[manager]["contracts"])>0:
 			if "Contracts" in rows.keys():
-				rows["Contracts"].children.add_new(TextBlock, title = "**Not Updated in "+str(client_days_before)+" days:**")
+				if(flag_contracts):
+					rows["Contracts"].children.add_new(TextBlock, title = "**Not Updated in "+str(client_days_before)+" days:**")
+					flag_contracts = False
+
 				parent_block = rows["Contracts"].children.add_new(TextBlock, title = "["+manager+": ]("+todo[manager]["todo_url"]+")")
 				for i in todo[manager]["contracts"]:
 					parent_block.children.add_new(TextBlock, title = "["+i[0]+"]("+i[1]+")")
@@ -525,7 +532,10 @@ def head_summary():
 
 		if len(todo[manager]["proposals"])>0:
 			if "Interviews" in rows.keys():
-				rows["Interviews"].children.add_new(TextBlock, title = "**Not Updated in "+str(proposal_days)+" days:**")
+				if (flag_proposals):
+					rows["Interviews"].children.add_new(TextBlock, title = "**Not Updated in "+str(proposal_days)+" days:**")
+					flag_proposals = False
+
 				parent_block = rows["Interviews"].children.add_new(TextBlock, title = "["+manager+": ]("+todo[manager]["todo_url"]+")")
 				for i in todo[manager]["proposals"]:
 					parent_block.children.add_new(TextBlock, title = "["+i[0]+"]("+i[1]+")")
@@ -533,7 +543,10 @@ def head_summary():
 			
 		if len(todo[manager]["projects"])>0:
 			if "Projects" in rows.keys():
-				rows["Projects"].children.add_new(TextBlock, title = "**Not Updated in "+str(client_days_before)+" days:**")
+				if (flag_projects):
+					rows["Projects"].children.add_new(TextBlock, title = "**Not Updated in "+str(client_days_before)+" days:**")
+					flag_projects = False
+
 				parent_block = rows["Projects"].children.add_new(TextBlock, title = "["+manager+": ]("+todo[manager]["todo_url"]+")")
 				for i in todo[manager]["projects"]:
 					parent_block.children.add_new(TextBlock, title = "["+i[0]+"]("+i[1]+")")
