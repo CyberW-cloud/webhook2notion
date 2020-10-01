@@ -112,7 +112,7 @@ def head_summary():
     result = []
 
     if "proposals" in select_dbs:
-        result.append(["Type", "Proposals"])
+        result.append(["Type", "Interviews"])
 
         #get proposals
         filter_params = {
