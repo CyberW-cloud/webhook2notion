@@ -544,14 +544,14 @@ def message_review():
             
             if len(contracts_found)>0:
                 if not contracts_found[0][4]:
-                    update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Contract", "messages":messages, "link":contracts_found[0][3]})
+                    update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Contracts", "messages":messages, "link":contracts_found[0][3]})
                     print("ACTIVE CONTRACT: " + str(room))
                 else:
-                    update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Ended contract", "messages":messages, "link":contracts_found[0][3]})
+                    update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Ended contracts", "messages":messages, "link":contracts_found[0][3]})
                     print("ENDED CONTRACT: " + str(room))
         
             elif len(proposals_found)>0:        
-                update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Interview", "messages":messages, "link":proposals_found[0][3]})
+                update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Interviews", "messages":messages, "link":proposals_found[0][3]})
                 print("PROPOSAL: " + str(room))
 
             else:
@@ -577,7 +577,7 @@ def message_review():
         if room["type"] == "No info":
             type_text = "***No info***"
             #to add to the interview column
-            room["type"] = "Interview"
+            room["type"] = "Interviews"
 
         else:
             if room["type"] == "Interview":
