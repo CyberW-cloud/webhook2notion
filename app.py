@@ -178,6 +178,7 @@ def head_summary():
     i = 0  
     row_type = ""
     add_row = False
+    rows = {}
     for row in result:
         if isinstance(row, list):
             row_type = row[1]
@@ -274,10 +275,84 @@ def head_summary():
                 target = target_table.collection.add_row()
                 target.tags = row_type
                 target.title = name
+                rows[row_type] = target
                 add_row = False
 
             add_aliases_to_summary(aliases, target, target_row)
             print(aliases)
+
+    print("starting copied kickstaff")
+    date = request.args.get("date", None)
+    contracts_day = request.args.get("contracts_day", 9, type=int)
+    projects_day = request.args.get("projects_day", contracts_day, type=int)
+    client_days_before = request.args.get("client_day", 14, type=int)
+    proposal_days = request.args.get("proposals_day", 7, type=int)
+    cc_tag = request.args.get("no_contracts", None)
+    pm_tag = request.args.get("no_projects", None)
+    prop_tag = request.args.get("no_proposals", None)
+    cc = True if cc_tag is None else False
+    pm = True if pm_tag is None else False
+    prop = True if prop_tag is None else False
+    
+    if cc:
+        contracts = get_contracts(token, contracts_day)
+        print("contracts done")
+    else:
+        contracts = []
+    if pm:
+        projects = get_projects(token, projects_day)
+        print("projects done")
+    else:
+        projects = []
+
+    if prop:
+        proposals = get_proposals(token, proposal_days)
+        print("proposals done")
+    else:
+        proposals = []
+
+    todo = dict()
+    todo = parse_staff(todo, contracts, "contracts", client_days_before)
+    todo = parse_staff(todo, projects, "projects", client_days_before)
+    todo = parse_staff(todo, proposals, "proposals", proposal_days)
+    
+    flag_contracts = True
+    flag_proposals = True
+    flag_projects = True
+
+    for manager in todo.keys():
+        if len(todo[manager]["contracts"])>0:
+            if "Contracts" in rows.keys():
+                if(flag_contracts):
+                    rows["Contracts"].children.add_new(TextBlock, title = "**Not Updated in "+str(client_days_before)+" days:**")
+                    flag_contracts = False
+
+                parent_block = rows["Contracts"].children.add_new(TextBlock, title = "["+manager+": ]("+todo[manager]["todo_url"]+")")
+                for i in todo[manager]["contracts"]:
+                    parent_block.children.add_new(TextBlock, title = "["+i[0]+"]("+i[1]+")")
+                print(todo[manager]["contracts"])           
+
+        if len(todo[manager]["proposals"])>0:
+            if "Interviews" in rows.keys():
+                if (flag_proposals):
+                    rows["Interviews"].children.add_new(TextBlock, title = "**Not Updated in "+str(proposal_days)+" days:**")
+                    flag_proposals = False
+
+                parent_block = rows["Interviews"].children.add_new(TextBlock, title = "["+manager+": ]("+todo[manager]["todo_url"]+")")
+                for i in todo[manager]["proposals"]:
+                    parent_block.children.add_new(TextBlock, title = "["+i[0]+"]("+i[1]+")")
+                print(todo[manager]["proposals"])   
+            
+        if len(todo[manager]["projects"])>0:
+            if "Projects" in rows.keys():
+                if (flag_projects):
+                    rows["Projects"].children.add_new(TextBlock, title = "**Not Updated in "+str(client_days_before)+" days:**")
+                    flag_projects = False
+
+                parent_block = rows["Projects"].children.add_new(TextBlock, title = "["+manager+": ]("+todo[manager]["todo_url"]+")")
+                for i in todo[manager]["projects"]:
+                    parent_block.children.add_new(TextBlock, title = "["+i[0]+"]("+i[1]+")")
+                print(todo[manager]["projects"])
 
 
 @app.route('/refresh_db', methods=["GET"])
