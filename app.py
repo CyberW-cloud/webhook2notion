@@ -270,7 +270,7 @@ def head_summary():
             #we do this to not add empty rows
             if (add_row):
                 target = target_table.collection.add_row()
-                target.type = row_type
+                target.tags = row_type
                 target.title = name
                 add_row = False
 
