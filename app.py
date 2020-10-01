@@ -108,7 +108,8 @@ def head_summary():
 
  
     date = str(datetime.datetime.now().day) + "." + str(datetime.datetime.now().month) + "." + str(datetime.datetime.now().year)
-    name = request.args.get("row_name", date + " - " + str(active_since_hours)+"h")
+    name = request.args.get("row_name", "")
+    name = name + " " + date + " - " + str(active_since_hours)+"h"
 
     result = []
 
