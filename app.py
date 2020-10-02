@@ -39,6 +39,38 @@ TEST = False
 test_page_url = "https://www.notion.so/TEST-68d7198ed4d3437b816386f6da196547"
 token = ""
 
+@app.route('/update_by_clients', methods = ["GET"])
+def update_by_clients:
+	token = os.environ.get("TOKEN")
+	notion_client = NotionClient(token)
+
+	clients = notion_client.get_collection_view("https://www.notion.so/0ce71695159145aa84ab4371cc1e094a?v=7daae214ec7e41f4a7130ea4d6313bc5&p=14d0c9e2460947d6af09836a3f6c4ceb")
+
+	active_since_hours = request.args.get("activeSince", "24")
+
+	if active_since_hours == "all":
+		activeSince = 0
+	else:
+		activeSince = datetime.datetime.now() - datetime.timedelta(hours = int(active_since_hours))
+		activeSince = int(activeSince.timestamp())
+
+	filter_params = {
+		"filters": [
+			{
+				"filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.fromtimestamp(activeSince).strftime('%Y-%m-%d')}}, "operator": "date_is_on_or_after"},
+				"property": "Modified"
+			}
+		],
+		"operator": "and",		
+	}
+	sort_params = [{"direction": "ascending", "property": "Modified"}]
+
+	clients = clients.build_query(filter=filter_params, sort = sort_params)
+	result = clients.execute()  
+
+	for row in result:
+		print(row.proposal_sent)
+
 @app.route('/update_token', methods = ["GET"])
 def update_token():
 	
@@ -62,7 +94,7 @@ def get_token():
 	cur = conn.cursor()
 
 	token = cur.execute("""Select value from config_vars where name='token'""")[0]
-	print(token)
+	return token
 
 def copy_proposal_row(source_row, target_row):
 	target_row.date_sent = source_row.date_sent
