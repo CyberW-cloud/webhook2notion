@@ -87,6 +87,7 @@ def update_by_clients():
 			if row.proposal_sent[0].job_url != None and row.proposal_sent[0].job_url != "":
 				openingCiphertext = row.proposal_sent[0].job_url
 			else:	
+				print(row.proposal_sent)
 				time.sleep(1.6)
 				ref = row.propoal_sent[0].proposal_id
 				openingCiphertext = client.get("/hr/v4/contractors/applications/"+ref)["data"]["openingCiphertext"]
