@@ -40,7 +40,7 @@ test_page_url = "https://www.notion.so/TEST-68d7198ed4d3437b816386f6da196547"
 token = ""
 
 @app.route('/update_by_clients', methods = ["GET"])
-def update_by_clients:
+def update_by_clients():
 	token = os.environ.get("TOKEN")
 	notion_client = NotionClient(token)
 
