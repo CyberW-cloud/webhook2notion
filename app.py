@@ -84,7 +84,7 @@ def update_by_clients():
 	for row in result:
 		openingCiphertext = None
 		if len(row.proposal_sent)>0:
-			if row.proposal_sent[0].job_url != None:
+			if row.proposal_sent[0].job_url != None and row.proposal_sent[0].job_url != "":
 				openingCiphertext = row.proposal_sent[0].job_url
 			else:	
 				time.sleep(1.6)
