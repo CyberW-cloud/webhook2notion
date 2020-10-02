@@ -88,7 +88,7 @@ def update_by_clients():
 				openingCiphertext = row.proposal_sent[0].job_url
 			else:	
 				time.sleep(1.6)
-				ref = row.propoal_sent.proposal_id
+				ref = row.propoal_sent[0].proposal_id
 				openingCiphertext = client.get("/hr/v4/contractors/applications/"+ref)["data"]["openingCiphertext"]
 
 		print(openingCiphertext)
