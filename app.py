@@ -90,7 +90,8 @@ def update_by_clients():
 				time.sleep(1.6)
 				ref = row.proposal_sent[0].proposal_id
 				openingCiphertext = client.get("/hr/v4/contractors/applications/"+ref)["data"]["openingCiphertext"]
-
+		elif len(row.invites_and_jobs_posted)>0:
+			print(2)
 		print(openingCiphertext)
 
 
