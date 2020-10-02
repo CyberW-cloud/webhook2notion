@@ -68,8 +68,31 @@ def update_by_clients():
 	clients = clients.build_query(filter=filter_params, sort = sort_params)
 	result = clients.execute()  
 
+	login_config = upwork.Config({\
+		'consumer_key': os.environ.get("ConsumerKey"),\
+		'consumer_secret': os.environ.get("ConsumerSecret"),\
+		'access_token': os.environ.get("AccessToken"),\
+		'access_token_secret': os.environ.get("AccessSecret")})
+
+	client = upwork.Client(login_config)
+	
+	company = companyAPI(client)
+	application = applicationAPI(client)
+	job_info = jobInfoAPI(client)
+
+
 	for row in result:
-		print(row.proposal_sent)
+		openingCiphertext = None
+		if len(row.proposal_sent)>0:
+			if row.job_url != "":
+				openingCiphertext = row.job_url
+			else:	
+				time.sleep(1.6)
+				ref = row.propoal_sent.proposal_id
+				openingCiphertext = client.get("/hr/v4/contractors/applications/"+ref)["data"]["openingCiphertext"]
+
+		print(openingCiphertext)
+
 
 @app.route('/update_token', methods = ["GET"])
 def update_token():
