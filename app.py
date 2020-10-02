@@ -93,9 +93,12 @@ def update_by_clients():
 		elif len(row.invites_and_jobs_posted)>0:
 			if row.invites_and_jobs_posted[0].job_url != None and row.invites_and_jobs_posted[0].job_url != "":
 				openingCiphertext = row.proposal_sent[0].job_url
+			
+			elif not re.match("^[0-9]+$",re.id):
+				print(row.invites_and_jobs_posted[0].description)
 			else:	
 				time.sleep(1.6)
-				ref = row.invites_and_jobs_posted[0].proposal_id
+				ref = row.invites_and_jobs_posted[0].id
 				openingCiphertext = client.get("/hr/v4/contractors/applications/"+ref)["data"]["openingCiphertext"]
 
 
