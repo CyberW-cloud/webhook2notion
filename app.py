@@ -91,7 +91,14 @@ def update_by_clients():
 				ref = row.proposal_sent[0].proposal_id
 				openingCiphertext = client.get("/hr/v4/contractors/applications/"+ref)["data"]["openingCiphertext"]
 		elif len(row.invites_and_jobs_posted)>0:
-			print(2)
+			if row.invites_and_jobs_posted[0].job_url != None and row.invites_and_jobs_posted[0].job_url != "":
+				openingCiphertext = row.proposal_sent[0].job_url
+			else:	
+				time.sleep(1.6)
+				ref = row.invites_and_jobs_posted[0].proposal_id
+				openingCiphertext = client.get("/hr/v4/contractors/applications/"+ref)["data"]["openingCiphertext"]
+
+
 		print(openingCiphertext)
 
 
