@@ -156,8 +156,14 @@ def update_token():
 
 @app.route('/tmp')
 def tmp():
+
+
 	token = os.environ.get("TOKEN")
 	client = NotionClient(token)
+
+	client.get_block("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bbbbd5bd5fd84f02bf9670d2793b0538&p=fd14ccd986f7490e9b856d37910b04ee").modified = datetime.datetime.fromtimestamp(1571356800)
+	return ""
+	
 
 	proposals = client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
 
@@ -182,7 +188,7 @@ def tmp():
 	for row in result:
 		modified = row.modified
 		row.client_relation = row.client
-		row.modified = modified
+		row.modified = 
 
 def get_token():
 	DATABASE_URL = os.environ['DATABASE_URL']
