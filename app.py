@@ -131,6 +131,7 @@ def update_clients():
 		
 		print(openingCiphertext)
 		if (openingCiphertext != None):
+			time.sleep(1.6)
 			buyer = job_info.get_specific(openingCiphertext)["engagement"]["buyer"]
 			print(buyer["op_country"])
 			print(buyer["op_state"])
