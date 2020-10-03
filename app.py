@@ -25,6 +25,7 @@ from upwork.routers.freelancers.profile import Api as profileAPI
 from upwork.routers.hr.freelancers.applications import Api as applicationAPI
 from upwork.routers.hr.jobs import Api as jobsAPI
 from upwork.routers.jobs.profile import Api as jobInfoAPI
+from upwork.routers.hr.engagements import Api as engagementAPI
 
 import psycopg2
 
@@ -79,7 +80,7 @@ def update_clients():
 	company = companyAPI(client)
 	application = applicationAPI(client)
 	job_info = jobInfoAPI(client)
-
+	engagements = engagementAPI(client)
 
 	for row in result:
 		openingCiphertext = None
@@ -99,7 +100,7 @@ def update_clients():
 			
 				except Exception as e:
 					continue
-					
+
 		if len(row.invites_and_jobs_posted)>0 and openingCiphertext == None:
 			for invite in row.invites_and_jobs_posted: 
 				try:
@@ -120,8 +121,13 @@ def update_clients():
 
 				except Exception as e:
 					continue
-				
+		if len(row.contracts)>0 and openingCiphertext == None:
+			for contract in row.contracts:
+				try:
+					
 
+				except Exception as e:
+					continue
 		print(openingCiphertext)
 
 
