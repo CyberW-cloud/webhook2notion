@@ -94,7 +94,7 @@ def update_clients():
 			if row.invites_and_jobs_posted[0].job_url != None and row.invites_and_jobs_posted[0].job_url != "":
 				openingCiphertext = row.proposal_sent[0].job_url
 			
-			elif not re.match("^[0-9]+$",row.invites_and_jobs_posted[0].id):
+			elif not re.match("^[0-9]*",row.invites_and_jobs_posted[0].id):
 				openingCiphertext = re.match( "(~|(%7E))[^?\]]*", row.invites_and_jobs_posted[0].description).group()
 			else:	
 				time.sleep(1.6)
