@@ -188,7 +188,7 @@ def tmp():
 	for row in result:
 		modified = row.modified
 		row.client_relation = row.client
-		row.modified = 
+		row.modified = modified
 
 def get_token():
 	DATABASE_URL = os.environ['DATABASE_URL']
