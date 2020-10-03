@@ -161,13 +161,6 @@ def tmp():
 	token = os.environ.get("TOKEN")
 	client = NotionClient(token)
 
-	row = client.get_block("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bbbbd5bd5fd84f02bf9670d2793b0538&p=fd14ccd986f7490e9b856d37910b04ee")
-	row.modified = datetime.datetime(2019, 10, 18)
-	print(row.modified)
-
-	return ""
-	
-
 	proposals = client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
 
 	filter_params = {
@@ -186,7 +179,7 @@ def tmp():
 	sort_params = [{"direction": "ascending", "property": "Modified"}]
 
 	proposals = proposals.build_query(filter=filter_params, sort = sort_params)
-	result = [proposals.execute()[0]]  
+	result = proposals.execute() 
 
 	for row in result:
 		modified = row.modified
