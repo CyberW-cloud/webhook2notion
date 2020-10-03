@@ -128,7 +128,10 @@ def update_clients():
 					break
 				except Exception as e:
 					continue
+		
 		print(openingCiphertext)
+		if (openingCiphertext != None):
+			print(job_info.get_specific(openingCiphertext))
 
 
 @app.route('/update_token', methods = ["GET"])
