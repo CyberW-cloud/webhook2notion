@@ -98,7 +98,6 @@ def update_clients():
 				
 				elif re.match("^[0-9]$",row.invites_and_jobs_posted[0].id) == None:
 					print(row.invites_and_jobs_posted[0].description)
-					i = 1/0
 					openingCiphertext = re.search( "(~|(%7E))[^?\]]*", row.invites_and_jobs_posted[0].description).group().replace("%7E", "~")
 				else:	
 					time.sleep(1.6)
@@ -106,7 +105,6 @@ def update_clients():
 					print(ref)
 					openingCiphertext = client.get("/hr/v4/contractors/applications/"+ref)["data"]["openingCiphertext"]
 		except Exception as e:
-			i = 1/0
 			print("skipping due to " + str(e))
 			continue
 
