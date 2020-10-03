@@ -84,24 +84,36 @@ def update_clients():
 	for row in result:
 		openingCiphertext = None
 		try:
-			if len(row.proposal_sent)>0:
-				if row.proposal_sent[0].job_url != None and row.proposal_sent[0].job_url != "":
-					openingCiphertext = row.proposal_sent[0].job_url
-				else:	
-					time.sleep(1.6)
-					ref = row.proposal_sent[0].proposal_id
-					openingCiphertext = client.get("/hr/v4/contractors/applications/"+ref)["data"]["openingCiphertext"]
-			elif len(row.invites_and_jobs_posted)>0:
-				if row.invites_and_jobs_posted[0].job_url != None and row.invites_and_jobs_posted[0].job_url != "":
-					openingCiphertext = row.proposal_sent[0].job_url
+			if len(row.proposal_sent)>0 and openingCiphertext != None:
+				for proposal in row.proposal_sent: 
+					if proposal.job_url != None and proposal.job_url != "":
+						openingCiphertext = proposal.job_url
+					else:	
+						time.sleep(1.6)
+						ref = proposal.proposal_id
+						openingCiphertext = client.get("/hr/v4/contractors/applications/"+ref)["data"]["openingCiphertext"]
+					
+					if openingCiphertext != None:
+						break			
+			
+			if len(row.invites_and_jobs_posted)>0 and openingCiphertext != None:
+				for invite in row.invites_and_jobs_posted: 
 				
-				elif re.match("^[0-9]$",row.invites_and_jobs_posted[0].id) == None:
-					openingCiphertext = re.search( "(~|(%7E))[^?\]]*", row.invites_and_jobs_posted[0].description).group().replace("%7E", "~")
-				else:	
-					time.sleep(1.6)
-					ref = row.invites_and_jobs_posted[0].id
-					print(ref)
-					openingCiphertext = client.get("/hr/v4/contractors/applications/"+ref)["data"]["openingCiphertext"]
+					if invite.job_url != None and invite.job_url != "":
+						openingCiphertext = row.proposal_sent[0].job_url
+					
+					elif re.match("^[0-9]$", invite.id) == None:
+						openingCiphertext = re.search( "(~|(%7E))[^?\]]*", invite.description).group().replace("%7E", "~")
+						
+					else:	
+						time.sleep(1.6)
+						ref = invite.id
+						print(ref)
+						openingCiphertext = client.get("/hr/v4/contractors/applications/"+ref)["data"]["openingCiphertext"]
+			
+					if openingCiphertext != None:
+						break
+
 		except Exception as e:
 			print("skipping due to " + str(e))
 			i = 1/0
