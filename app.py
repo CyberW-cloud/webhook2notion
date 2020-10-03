@@ -82,8 +82,8 @@ def update_clients():
 
 
 	for row in result:
+		openingCiphertext = None
 		try:
-			openingCiphertext = None
 			if len(row.proposal_sent)>0:
 				if row.proposal_sent[0].job_url != None and row.proposal_sent[0].job_url != "":
 					openingCiphertext = row.proposal_sent[0].job_url
