@@ -106,6 +106,7 @@ def update_clients():
 					print(ref)
 					openingCiphertext = client.get("/hr/v4/contractors/applications/"+ref)["data"]["openingCiphertext"]
 		except Exception as e:
+			i = 1/0
 			print("skipping due to " + str(e))
 			continue
 
