@@ -177,13 +177,12 @@ def tmp():
 	sort_params = [{"direction": "ascending", "property": "Modified"}]
 
 	proposals = proposals.build_query(filter=filter_params, sort = sort_params)
-	result = proposals.execute()  
+	result = proposals.execute()[0]  
 
 	for row in result:
-		print(row.client)
-#		modified = row.modified
-#		row.client_relation = row.client
-#		row.modified = modified
+		modified = row.modified
+		row.client_relation = row.client
+		row.modified = modified
 
 def get_token():
 	DATABASE_URL = os.environ['DATABASE_URL']
