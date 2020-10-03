@@ -137,6 +137,7 @@ def update_clients():
 			print(buyer["op_city"])
 			print(buyer["op_contract_date"])
 			print("op_timezone")
+
 @app.route('/update_token', methods = ["GET"])
 def update_token():
 	
@@ -154,6 +155,36 @@ def update_token():
 	conn.commit()
 
 @app.route('/tmp')
+def tmp():
+	token = os.environ.get("TOKEN")
+	client = NotionClient(token)
+
+	proposals = client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
+
+	filter_params = {
+		"filters": [
+			{
+				"filter": {"operator": "is_empty"},
+				"property": "Client Relation"
+			},
+			{
+				"filter": {"operator" : "is_not_empty"},
+				"property": "Client"
+			}
+		],
+		"operator": "and",
+	}
+	sort_params = [{"direction": "ascending", "property": "Modified"}]
+
+	proposals = proposals.build_query(filter=filter_params, sort = sort_params)
+	result = proposals.execute()  
+
+	for row in result:
+		print(row.client)
+#		modified = row.modified
+#		row.client_relation = row.client
+#		row.modified = modified
+
 def get_token():
 	DATABASE_URL = os.environ['DATABASE_URL']
 	conn = psycopg2.connect(DATABASE_URL, sslmode='require')
