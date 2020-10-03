@@ -93,6 +93,7 @@ def update_clients():
 					print(ref + "proposals")
 					openingCiphertext = client.get("/hr/v4/contractors/applications/"+ref)["data"]["openingCiphertext"]
 			elif len(row.invites_and_jobs_posted)>0:
+				print(re.match("^[0-9]*",row.invites_and_jobs_posted[0].id))
 				if row.invites_and_jobs_posted[0].job_url != None and row.invites_and_jobs_posted[0].job_url != "":
 					openingCiphertext = row.proposal_sent[0].job_url
 				
