@@ -131,9 +131,12 @@ def update_clients():
 		
 		print(openingCiphertext)
 		if (openingCiphertext != None):
-			print(job_info.get_specific(openingCiphertext))
-			i = 1/0
-
+			buyer = job_info.get_specific(openingCiphertext)["engagement"]["buyer"]
+			print(buyer["op_country"])
+			print(buyer["op_state"])
+			print(buyer["op_city"])
+			print(buyer["op_contract_date"])
+			print("op_timezone")
 @app.route('/update_token', methods = ["GET"])
 def update_token():
 	
