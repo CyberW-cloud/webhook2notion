@@ -125,7 +125,7 @@ def update_clients():
 			for contract in row.contracts:
 				try:
 					openingCiphertext = engagements.get_specific(contract.contract_id)["engagement"]["job_ref_ciphertext"]	
-
+					break
 				except Exception as e:
 					continue
 		print(openingCiphertext)
