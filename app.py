@@ -83,9 +83,10 @@ def update_clients():
 
 	for row in result:
 		openingCiphertext = None
-		try:
-			if len(row.proposal_sent)>0 and openingCiphertext == None:
-				for proposal in row.proposal_sent: 
+
+		if len(row.proposal_sent)>0 and openingCiphertext == None:
+			for proposal in row.proposal_sent: 
+				try:
 					if proposal.job_url != None and proposal.job_url != "":
 						openingCiphertext = proposal.job_url
 					else:	
@@ -96,9 +97,12 @@ def update_clients():
 					if openingCiphertext != None:
 						break			
 			
-			if len(row.invites_and_jobs_posted)>0 and openingCiphertext == None:
-				for invite in row.invites_and_jobs_posted: 
-				
+				except Exception as e:
+					continue
+					
+		if len(row.invites_and_jobs_posted)>0 and openingCiphertext == None:
+			for invite in row.invites_and_jobs_posted: 
+				try:
 					if invite.job_url != None and invite.job_url != "":
 						openingCiphertext = row.proposal_sent[0].job_url
 					
@@ -114,10 +118,9 @@ def update_clients():
 					if openingCiphertext != None:
 						break
 
-		except Exception as e:
-			print("skipping due to " + str(e))
-			i = 1/0
-			continue
+				except Exception as e:
+					continue
+				
 
 		print(openingCiphertext)
 
