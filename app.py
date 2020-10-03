@@ -124,7 +124,7 @@ def update_clients():
 		if len(row.contracts)>0 and openingCiphertext == None:
 			for contract in row.contracts:
 				try:
-					print(engagements.get_specific(contract.contract_id))	
+					openingCiphertext = engagements.get_specific(contract.contract_id)["engagement"]["job_ref_ciphertext"]	
 
 				except Exception as e:
 					continue
