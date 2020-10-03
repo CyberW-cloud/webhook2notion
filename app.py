@@ -99,7 +99,7 @@ def update_clients():
 				elif re.match("^[0-9]$",row.invites_and_jobs_posted[0].id) == None:
 					print(row.invites_and_jobs_posted[0].description)
 					i = 1/0
-					openingCiphertext = re.match( "(~|(%7E))[^?\]]*", row.invites_and_jobs_posted[0].description).group()
+					openingCiphertext = re.search( "(~|(%7E))[^?\]]*", row.invites_and_jobs_posted[0].description).group().replace("%7E", "~")
 				else:	
 					time.sleep(1.6)
 					ref = row.invites_and_jobs_posted[0].id
