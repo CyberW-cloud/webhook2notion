@@ -132,7 +132,7 @@ def update_clients():
 		print(openingCiphertext)
 		if (openingCiphertext != None):
 			print(job_info.get_specific(openingCiphertext))
-
+			i = 1/0
 
 @app.route('/update_token', methods = ["GET"])
 def update_token():
