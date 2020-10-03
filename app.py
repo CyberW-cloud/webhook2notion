@@ -162,7 +162,9 @@ def tmp():
 	client = NotionClient(token)
 
 	row = client.get_block("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bbbbd5bd5fd84f02bf9670d2793b0538&p=fd14ccd986f7490e9b856d37910b04ee")
-	print(type(row.modified))
+	row.modified = datetime.datetime(2019, 10, 18)
+	print(row.modified)
+
 	return ""
 	
 
