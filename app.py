@@ -177,7 +177,7 @@ def tmp():
 	sort_params = [{"direction": "ascending", "property": "Modified"}]
 
 	proposals = proposals.build_query(filter=filter_params, sort = sort_params)
-	result = proposals.execute()[0]  
+	result = [proposals.execute()[0]]  
 
 	for row in result:
 		modified = row.modified
