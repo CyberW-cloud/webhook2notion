@@ -85,9 +85,17 @@ def add_aliases_to_summary(aliases, page, parent_row):
 
 
 
-#параметры ендпоинта - types = Proposals,Contracts,Projects (убери базы которые не надо и запятую), 
-#activeSince = количество часов, за которые надо собирать апдейты 
-#row_name - имя столбцов добавленых в базу, по дефолту 22.09.2020 - 24h
+#PARAMETERS:
+# activeSince = количество часов за которые забираются обновления
+# table = таблица в которую пишем, урл
+# types = базы данных из которых брать ардейты, написаных через запятую (сейчас работают только параметры Proposals,Contracts,Projects) 
+# row_name = имя строки, до него обязательно добавляется дата к концу
+# date = дата с которой оперирует кикстафф в конце репорта 
+# contracts_day, projects_day = дни, до которых брать контракты/пропозалы для кикстафа (оптимизация, смысл ставить не 0 только если брать большой client_days) 
+# client_day = неактивонсть(дни), за сколько добавлять контракты/проекты в конец 
+# proposals_day = неактивонсть(дни), за сколько добавлять пропозалы в конец
+# no_contracts, no_projects, no_proposals = если чтото поставить в ети поля, то контракты/проекты/пропозалы не будут добавлятся в конец репорта
+
 @app.route('/updates_check', methods=["GET"])
 def head_summary():
     token = os.environ.get("TOKEN")
@@ -283,7 +291,7 @@ def head_summary():
 
     print("starting copied kickstaff")
     date = request.args.get("date", None)
-    contracts_day = request.args.get("contracts_day", 9, type=int)
+    contracts_day = request.args.get("contracts_day", 0, type=int)
     projects_day = request.args.get("projects_day", contracts_day, type=int)
     client_days_before = request.args.get("client_day", 7, type=int)
     proposal_days = request.args.get("proposals_day", 3, type=int)    cc_tag = request.args.get("no_contracts", None)
