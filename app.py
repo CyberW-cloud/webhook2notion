@@ -40,12 +40,35 @@ TEST = False
 test_page_url = "https://www.notion.so/TEST-68d7198ed4d3437b816386f6da196547"
 token = ""
 
+def copy_client(new_row, source):
+	new_row.name = source.name 
+	new_row.clients_company = source.clients_company 
+	new_row.added = source.added 
+	new_row.time_zone = source.time_zone 
+	new_row.country = source.country 
+
+
 @app.route('/update_clients', methods = ["GET"])
 def update_clients():
 	token = os.environ.get("TOKEN")
 	notion_client = NotionClient(token)
 
 	clients = notion_client.get_collection_view("https://www.notion.so/21a8e8245c9e4024848613cecdc8e88f?v=f658b865c0b842149cf4583bbff2dc28")
+
+	test_page = notion_client.get_block("https://www.notion.so/test-63e297723c924b6babc931d10f7b4740")
+	
+
+	test_page.children.add_new(CollectionViewPageBlock, title = "table")
+	page = test_page.children[-1]
+
+	proposals = notion_client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
+
+	schema = notion_client.get_block("https://www.notion.so/21a8e8245c9e4024848613cecdc8e88f?v=f658b865c0b842149cf4583bbff2dc28").collection.get("schema")
+
+	collection = notion_client.get_collection(notion_client.create_record("collection", parent=page, schema=schema))
+	page.collection = collection
+	page.views.add_new()
+
 
 	active_since_hours = request.args.get("activeSince", "24")
 
@@ -135,6 +158,8 @@ def update_clients():
 				except Exception as e:
 					continue
 		
+		test_row = page.collection.add_row()
+		copy_client(test_row, row)
 		print(openingCiphertext)
 		if (openingCiphertext != None):
 			time.sleep(1.6)
