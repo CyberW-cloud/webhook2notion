@@ -134,8 +134,11 @@ def update_clients():
 		print(openingCiphertext)
 		if (openingCiphertext != None):
 			time.sleep(1.6)
-			buyer = job_info.get_specific(openingCiphertext)["profile"]["buyer"]
-			
+			try:
+				buyer = job_info.get_specific(openingCiphertext)["profile"]["buyer"]
+			except:
+				continue
+
 			if "op_country" in buyer.keys():
 				print(buyer["op_country"])
 			
