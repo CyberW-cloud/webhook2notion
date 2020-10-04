@@ -85,7 +85,7 @@ def add_aliases_to_summary(aliases, page, parent_row):
 
 
 
-#PARAMETERS:
+#PROPERTIES:
 # activeSince = количество часов за которые забираются обновления
 # table = таблица в которую пишем, урл
 # types = базы данных из которых брать ардейты, написаных через запятую (сейчас работают только параметры Proposals,Contracts,Projects) 
@@ -496,6 +496,8 @@ def update_parsed_rooms(parsed_rooms, update):
         parsed_rooms.append(update)
         return parsed_rooms
 
+#PROPERTIES:
+# activeSince - количество часов, за которые брать месседжы
 
 @app.route('/message_review', methods=["GET"])
 def message_review():
@@ -791,6 +793,9 @@ def create_page(parent_url, title):
     parent.children.add_new(PageBlock, title=title)
 
     return parent.children[-1]
+
+#PROPERTIES:
+# target_site = таблица, в которой туду находятся
 
 @app.route("/hb_tasks", methods=["GET"])
 def Hb_tasks():
@@ -1198,6 +1203,12 @@ def get_proposals(token, days_before):
     return res
 
 
+#PROPERTIES:
+# date = дата за которую добавляют todo 
+# contracts_day, projects_day = дни, до которых брать контракты/пропозалы для кикстафа (оптимизация, смысл ставить не 0 только если брать большой client_days) 
+# client_day = неактивонсть(дни), за сколько добавлять контракты/проекты в конец 
+# no_contracts, no_projects = если чтото поставить в ети поля, то контракты/проекты/пропозалы не будут добавлятся в конец репорта
+
 @app.route("/kick_staff", methods=["GET"])
 def kick_staff():
     print("starting kickstaff")
@@ -1257,7 +1268,8 @@ def kick_staff():
     return "Done!"
 
 
-
+#PROPERTIES:
+# days_before = неактивонсть(дни), за сколько добавлять контракты/проекты в конец 
 
 @app.route("/proposals_check", methods=["GET"])
 def proposals_check():
@@ -1321,6 +1333,12 @@ def create_todo(token, date, link, todo, text):
 	if not added:
 		raise IOError("Notion is most likely down. F")
 
+
+#PROPERTIES:
+# member = урл страницы человека, которому добавить todo 
+# todo = само туду, если их несколько, то разделять разные при помощи "||"
+# text = задача под todo c галочкой
+# date = дата, за которую создается туду
 
 @app.route("/todoone", methods=["GET"])
 def todo_one():
@@ -1556,6 +1574,10 @@ def get_todo_list_by_role(token, roles):
     return todo_list
 
 
+#PROPERTIES:
+# roles = роли на которых запускается kickstaff, если несколько, то между ними можно ставить '/' , '\' , '.' , ';' , '|' , ' ' , ',' 
+# date = дата, за которую добавляется туду
+
 @app.route("/weekly_todo", methods=["GET"])
 def weekly_todo():
     roles = request.args.get("roles", "")
@@ -1594,6 +1616,11 @@ def weekly_todo():
             return f"Can't find Function for role {role}"
     print(f"weekly todo for {roles} done")
     return "Done!"
+
+
+#PROPERTIES:
+# roles = роли на которых запускается kickstaff, если несколько, то между ними можно ставить '/' , '\' , '.' , ';' , '|' , ' ' , ',' 
+# date = дата, за которую добавляется туду
   
 @app.route("/friday_todo", methods=["GET"])
 def friday_todo():
@@ -1632,6 +1659,12 @@ def create_rss(token, collection_url, subject, link, description):
     if link.find("https://community.upwork.com/t5/Announcements/") != -1:
         row.label = "upwork community announcements"
 
+
+#PROPERTIES:
+# collectionURL = таблица, в которую добавить строку
+# subject = проперти name етой строки
+# link = ссылка с которой получили rss
+# description = проперти decription етой строки
 
 @app.route("/rss", methods=["POST"])
 def rss():
@@ -1725,6 +1758,14 @@ def create_pcj(token, collection_url, subject, description, invite_to, link):
 	row.id = item_id.group()[3:]
 	return row
 
+
+#PROPERTIES:
+# collectionURL = таблица, в которую добавить строку
+# subject = проперти name етой строки
+# link = проперти URL rss, с него получаем id
+# description = проперти decription етой строки
+# inviteto = кому пришел инвайт, ссылка на тим директори
+
 @app.route("/pcj", methods=["POST"])
 def pcj():
 	collection_url = request.form.get("collectionURL")
@@ -1760,6 +1801,13 @@ def create_invite(token, collection_url, subject, description, invite_to):
 	row.link = url
 	row.id = item_id.group()
 	return row
+
+
+#PROPERTIES:
+# collectionURL = таблица, в которую добавить строку
+# subject = проперти name етой строки
+# description = проперти decription етой строки
+# inviteto = кому пришел инвайт, ссылка на тим директори
 
 @app.route("/invites", methods=["POST"])
 def invites():
