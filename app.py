@@ -421,6 +421,18 @@ def add_aliases_to_summary(aliases, page, parent_row):
 	page.children.add_new(TextBlock, title = "")
 	page.children.add_new(DividerBlock)
 
+
+#PROPERTIES:
+# activeSince = количество часов за которые забираются обновления
+# table = таблица в которую пишем, урл
+# types = базы данных из которых брать ардейты, написаных через запятую (сейчас работают только параметры Proposals,Contracts,Projects) 
+# row_name = имя строки, до него обязательно добавляется дата к концу
+# date = дата с которой оперирует кикстафф в конце репорта 
+# contracts_day, projects_day = дни, до которых брать контракты/пропозалы для кикстафа (оптимизация, смысл ставить не 0 только если брать большой client_days) 
+# client_day = неактивонсть(дни), за сколько добавлять контракты/проекты в конец 
+# proposals_day = неактивонсть(дни), за сколько добавлять пропозалы в конец
+# no_contracts, no_projects, no_proposals = если чтото поставить в ети поля, то контракты/проекты/пропозалы не будут добавлятся в конец репорта
+
 @app.route('/updates_check', methods=["GET"])
 def head_summary():
 	token = os.environ.get("TOKEN")
@@ -439,7 +451,8 @@ def head_summary():
 	select_dbs = request.args.get("types", "Proposals,Contracts,Projects").lower().split(",")
 
 	date = str(datetime.datetime.now().day) + "." + str(datetime.datetime.now().month) + "." + str(datetime.datetime.now().year)
-	name = request.args.get("row_name", date + " - " + str(active_since_hours)+"h")
+	name = request.args.get("row_name", "")
+	name = name + " " + date + " - " + str(active_since_hours)+"h"
 
 	result = []
 
@@ -613,7 +626,7 @@ def head_summary():
 
 	print("starting copied kickstaff")
 	date = request.args.get("date", None)
-	contracts_day = request.args.get("contracts_day", 9, type=int)
+	contracts_day = request.args.get("contracts_day", 0, type=int)
 	projects_day = request.args.get("projects_day", contracts_day, type=int)
 	client_days_before = request.args.get("client_day", 7, type=int)
 	proposal_days = request.args.get("proposals_day", 3, type=int)
@@ -819,6 +832,8 @@ def update_parsed_rooms(parsed_rooms, update):
 		parsed_rooms.append(update)
 		return parsed_rooms
 
+#PROPERTIES:
+# activeSince - количество часов, за которые брать месседжы
 
 @app.route('/message_review', methods=["GET"])
 def message_review():
@@ -1243,6 +1258,8 @@ def get_offset_to_closest_weekday(source, targets):
 	else:
 		return datetime.timedelta(target_day-day)
 	
+#PROPERTIES:
+# target_site = таблица, в которой туду находятся
 
 @app.route("/hb_tasks", methods=["GET"])
 def Hb_tasks():
@@ -1659,6 +1676,11 @@ def get_proposals(token, days_before):
 			res.append(proposal)
 	return res
 
+#PROPERTIES:
+# date = дата за которую добавляют todo 
+# contracts_day, projects_day = дни, до которых брать контракты/пропозалы для кикстафа (оптимизация, смысл ставить не 0 только если брать большой client_days) 
+# client_day = неактивонсть(дни), за сколько добавлять контракты/проекты в конец 
+# no_contracts, no_projects = если чтото поставить в ети поля, то контракты/проекты/пропозалы не будут добавлятся в конец репорта
 
 @app.route("/kick_staff", methods=["GET"])
 def kick_staff():
@@ -1724,8 +1746,8 @@ def kick_staff():
 	return "Done!"
 
 
-
-
+#PROPERTIES:
+# days_before = неактивонсть(дни), за сколько добавлять контракты/проекты в конец 
 @app.route("/proposals_check", methods=["GET"])
 def proposals_check():
 	global TEST
@@ -1800,6 +1822,11 @@ def create_todo(token, date, link, todo, text):
 	if not added:
 		raise IOError("Notion is most likely down. F")
 
+#PROPERTIES:
+# member = урл страницы человека, которому добавить todo 
+# todo = само туду, если их несколько, то разделять разные при помощи "||"
+# text = задача под todo c галочкой
+# date = дата, за которую создается туду
 
 @app.route("/todoone", methods=["GET"])
 def todo_one():
@@ -2073,6 +2100,9 @@ def get_todo_list_by_role(token, roles):
 	# print(*todo_list.items(), sep="\n")
 	return todo_list
 
+#PROPERTIES:
+# roles = роли на которых запускается kickstaff, если несколько, то между ними можно ставить '/' , '\' , '.' , ';' , '|' , ' ' , ',' 
+# date = дата, за которую добавляется туду
 
 @app.route("/weekly_todo", methods=["GET"])
 def weekly_todo():
@@ -2114,7 +2144,12 @@ def weekly_todo():
 			return f"Can't find Function for role {role}"
 	print(f"weekly todo for {roles} done")
 	return "Done!"
-  
+
+
+#PROPERTIES:
+# roles = роли на которых запускается kickstaff, если несколько, то между ними можно ставить '/' , '\' , '.' , ';' , '|' , ' ' , ',' 
+# date = дата, за которую добавляется туду
+
 @app.route("/friday_todo", methods=["GET"])
 def friday_todo():
 	roles = request.args.get("roles", "")
@@ -2153,6 +2188,11 @@ def create_rss(token, collection_url, subject, link, description):
 	if link.find("https://community.upwork.com/t5/Announcements/") != -1:
 		row.label = "upwork community announcements"
 
+#PROPERTIES:
+# collectionURL = таблица, в которую добавить строку
+# subject = проперти name етой строки
+# link = ссылка с которой получили rss
+# description = проперти decription етой строки
 
 @app.route("/rss", methods=["POST"])
 def rss():
@@ -2246,6 +2286,14 @@ def create_pcj(token, collection_url, subject, description, invite_to, link):
 	row.id = item_id.group()[1:]
 	return row
 
+
+#PROPERTIES:
+# collectionURL = таблица, в которую добавить строку
+# subject = проперти name етой строки
+# link = проперти URL rss, с него получаем id
+# description = проперти decription етой строки
+# inviteto = кому пришел инвайт, ссылка на тим директори
+
 @app.route("/pcj", methods=["GET"])
 def pcj():
 	collection_url = request.args.get("collectionURL")
@@ -2281,6 +2329,13 @@ def create_invite(token, collection_url, subject, description, invite_to):
 	row.link = url
 	row.id = item_id.group()
 	return row
+
+
+#PROPERTIES:
+# collectionURL = таблица, в которую добавить строку
+# subject = проперти name етой строки
+# description = проперти decription етой строки
+# inviteto = кому пришел инвайт, ссылка на тим директори
 
 @app.route("/invites", methods=["POST", "GET"])
 def invites():
