@@ -135,13 +135,21 @@ def update_clients():
 		if (openingCiphertext != None):
 			time.sleep(1.6)
 			buyer = job_info.get_specific(openingCiphertext)["profile"]["buyer"]
-			print(buyer["op_country"])
+			
+			if "op_country" in buyer.keys():
+				print(buyer["op_country"])
+			
 			if "op_state" in buyer.keys():
 				print(buyer["op_state"])
 
-			print(buyer["op_city"])
-			print(buyer["op_contract_date"])
-			print(buyer["op_timezone"])
+			if "op_city" in buyer.keys():
+				print(buyer["op_city"])
+			
+			if "op_contract_date" in buyer.keys():
+				print(buyer["op_contract_date"])
+			
+			if "op_timezone" in buyer.keys():
+				print(buyer["op_timezone"])
 		else:
 			print("none")
 
