@@ -139,7 +139,7 @@ def update_clients():
 			print(buyer["op_state"])
 			print(buyer["op_city"])
 			print(buyer["op_contract_date"])
-			print("op_timezone")
+			print(buyer["op_timezone"])
 		else:
 			print("none")
 @app.route('/update_token', methods = ["GET"])
