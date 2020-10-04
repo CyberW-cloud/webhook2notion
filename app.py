@@ -45,7 +45,7 @@ def update_clients():
 	token = os.environ.get("TOKEN")
 	notion_client = NotionClient(token)
 
-	clients = notion_client.get_collection_view("https://www.notion.so/0ce71695159145aa84ab4371cc1e094a?v=7daae214ec7e41f4a7130ea4d6313bc5&p=14d0c9e2460947d6af09836a3f6c4ceb")
+	clients = notion_client.get_collection_view("https://www.notion.so/21a8e8245c9e4024848613cecdc8e88f?v=f658b865c0b842149cf4583bbff2dc28")
 
 	active_since_hours = request.args.get("activeSince", "24")
 
@@ -55,6 +55,7 @@ def update_clients():
 		activeSince = datetime.datetime.now() - datetime.timedelta(hours = int(active_since_hours))
 		activeSince = int(activeSince.timestamp())
 
+		
 	filter_params = {
 		"filters": [
 			{
@@ -831,6 +832,7 @@ def update_parsed_rooms(parsed_rooms, update):
 	if update["id"] not in [x["id"] for x in parsed_rooms]:
 		parsed_rooms.append(update)
 		return parsed_rooms
+
 
 #PROPERTIES:
 # activeSince - количество часов, за которые брать месседжы
