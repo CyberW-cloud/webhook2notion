@@ -55,7 +55,7 @@ def update_clients():
 		activeSince = datetime.datetime.now() - datetime.timedelta(hours = int(active_since_hours))
 		activeSince = int(activeSince.timestamp())
 
-		
+
 	filter_params = {
 		"filters": [
 			{
@@ -139,7 +139,8 @@ def update_clients():
 			print(buyer["op_city"])
 			print(buyer["op_contract_date"])
 			print("op_timezone")
-
+		else:
+			print("none")
 @app.route('/update_token', methods = ["GET"])
 def update_token():
 	
