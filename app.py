@@ -83,6 +83,7 @@ def update_clients():
 	job_info = jobInfoAPI(client)
 	engagements = engagementAPI(client)
 
+	print(len(result))
 	for row in result:
 		openingCiphertext = None
 
