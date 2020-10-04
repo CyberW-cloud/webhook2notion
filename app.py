@@ -91,7 +91,9 @@ def update_clients():
 			for proposal in row.proposal_sent: 
 				try:
 					if proposal.job_url != None and proposal.job_url != "":
-						openingCiphertext = proposal.job_url
+						openingCiphertext = re.search("(~|(%7E))\w+",proposal.job_url)
+						if openingCiphertext != None:
+							openingCiphertext = openingCiphertext.group()
 					else:	
 						time.sleep(1.6)
 						ref = proposal.proposal_id
@@ -107,8 +109,10 @@ def update_clients():
 			for invite in row.invites_and_jobs_posted: 
 				try:
 					if invite.job_url != None and invite.job_url != "":
-						openingCiphertext = row.proposal_sent[0].job_url
-					
+						openingCiphertext = re.search("(~|(%7E))\w+",invite.job_url)
+						if openingCiphertext != None:
+							openingCiphertext = openingCiphertext.group()
+
 					elif re.match("^[0-9]$", invite.id) == None:
 						openingCiphertext = re.search( "(~|(%7E))[^?\]]*", invite.description).group().replace("%7E", "~")
 						
