@@ -60,9 +60,9 @@ def update_clients():
 	test_page.children.add_new(CollectionViewPageBlock, title = "table")
 	page = test_page.children[-1]
 
-	schema = client.get_block("https://www.notion.so/21a8e8245c9e4024848613cecdc8e88f?v=f658b865c0b842149cf4583bbff2dc28").collection.get("schema")
+	schema = notion_client.get_block("https://www.notion.so/21a8e8245c9e4024848613cecdc8e88f?v=f658b865c0b842149cf4583bbff2dc28").collection.get("schema")
 
-	collection = client.get_collection(client.create_record("collection", parent=page, schema=schema))
+	collection = notion_client.get_collection(notion_client.create_record("collection", parent=page, schema=schema))
 	page.collection = collection
 	page.views.add_new()
 
