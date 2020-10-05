@@ -294,7 +294,8 @@ def head_summary():
     contracts_day = request.args.get("contracts_day", 0, type=int)
     projects_day = request.args.get("projects_day", contracts_day, type=int)
     client_days_before = request.args.get("client_day", 7, type=int)
-    proposal_days = request.args.get("proposals_day", 3, type=int)    cc_tag = request.args.get("no_contracts", None)
+    proposal_days = request.args.get("proposals_day", 3, type=int)
+    cc_tag = request.args.get("no_contracts", None)
     pm_tag = request.args.get("no_projects", None)
     prop_tag = request.args.get("no_proposals", None)
     cc = True if cc_tag is None else False
