@@ -214,7 +214,8 @@ def tmp():
 
 	test_client = client.get_block("https://www.notion.so/TEST-b50d82476cf44c8c8eef40a52cfb9cf4")
 	for row in result:
-		row.client.append(test_client)
+		print(row.name)
+		row.client = row.client + [test_client]
 
 def get_token():
 	DATABASE_URL = os.environ['DATABASE_URL']
