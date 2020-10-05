@@ -56,7 +56,7 @@ def tmp():
     sort_params = [{"direction": "ascending", "property": "Modified"}]
 
     clients = clients.build_query(filter=filter_params, sort = sort_params)
-    result = [clients.execute()[0]]
+    result = clients.execute()[0]
 
     for row in result:
         row.proposal_sent_fix = row.proposal_sent
