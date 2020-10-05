@@ -31,6 +31,36 @@ timezone = "Europe/Kiev"
 
 app = Flask(__name__)
 cache = {}
+@app.route('/tmp')
+def tmp():
+
+
+    token = os.environ.get("TOKEN")
+    client = NotionClient(token)
+
+    clients = client.get_collection_view("https://www.notion.so/21a8e8245c9e4024848613cecdc8e88f?v=f658b865c0b842149cf4583bbff2dc28")
+
+    filter_params = {
+        "filters": [
+            {
+                "filter": {"operator": "is_empty"},
+                "property": "proposal_sent_fix"
+            },
+            {
+                "filter": {"operator" : "is_not_empty"},
+                "property": "Proposal sent"
+            }
+        ],
+        "operator": "and",
+    }
+    sort_params = [{"direction": "ascending", "property": "Modified"}]
+
+    clients = clients.build_query(filter=filter_params, sort = sort_params)
+    result = clients.execute()[0]
+
+    for row in result:
+        row.proposal_sent_fix = row.proposal_sent
+
 
 def add_aliases_to_summary(aliases, page, parent_row):
     token = os.environ.get("TOKEN")
