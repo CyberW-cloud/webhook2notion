@@ -206,30 +206,15 @@ def tmp():
 	token = os.environ.get("TOKEN")
 	client = NotionClient(token)
 
-	proposals = client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
+	proposals = client.get_collection_view("https://www.notion.so/6e5cc4d20e03471ab0daa7e11925518e?v=b766776f402b4bd5a37ad38e46e04f05")
+	sort_params = [{"direction": "ascending", "property": "Date created"}]
 
-	filter_params = {
-		"filters": [
-			{
-				"filter": {"operator": "is_empty"},
-				"property": "Client Relation"
-			},
-			{
-				"filter": {"operator" : "is_not_empty"},
-				"property": "Client"
-			}
-		],
-		"operator": "and",
-	}
-	sort_params = [{"direction": "ascending", "property": "Modified"}]
-
-	proposals = proposals.build_query(filter=filter_params, sort = sort_params)
+	proposals = proposals.build_query(sort = sort_params)
 	result = proposals.execute() 
 
+	test_client = client.get_block("https://www.notion.so/TEST-b50d82476cf44c8c8eef40a52cfb9cf4")
 	for row in result:
-		modified = row.modified
-		row.client_relation = row.client
-		row.modified = modified
+		row.client.append()
 
 def get_token():
 	DATABASE_URL = os.environ['DATABASE_URL']
