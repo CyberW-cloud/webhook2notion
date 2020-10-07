@@ -250,7 +250,7 @@ def tmp():
 
 def get_token():
 	DATABASE_URL = os.environ['DATABASE_URL']
-	conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+	conn = psycopg2.connect(DATABASE_URL, sslmode='require') 
 	cur = conn.cursor()
 
 	token = cur.execute("""Select value from config_vars where name='token'""")[0]
