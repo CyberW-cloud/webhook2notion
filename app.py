@@ -206,16 +206,47 @@ def tmp():
 	token = os.environ.get("TOKEN")
 	client = NotionClient(token)
 
-	proposals = client.get_collection_view("https://www.notion.so/6e5cc4d20e03471ab0daa7e11925518e?v=b766776f402b4bd5a37ad38e46e04f05")
-	sort_params = [{"direction": "ascending", "property": "Date created"}]
+	proposals = client.get_collection_view("https://www.notion.so/21a8e8245c9e4024848613cecdc8e88f?v=ff14989e8f96401db5f7c3527a4cd8b7")
+	sort_params = [{"direction": "descending", "property": "Added"}]
 
 	proposals = proposals.build_query(sort = sort_params)
-	result = proposals.execute() 
+	result = [proposals.execute()[0]] 
 
 	test_client = client.get_block("https://www.notion.so/TEST-b50d82476cf44c8c8eef40a52cfb9cf4")
 	for row in result:
 		print(row.name)
-		row.client = row.client + [test_client]
+
+		tmp = row.same_client_name
+		row.same_client_name
+		row.same_client_name = tmp
+
+		tmp = row.bidder
+		row.bidder = []
+		row.bidder = tmp
+
+		tmp = row.proposal_sent
+		row.proposal_sent = []
+		row.proposal_sent = tmp
+
+		tmp = row.contracts
+		row.contracts = []
+		row.contracts = tmp
+
+		tmp = row.projects
+		row.projects = []
+		row.projects = tmp
+
+		tmp = row.invites_and_jobs_posted
+		row.invites_and_jobs_posted = []
+		row.invites_and_jobs_posted = tmp
+
+		tmp = row.estimates
+		row.estimates = []
+		row.estimates = tmp
+
+		tmp = row.sales
+		row.sales = []
+		row.sales = tmp
 
 def get_token():
 	DATABASE_URL = os.environ['DATABASE_URL']
