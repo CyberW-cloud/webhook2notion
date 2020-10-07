@@ -210,7 +210,7 @@ def tmp():
 	sort_params = [{"direction": "descending", "property": "Added"}]
 
 	proposals = proposals.build_query(sort = sort_params)
-	result = [proposals.execute()[0]] 
+	result = proposals.execute()
 
 	test_client = client.get_block("https://www.notion.so/TEST-b50d82476cf44c8c8eef40a52cfb9cf4")
 	for row in result:
