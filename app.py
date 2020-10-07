@@ -1410,13 +1410,15 @@ def weekly_todo_pa(token, staff, calendar):
                 f"{freelancers}"
             )
             todo.append(f"Собрать Stats из Upwork и Загрузить на pCLoud по {freelancers}")
+            todo.append(f"Заполнить цифры по Who vieved and discovered в [Profile Stats](https://www.notion.so/501c314abddb45bfb35d91a217d709d8?v=f22acd6b1b1f4697bdab81734f86301a) по {freelancers}")
+            
         create_todo(token, calendar["mon"], pa["todo_url"], todo, text="")
 
         # Tuesday
         todo = list()
         for f in map(lambda c: "[{}]({})".format(c[0], c[1]), pa["pa_for"]):
             todo.append(f"Обновить профиль {f}")
-        todo.append("Проверить наличие апдейтов в pcloud по активным контрактам ")
+        todo.append("Проверить заливку рабочих материалов на pCloud/Github по активным контрактам ")
         create_todo(token, calendar["tue"], pa["todo_url"], todo, text="")
 
         # Wednesday
@@ -1438,9 +1440,9 @@ def weekly_todo_pa(token, staff, calendar):
         create_todo(token, calendar["wed"], pa["todo_url"], todo, text="")
 
         # Thursday
-        todo = list()
-        todo.append("Проверить заливку рабочих материалов на pCloud/Github")
-        create_todo(token, calendar["wed"], pa["todo_url"], todo, text="")
+        # todo = list()
+        # todo.append("Проверить заливку рабочих материалов на pCloud/Github")
+        # create_todo(token, calendar["wed"], pa["todo_url"], todo, text="")
 
         # Friday
         todo = list()
