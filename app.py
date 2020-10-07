@@ -222,7 +222,6 @@ def tmp():
 	proposals = proposals.build_query(filter = filter_params,sort = sort_params)
 	result = proposals.execute()
 	print(len(result))
-	return ""
 	test_client = client.get_block("https://www.notion.so/TEST-b50d82476cf44c8c8eef40a52cfb9cf4")
 	for row in result:
 		print(row.name)
