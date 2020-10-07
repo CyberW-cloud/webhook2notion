@@ -207,9 +207,19 @@ def tmp():
 	client = NotionClient(token)
 
 	proposals = client.get_collection_view("https://www.notion.so/21a8e8245c9e4024848613cecdc8e88f?v=ff14989e8f96401db5f7c3527a4cd8b7")
+	filter_params = {
+		"filters": [
+			{
+				"filter": {"operator": "date_is_before", "value": {"type": "exact", "value": {"type": "date", "start_date": "2020-10-07"}}},
+				"property": "Modified",
+			}
+		],
+		"operator": "and",
+		
+	}
 	sort_params = [{"direction": "descending", "property": "Added"}]
 
-	proposals = proposals.build_query(sort = sort_params)
+	proposals = proposals.build_query(filter = filter_params,sort = sort_params)
 	result = proposals.execute()
 
 	test_client = client.get_block("https://www.notion.so/TEST-b50d82476cf44c8c8eef40a52cfb9cf4")
