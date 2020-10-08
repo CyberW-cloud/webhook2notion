@@ -229,41 +229,49 @@ def tmp():
 		tmp = row.same_client_name
 		if len(tmp)>0:
 			row.same_client_name = []
+			time.sleep(3)
 			row.same_client_name = tmp
 
 		tmp = row.bidder
 		if len(tmp)>0:
 			row.bidder = []
+			time.sleep(3)
 			row.bidder = tmp
 
 		tmp = row.proposal_sent
 		if len(tmp)>0:
 			row.proposal_sent = []
+			time.sleep(3)
 			row.proposal_sent = tmp
 
 		tmp = row.contracts
 		if len(tmp)>0:
 			row.contracts = []
+			time.sleep(3)
 			row.contracts = tmp
 
 		tmp = row.projects
 		if len(tmp)>0:
 			row.projects = []
+			time.sleep(3)
 			row.projects = tmp
 
 		tmp = row.invites_and_jobs_posted
 		if len(tmp)>0:
 			row.invites_and_jobs_posted = []
+			time.sleep(3)
 			row.invites_and_jobs_posted = tmp
 
 		tmp = row.estimates
 		if len(tmp)>0:
 			row.estimates = []
+			time.sleep(3)
 			row.estimates = tmp
 
 		tmp = row.sales
 		if len(tmp)>0:
 			row.sales = []
+			time.sleep(3)
 			row.sales = tmp
 
 def get_token():
