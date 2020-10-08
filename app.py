@@ -66,7 +66,7 @@ def update_clients():
 	# page.collection = collection
 	# page.views.add_new()
 
-	
+
 	active_since_hours = request.args.get("activeSince", "24")
 
 	if active_since_hours == "all":
@@ -210,7 +210,7 @@ def tmp():
 	filter_params = {
 		"filters": [
 			{
-				"filter": {"operator": "date_is_on_or_before", "value": {"type": "exact", "value": {"type": "date", "start_date": "2020-04-13"}}},
+				"filter": {"operator": "date_is_on_or_before", "value": {"type": "exact", "value": {"type": "date", "start_date": "2019-10-18"}}},
 				"property": "Added",
 			}
 		],
