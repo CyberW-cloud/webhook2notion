@@ -224,7 +224,7 @@ def tmp():
 	print(len(result))
 	for row in result:
 		print(row.name)
-
+		
 		tmp = row.same_client_name
 		if len(tmp)>0:
 			row.same_client_name = []
@@ -272,7 +272,7 @@ def tmp():
 			row.sales = []
 			time.sleep(1.5)
 			row.sales = tmp
-
+		
 def get_token():
 	DATABASE_URL = os.environ['DATABASE_URL']
 	conn = psycopg2.connect(DATABASE_URL, sslmode='require') 
