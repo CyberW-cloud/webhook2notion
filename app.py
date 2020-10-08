@@ -227,36 +227,44 @@ def tmp():
 		print(row.name)
 
 		tmp = row.same_client_name
-		row.same_client_name
-		row.same_client_name = tmp
+		if len(tmp)>0:
+			row.same_client_name = []
+			row.same_client_name = tmp
 
 		tmp = row.bidder
-		row.bidder = []
-		row.bidder = tmp
+		if len(tmp)>0:
+			row.bidder = []
+			row.bidder = tmp
 
 		tmp = row.proposal_sent
-		row.proposal_sent = []
-		row.proposal_sent = tmp
+		if len(tmp)>0:
+			row.proposal_sent = []
+			row.proposal_sent = tmp
 
 		tmp = row.contracts
-		row.contracts = []
-		row.contracts = tmp
+		if len(tmp)>0:
+			row.contracts = []
+			row.contracts = tmp
 
 		tmp = row.projects
-		row.projects = []
-		row.projects = tmp
+		if len(tmp)>0:
+			row.projects = []
+			row.projects = tmp
 
 		tmp = row.invites_and_jobs_posted
-		row.invites_and_jobs_posted = []
-		row.invites_and_jobs_posted = tmp
+		if len(tmp)>0:
+			row.invites_and_jobs_posted = []
+			row.invites_and_jobs_posted = tmp
 
 		tmp = row.estimates
-		row.estimates = []
-		row.estimates = tmp
+		if len(tmp)>0:
+			row.estimates = []
+			row.estimates = tmp
 
 		tmp = row.sales
-		row.sales = []
-		row.sales = tmp
+		if len(tmp)>0:
+			row.sales = []
+			row.sales = tmp
 
 def get_token():
 	DATABASE_URL = os.environ['DATABASE_URL']
