@@ -220,7 +220,7 @@ def tmp():
 	sort_params = [{"direction": "descending", "property": "Added"}]
 
 	proposals = proposals.build_query(filter = filter_params,sort = sort_params)
-	result = proposals.execute()
+	result = [client.get_block("https://www.notion.so/Ebba-Carlson-Patrick-Vuagnat-Ebba-Carlson-3c22c8600087456ab66f171172ad9f25")]
 	print(len(result))
 	test_client = client.get_block("https://www.notion.so/TEST-b50d82476cf44c8c8eef40a52cfb9cf4")
 	for row in result:
