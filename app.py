@@ -204,7 +204,7 @@ def tmp():
 
 
 	token = os.environ.get("TOKEN")
-	client = NotionClient(token)
+	client = NotionClient(token) 
 
 	proposals = client.get_collection_view("https://www.notion.so/21a8e8245c9e4024848613cecdc8e88f?v=ff14989e8f96401db5f7c3527a4cd8b7")
 	filter_params = {
