@@ -210,7 +210,7 @@ def tmp():
 	filter_params = {
 		"filters": [
 			{
-				"filter": {"operator": "date_is_before", "value": {"type": "exact", "value": {"type": "date", "start_date": "2020-10-07"}}},
+				"filter": {"operator": "date_is_before", "value": {"type": "exact", "value": {"type": "date", "start_date": "2020-10-08"}}},
 				"property": "Modified",
 			}
 		],
@@ -219,8 +219,8 @@ def tmp():
 	}
 	sort_params = [{"direction": "descending", "property": "Added"}]
 
-	proposals = proposals.build_query(filter = filter_params,sort = sort_params)
-	result = [client.get_block("https://www.notion.so/Martyn-R-Squareball-Digital-5ab7426693cb475798817b572f85ced6")]
+	proposals = proposals.build_query(sort = sort_params)
+	result = proposals.execute()
 	print(len(result))
 	for row in result:
 		print(row.name)
@@ -228,49 +228,49 @@ def tmp():
 		tmp = row.same_client_name
 		if len(tmp)>0:
 			row.same_client_name = []
-			time.sleep(3)
+			time.sleep(1.5)
 			row.same_client_name = tmp
 
 		tmp = row.bidder
 		if len(tmp)>0:
 			row.bidder = []
-			time.sleep(3)
+			time.sleep(1.5)
 			row.bidder = tmp
 
 		tmp = row.proposal_sent
 		if len(tmp)>0:
 			row.proposal_sent = []
-			time.sleep(3)
+			time.sleep(1.5)
 			row.proposal_sent = tmp
 
 		tmp = row.contracts
 		if len(tmp)>0:
 			row.contracts = []
-			time.sleep(3)
+			time.sleep(1.5)
 			row.contracts = tmp
 
 		tmp = row.projects
 		if len(tmp)>0:
 			row.projects = []
-			time.sleep(3)
+			time.sleep(1.5)
 			row.projects = tmp
 
 		tmp = row.invites_and_jobs_posted
 		if len(tmp)>0:
 			row.invites_and_jobs_posted = []
-			time.sleep(3)
+			time.sleep(1.5)
 			row.invites_and_jobs_posted = tmp
 
 		tmp = row.estimates
 		if len(tmp)>0:
 			row.estimates = []
-			time.sleep(3)
+			time.sleep(1.5)
 			row.estimates = tmp
 
 		tmp = row.sales
 		if len(tmp)>0:
 			row.sales = []
-			time.sleep(3)
+			time.sleep(1.5)
 			row.sales = tmp
 
 def get_token():
