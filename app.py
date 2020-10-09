@@ -1235,35 +1235,35 @@ def test_scripts():
 		# if not check_test_results(test_page_url):
 		# 	log += "TEST FAILED!: proposals_check didn't add todo's correctly!\n"
 
-		# test_page_url = create_page(day_page.get_browseable_url(), "/weekly_todo").get_browseable_url()
+		test_page_url = create_page(day_page.get_browseable_url(), "/weekly_todo").get_browseable_url()
 
-		# weekly_todo()
+		weekly_todo()
+
+		if not check_test_results(test_page_url):
+			log += "TEST FAILED!: weekly_todo didn't add todo's correctly!\n"
+
+		# test_page_url = create_page(day_page.get_browseable_url(), "/friday_todo").get_browseable_url()
+
+		# friday_todo()
 
 		# if not check_test_results(test_page_url):
-		# 	log += "TEST FAILED!: weekly_todo didn't add todo's correctly!\n"
+		# 	log += "TEST FAILED!: friday_todo didn't add todo's correctly!\n"
 
-		test_page_url = create_page(day_page.get_browseable_url(), "/friday_todo").get_browseable_url()
+		# test_page_url = create_page(day_page.get_browseable_url(), "/todo_one").get_browseable_url()
 
-		friday_todo()
+		# todo_one()
 
-		if not check_test_results(test_page_url):
-			log += "TEST FAILED!: friday_todo didn't add todo's correctly!\n"
+		# if not check_test_results(test_page_url):
+		# 	log += "TEST FAILED!: todo_one didn't add todo's correctly!\n"
 
-		test_page_url = create_page(day_page.get_browseable_url(), "/todo_one").get_browseable_url()
+		# test_page_url = ""
 
-		todo_one()
-
-		if not check_test_results(test_page_url):
-			log += "TEST FAILED!: todo_one didn't add todo's correctly!\n"
-
-		test_page_url = ""
-
-		TEST = False
-		if(log==""):
-			return "Done"
-		else:
-			print(log)
-			return log
+		# TEST = False
+		# if(log==""):
+		# 	return "Done"
+		# else:
+		# 	print(log)
+		# 	return log
 
 	except Exception as e:
 		TEST = False
