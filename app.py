@@ -210,7 +210,7 @@ def tmp():
 	filter_params = {
 		"filters": [
 			{
-				"filter": {"operator": "date_is_on_or_before", "value": {"type": "exact", "value": {"type": "date", "start_date": "2019-08-23"}}},
+				"filter": {"operator": "date_is_on_or_before", "value": {"type": "exact", "value": {"type": "date", "start_date": "2019-03-17"}}},
 				"property": "Added",
 			}
 		],
@@ -219,7 +219,7 @@ def tmp():
 	}
 	sort_params = [{"direction": "descending", "property": "Added"}]
 
-	proposals = proposals.build_query(sort = sort_params)
+	proposals = proposals.build_query(filter = filter_params, sort = sort_params)
 	result = proposals.execute()
 	print(len(result))
 	for row in result:
