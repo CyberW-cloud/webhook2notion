@@ -1189,13 +1189,13 @@ def test_scripts():
 
 	log = ""
 
-	# try:
-	TEST = True	
-	token = os.environ.get("TOKEN")
-	client = NotionClient(token)
+	try:
+		TEST = True	
+		token = os.environ.get("TOKEN")
+		client = NotionClient(token)
 
-	title = str(datetime.datetime.now().day) + " " + str(datetime.datetime.now().month) + " " + str(datetime.datetime.now().year) + " "
-	day_page = create_page(parent_page_url, title)
+		title = str(datetime.datetime.now().day) + " " + str(datetime.datetime.now().month) + " " + str(datetime.datetime.now().year) + " "
+		day_page = create_page(parent_page_url, title)
 
 
 
@@ -1235,12 +1235,12 @@ def test_scripts():
 		# if not check_test_results(test_page_url):
 		# 	log += "TEST FAILED!: proposals_check didn't add todo's correctly!\n"
 
-	test_page_url = create_page(day_page.get_browseable_url(), "/weekly_todo").get_browseable_url()
+		test_page_url = create_page(day_page.get_browseable_url(), "/weekly_todo").get_browseable_url()
 
-	weekly_todo()
+		weekly_todo()
 
-	if not check_test_results(test_page_url):
-		log += "TEST FAILED!: weekly_todo didn't add todo's correctly!\n"
+		if not check_test_results(test_page_url):
+			log += "TEST FAILED!: weekly_todo didn't add todo's correctly!\n"
 
 		# test_page_url = create_page(day_page.get_browseable_url(), "/friday_todo").get_browseable_url()
 
@@ -1265,10 +1265,10 @@ def test_scripts():
 		# 	print(log)
 		# 	return log
 
-	# except Exception as e:
-	# 	TEST = False
-	# 	print( log + "\n" + "Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__))))
-	# 	return "Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__)))
+	except Exception as e:
+		TEST = False
+		print( log + "\n" + "Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__))))
+		return "Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__)))
 
 def create_page(parent_url, title):
 	token = os.environ.get("TOKEN")
@@ -2127,76 +2127,65 @@ def weekly_todo_bidder(token, staff, calendar):
 
 
 def get_todo_list_by_role(token, roles):
-	client = NotionClient(token)
-	team = client.get_collection_view(
-		"https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=536bcc489f93433ab19d697490b00525"
-	)
-	team_df = nview_to_pandas(team)
-	# python 536bcc489f93433ab19d697490b00525
-	# no_filters 375e91212fc4482c815f0b4419cbf5e3
-	stats = client.get_collection_view(
-		"https://www.notion.so/e4d36149b9d8476e9985a2c658d4a873?v=3238ddee2ea04d5ea302d99fc2a2d5cc"
-	)
-	# stats_df = nview_to_pandas(stats)
-	todo_list = dict()
-	for role in roles:
-		# filter_params = [
-		#	 {"property": "Roles", "comparator": "enum_contains", "value": role},
-		#	 {"property": "out of Team now", "comparator": "checkbox_is", "value": "No"},
-		# ]
-		# people = team.build_query(filter=filter_params).execute()
-		for i, f in team_df.iterrows():
-			if(f["name"] == "Serhii Maslovskiy"):
-				pa = f["pa"]
-				i = 1/0
-		team_df.loc[:, "pa_name"] = team_df.pa.map(lambda x: print(x) if x[0].name == "Serhii Maslovskiy" else None)
-		team_df.pa_name = team_df.pa_name.apply(lambda x: x.replace("\xa0", "") if x else "")
-		team_df.loc[:, "bidder_name"] = team_df.bidder.map(lambda x: next(iter(x), None))
-		team_df.bidder_name = team_df.bidder_name.apply(lambda x: x.name.replace("\xa0", "") if x else "")
-		people = team_df[[role in x for x in team_df["roles"]]]
-		people = people[people["out_of_team_now"] != True]
+    client = NotionClient(token)
+    team = client.get_collection_view(
+        "https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=536bcc489f93433ab19d697490b00525"
+    )
+    team_df = nview_to_pandas(team)
+    # python 536bcc489f93433ab19d697490b00525
+    # no_filters 375e91212fc4482c815f0b4419cbf5e3
+    stats = client.get_collection_view(
+        "https://www.notion.so/e4d36149b9d8476e9985a2c658d4a873?v=3238ddee2ea04d5ea302d99fc2a2d5cc"
+    )
+    # stats_df = nview_to_pandas(stats)
+    todo_list = dict()
+    for role in roles:
+        # filter_params = [
+        #     {"property": "Roles", "comparator": "enum_contains", "value": role},
+        #     {"property": "out of Team now", "comparator": "checkbox_is", "value": "No"},
+        # ]
+        # people = team.build_query(filter=filter_params).execute()
 
-		todo_list[role] = []
-		for index, person in people.iterrows():
-			d = dict()
-			# filter_params = [
-			#	 {"property": "title", "comparator": "string_contains", "value": person.name.replace("\xa0", "")}
-			# ]
-			# person_stat = stats.build_query(filter=filter_params).execute()
+        team_df.loc[:, "pa_name"] = team_df.pa.map(lambda x: next(iter(x), None))
+        team_df.pa_name = team_df.pa_name.apply(lambda x: x.name.replace("\xa0", "") if x else "")
+        team_df.loc[:, "bidder_name"] = team_df.bidder.map(lambda x: next(iter(x), None))
+        team_df.bidder_name = team_df.bidder_name.apply(lambda x: x.name.replace("\xa0", "") if x else "")
+        people = team_df[[role in x for x in team_df["roles"]]]
+        people = people[people["out_of_team_now"] != True]
 
-			# person_stat = stats_df[stats_df['name'] == person['name']]
+        todo_list[role] = []
+        for index, person in people.iterrows():
+            d = dict()
+            # filter_params = [
+            #     {"property": "title", "comparator": "string_contains", "value": person.name.replace("\xa0", "")}
+            # ]
+            # person_stat = stats.build_query(filter=filter_params).execute()
 
-			# if person:
-			# d["stats"] = person[0]
+            # person_stat = stats_df[stats_df['name'] == person['name']]
 
-			d["todo_url"] = person["todo"].split()[1]
-			#handle links
-			if "[" in d["todo_url"]:
-				d["todo_url"] = re.search("(?<=\().*(?=\))", d["todo_url"]).group()				
-	
-			d["stats_upload"] = person["stats_upload"]
-			d["team"] = person
-			d["name"] = person["name"].replace("\xa0", "")
-			d["pa_for"] = []
-			d["bidder_for"] = []
-			d["pa_name"] = person["pa_name"]
+            # if person:
+            # d["stats"] = person[0]
+            d["todo_url"] = person["todo"].split()[1]
+            #handle links
+            if "[" in d["todo_url"]:
+                d["todo_url"] = re.search("(?<=\().*(?=\))", d["todo_url"]).group()             
 
-			
-			for i, f in team_df.iterrows():
-				if f["name"] == "Serhii Maslovskiy":
-					print(f["pa_name"])
-				if f["pa_name"] == person["name"]:
-					print(person["name"] + " " + f["name"])
-					d["pa_for"].append((f["name"], f["row"].get_browseable_url()))
+            d["stats_upload"] = person["stats_upload"]
+            d["team"] = person
+            d["name"] = person["name"].replace("\xa0", "")
+            d["pa_for"] = []
+            d["bidder_for"] = []
+            d["pa_name"] = person["pa_name"]
+            for i, f in team_df[team_df["pa_name"] == person["name"]].iterrows():
+                d["pa_for"].append((f["name"], f["row"].get_browseable_url()))
+            for i, f in team_df[team_df["bidder_name"] == person["name"]].iterrows():
+                d["bidder_for"].append((f["name"], f["row"].get_browseable_url()))
+            todo_list[role].append(d)
+            # else:
+            #     print(person.name.replace("\xa0", ""), "not found in stats")
+    # print(*todo_list.items(), sep="\n")
+    return todo_list
 
-			for i, f in team_df[team_df["bidder_name"] == person["name"]].iterrows():
-				d["bidder_for"].append((f["name"], f["row"].get_browseable_url()))
-			
-			todo_list[role].append(d)
-			# else:
-			#	 print(person.name.replace("\xa0", ""), "not found in stats")
-	# print(*todo_list.items(), sep="\n")
-	return todo_list
 
 #PROPERTIES:
 # roles = роли на которых запускается kickstaff, если несколько, то между ними можно ставить '/' , '\' , '.' , ';' , '|' , ' ' , ',' 
