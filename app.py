@@ -2146,7 +2146,7 @@ def get_todo_list_by_role(token, roles):
 		# ]
 		# people = team.build_query(filter=filter_params).execute()
 
-		team_df.loc[:, "pa_name"] = team_df.pa.map(lambda x: print(x))
+		team_df.loc[:, "pa_name"] = team_df.pa.map(lambda x: x[0] if len(x)>0 else None)
 		team_df.pa_name = team_df.pa_name.apply(lambda x: x.name.replace("\xa0", "") if x else "")
 		team_df.loc[:, "bidder_name"] = team_df.bidder.map(lambda x: next(iter(x), None))
 		team_df.bidder_name = team_df.bidder_name.apply(lambda x: x.name.replace("\xa0", "") if x else "")
