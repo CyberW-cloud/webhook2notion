@@ -2179,7 +2179,7 @@ def get_todo_list_by_role(token, roles):
 			d["pa_name"] = person["pa_name"]
 
 			
-			for i, f in team_df:
+			for f in team_df:
 				if f["pa_name"] == person["name"]:
 					print(person["name"] + " " + f["name"])
 					d["pa_for"].append((f["name"], f["row"].get_browseable_url()))
