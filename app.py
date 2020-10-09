@@ -228,46 +228,54 @@ def tmp():
 
 		
 		if len(row.same_client_name)>0:
-			row.same_client_name = []
 			tmp["client"] = row.same_client_name
+			row.same_client_name = []
+			
 		
 
 		
 		if len(row.bidder)>0:
-			row.bidder = []
 			tmp["bidder"] = row.bidder
+			row.bidder = []
+			
 
 
 		
 		if len(row.proposal_sent)>0:
-			row.proposal_sent = []
 			tmp["proposal"] = row.proposal_sent
+			row.proposal_sent = []
+			
 
 		
 		if len(row.contracts)>0:
-			row.contracts = []
 			tmp["contract"] = row.contracts
+			row.contracts = []
+			
 
 
 		
 		if len(row.projects)>0:
-			row.projects = []
 			tmp["project"] = row.projects
+			row.projects = []
+			
 			
 
 		if len(row.invites_and_jobs_posted)>0:
-			row.invites_and_jobs_posted = []
 			tmp["invite"] = row.invites_and_jobs_posted
+			row.invites_and_jobs_posted = []
+			
 			
 		
 		if len(row.estimates)>0:
-			row.estimates = []
 			tmp["est"] = row.estimates
+			row.estimates = []
+			
 
 		
 		if len(row.sales)>0:
-			row.sales = []
 			tmp["sales"] = row.sales
+			row.sales = []
+			
 
 
 		if len(tmp.keys())>0:
