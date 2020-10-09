@@ -219,60 +219,75 @@ def tmp():
 	}
 	sort_params = [{"direction": "descending", "property": "Added"}]
 
-	proposals = proposals.build_query(filter = filter_params, sort = sort_params)
+	proposals = proposals.build_query(sort = sort_params)
 	result = proposals.execute()
 	print(len(result))
 	for row in result:
 		print(row.name)
+		tmp = {}
 
-		tmp = row.same_client_name
-		if len(tmp)>0:
+		
+		if len(row.same_client_name)>0:
 			row.same_client_name = []
-			time.sleep(1.5)
-			row.same_client_name = tmp
+			tmp["client"] = row.same_client_name
+		
 
-		tmp = row.bidder
-		if len(tmp)>0:
+		
+		if len(row.bidder)>0:
 			row.bidder = []
-			time.sleep(1.5)
-			row.bidder = tmp
+			tmp["bidder"] = row.bidder
 
-		tmp = row.proposal_sent
-		if len(tmp)>0:
+
+		
+		if len(row.proposal_sent)>0:
 			row.proposal_sent = []
-			time.sleep(1.5)
-			row.proposal_sent = tmp
+			tmp["proposal"] = row.proposal_sent
 
-		tmp = row.contracts
-		if len(tmp)>0:
+		
+		if len(row.contracts)>0:
 			row.contracts = []
-			time.sleep(1.5)
-			row.contracts = tmp
+			tmp["contract"] = row.contracts
 
-		tmp = row.projects
-		if len(tmp)>0:
+
+		
+		if len(row.projects)>0:
 			row.projects = []
-			time.sleep(1.5)
-			row.projects = tmp
+			tmp["project"] = row.projects
+			
 
-		tmp = row.invites_and_jobs_posted
-		if len(tmp)>0:
+		if len(row.invites_and_jobs_posted)>0:
 			row.invites_and_jobs_posted = []
-			time.sleep(1.5)
-			row.invites_and_jobs_posted = tmp
-
-		tmp = row.estimates
-		if len(tmp)>0:
+			tmp["invite"] = row.invites_and_jobs_posted
+			
+		
+		if len(row.estimates)>0:
 			row.estimates = []
-			time.sleep(1.5)
-			row.estimates = tmp
+			tmp["est"] = row.estimates
 
-		tmp = row.sales
-		if len(tmp)>0:
+		
+		if len(row.sales)>0:
 			row.sales = []
-			time.sleep(1.5)
-			row.sales = tmp
+			tmp["sales"] = row.sales
 
+		if len(tmp.keys())>0:
+			time.sleep(5)
+			for key in tmp.keys():
+				if key == "bidder":
+					row.bidder = tmp["bidder"]
+				elif key == "proposal":
+					row.proposal_sent = tmp["proposal"]
+				elif key == "client":
+					row.same_client_name = tmp["client"]
+				elif key == "contract":
+					row.contracts = tmp["contract"]
+				elif key == "project":
+					row.projects = tmp["project"]
+				elif key == "invite":
+					row.invites_and_jobs_posted = tmp["invite"]
+				elif key == "est":
+					row.estimates = tmp["est"]
+				elif key == "sales":
+					row.sales = tmp["sales"]
 def get_token():
 	DATABASE_URL = os.environ['DATABASE_URL'] 
 	conn = psycopg2.connect(DATABASE_URL, sslmode='require') 
