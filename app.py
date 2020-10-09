@@ -1189,13 +1189,13 @@ def test_scripts():
 
 	log = ""
 
-	try:
-		TEST = True	
-		token = os.environ.get("TOKEN")
-		client = NotionClient(token)
+	# try:
+	TEST = True	
+	token = os.environ.get("TOKEN")
+	client = NotionClient(token)
 
-		title = str(datetime.datetime.now().day) + " " + str(datetime.datetime.now().month) + " " + str(datetime.datetime.now().year) + " "
-		day_page = create_page(parent_page_url, title)
+	title = str(datetime.datetime.now().day) + " " + str(datetime.datetime.now().month) + " " + str(datetime.datetime.now().year) + " "
+	day_page = create_page(parent_page_url, title)
 
 
 
@@ -1235,12 +1235,12 @@ def test_scripts():
 		# if not check_test_results(test_page_url):
 		# 	log += "TEST FAILED!: proposals_check didn't add todo's correctly!\n"
 
-		test_page_url = create_page(day_page.get_browseable_url(), "/weekly_todo").get_browseable_url()
+	test_page_url = create_page(day_page.get_browseable_url(), "/weekly_todo").get_browseable_url()
 
-		weekly_todo()
+	weekly_todo()
 
-		if not check_test_results(test_page_url):
-			log += "TEST FAILED!: weekly_todo didn't add todo's correctly!\n"
+	if not check_test_results(test_page_url):
+		log += "TEST FAILED!: weekly_todo didn't add todo's correctly!\n"
 
 		# test_page_url = create_page(day_page.get_browseable_url(), "/friday_todo").get_browseable_url()
 
@@ -1265,10 +1265,10 @@ def test_scripts():
 		# 	print(log)
 		# 	return log
 
-	except Exception as e:
-		TEST = False
-		print( log + "\n" + "Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__))))
-		return "Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__)))
+	# except Exception as e:
+	# 	TEST = False
+	# 	print( log + "\n" + "Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__))))
+	# 	return "Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__)))
 
 def create_page(parent_url, title):
 	token = os.environ.get("TOKEN")
