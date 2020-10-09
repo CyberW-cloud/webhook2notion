@@ -269,8 +269,10 @@ def tmp():
 			row.sales = []
 			tmp["sales"] = row.sales
 
+
 		if len(tmp.keys())>0:
 			time.sleep(5)
+			print(tmp)
 			for key in tmp.keys():
 				if key == "bidder":
 					row.bidder = tmp["bidder"]
