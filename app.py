@@ -2177,10 +2177,13 @@ def get_todo_list_by_role(token, roles):
 			d["pa_for"] = []
 			d["bidder_for"] = []
 			d["pa_name"] = person["pa_name"]
+			print(team_df[team_df["pa_name"] == person["name"]])
 			for i, f in team_df[team_df["pa_name"] == person["name"]].iterrows():
 				d["pa_for"].append((f["name"], f["row"].get_browseable_url()))
+
 			for i, f in team_df[team_df["bidder_name"] == person["name"]].iterrows():
 				d["bidder_for"].append((f["name"], f["row"].get_browseable_url()))
+			
 			todo_list[role].append(d)
 			# else:
 			#	 print(person.name.replace("\xa0", ""), "not found in stats")
