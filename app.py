@@ -220,7 +220,7 @@ def tmp():
 	sort_params = [{"direction": "descending", "property": "Added"}]
 
 	proposals = proposals.build_query(sort = sort_params)
-	result = proposals.execute()
+	result = [proposals.execute()[0]]
 	print(len(result))
 	for row in result:
 		print(row.name)
