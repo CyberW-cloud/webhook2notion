@@ -324,18 +324,18 @@ def get_proposals_reject_reason():
 	test_page = notion_client.get_block("https://www.notion.so/proposal-edit-test-7f8d247669c14b3ea5bc602f846cf81f")
 	
 
-	# test_page.children.add_new(CollectionViewPageBlock, title = "table")
-	# page = test_page.children[-1]
+	test_page.children.add_new(CollectionViewPageBlock, title = "table")
+	page = test_page.children[-1]
 
-	# proposals = notion_client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
+	proposals = notion_client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
 
-	# schema = notion_client.get_block("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bbbbd5bd5fd84f02bf9670d2793b0538").collection.get("schema")
+	schema = copy_schema("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bbbbd5bd5fd84f02bf9670d2793b0538")
 
-	# collection = notion_client.get_collection(notion_client.create_record("collection", parent=page, schema=schema))
-	# page.collection = collection
+	collection = notion_client.get_collection(notion_client.create_record("collection", parent=page, schema=schema))
+	page.collection = collection
 
 
-	# test_row = page.views.add_new()
+	test_row = page.views.add_new()
 	
 
 	date = str(datetime.datetime.now().day) + "." + str(datetime.datetime.now().month) + "." + str(datetime.datetime.now().year)
@@ -1237,23 +1237,23 @@ def test_scripts():
 
 
 
-		# day_page.children.add_new(CollectionViewPageBlock, title = "table")
-		# page = day_page.children[-1]
+		day_page.children.add_new(CollectionViewPageBlock, title = "table")
+		page = day_page.children[-1]
 
 
-		# schema = client.get_block("https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=375e91212fc4482c815f0b4419cbf5e3").collection.get("schema")
+		schema = copy_schema("https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=375e91212fc4482c815f0b4419cbf5e3")
 
-		# collection = client.get_collection(client.create_record("collection", parent=page, schema=schema))
-		# page.collection = collection
+		collection = client.get_collection(client.create_record("collection", parent=page, schema=schema))
+		page.collection = collection
 
 	
-		# test_row = page.views.add_new()
-		# test_row = page.collection.add_row()
-		# test_row.name = "This worked!"
-		# page.collection.refresh()
+		test_row = page.views.add_new()
+		test_row = page.collection.add_row()
+		test_row.name = "This worked!"
+		page.collection.refresh()
 
-		# if test_row.name != "This worked!":
-		# 	log += "TEST FAILED!: Notion seems to be down for tables!\n"
+		if test_row.name != "This worked!":
+			log += "TEST FAILED!: Notion seems to be down for tables!\n"
 
 
 
