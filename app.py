@@ -1111,7 +1111,7 @@ def message_review():
 	for room in parsed_rooms:
 		if room["messages"][1] not in room["room"]['chat_url']:
 			i = 1/0
-		# client = upwork.Client(upwork.Config({\
+		client = upwork.Client(upwork.Config({\
 			'consumer_key': os.environ.get("ConsumerKey"),\
 			'consumer_secret': os.environ.get("ConsumerSecret"),\
 			'access_token': os.environ.get("AccessToken"),\
