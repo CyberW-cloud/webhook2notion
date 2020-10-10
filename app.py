@@ -1160,7 +1160,7 @@ def message_review():
 		try:
 			stories = room["messages"][0]["stories_list"]["stories"]
 		except Exception:
-		  stories = None
+			stories = None
 			print(room["messages"])
 
 		#if the message ends in a sinature like [Line Start][Capital][* amount of lowercase][space][Capital][Dot][EOF] 
