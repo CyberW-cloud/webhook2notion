@@ -46,8 +46,9 @@ def test():
 	notion_client = NotionClient(token)
 
 	schema = notion_client.get_block("https://www.notion.so/21a8e8245c9e4024848613cecdc8e88f?v=f658b865c0b842149cf4583bbff2dc28").collection.get("schema")
-	schema_copy = schema
+	schema_copy = {}
 	for key, value in schema.items():
+		print(value["type"])
 		if value["type"]!="relation" and value["type"]!="lookup":
 			schema_copy[key] = value
 
