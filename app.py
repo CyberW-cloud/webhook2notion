@@ -53,6 +53,7 @@ def test():
 		prop.pop("slug")
 
 		schema[id] = prop
+		
 	i = 1/0
 
 
