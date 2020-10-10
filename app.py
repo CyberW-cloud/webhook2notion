@@ -485,8 +485,17 @@ def get_proposals_reject_reason():
 def add_aliases_to_summary(aliases, page, parent_row):
 	token = os.environ.get("TOKEN")
 	client = NotionClient(token)
-	#parent_row should contain {"url", "title", "manager", "freelancer", "client_name"}
+
+	#remove links
+	if "http" in parent_row["title"]:
+		parent_row["title"] = re.sub("(\[[^()[\]]*?\]\(http.*?\))", lambda x: x.group().split("(")[0][1:-1], parent_row["title"])
+
 	if not isinstance(parent_row["client_name"], type(None)):
+		
+		#remove links
+		if "http" in parent_row["client_name"]:
+			parent_row["client_name"] = re.sub("(\[[^()[\]]*?\]\(http.*?\))", lambda x: x.group().split("(")[0][1:-1], parent_row["client_name"])
+
 		parent_text = "[**" + parent_row["client_name"] + "**]("+ parent_row["client_url"] +"), [**" + parent_row["title"]+ "**](" +  parent_row["url"] + ")"
 	else:
 		parent_text = "[**" + parent_row["title"] + "**](" +  parent_row["url"] + ")"
@@ -1049,7 +1058,7 @@ def message_review():
 
 
 
-			#sometimes throws an error, just default to no info
+			
 			try:
 				db.execute("""select * from contracts where chat_url like '%"""+room["roomId"]+"""%'""")
 				contracts_found = db.fetchall()
@@ -1064,6 +1073,7 @@ def message_review():
 				print(str(e) + " 2")
 				proposals_found = []
 
+			#sometimes throws an error, just default to no info
 			try:
 				time.sleep(1.6)
 				messages = {}
@@ -1102,101 +1112,102 @@ def message_review():
 		if room["messages"][1] not in room["room"]['chat_url']:
 			i = 1/0
 		# client = upwork.Client(upwork.Config({\
-		# 	'consumer_key': os.environ.get("ConsumerKey"),\
-		# 	'consumer_secret': os.environ.get("ConsumerSecret"),\
-		# 	'access_token': os.environ.get("AccessToken"),\
-		# 	'access_token_secret': os.environ.get("AccessSecret")}))
+			'consumer_key': os.environ.get("ConsumerKey"),\
+			'consumer_secret': os.environ.get("ConsumerSecret"),\
+			'access_token': os.environ.get("AccessToken"),\
+			'access_token_secret': os.environ.get("AccessSecret")}))
 
-		# profileApi = profileAPI(client)
+		profileApi = profileAPI(client)
 
-		# link = "https://www.upwork.com/messages/rooms/" + room["id"]
-		# link_text = "[Room]("+link+")"
+		link = "https://www.upwork.com/messages/rooms/" + room["id"]
+		link_text = "[Room]("+link+")"
 		
-		# if room["type"] == "No info":
-		# 	type_text = "***No info***"
-		# 	#to add to the interview column
-		# 	room["type"] = "Interviews"
+		if room["type"] == "No info":
+			type_text = "***No info***"
+			#to add to the interview column
+			room["type"] = "Interviews"
 
-		# else:
-		# 	if room["type"] == "Interviews":
-		# 		type_text = "[Proposal]("+room["link"]+")"
-		# 	else:
-		# 		type_text = "["+room["type"]+"]("+room["link"]+")" 
-
-
-	# 	if room["type"] not in rows.keys():
-	# 		rows[room["type"]] = auto_retry_lambda(message_review.collection.add_row)
-	# 		auto_retry_lambda(lambda: rows[room["type"]].__setattr__("name", row_name))
-	# 		auto_retry_lambda(lambda: rows[room["type"]].__setattr__("tags", room["type"]))
-
-	# 	target_row = rows[room["type"]]
-
-	# 	if room["room"]["roomName"] == None:
-	# 		room["room"]["roomName"] == "None"
-
-	# 	if room["room"]["topic"] == None:
-	# 		room["room"]["topic"] == "None"
-
-	# 	try:
-	# 		title = room["room"]["roomName"]+", **"+room["room"]["topic"] + "**"
-	# 	except Exception:
-	# 		print(room)
-	# 		continue
-
-	# 	parent_text_block = auto_retry_lambda(target_row.children.add_new,TextBlock, title = title)
-	# 	text_block = auto_retry_lambda(parent_text_block.children.add_new,TextBlock, title =type_text+" , "+link_text)
-
-		# try:
-		# 	stories = room["messages"][0]["stories_list"]["stories"]
-		# except Exception:
-		#   stories = None
-		# 	print(room["messages"])
-
-		# #if the message ends in a sinature like [Line Start][Capital][* amount of lowercase][space][Capital][Dot][EOF] 
-		# if isinstance(stories[0]["message"], str) and re.findall("^[A-Z][a-z]* [A-Z]\.\Z", stories[0]["message"], re.M) and room["type"] == "Interview" or stories == None:
-		# 	auto_retry_lambda(parent_text_block.remove,permanently = True)
-		# 	print("bot detected, skipped")
-		# 	continue
+		else:
+			if room["type"] == "Interviews":
+				type_text = "[Proposal]("+room["link"]+")"
+			else:
+				type_text = "["+room["type"]+"]("+room["link"]+")" 
 
 
-		# written = 0
-		# for i in stories:
-		# 	if not isinstance(i["message"],str) or i["message"] == "" or i["userId"] == None or i["isSystemStory"]:
-		# 		print(i)
-		# 		continue
+		if room["type"] not in rows.keys():
+			rows[room["type"]] = auto_retry_lambda(message_review.collection.add_row)
+			auto_retry_lambda(lambda: rows[room["type"]].__setattr__("name", row_name))
+			auto_retry_lambda(lambda: rows[room["type"]].__setattr__("tags", room["type"]))
 
-		# 	if written>=3:
-		# 		break
+		target_row = rows[room["type"]]
 
-		# 	message_time = datetime.datetime.fromtimestamp(i["updated"]/1000).strftime('%Y-%m-%d %H:%M:%S')
-		# 	text = "["+message_time+"]\n"
+		if room["room"]["roomName"] == None:
+			room["room"]["roomName"] == "None"
 
-		# 	try:
-		# 		if i["userId"] not in cache.keys(): 
-		# 			name = profileApi.get_specific(i["userId"])["profile"]["dev_short_name"][:-1]
-		# 			cache[i["userId"]] = name
-		# 		else:
-		# 			name = cache[i["userId"]]
-		# 	except Exception as e:
-		# 		print(i)
-		# 		print(i["userId"])
-		# 		name = "ERROR"
-
-		# 	text += "**"+name+":**\n"
-		# 	text += i["message"]
-
-	# 		message = auto_retry_lambda(parent_text_block.children.add_new,CodeBlock, title = text)
-	# 		auto_retry_lambda(lambda: setattr(message, "language", "Plain text"))
-	# 		auto_retry_lambda(lambda: setattr(message, "wrap", True))
-
-	# 		auto_retry_lambda(message.move_to,parent_text_block, position = "first-child")
+		if room["room"]["topic"] == None:
+			room["room"]["topic"] == "None"
 
 
-			# written +=1
+		try:
+			title = room["room"]["roomName"]+", **"+room["room"]["topic"] + "**"
+		except Exception:
+			print(room)
+			continue
 
-	# 	auto_retry_lambda(text_block.move_to,parent_text_block, position = "first-child")
-	# 	auto_retry_lambda(parent_text_block.children.add_new,TextBlock)
-	# 	auto_retry_lambda(target_row.children.add_new,DividerBlock)
+		parent_text_block = auto_retry_lambda(target_row.children.add_new,TextBlock, title = title)
+		text_block = auto_retry_lambda(parent_text_block.children.add_new,TextBlock, title =type_text+" , "+link_text)
+
+		try:
+			stories = room["messages"][0]["stories_list"]["stories"]
+		except Exception:
+		  stories = None
+			print(room["messages"])
+
+		#if the message ends in a sinature like [Line Start][Capital][* amount of lowercase][space][Capital][Dot][EOF] 
+		if isinstance(stories[0]["message"], str) and re.findall("^[A-Z][a-z]* [A-Z]\.\Z", stories[0]["message"], re.M) and room["type"] == "Interview" or stories == None:
+			auto_retry_lambda(parent_text_block.remove,permanently = True)
+			print("bot detected, skipped")
+			continue
+
+
+		written = 0
+		for i in stories:
+			if not isinstance(i["message"],str) or i["message"] == "" or i["userId"] == None or i["isSystemStory"]:
+				print(i)
+				continue
+
+			if written>=3:
+				break
+
+			message_time = datetime.datetime.fromtimestamp(i["updated"]/1000).strftime('%Y-%m-%d %H:%M:%S')
+			text = "["+message_time+"]\n"
+
+			try:
+				if i["userId"] not in cache.keys(): 
+					name = profileApi.get_specific(i["userId"])["profile"]["dev_short_name"][:-1]
+					cache[i["userId"]] = name
+				else:
+					name = cache[i["userId"]]
+			except Exception as e:
+				print(i)
+				print(i["userId"])
+				name = "ERROR"
+
+			text += "**"+name+":**\n"
+			text += i["message"]
+
+			message = auto_retry_lambda(parent_text_block.children.add_new,CodeBlock, title = text)
+			auto_retry_lambda(lambda: setattr(message, "language", "Plain text"))
+			auto_retry_lambda(lambda: setattr(message, "wrap", True))
+
+			auto_retry_lambda(message.move_to,parent_text_block, position = "first-child")
+
+
+			written +=1
+
+		auto_retry_lambda(text_block.move_to,parent_text_block, position = "first-child")
+		auto_retry_lambda(parent_text_block.children.add_new,TextBlock)
+		auto_retry_lambda(target_row.children.add_new,DividerBlock)
 
 	print("all done!")	
 	print(cache)
