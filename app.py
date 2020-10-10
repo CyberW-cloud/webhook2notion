@@ -1241,7 +1241,7 @@ def test_scripts():
 		page = day_page.children[-1]
 
 
-		schema = copy_schema("https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=375e91212fc4482c815f0b4419cbf5e3")
+		schema = copy_schema("https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=375e91212fc4482c815f0b4419cbf5e3",client)
 
 		collection = client.get_collection(client.create_record("collection", parent=page, schema=schema))
 		page.collection = collection

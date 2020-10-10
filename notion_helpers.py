@@ -26,11 +26,9 @@ def auto_retry_lambda(fun, *args, **kwargs):
 			retries -= 1
 			time.sleep(sleep)
 
-def copy_schema(link):
-	token = os.environ.get("TOKEN")
-	notion_client = NotionClient(token)
+def copy_schema(link, client):
 
-	schema = notion_client.get_block(link).collection.get("schema")
+	schema = client.get_block(link).collection.get("schema")
 	schema_copy = {}
 	for key, value in schema.items():
 		print(value["type"])
