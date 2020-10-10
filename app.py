@@ -40,19 +40,6 @@ TEST = False
 test_page_url = "https://www.notion.so/TEST-68d7198ed4d3437b816386f6da196547"
 token = ""
 
-@app.route('/test', methods = ['GET'])
-def test():
-	token = os.environ.get("TOKEN")
-	notion_client = NotionClient(token)
-
-	schema = notion_client.get_block("https://www.notion.so/21a8e8245c9e4024848613cecdc8e88f?v=f658b865c0b842149cf4583bbff2dc28").collection.get("schema")
-	schema_copy = {}
-	for key, value in schema.items():
-		print(value["type"])
-		if value["type"]!="relation" and value["type"]!="rollup":
-			schema_copy[key] = value
-
-	i = 1/0
 
 def copy_client(new_row, source):
 	new_row.name = source.name 

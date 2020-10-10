@@ -7,7 +7,6 @@ from notion.block import HeaderBlock, TextBlock, TodoBlock
 from notion.collection import NotionDate, TableView, TableQueryResult
 
 def auto_retry_lambda(fun, *args, **kwargs):
-
 	# making them function arguments would mess with *args and **kwargs if not always given
 	retries = 5
 	log = True
@@ -26,6 +25,19 @@ def auto_retry_lambda(fun, *args, **kwargs):
 
 			retries -= 1
 			time.sleep(sleep)
+
+def copy_schema(link):
+	token = os.environ.get("TOKEN")
+	notion_client = NotionClient(token)
+
+	schema = notion_client.get_block(link).collection.get("schema")
+	schema_copy = {}
+	for key, value in schema.items():
+		print(value["type"])
+		if value["type"]!="relation" and value["type"]!="rollup":
+			schema_copy[key] = value
+
+	return schema_copy
 
 def get_block_edit_date(client, block):
 	return int(auto_retry_lambda(client.get_record_data, "block", block.id, True)["last_edited_time"])
