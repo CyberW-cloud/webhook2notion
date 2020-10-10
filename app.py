@@ -45,18 +45,13 @@ def test():
 	token = os.environ.get("TOKEN")
 	notion_client = NotionClient(token)
 
-	page = notion_client.get_block("https://www.notion.so/21a8e8245c9e4024848613cecdc8e88f?v=f658b865c0b842149cf4583bbff2dc28")
-	schema = {}
-	for prop in page.collection.get_schema_properties():
-		id = prop["id"]
-		prop.pop("id")
-		prop.pop("slug")
+	schema = notion_client.get_block("https://www.notion.so/21a8e8245c9e4024848613cecdc8e88f?v=f658b865c0b842149cf4583bbff2dc28").collection.get("schema")
 
-		schema[id] = prop
-		
+	for key, value in schema.values():
+		if value["type"]=="relation" or value["type"]=="lookup":
+			schema.pop(key)
+
 	i = 1/0
-
-
 
 def copy_client(new_row, source):
 	new_row.name = source.name 
