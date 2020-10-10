@@ -58,14 +58,14 @@ def update_clients():
 	test_page = notion_client.get_block("https://www.notion.so/test-63e297723c924b6babc931d10f7b4740")
 	
 
-	# test_page.children.add_new(CollectionViewPageBlock, title = "table")
-	# page = test_page.children[-1]
+	test_page.children.add_new(CollectionViewPageBlock, title = "table")
+	page = test_page.children[-1]
 
-	# schema = notion_client.get_block("https://www.notion.so/21a8e8245c9e4024848613cecdc8e88f?v=f658b865c0b842149cf4583bbff2dc28").collection.get("schema")
+	schema = copy_schema("https://www.notion.so/21a8e8245c9e4024848613cecdc8e88f?v=f658b865c0b842149cf4583bbff2dc28")
 
-	# collection = notion_client.get_collection(notion_client.create_record("collection", parent=page, schema=schema))
-	# page.collection = collection
-	# page.views.add_new()
+	collection = notion_client.get_collection(notion_client.create_record("collection", parent=page, schema=schema))
+	page.collection = collection
+	page.views.add_new()
 
 
 	active_since_hours = request.args.get("activeSince", "24")
