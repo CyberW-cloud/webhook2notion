@@ -47,7 +47,10 @@ def test():
 
 	schema = notion_client.get_block("https://www.notion.so/21a8e8245c9e4024848613cecdc8e88f?v=f658b865c0b842149cf4583bbff2dc28").collection.get("schema")
 
-	for key, value in schema.values():
+	for value in schema.values():
+		key = value[0]
+		value = value[1]
+		
 		if value["type"]=="relation" or value["type"]=="lookup":
 			schema.pop(key)
 
