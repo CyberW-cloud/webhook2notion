@@ -49,7 +49,7 @@ def test():
 	schema_copy = {}
 	for key, value in schema.items():
 		print(value["type"])
-		if value["type"]!="relation" and value["type"]!="lookup":
+		if value["type"]!="relation" and value["type"]!="rollup":
 			schema_copy[key] = value
 
 	i = 1/0
