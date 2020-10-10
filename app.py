@@ -46,10 +46,10 @@ def test():
 	notion_client = NotionClient(token)
 
 	schema = notion_client.get_block("https://www.notion.so/21a8e8245c9e4024848613cecdc8e88f?v=f658b865c0b842149cf4583bbff2dc28").collection.get("schema")
-
+	schema_copy = schema
 	for key, value in schema.items():
 		if value["type"]=="relation" or value["type"]=="lookup":
-			schema.pop(key)
+			schema_copy.pop(key)
 
 	i = 1/0
 
