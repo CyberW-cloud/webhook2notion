@@ -280,7 +280,9 @@ def tmp():
 
 
 		if len(tmp.keys())>0:
-			time.sleep(15)
+			time.sleep(5)
+			row.refresh()
+			time.sleep(5)
 			print(tmp)
 			for key in tmp.keys():
 				if key == "bidder":
