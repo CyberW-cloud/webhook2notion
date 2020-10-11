@@ -280,7 +280,7 @@ def tmp():
 
 
 		if len(tmp.keys())>0:
-			time.sleep(5)
+			time.sleep(15)
 			print(tmp)
 			for key in tmp.keys():
 				if key == "bidder":
@@ -299,6 +299,7 @@ def tmp():
 					row.estimates = tmp["est"]
 				elif key == "sales":
 					row.sales = tmp["sales"]
+					
 def get_token():
 	DATABASE_URL = os.environ['DATABASE_URL'] 
 	conn = psycopg2.connect(DATABASE_URL, sslmode='require') 

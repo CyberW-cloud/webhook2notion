@@ -31,7 +31,6 @@ def copy_schema(link, client):
 	schema = client.get_block(link).collection.get("schema")
 	schema_copy = {}
 	for key, value in schema.items():
-		print(value["type"])
 		if value["type"]!="relation" and value["type"]!="rollup":
 			schema_copy[key] = value
 
