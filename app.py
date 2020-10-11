@@ -211,7 +211,7 @@ def tmp():
 	filter_params = {
 		"filters": [
 			{
-				"filter": {"operator": "date_is_on_or_before", "value": {"type": "exact", "value": {"type": "date", "start_date": "2019-08-23"}}},
+				"filter": {"operator": "date_is_on_or_before", "value": {"type": "exact", "value": {"type": "date", "start_date": "2015-08-23"}}},
 				"property": "Added",
 			}
 		],
@@ -299,7 +299,7 @@ def tmp():
 					row.estimates = tmp["est"]
 				elif key == "sales":
 					row.sales = tmp["sales"]
-					
+
 def get_token():
 	DATABASE_URL = os.environ['DATABASE_URL'] 
 	conn = psycopg2.connect(DATABASE_URL, sslmode='require') 
