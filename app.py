@@ -211,7 +211,7 @@ def tmp():
 	filter_params = {
 		"filters": [
 			{
-				"filter": {"operator": "date_is_on_or_before", "value": {"type": "exact", "value": {"type": "date", "start_date": "2020-05-18"}}},
+				"filter": {"operator": "date_is_on_or_before", "value": {"type": "exact", "value": {"type": "date", "start_date": "2020-04-01"}}},
 				"property": "Added",
 			}
 		],
