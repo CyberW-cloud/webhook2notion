@@ -215,8 +215,8 @@ def tmp():
 				"property": "Added",
 			},
 			{
-				"filter": {"operator": "is_not_empty"}
-				"property": "Contracts"
+				"filter": {"operator": "is_not_empty"},
+				"property": "Contracts",
 			}
 		],
 		"operator": "and",
