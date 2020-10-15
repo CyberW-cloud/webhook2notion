@@ -225,8 +225,8 @@ def tmp():
 	print(len(result))
 	for row in result:
 		print(row.name)
-		row.tmp_proposals = row.proposal_sent
-		row.proposal_sent = []
+		row.proposal_sent = row.tmp_proposals
+		
 
 def get_token():
 	DATABASE_URL = os.environ['DATABASE_URL'] 
