@@ -211,7 +211,7 @@ def tmp():
 	filter_params = {
 		"filters": [
 			{
-				"filter": {"operator": "date_is_on_or_before", "value": {"type": "exact", "value": {"type": "date", "start_date": "2019-11-01"}}}, 
+				"filter": {"operator": "date_is_on_or_before", "value": {"type": "exact", "value": {"type": "date", "start_date": "2024-11-01"}}}, 
 				"property": "Added",
 			}
 		],
@@ -225,82 +225,8 @@ def tmp():
 	print(len(result))
 	for row in result:
 		print(row.name)
-		tmp = {}
-
-		
-		if len(row.same_client_name)>0:
-			tmp["client"] = row.same_client_name
-			row.same_client_name = []
-			
-		
-
-		
-		if len(row.bidder)>0:
-			tmp["bidder"] = row.bidder
-			row.bidder = []
-			
-
-
-		
-		if len(row.proposal_sent)>0:
-			tmp["proposal"] = row.proposal_sent
-			row.proposal_sent = []
-			
-
-		
-		if len(row.contracts)>0:
-			tmp["contract"] = row.contracts
-			row.contracts = []
-			
-
-
-		
-		if len(row.projects)>0:
-			tmp["project"] = row.projects
-			row.projects = []
-			
-			
-
-		if len(row.invites_and_jobs_posted)>0:
-			tmp["invite"] = row.invites_and_jobs_posted
-			row.invites_and_jobs_posted = []
-			
-			
-		
-		if len(row.estimates)>0:
-			tmp["est"] = row.estimates
-			row.estimates = []
-			
-
-		
-		if len(row.sales)>0:
-			tmp["sales"] = row.sales
-			row.sales = []
-			
-
-
-		if len(tmp.keys())>0:
-			time.sleep(5)
-			row.refresh()
-			time.sleep(5)
-			print(tmp)
-			for key in tmp.keys():
-				if key == "bidder":
-					row.bidder = tmp["bidder"]
-				elif key == "proposal":
-					row.proposal_sent = tmp["proposal"]
-				elif key == "client":
-					row.same_client_name = tmp["client"]
-				elif key == "contract":
-					row.contracts = tmp["contract"]
-				elif key == "project":
-					row.projects = tmp["project"]
-				elif key == "invite":
-					row.invites_and_jobs_posted = tmp["invite"]
-				elif key == "est":
-					row.estimates = tmp["est"]
-				elif key == "sales":
-					row.sales = tmp["sales"]
+		row.tmp_proposals = row.proposal_sent
+		row.proposal_sent = []
 
 def get_token():
 	DATABASE_URL = os.environ['DATABASE_URL'] 
