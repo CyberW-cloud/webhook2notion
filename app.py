@@ -223,51 +223,51 @@ def tmp():
 	proposals = proposals.build_query(filter = filter_params, sort = sort_params)
 	result = proposals.execute()
 
-	result = [client.get_block("https://www.notion.so/Raniel-Adrian-Lardizabal-Socorro-Pia-Duran-Crowdbotics-ce5a777b42624eaeb50fd40f1e553f7e")]
+	result = [client.get_block("https://www.notion.so/Charles-Kao-15c0c1878119429f8eda4b882dadb18d")]
 
 	print(len(result))
 	for row in result:
 		print(row.name)
 		
-		# row.tmp_proposals = row.proposal_sent
-		# row.proposal_sent = []
+		row.tmp_proposals = row.proposal_sent
+		row.proposal_sent = []
 
-		# row.tmp_name = row.same_client_name
-		# row.same_client_name = []
+		row.tmp_name = row.same_client_name
+		row.same_client_name = []
 
-		# row.tmp_bidder = row.bidder
-		# row.bidder = []
+		row.tmp_bidder = row.bidder
+		row.bidder = []
 
-		# row.tmp_contracts = row.contracts
-		# row.contracts = []
+		row.tmp_contracts = row.contracts
+		row.contracts = []
 		
-		# row.tmp_projects = row.projects
-		# row.projects = []
+		row.tmp_projects = row.projects
+		row.projects = []
 
-		# row.tmp_invites = row.invites_and_jobs_posted
-		# row.invites_and_jobs_posted = []
+		row.tmp_invites = row.invites_and_jobs_posted
+		row.invites_and_jobs_posted = []
 
-		# row.tmp_estimates = row.estimates
-		# row.estimates = []
+		row.tmp_estimates = row.estimates
+		row.estimates = []
 
-		# row.tmp_sales = row.sales
-		# row.sales = []
+		row.tmp_sales = row.sales
+		row.sales = []
 
-		row.proposal_sent = row.tmp_proposals
+		# row.proposal_sent = row.tmp_proposals
 
-		row.same_client_name = row.tmp_name
+		# row.same_client_name = row.tmp_name
 
-		row.bidder = row.tmp_bidder
+		# row.bidder = row.tmp_bidder
 
-		row.contracts = row.tmp_contracts
+		# row.contracts = row.tmp_contracts
 		
-		row.projects = row.tmp_projects
+		# row.projects = row.tmp_projects
 
-		row.invites_and_jobs_posted = row.tmp_invites
+		# row.invites_and_jobs_posted = row.tmp_invites
 
-		row.estimates = row.tmp_estimates
+		# row.estimates = row.tmp_estimates
 
-		row.sales = row.tmp_sales
+		# row.sales = row.tmp_sales
 
 def get_token():
 	DATABASE_URL = os.environ['DATABASE_URL'] 
