@@ -211,12 +211,8 @@ def tmp():
 	filter_params = {
 		"filters": [
 			{
-				"filter": {"operator": "date_is", "value": {"type": "exact", "value": {"type": "date", "start_date": "2019-08-23"}}}, 
+				"filter": {"operator": "date_is_on_or_before", "value": {"type": "exact", "value": {"type": "date", "start_date": "2025-09-17"}}}, 
 				"property": "Added",
-			},
-			{
-				"filter": {"operator": "is_not_empty"},
-				"property": "Contracts",
 			}
 		],
 		"operator": "and",
@@ -231,45 +227,45 @@ def tmp():
 	for row in result:
 		print(row.name)
 		
-		row.tmp_proposals = row.proposal_sent
-		row.proposal_sent = []
+		# row.tmp_proposals = row.proposal_sent
+		# row.proposal_sent = []
 
-		row.tmp_name = row.same_client_name
-		row.same_client_name = []
+		# row.tmp_name = row.same_client_name
+		# row.same_client_name = []
 
-		row.tmp_bidder = row.bidder
-		row.bidder = []
+		# row.tmp_bidder = row.bidder
+		# row.bidder = []
 
-		row.tmp_contracts = row.contracts
-		row.contracts = []
+		# row.tmp_contracts = row.contracts
+		# row.contracts = []
 		
-		row.tmp_projects = row.projects
-		row.projects = []
+		# row.tmp_projects = row.projects
+		# row.projects = []
 
-		row.tmp_invites = row.invites_and_jobs_posted
-		row.invites_and_jobs_posted = []
+		# row.tmp_invites = row.invites_and_jobs_posted
+		# row.invites_and_jobs_posted = []
 
-		row.tmp_estimates = row.estimates
-		row.estimates = []
+		# row.tmp_estimates = row.estimates
+		# row.estimates = []
 
-		row.tmp_sales = row.sales
-		row.sales = []
+		# row.tmp_sales = row.sales
+		# row.sales = []
 
-		# row.proposal_sent = row.tmp_proposals
+		row.proposal_sent = row.tmp_proposals
 
-		# row.same_client_name = row.tmp_name
+		row.same_client_name = row.tmp_name
 
-		# row.bidder = row.tmp_bidder
+		row.bidder = row.tmp_bidder
 
-		# row.contracts = row.tmp_contracts
+		row.contracts = row.tmp_contracts
 		
-		# row.projects = row.tmp_projects
+		row.projects = row.tmp_projects
 
-		# row.invites_and_jobs_posted = row.tmp_invites
+		row.invites_and_jobs_posted = row.tmp_invites
 
-		# row.estimates = row.tmp_estimates
+		row.estimates = row.tmp_estimates
 
-		# row.sales = row.tmp_sales
+		row.sales = row.tmp_sales
 
 def get_token():
 	DATABASE_URL = os.environ['DATABASE_URL'] 
