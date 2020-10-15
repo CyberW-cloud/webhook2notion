@@ -253,6 +253,22 @@ def tmp():
 		row.tmp_sales = row.sales
 		row.sales = []
 
+		# row.proposal_sent = row.tmp_proposals
+
+		# row.same_client_name = row.tmp_name
+
+		# row.bidder = row.tmp_bidder
+
+		# row.contracts = row.tmp_contracts
+		
+		# row.projects = row.tmp_projects
+
+		# row.invites_and_jobs_posted = row.tmp_invites
+
+		# row.estimates = row.tmp_estimates
+
+		# row.sales = row.tmp_sales
+
 def get_token():
 	DATABASE_URL = os.environ['DATABASE_URL'] 
 	conn = psycopg2.connect(DATABASE_URL, sslmode='require') 
