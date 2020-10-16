@@ -1247,12 +1247,12 @@ def test_scripts():
 		if not check_test_results(test_page_url):
 			log += "TEST FAILED!: weekly_todo didn't add todo's correctly!\n"
 
-		# test_page_url = create_page(day_page.get_browseable_url(), "/friday_todo").get_browseable_url()
+		test_page_url = create_page(day_page.get_browseable_url(), "/friday_todo").get_browseable_url()
 
-		# friday_todo()
+		friday_todo()
 
-		# if not check_test_results(test_page_url):
-		# 	log += "TEST FAILED!: friday_todo didn't add todo's correctly!\n"
+		if not check_test_results(test_page_url):
+			log += "TEST FAILED!: friday_todo didn't add todo's correctly!\n"
 
 		# test_page_url = create_page(day_page.get_browseable_url(), "/todo_one").get_browseable_url()
 
