@@ -194,14 +194,13 @@ def update_clients():
 				test_row.time_zone = re.findall("(^UTC[+-][0-9][0-9])(?=:00)", buyer["op_timezone"])[0]
 		
 		else:
-			if isinstance(failed_day_page, NoneType):
+			if isinstance(failed_day_page, type(None)):
 				failed_day_page = failed.children.add_new(PageBlock, title = date)
 			
 			time.sleep(1)
-			try:
-				add_global_block(failed_day_page, row)
-			except:
-				pass
+
+			add_global_block(failed_day_page, row)
+
 
 			print("NO INFO FOR CLIENT")
 
