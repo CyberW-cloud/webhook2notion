@@ -61,7 +61,7 @@ def update_clients():
 	test_page.children.add_new(CollectionViewPageBlock, title = "table")
 	page = test_page.children[-1]
 
-	schema = copy_schema("https://www.notion.so/21a8e8245c9e4024848613cecdc8e88f?v=f658b865c0b842149cf4583bbff2dc28")
+	schema = copy_schema(notion_client, "https://www.notion.so/21a8e8245c9e4024848613cecdc8e88f?v=f658b865c0b842149cf4583bbff2dc28")
 
 	collection = notion_client.get_collection(notion_client.create_record("collection", parent=page, schema=schema))
 	page.collection = collection
@@ -173,6 +173,11 @@ def update_clients():
 				print(buyer["op_state"])
 
 			if "op_city" in buyer.keys():
+				if test_row.location != "":
+					test_row.location = buyer["op_city"]
+				else:
+					test_row.location = test_row.location + ", " + buyer["op_city"]
+				
 				print(buyer["op_city"])
 			
 			if "op_contract_date" in buyer.keys():
@@ -180,6 +185,7 @@ def update_clients():
 			
 			if "op_timezone" in buyer.keys():
 				print(buyer["op_timezone"])
+		
 		else:
 			print("none")
 
