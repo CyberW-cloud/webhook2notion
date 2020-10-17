@@ -170,11 +170,9 @@ def update_clients():
 				continue
 
 			if "op_country" in buyer.keys():
-				print(buyer["op_country"])
 				test_row.country = buyer["op_country"]
 
 			if "op_state" in buyer.keys():
-				print(buyer["op_state"])
 				test_row.state = buyer["op_state"]
 
 			if "op_city" in buyer.keys():
@@ -183,14 +181,11 @@ def update_clients():
 				else:
 					test_row.location = test_row.location + ", " + buyer["op_city"]
 				
-				print(buyer["op_city"])
 			
 			if "op_contract_date" in buyer.keys():
-				print(buyer["op_contract_date"])
 				test_row.member_since = datetime.datetime.strptime(buyer["op_contract_date"], '%B %d, %Y')
 
 			if "op_timezone" in buyer.keys():
-				print(buyer["op_timezone"])
 				test_row.time_zone = re.findall("(^UTC[+-][0-9][0-9])(?=:00)", buyer["op_timezone"])[0]
 		
 		else:
