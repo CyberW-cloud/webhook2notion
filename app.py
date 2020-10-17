@@ -207,7 +207,7 @@ def tmp():
 	token = os.environ.get("TOKEN")
 	client = NotionClient(token) 
 
-	proposals = client.get_collection_view("https://www.notion.so/21a8e8245c9e4024848613cecdc8e88f?v=ff14989e8f96401db5f7c3527a4cd8b7")
+	proposals = client.get_collection_view("https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=536bcc489f93433ab19d697490b00525")
 	filter_params = {
 		"filters": [
 			{
@@ -218,11 +218,12 @@ def tmp():
 		"operator": "and",
 		
 	}
-	sort_params = [{"direction": "descending", "property": "Added"}]
+	sort_params = [{"direction": "descending", "property": "Joined"}]
 
-	proposals = proposals.build_query(filter = filter_params, sort = sort_params)
+	proposals = proposals.build_query(sort = sort_params)
 	result = proposals.execute()
 
+	result = [client.get_block("https://www.notion.so/Dmytro-Beley-ca6295843f524cd1bd4d2d4f32cb9a9a")]
 	print(len(result))
 	for row in result:
 		print(row.name)
