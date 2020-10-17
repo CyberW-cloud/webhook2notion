@@ -154,6 +154,7 @@ def update_clients():
 					openingCiphertext = engagements.get_specific(contract.contract_id)["engagement"]["job_ref_ciphertext"]	
 					break
 				except Exception as e:
+					time.sleep(1.6)
 					continue
 
 		if (openingCiphertext != None):
