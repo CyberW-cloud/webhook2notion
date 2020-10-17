@@ -289,7 +289,7 @@ def get_proposals_reject_reason():
 
 	proposals = notion_client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
 
-	schema = copy_schema("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bbbbd5bd5fd84f02bf9670d2793b0538")
+	schema = copy_schema("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bbbbd5bd5fd84f02bf9670d2793b0538", notion_client)
 
 	collection = notion_client.get_collection(notion_client.create_record("collection", parent=page, schema=schema))
 	page.collection = collection
@@ -331,7 +331,8 @@ def get_proposals_reject_reason():
 	tokens = os.environ.get('TOKENS')
 	tokens = parse_tokens(tokens, freelancer_ids)
 	
-
+	applications = ""
+	job_keys = []
 	for row in result:
 		proposal = page.collection.add_row()
 		copy_proposal_row(source_row = row, target_row = proposal)
@@ -341,11 +342,23 @@ def get_proposals_reject_reason():
 			else:
 				ref = proposal.title
 
-			application = client.get("/hr/v4/contractors/applications/"+ref)["data"]
-		
-			job_info_res = job_info.get_specific(application["openingCiphertext"])
-			proposal.upw_status = job_info_res["profile"]["ui_opening_status"]
+			app = client.get("/hr/v4/contractors/applications/"+ref)["data"]["openingCiphertext"]
+			applications+=app+","
+			job_keys.append(app)
+			time.sleep(1.6)
 
+
+		except Exception as e:
+			time.sleep(1.6)
+			print(e)
+			continue
+	
+	applications = application.get_list({"job_key":applications, "status": "archived"})
+	for app, i in enumerate(applications):
+		try:
+			
+			job_info_res = job_info.get_specific(job_keys[i])
+			proposal.upw_status = job_info_res["profile"]["ui_opening_status"]
 
 			if application["status"] == "7":
 				proposal.property = "proposal open"
