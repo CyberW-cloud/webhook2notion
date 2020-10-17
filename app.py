@@ -334,10 +334,10 @@ def get_proposals_reject_reason():
 	job_keys = []
 	for row in result:
 		try:
-			if "[" in proposal.title:
-				ref = re.search("(?<=\[).*(?=\])", proposal.title).group()
+			if "[" in row.title:
+				ref = re.search("(?<=\[).*(?=\])", row.title).group()
 			else:
-				ref = proposal.title
+				ref = row.title
 
 			app = client.get("/hr/v4/contractors/applications/"+ref)["data"]["openingCiphertext"]
 			applications+=app+","
