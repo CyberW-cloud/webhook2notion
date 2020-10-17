@@ -53,8 +53,12 @@ def update_clients():
 	token = os.environ.get("TOKEN")
 	notion_client = NotionClient(token)
 
+	date = str(datetime.datetime.now().day) + "." + str(datetime.datetime.now().month) + "." + str(datetime.datetime.now().year)
+
 	clients = notion_client.get_collection_view("https://www.notion.so/21a8e8245c9e4024848613cecdc8e88f?v=f658b865c0b842149cf4583bbff2dc28")
 	failed = notion_client.get_block("https://www.notion.so/Failed-26abe549b6394242b5c6c148e822f166")
+
+	failed_day_page = None
 
 	test_page = notion_client.get_block("https://www.notion.so/test-63e297723c924b6babc931d10f7b4740")
 	
@@ -190,6 +194,7 @@ def update_clients():
 				test_row.time_zone = re.findall("(^UTC[+-][0-9][0-9])(?=:00)", buyer["op_timezone"])[0]
 		
 		else:
+			failed.children.add_new(PageBlock, title = date)
 			add_global_block(failed, row)
 			print("NO INFO FOR CLIENT")
 
