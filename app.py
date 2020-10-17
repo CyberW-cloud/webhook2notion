@@ -194,7 +194,7 @@ def update_clients():
 				test_row.time_zone = re.findall("(^UTC[+-][0-9][0-9])(?=:00)", buyer["op_timezone"])[0]
 		
 		else:
-			if failed_day_page == None:
+			if isinstance(failed_day_page, NoneType):
 				failed_day_page = failed.children.add_new(PageBlock, title = date)
 			
 			time.sleep(1)
