@@ -346,7 +346,7 @@ def get_proposals_reject_reason():
 
 
 		except Exception as e:
-			time.sleep(1.6)
+			time.sleep(1.6) 
 			print(e)
 			continue
 	
