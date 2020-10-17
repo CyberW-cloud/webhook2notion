@@ -45,7 +45,7 @@ def copy_client(new_row, source):
 	new_row.name = source.name 
 	new_row.added = source.added 
 	new_row.time_zone = source.time_zone 
-	new_row.country = source.country 
+	# new_row.country = source.country 
 
 
 @app.route('/update_clients', methods = ["GET"])
