@@ -996,7 +996,7 @@ def message_review():
 
 
 		try:
-			rooms = messages_api.get_room_messages(os.environ.get("TeamID"), 'room_ce33c1acb5660a70ded9f811d19995d3',{"activeSince": str(activeSince), "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})
+			rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": str(activeSince), "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})
 		except Exception as e:
 			print(str(e) + " 4")
 			print("		 " + str(rooms))
@@ -1005,22 +1005,27 @@ def message_review():
 		
 		time.sleep(1.6)
 
-		# try:
-		# 	user_rooms = messages_api.get_rooms(user_id, {"activeSince": str(activeSince), "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})	
-		# except Exception as e:
-		# 	print(str(e) + " 5")
-		# 	print("		 " + str(user_rooms))
-		# 	time.sleep(3.2)
-		# 	continue
+		try:
+			user_rooms = messages_api.get_rooms(user_id, {"activeSince": str(activeSince), "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})	
+		except Exception as e:
+			print(str(e) + " 5")
+			print("		 " + str(user_rooms))
+			time.sleep(3.2)
+			continue
 
-		# if "rooms" not in rooms.keys() or "rooms" not in user_rooms.keys():
-		# 	time.sleep(3.2)
-		# 	continue
+		if "rooms" not in rooms.keys() or "rooms" not in user_rooms.keys():
+			time.sleep(3.2)
+			continue
 
-		# rooms = rooms["rooms"] + user_rooms["rooms"]
+		rooms = rooms["rooms"] + user_rooms["rooms"]
 
 		for room in rooms:
-			print(room)
+			if room["roomId"] not in "room_ce33c1acb5660a70ded9f811d19995d3":
+				print(room["roomId"])
+				continue
+			else:
+				print(room)
+				i = 1/0
 			# double check activeSince
 			if int(room["latestStory"]["updated"])<activeSince:
 				print("ERROR: activeSince did not filter a room")
