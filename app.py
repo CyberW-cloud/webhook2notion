@@ -269,7 +269,6 @@ def get_token():
 
 def copy_proposal_row(source_row, target_row):
 	target_row.date_sent = source_row.date_sent
-	target_row.invite_name = source_row.invite_name
 	target_row.url = source_row.url
 	target_row.title = source_row.title
 	target_row.job_url = source_row.job_url
