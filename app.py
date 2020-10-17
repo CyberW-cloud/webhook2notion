@@ -996,7 +996,7 @@ def message_review():
 
 
 		try:
-			rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": str(activeSince), "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})
+			rooms = messages_api.get_room_messages(os.environ.get("TeamID"), 'room_ce33c1acb5660a70ded9f811d19995d3',{"activeSince": str(activeSince), "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})
 		except Exception as e:
 			print(str(e) + " 4")
 			print("		 " + str(rooms))
@@ -1005,19 +1005,19 @@ def message_review():
 		
 		time.sleep(1.6)
 
-		try:
-			user_rooms = messages_api.get_rooms(user_id, {"activeSince": str(activeSince), "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})	
-		except Exception as e:
-			print(str(e) + " 5")
-			print("		 " + str(user_rooms))
-			time.sleep(3.2)
-			continue
+		# try:
+		# 	user_rooms = messages_api.get_rooms(user_id, {"activeSince": str(activeSince), "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})	
+		# except Exception as e:
+		# 	print(str(e) + " 5")
+		# 	print("		 " + str(user_rooms))
+		# 	time.sleep(3.2)
+		# 	continue
 
-		if "rooms" not in rooms.keys() or "rooms" not in user_rooms.keys():
-			time.sleep(3.2)
-			continue
+		# if "rooms" not in rooms.keys() or "rooms" not in user_rooms.keys():
+		# 	time.sleep(3.2)
+		# 	continue
 
-		rooms = rooms["rooms"] + user_rooms["rooms"]
+		# rooms = rooms["rooms"] + user_rooms["rooms"]
 
 		for room in rooms:
 			# double check activeSince
@@ -1077,106 +1077,106 @@ def message_review():
 	print("finished parsing rooms")
 	target_page = create_page("https://www.notion.so/Message-Review-33cbe6e92b9e4894890d768f1ea7b970","testing without the db for now")
 
-	for room in parsed_rooms:
-		if room["messages"][1] not in room["room"]['chat_url']:
-			i = 1/0
-		client = upwork.Client(upwork.Config({\
-			'consumer_key': os.environ.get("ConsumerKey"),\
-			'consumer_secret': os.environ.get("ConsumerSecret"),\
-			'access_token': os.environ.get("AccessToken"),\
-			'access_token_secret': os.environ.get("AccessSecret")}))
+	# for room in parsed_rooms:
+	# 	if room["messages"][1] not in room["room"]['chat_url']:
+	# 		i = 1/0
+	# 	client = upwork.Client(upwork.Config({\
+	# 		'consumer_key': os.environ.get("ConsumerKey"),\
+	# 		'consumer_secret': os.environ.get("ConsumerSecret"),\
+	# 		'access_token': os.environ.get("AccessToken"),\
+	# 		'access_token_secret': os.environ.get("AccessSecret")}))
 
-		profileApi = profileAPI(client)
+	# 	profileApi = profileAPI(client)
 
-		link = "https://www.upwork.com/messages/rooms/" + room["id"]
-		link_text = "[Room]("+link+")"
+	# 	link = "https://www.upwork.com/messages/rooms/" + room["id"]
+	# 	link_text = "[Room]("+link+")"
 		
-		if room["type"] == "No info":
-			type_text = "***No info***"
-			#to add to the interview column
-			room["type"] = "Interviews"
+	# 	if room["type"] == "No info":
+	# 		type_text = "***No info***"
+	# 		#to add to the interview column
+	# 		room["type"] = "Interviews"
 
-		else:
-			if room["type"] == "Interviews":
-				type_text = "[Proposal]("+room["link"]+")"
-			else:
-				type_text = "["+room["type"]+"]("+room["link"]+")" 
-
-
-		if room["type"] not in rows.keys():
-			rows[room["type"]] = auto_retry_lambda(message_review.collection.add_row)
-			auto_retry_lambda(lambda: rows[room["type"]].__setattr__("name", row_name))
-			auto_retry_lambda(lambda: rows[room["type"]].__setattr__("tags", room["type"]))
-
-		target_row = rows[room["type"]]
-
-		if room["room"]["roomName"] == None:
-			room["room"]["roomName"] == "None"
-
-		if room["room"]["topic"] == None:
-			room["room"]["topic"] == "None"
+	# 	else:
+	# 		if room["type"] == "Interviews":
+	# 			type_text = "[Proposal]("+room["link"]+")"
+	# 		else:
+	# 			type_text = "["+room["type"]+"]("+room["link"]+")" 
 
 
-		try:
-			title = room["room"]["roomName"]+", **"+room["room"]["topic"] + "**"
-		except Exception:
-			print(room)
-			continue
+	# 	if room["type"] not in rows.keys():
+	# 		rows[room["type"]] = auto_retry_lambda(message_review.collection.add_row)
+	# 		auto_retry_lambda(lambda: rows[room["type"]].__setattr__("name", row_name))
+	# 		auto_retry_lambda(lambda: rows[room["type"]].__setattr__("tags", room["type"]))
 
-		parent_text_block = auto_retry_lambda(target_row.children.add_new,TextBlock, title = title)
-		text_block = auto_retry_lambda(parent_text_block.children.add_new,TextBlock, title =type_text+" , "+link_text)
+	# 	target_row = rows[room["type"]]
 
-		try:
-			stories = room["messages"][0]["stories_list"]["stories"]
-		except Exception:
-			stories = None
-			print(room["messages"])
+	# 	if room["room"]["roomName"] == None:
+	# 		room["room"]["roomName"] == "None"
 
-		#if the message ends in a sinature like [Line Start][Capital][* amount of lowercase][space][Capital][Dot][EOF] 
-		if isinstance(stories[0]["message"], str) and re.findall("^[A-Z][a-z]* [A-Z]\.\Z", stories[0]["message"], re.M) and room["type"] == "Interview" or stories == None:
-			auto_retry_lambda(parent_text_block.remove,permanently = True)
-			print("bot detected, skipped")
-			continue
+	# 	if room["room"]["topic"] == None:
+	# 		room["room"]["topic"] == "None"
 
 
-		written = 0
-		for i in stories:
-			if not isinstance(i["message"],str) or i["message"] == "" or i["userId"] == None or i["isSystemStory"]:
-				print(i)
-				continue
+	# 	try:
+	# 		title = room["room"]["roomName"]+", **"+room["room"]["topic"] + "**"
+	# 	except Exception:
+	# 		print(room)
+	# 		continue
 
-			if written>=3:
-				break
+	# 	parent_text_block = auto_retry_lambda(target_row.children.add_new,TextBlock, title = title)
+	# 	text_block = auto_retry_lambda(parent_text_block.children.add_new,TextBlock, title =type_text+" , "+link_text)
 
-			message_time = datetime.datetime.fromtimestamp(i["updated"]/1000).strftime('%Y-%m-%d %H:%M:%S')
-			text = "["+message_time+"]\n"
+	# 	try:
+	# 		stories = room["messages"][0]["stories_list"]["stories"]
+	# 	except Exception:
+	# 		stories = None
+	# 		print(room["messages"])
 
-			try:
-				if i["userId"] not in cache.keys(): 
-					name = profileApi.get_specific(i["userId"])["profile"]["dev_short_name"][:-1]
-					cache[i["userId"]] = name
-				else:
-					name = cache[i["userId"]]
-			except Exception as e:
-				print(i)
-				print(i["userId"])
-				name = "ERROR"
-
-			text += "**"+name+":**\n"
-			text += i["message"]
-
-			message = auto_retry_lambda(parent_text_block.children.add_new,CodeBlock, title = text)
-			auto_retry_lambda(lambda: setattr(message, "language", "Plain text"))
-			auto_retry_lambda(lambda: setattr(message, "wrap", True))
-
-			auto_retry_lambda(message.move_to,parent_text_block, position = "first-child")
+	# 	#if the message ends in a sinature like [Line Start][Capital][* amount of lowercase][space][Capital][Dot][EOF] 
+	# 	if isinstance(stories[0]["message"], str) and re.findall("^[A-Z][a-z]* [A-Z]\.\Z", stories[0]["message"], re.M) and room["type"] == "Interview" or stories == None:
+	# 		auto_retry_lambda(parent_text_block.remove,permanently = True)
+	# 		print("bot detected, skipped")
+	# 		continue
 
 
-			written +=1
+	# 	written = 0
+	# 	for i in stories:
+	# 		if not isinstance(i["message"],str) or i["message"] == "" or i["userId"] == None or i["isSystemStory"]:
+	# 			print(i)
+	# 			continue
 
-		auto_retry_lambda(text_block.move_to,parent_text_block, position = "first-child")
-		auto_retry_lambda(parent_text_block.children.add_new,TextBlock)
-		auto_retry_lambda(target_row.children.add_new,DividerBlock)
+	# 		if written>=3:
+	# 			break
+
+	# 		message_time = datetime.datetime.fromtimestamp(i["updated"]/1000).strftime('%Y-%m-%d %H:%M:%S')
+	# 		text = "["+message_time+"]\n"
+
+	# 		try:
+	# 			if i["userId"] not in cache.keys(): 
+	# 				name = profileApi.get_specific(i["userId"])["profile"]["dev_short_name"][:-1]
+	# 				cache[i["userId"]] = name
+	# 			else:
+	# 				name = cache[i["userId"]]
+	# 		except Exception as e:
+	# 			print(i)
+	# 			print(i["userId"])
+	# 			name = "ERROR"
+
+	# 		text += "**"+name+":**\n"
+	# 		text += i["message"]
+
+	# 		message = auto_retry_lambda(parent_text_block.children.add_new,CodeBlock, title = text)
+	# 		auto_retry_lambda(lambda: setattr(message, "language", "Plain text"))
+	# 		auto_retry_lambda(lambda: setattr(message, "wrap", True))
+
+	# 		auto_retry_lambda(message.move_to,parent_text_block, position = "first-child")
+
+
+	# 		written +=1
+
+	# 	auto_retry_lambda(text_block.move_to,parent_text_block, position = "first-child")
+	# 	auto_retry_lambda(parent_text_block.children.add_new,TextBlock)
+	# 	auto_retry_lambda(target_row.children.add_new,DividerBlock)
 
 	print("all done!")	
 	print(cache)
