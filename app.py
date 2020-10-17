@@ -228,15 +228,15 @@ def tmp():
 	for row in result:
 		print(row.name)
 
-		row.tmp_pa = row.pa
-		row.pa = []
+		# row.tmp_pa = row.pa
+		# row.pa = []
 
-		row.tmp_bidder = row.bidder
-		row.bidder = []
+		# row.tmp_bidder = row.bidder
+		# row.bidder = []
 
-		# row.bidder = row.tmp_bidder
+		row.bidder = row.tmp_bidder
 
-		# row.pa = row.tmp_pa
+		row.pa = row.tmp_pa
 
 
 def get_token():
