@@ -1020,6 +1020,7 @@ def message_review():
 		# rooms = rooms["rooms"] + user_rooms["rooms"]
 
 		for room in rooms:
+			print(room)
 			# double check activeSince
 			if int(room["latestStory"]["updated"])<activeSince:
 				print("ERROR: activeSince did not filter a room")
