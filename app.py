@@ -223,20 +223,19 @@ def tmp():
 	proposals = proposals.build_query(sort = sort_params)
 	result = proposals.execute()
 
-	result = [client.get_block("https://www.notion.so/Dmytro-Beley-ca6295843f524cd1bd4d2d4f32cb9a9a")]
 	print(len(result))
 	for row in result:
 		print(row.name)
 
-		# row.tmp_pa = row.pa
-		# row.pa = []
+		row.tmp_pa = row.pa
+		row.pa = []
 
-		# row.tmp_bidder = row.bidder
-		# row.bidder = []
+		row.tmp_bidder = row.bidder
+		row.bidder = []
 
-		row.bidder = row.tmp_bidder
+		# row.bidder = row.tmp_bidder
 
-		row.pa = row.tmp_pa
+		# row.pa = row.tmp_pa
 
 
 def get_token():
