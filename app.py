@@ -333,8 +333,6 @@ def get_proposals_reject_reason():
 	applications = ""
 	job_keys = []
 	for row in result:
-		proposal = page.collection.add_row()
-		copy_proposal_row(source_row = row, target_row = proposal)
 		try:
 			if "[" in proposal.title:
 				ref = re.search("(?<=\[).*(?=\])", proposal.title).group()
@@ -355,6 +353,9 @@ def get_proposals_reject_reason():
 	applications = application.get_list({"job_key":applications, "status": "archived"})
 	for app, i in enumerate(applications):
 		try:
+			
+			proposal = page.collection.add_row()
+			copy_proposal_row(source_row = row, target_row = proposal)
 
 			job_info_res = job_info.get_specific(job_keys[i])
 			proposal.upw_status = job_info_res["profile"]["ui_opening_status"]
