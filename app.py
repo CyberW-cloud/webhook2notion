@@ -196,6 +196,8 @@ def update_clients():
 		else:
 			if failed_day_page == None:
 				failed_day_page = failed.children.add_new(PageBlock, title = date)
+			
+			time.sleep(1)
 			try:
 				add_global_block(failed_day_page, row)
 			except:
