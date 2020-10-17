@@ -356,7 +356,7 @@ def get_proposals_reject_reason():
 	applications = application.get_list({"job_key":applications, "status": "archived"})
 	for app, i in enumerate(applications):
 		try:
-			
+
 			job_info_res = job_info.get_specific(job_keys[i])
 			proposal.upw_status = job_info_res["profile"]["ui_opening_status"]
 
@@ -381,10 +381,6 @@ def get_proposals_reject_reason():
 
 			elif application["status"] == "3":
 				proposal.property = "Invite Declined by client"
-
-			elif application["status"] == "10":
-				print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-				print(proposal.get_browseable_url())
 
 			else:
 				print(application["status"])
