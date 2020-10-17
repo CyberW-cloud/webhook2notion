@@ -162,7 +162,7 @@ def update_clients():
 					time.sleep(1.6)
 					continue
 
-		if (openingCiphertext != None and false):
+		if (openingCiphertext != None and False):
 			test_row = page.collection.add_row()
 			copy_client(test_row, row)
 			print(openingCiphertext)
