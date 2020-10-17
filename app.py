@@ -185,7 +185,8 @@ def update_clients():
 			
 			if "op_contract_date" in buyer.keys():
 				print(buyer["op_contract_date"])
-			
+				test_row.time_zone = datetime.datetime.strptime(buyer["op_contract_date"], '%B %d, %Y')
+
 			if "op_timezone" in buyer.keys():
 				print(buyer["op_timezone"])
 				test_row.time_zone = re.findall("(^UTC[+-][0-9][0-9])(?=:00)", buyer["op_timezone"])[0]
