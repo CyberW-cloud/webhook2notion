@@ -171,9 +171,11 @@ def update_clients():
 
 			if "op_country" in buyer.keys():
 				print(buyer["op_country"])
-			
+				test_row.country = buyer["op_country"]
+
 			if "op_state" in buyer.keys():
 				print(buyer["op_state"])
+				test_row.state = buyer["op_state"]
 
 			if "op_city" in buyer.keys():
 				if test_row.location == "":
