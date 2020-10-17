@@ -155,11 +155,13 @@ def update_clients():
 					break
 				except Exception as e:
 					continue
-		
-		test_row = page.collection.add_row()
-		copy_client(test_row, row)
-		print(openingCiphertext)
+
 		if (openingCiphertext != None):
+			test_row = page.collection.add_row()
+			copy_client(test_row, row)
+			print(openingCiphertext)
+
+
 			time.sleep(1.6)
 			try:
 				buyer = job_info.get_specific(openingCiphertext)["profile"]["buyer"]
