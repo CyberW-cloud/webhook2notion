@@ -228,12 +228,12 @@ def tmp():
 	token = os.environ.get("TOKEN")
 	client = NotionClient(token) 
 
-	proposals = client.get_collection_view("https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=536bcc489f93433ab19d697490b00525")
+	proposals = client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bbbbd5bd5fd84f02bf9670d2793b0538")
 	filter_params = {
 		"filters": [
 			{
-				"filter": {"operator": "date_is_on_or_before", "value": {"type": "exact", "value": {"type": "date", "start_date": "2019-09-16"}}}, 
-				"property": "Added",
+				"filter": {"operator": "date_is_on_or_before", "value": {"type": "exact", "value": {"type": "date", "start_date": "2029-09-16"}}}, 
+				"property": "Date Sent",
 			}
 		],
 		"operator": "and",
@@ -250,31 +250,30 @@ def tmp():
 	for row in result:
 		print(row.proposal_id)
 
-		# row.tmp_estimate = row.estimate
-		# row.estimate = []
+		row.tmp_estimate = row.estimate
+		row.estimate = []
 
-		# row.tmp_contract = row.contract
-		# row.contract = []
+		row.tmp_contract = row.contract
+		row.contract = []
 
-		# row.tmp_fl = row.fl
-		# row.fl = []
+		row.tmp_fl = row.fl
+		row.fl = []
 
-		# row.tmp_client = row.client
-		# row.client = []
+		row.tmp_client = row.client
+		row.client = []
 
-		# row.tmp_invite = row.invite
-		# row.invite = []
+		row.tmp_invite = row.invite
+		row.invite = []
 
+		# row.estimate = row.tmp_estimate
 
-		row.estimate = row.tmp_estimate
+		# row.contract = row.tmp_contract
 
-		row.contract = row.tmp_contract
+		# row.fl = row.tmp_fl
 
-		row.fl = row.tmp_fl
+		# row.client = row.tmp_client
 
-		row.client = row.tmp_client
-
-		row.invite = row.tmp_invite
+		# row.invite = row.tmp_invite
 
 def get_token():
 	DATABASE_URL = os.environ['DATABASE_URL'] 
