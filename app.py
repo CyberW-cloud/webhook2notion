@@ -248,14 +248,14 @@ def tmp():
 	for row in result: 
 		print(row.proposal_id)
 
-		# for invite in row.invite:
-		# 	if row not in invite.proposal_sent:
-		# 		invite.proposal_sent.append(row)
+		for invite in row.invite:
+			if row not in invite.proposal_sent:
+				invite.proposal_sent = invite.proposal_sent + [row]
 
-		for fl in row.fl:
-			print(row not in fl.proposals_id_sent)
-			if row not in fl.proposals_id_sent:
-				fl.proposals_id_sent = fl.proposals_id_sent+[row]
+		# for fl in row.fl:
+		# 	print(row not in fl.proposals_id_sent)
+		# 	if row not in fl.proposals_id_sent:
+		# 		fl.proposals_id_sent = fl.proposals_id_sent+[row]
 
 		# for contract in row.contract:
 		# 	if row not in contract.proposal_id:
