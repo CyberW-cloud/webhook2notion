@@ -253,6 +253,7 @@ def tmp():
 		# 		invite.proposal_sent.append(row)
 
 		for fl in row.fl:
+			print(row not in fl.proposals_id_sent)
 			if row not in fl.proposals_id_sent:
 				fl.proposals_id_sent.append(row)
 
