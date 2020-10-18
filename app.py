@@ -239,7 +239,7 @@ def tmp():
 		"operator": "and",
 		
 	}
-	sort_params = [{"direction": "descending", "property": "Joined"}]
+	sort_params = [{"direction": "descending", "property": "Date Sent"}]
 
 	proposals = proposals.build_query(sort = sort_params)
 	result = proposals.execute()
