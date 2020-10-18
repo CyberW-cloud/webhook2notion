@@ -257,13 +257,13 @@ def tmp():
 		# 	if row not in fl.proposals_id_sent:
 		# 		fl.proposals_id_sent = fl.proposals_id_sent+[row]
 
-		for contract in row.contract:
-			if row not in contract.proposal_id:
-				contract.proposal_id = contract.proposal_id + [row]
+		# for contract in row.contract:
+		# 	if row not in contract.proposal_id:
+		# 		contract.proposal_id = contract.proposal_id + [row]
 
-		# for estimate in row.estimate:
-		# 	if row not in estimate.related_to_proposal:
-		# 		estimate.related_to_proposal.append(row)
+		for estimate in row.estimate:
+			if row not in estimate.related_to_proposal:
+				estimate.related_to_proposal = estimate.related_to_proposal + [row]
 
 
 def get_token():
