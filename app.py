@@ -242,27 +242,27 @@ def tmp():
 	proposals = proposals.build_query(filter = filter_params, sort = sort_params)
 	result = proposals.execute()
 
-
+	result = [client.get_block("https://www.notion.so/1163863197795221505-6d5df6550eeb4aed8df566578d693ade")]
 	print(len(result))
 
 	for row in result: 
 		print(row.proposal_id)
 
-		for invite in row.invite:
-			if row not in invite.proposal_sent:
-				invite.proposal_sent.append(row)
+		# for invite in row.invite:
+		# 	if row not in invite.proposal_sent:
+		# 		invite.proposal_sent.append(row)
 
 		for fl in row.fl:
 			if row not in fl.proposals_id_sent:
 				fl.proposals_id_sent.append(row)
 
-		for contract in row.contract:
-			if row not in contract.proposal_id:
-				contract.proposal_id.append(row)
+		# for contract in row.contract:
+		# 	if row not in contract.proposal_id:
+		# 		contract.proposal_id.append(row)
 
-		for estimate in row.estimate:
-			if row not in estimate.related_to_proposal:
-				estimate.related_to_proposal.append(row)
+		# for estimate in row.estimate:
+		# 	if row not in estimate.related_to_proposal:
+		# 		estimate.related_to_proposal.append(row)
 
 
 def get_token():
