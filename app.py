@@ -250,31 +250,31 @@ def tmp():
 	for row in result:
 		print(row.proposal_id)
 
-		row.tmp_estimate = row.estimate
-		row.estimate = []
+		# row.tmp_estimate = row.estimate
+		# row.estimate = []
 
-		row.tmp_contract = row.contract
-		row.contract = []
+		# row.tmp_contract = row.contract
+		# row.contract = []
 
-		row.tmp_fl = row.fl
-		row.fl = []
+		# row.tmp_fl = row.fl
+		# row.fl = []
 
-		row.tmp_client = row.client
-		row.client = []
+		# row.tmp_client = row.client
+		# row.client = []
 
-		row.tmp_invite = row.invite
-		row.invite = []
+		# row.tmp_invite = row.invite
+		# row.invite = []
 
 
-		# row.estimate = row.tmp_estimate
+		row.estimate = row.tmp_estimate
 
-		# row.contract = row.tmp_contract
+		row.contract = row.tmp_contract
 
-		# row.fl = row.tmp_fl
+		row.fl = row.tmp_fl
 
-		# row.client = row.tmp_client
+		row.client = row.tmp_client
 
-		# row.invite = row.tmp_invite
+		row.invite = row.tmp_invite
 
 def get_token():
 	DATABASE_URL = os.environ['DATABASE_URL'] 
