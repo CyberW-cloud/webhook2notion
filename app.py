@@ -244,7 +244,7 @@ def tmp():
 	proposals = proposals.build_query(sort = sort_params)
 	result = proposals.execute()
 
-	result = [client.get_block("https://www.notion.so/1179723620264980481-33f0d09fff154f0aa9bde1eb01e2d45d")]
+	result = [client.get_block("https://www.notion.so/1314632529710559232-8d9f5208c7284b3e8cef834a01c8f351")]
 
 	print(len(result))
 	for row in result:
