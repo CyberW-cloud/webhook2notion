@@ -244,7 +244,7 @@ def tmp():
 
 
 	print(len(result))
-	return len(result)
+
 	for row in result: 
 		print(row.proposal_id)
 
