@@ -235,8 +235,8 @@ def tmp():
 	filter_params = {
 		"filters": [
 			{
-				"filter": {"operator": "date_is_on_or_before", "value": {"type": "exact", "value": {"type": "date", "start_date": "2029-09-16"}}}, 
-				"property": "Date Sent",
+				{"property": "FL", "filter": {"operator": "is_empty"}},
+				{"property": "tmp_fl", "filter":{"operator":"is_not_empty"}}
 			}
 		],
 		"operator": "and",
@@ -247,34 +247,36 @@ def tmp():
 	proposals = proposals.build_query(sort = sort_params)
 	result = proposals.execute()
 
+
 	print(len(result))
+	return len(result)
 	for row in result:
 		print(row.proposal_id)
 
-		row.tmp_estimate = row.estimate 
-		row.estimate = []
+		# row.tmp_estimate = row.estimate 
+		# row.estimate = []
 
-		row.tmp_contract = row.contract
-		row.contract = []
+		# row.tmp_contract = row.contract
+		# row.contract = []
 
-		row.tmp_fl = row.fl
-		row.fl = []
+		# row.tmp_fl = row.fl
+		# row.fl = []
 
-		row.tmp_client = row.client
-		row.client = []
+		# row.tmp_client = row.client
+		# row.client = []
 
-		row.tmp_invite = row.invite
-		row.invite = []
+		# row.tmp_invite = row.invite
+		# row.invite = []
 
-		# row.estimate = row.tmp_estimate
+		row.estimate = row.tmp_estimate
 
-		# row.contract = row.tmp_contract
+		row.contract = row.tmp_contract
 
-		# row.fl = row.tmp_fl
+		row.fl = row.tmp_fl
 
-		# row.client = row.tmp_client
+		row.client = row.tmp_client
 
-		# row.invite = row.tmp_invite
+		row.invite = row.tmp_invite
 
 def get_token():
 	DATABASE_URL = os.environ['DATABASE_URL'] 
