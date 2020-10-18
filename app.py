@@ -237,7 +237,7 @@ def tmp():
 		"operator": "and",
 		
 	}
-	sort_params = [{"direction": "descending", "property": "Date Sent"}]
+	sort_params = [{"direction": "ascending", "property": "Date Sent"}]
 
 	proposals = proposals.build_query(sort = sort_params)
 	result = proposals.execute()
@@ -246,13 +246,12 @@ def tmp():
 
 	for row in result: 
 		print(row.proposal_id)
-
+		print(row.date_sent)
 		for invite in row.invite:
 			if row not in invite.proposal_sent:
 				invite.proposal_sent = invite.proposal_sent + [row]
 
 		for fl in row.fl:
-			print(row not in fl.proposals_id_sent)
 			if row not in fl.proposals_id_sent:
 				fl.proposals_id_sent = fl.proposals_id_sent+[row]
 
