@@ -231,8 +231,8 @@ def tmp():
 	proposals = client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bbbbd5bd5fd84f02bf9670d2793b0538")
 	filter_params = {
 		"filters": [
-				{"property": "FL", "filter": {"operator": "is_not_empty"}},
-				{"property": "tmp_fl", "filter":{"operator":"is_empty"}}
+				{"property": "FL", "filter": {"operator": "is_empty"}},
+				{"property": "tmp_fl", "filter":{"operator":"is_not_empty"}}
 		],
 		"operator": "and",
 		
