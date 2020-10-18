@@ -248,7 +248,7 @@ def tmp():
 
 	print(len(result))
 	for row in result:
-		print(row.name)
+		print(row.proposal_id)
 
 		row.tmp_estimate = row.estimate
 		row.estimate = []
