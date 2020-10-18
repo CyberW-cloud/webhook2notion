@@ -1083,7 +1083,7 @@ def get_projects(token, days_before):
             project["person"] = row["pm"][0]
         else:
             for contract in row["contracts"]:
-                if contract.coordinator[0]:
+                if len(contract.coordinator)>0:
                     if contract.coordinator[0].name != "selfCC" and contract.status == "In Progress":
                         project["person"] = contract.coordinator[0]
                         break
