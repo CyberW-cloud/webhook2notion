@@ -963,7 +963,7 @@ def message_review():
 	
 	active_since_hours =  int(request.args.get("activeSince", "24"))
 	activeSince = datetime.datetime.now() - datetime.timedelta(hours = active_since_hours)
-	activeSince = int(activeSince.timestamp())*1000
+	activeSince = 1598650483193
 
 	print(activeSince)
 
