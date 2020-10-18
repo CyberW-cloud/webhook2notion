@@ -255,7 +255,7 @@ def tmp():
 		for fl in row.fl:
 			print(row not in fl.proposals_id_sent)
 			if row not in fl.proposals_id_sent:
-				fl.proposals_id_sent = fl.proposals_id_sent+row
+				fl.proposals_id_sent = list(fl.proposals_id_sent)+row
 
 		# for contract in row.contract:
 		# 	if row not in contract.proposal_id:
