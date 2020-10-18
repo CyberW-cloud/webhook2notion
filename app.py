@@ -248,7 +248,7 @@ def tmp():
 	for row in result:
 		print(row.proposal_id)
 
-		row.tmp_estimate = row.estimate
+		row.tmp_estimate = row.estimate 
 		row.estimate = []
 
 		row.tmp_contract = row.contract
