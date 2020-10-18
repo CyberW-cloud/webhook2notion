@@ -239,31 +239,26 @@ def tmp():
 	}
 	sort_params = [{"direction": "descending", "property": "Date Sent"}]
 
-	proposals = proposals.build_query(filter = filter_params, sort = sort_params)
+	proposals = proposals.build_query(sort = sort_params)
 	result = proposals.execute()
 
-	result = [client.get_block("https://www.notion.so/1182667284269498368-98827ee1a37a4f39909f7fbba2c667d7")]
 	print(len(result))
 
 	for row in result: 
 		print(row.proposal_id)
 
-		# for invite in row.invite:
-		# 	if row not in invite.proposal_sent:
-		# 		invite.proposal_sent = invite.proposal_sent + [row]
+		for invite in row.invite:
+			if row not in invite.proposal_sent:
+				invite.proposal_sent = invite.proposal_sent + [row]
 
-		# for fl in row.fl:
-		# 	print(row not in fl.proposals_id_sent)
-		# 	if row not in fl.proposals_id_sent:
-		# 		fl.proposals_id_sent = fl.proposals_id_sent+[row]
+		for fl in row.fl:
+			print(row not in fl.proposals_id_sent)
+			if row not in fl.proposals_id_sent:
+				fl.proposals_id_sent = fl.proposals_id_sent+[row]
 
-		# for contract in row.contract:
-		# 	if row not in contract.proposal_id:
-		# 		contract.proposal_id = contract.proposal_id + [row]
-
-		for estimate in row.estimate:
-			if row not in estimate.related_to_proposal:
-				estimate.related_to_proposal = estimate.related_to_proposal + [row]
+		for contract in row.contract:
+			if row not in contract.proposal_id:
+				contract.proposal_id = contract.proposal_id + [row]
 
 
 def get_token():
