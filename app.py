@@ -247,18 +247,28 @@ def tmp():
 	for row in result: 
 		print(row.proposal_id)
 		print(row.date_sent)
-		for invite in row.invite:
-			if row not in invite.proposal_sent:
-				invite.proposal_sent = invite.proposal_sent + [row]
+		try:
+			for invite in row.invite:
+				if row not in invite.proposal_sent:
+					invite.proposal_sent = invite.proposal_sent + [row]
+		except Exception as e:
+			print("!!!!!!!!!!!!!!!!investigatethis!!!!!!!!!!!!!!!!!"+str(e))
+		
+		try:
+			for fl in row.fl:
+				if row not in fl.proposals_id_sent:
+					fl.proposals_id_sent = fl.proposals_id_sent+[row]
 
-		for fl in row.fl:
-			if row not in fl.proposals_id_sent:
-				fl.proposals_id_sent = fl.proposals_id_sent+[row]
+		except Exception as e:
+			print("!!!!!!!!!!!!!!!!investigatethis!!!!!!!!!!!!!!!!!"+str(e))
+		
+		try:
+			for contract in row.contract:
+				if row not in contract.proposal_id:
+					contract.proposal_id = contract.proposal_id + [row]
 
-		for contract in row.contract:
-			if row not in contract.proposal_id:
-				contract.proposal_id = contract.proposal_id + [row]
-
+		except Exception as e:
+			print("!!!!!!!!!!!!!!!!investigatethis!!!!!!!!!!!!!!!!!"+str(e))
 
 def get_token():
 	DATABASE_URL = os.environ['DATABASE_URL'] 
