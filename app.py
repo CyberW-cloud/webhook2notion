@@ -244,20 +244,37 @@ def tmp():
 	proposals = proposals.build_query(sort = sort_params)
 	result = proposals.execute()
 
+	result = [client.get_block("https://www.notion.so/1179723620264980481-33f0d09fff154f0aa9bde1eb01e2d45d")]
+
 	print(len(result))
 	for row in result:
 		print(row.name)
 
-		# row.tmp_pa = row.pa
-		# row.pa = []
+		row.tmp_estimate = row.estimate
+		row.estimate = []
 
-		# row.tmp_bidder = row.bidder
-		# row.bidder = []
+		row.tmp_contract = row.contract
+		row.contract = []
 
-		row.bidder = row.tmp_bidder
+		row.tmp_fl = row.fl
+		row.fl = []
 
-		row.pa = row.tmp_pa
+		row.tmp_client = row.client
+		row.client = []
 
+		row.tmp_invite = row.invite
+		row.invite = []
+
+
+		# row.estimate = row.tmp_estimate
+
+		# row.contract = row.tmp_contract
+
+		# row.fl = row.tmp_fl
+
+		# row.client = row.tmp_client
+
+		# row.invite = row.tmp_invite
 
 def get_token():
 	DATABASE_URL = os.environ['DATABASE_URL'] 
