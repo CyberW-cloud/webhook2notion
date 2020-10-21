@@ -988,12 +988,10 @@ def message_review():
 		rooms = rooms["rooms"] + user_rooms["rooms"]
 
 		for room in rooms:
-			if room["roomId"] not in "room_ce33c1acb5660a70ded9f811d19995d3":
-				print(room["roomId"])
-				continue
-			else:
-				print(room)
-				i = 1/0
+
+			print(room["roomId"])
+			continue
+
 			# double check activeSince
 			if int(room["latestStory"]["updated"])<activeSince:
 				print("ERROR: activeSince did not filter a room")
