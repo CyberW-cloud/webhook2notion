@@ -981,11 +981,11 @@ def message_review():
 		# 	time.sleep(3.2)
 		# 	continue
 
-		if "rooms" not in rooms.keys() or "rooms" not in user_rooms.keys():
-			time.sleep(3.2)
-			continue
+		# if "rooms" not in rooms.keys() or "rooms" not in user_rooms.keys():
+		# 	time.sleep(3.2)
+		# 	continue
 
-		rooms = rooms["rooms"] + user_rooms["rooms"]
+		# rooms = rooms["rooms"] + user_rooms["rooms"]
 
 		for room in rooms:
 
