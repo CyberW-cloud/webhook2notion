@@ -965,6 +965,7 @@ def message_review():
 
 		try:
 			rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": str(activeSince), "type":"all", "limit":"1000"})
+			print(rooms)
 		except Exception as e:
 			print(str(e) + " 4")
 			print("		 " + str(rooms))
