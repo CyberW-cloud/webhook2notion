@@ -990,7 +990,7 @@ def message_review():
 
 		for room in rooms:
 
-			print(room)
+			print(room["roomId"])
 			continue
 
 			# double check activeSince
