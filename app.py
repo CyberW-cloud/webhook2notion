@@ -223,52 +223,9 @@ def update_token():
 
 @app.route('/tmp')
 def tmp():
+	i = 1/0
 
-
-	token = os.environ.get("TOKEN")
-	client = NotionClient(token) 
-
-	proposals = client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bbbbd5bd5fd84f02bf9670d2793b0538")
-	filter_params = {
-		"filters": [
-				{"filter": {"operator": "date_is_on_or_after", "value":{"type": "exact", "value": {"type": "date", "start_date": "2020-05-18"}}}, "property": "Date Sent"},
-		],
-		"operator": "and",
-		
-	}
-	sort_params = [{"direction": "ascending", "property": "Date Sent"}]
-
-	proposals = proposals.build_query(filter= filter_params,sort = sort_params)
-	result = proposals.execute()
-
-	print(len(result))
-
-	for row in result: 
-		print(row.proposal_id)
-		print(row.date_sent)
-		try:
-			for invite in row.invite:
-				if row not in invite.proposal_sent:
-					invite.proposal_sent = invite.proposal_sent + [row]
-		except Exception as e:
-			print("!!!!!!!!!!!!!!!!investigatethis!!!!!!!!!!!!!!!!!"+str(e))
-		
-		try:
-			for fl in row.fl:
-				if row not in fl.proposals_id_sent:
-					fl.proposals_id_sent = fl.proposals_id_sent+[row]
-
-		except Exception as e:
-			print("!!!!!!!!!!!!!!!!investigatethis!!!!!!!!!!!!!!!!!"+str(e))
-		
-		try:
-			for contract in row.contract:
-				if row not in contract.proposal_id:
-					contract.proposal_id = contract.proposal_id + [row]
-
-		except Exception as e:
-			print("!!!!!!!!!!!!!!!!investigatethis!!!!!!!!!!!!!!!!!"+str(e))
-
+	
 def get_token():
 	DATABASE_URL = os.environ['DATABASE_URL'] 
 	conn = psycopg2.connect(DATABASE_URL, sslmode='require') 
@@ -2457,6 +2414,17 @@ def invites():
 	invite = create_invite(token_v2, collection_url, subject, description, invite_to)
 	return f"added {subject} receipt to " + invite.get_browseable_url()
 
+def get_id_from_upwork_url(url):
+
+	if "~" in url:
+		return upwork_profile[url.find("~") + 1: url.find("~") + 19]
+	else:
+		upwork_id = re.findall("(?<=fl\/)[\w]+", url)
+		if len(upwork_id)>0:
+			return upwork_id[0]
+		else:
+			print("unknown url type")
+			return None
 
 def create_response(type, data):
 	# Development
@@ -2468,31 +2436,53 @@ def create_response(type, data):
 
 	cv = client.get_collection_view(collection_url)
 	upwork_profile = data["Upwork profile"]
-	upwork_id = upwork_profile[upwork_profile.find("~") + 1: upwork_profile.find("~") + 19]
+	if "~" in upwork_profile:
+		upwork_id = upwork_profile[upwork_profile.find("~") + 1: upwork_profile.find("~") + 19]
+	else:
+		upwork_id = re.findall("(?<=fl\/)[\w]+", upwork_profile)
+		if len(upwork_id)>0:
+			upwork_id = upwork_id[0]
+		else:
+			print("unknown url type")
+			upwork_id = None
+
 	records = cv.collection.get_rows()
 	row_exist = None
 	for record in records:
 		rec_profile = record.get_property("upwork_profile")
 		if rec_profile != "":
-			uw_id = rec_profile[rec_profile.find("~") + 1: rec_profile.find("~") + 19]
+			
+			if "~" in rec_profile:
+				uw_id = rec_profile[upwork_profile.find("~") + 1: rec_profile.find("~") + 19]
+			else:
+				uw_id = re.findall("(?<=fl\/)[\w]+", rec_profile)
+				if len(upwork_id)>0:
+					uw_id = uw_id[0]
+				else:
+					uw_id = None
+
 			if uw_id == upwork_id:
 				row_exist = record
 				break
-	row = row_exist if row_exist is not None else cv.collection.add_row()
-	row.set_property("Type", type)
-	for i in data:
-		print(f"{i}: {data[i]}")
-		if i == "timestamp":
-			row.set_property("Form filled", datetime.datetime.strptime(data[i], "%Y-%m-%dT%H:%M:%S.%fZ"))
-		else:
-			if "_".join(str.lower(i).split()) in row.get_all_properties().keys():
-				try:
-					row.set_property("_".join(str.lower(i).split()), data[i])
-				except Exception:
-					print(f'unable to insert value "{data[i]}" into column "{i}"')
-			else:
-				print(f'no column "{i}" in target table')
-	row.set_property("Status", "Form filled")
+
+	print(row_exist)
+	if not isinstance(row_exist, type(None)):
+		print(row_exist.name)
+	# row = row_exist if row_exist is not None else cv.collection.add_row()
+	# row.set_property("Type", type)
+	# for i in data:
+	# 	print(f"{i}: {data[i]}")
+	# 	if i == "timestamp":
+	# 		row.set_property("Form filled", datetime.datetime.strptime(data[i], "%Y-%m-%dT%H:%M:%S.%fZ"))
+	# 	else:
+	# 		if "_".join(str.lower(i).split()) in row.get_all_properties().keys():
+	# 			try:
+	# 				row.set_property("_".join(str.lower(i).split()), data[i])
+	# 			except Exception:
+	# 				print(f'unable to insert value "{data[i]}" into column "{i}"')
+	# 		else:
+	# 			print(f'no column "{i}" in target table')
+	# row.set_property("Status", "Form filled")
 
 
 
