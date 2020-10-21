@@ -974,7 +974,7 @@ def message_review():
 		time.sleep(1.6)
 
 		try:
-			user_rooms = messages_api.get_rooms(user_id, {"activeSince": str(activeSince), "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})	
+			user_rooms = messages_api.get_rooms(user_id, {"activeSince": str(activeSince), "type":"all","includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})	
 		except Exception as e:
 			print(str(e) + " 5")
 			print("		 " + str(user_rooms))
