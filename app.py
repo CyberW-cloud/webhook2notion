@@ -986,7 +986,7 @@ def message_review():
 		# 	time.sleep(3.2)
 		# 	continue
 
-		# rooms = rooms["rooms"] + user_rooms["rooms"]
+		rooms = rooms["rooms"] #+ user_rooms["rooms"]
 
 		for room in rooms:
 
