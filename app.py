@@ -225,7 +225,7 @@ def update_token():
 def tmp():
 	i = 1/0
 
-	
+
 def get_token():
 	DATABASE_URL = os.environ['DATABASE_URL'] 
 	conn = psycopg2.connect(DATABASE_URL, sslmode='require') 
@@ -2417,7 +2417,7 @@ def invites():
 def get_id_from_upwork_url(url):
 
 	if "~" in url:
-		return upwork_profile[url.find("~") + 1: url.find("~") + 19]
+		return url[url.find("~") + 1: url.find("~") + 19]
 	else:
 		upwork_id = re.findall("(?<=fl\/)[\w]+", url)
 		if len(upwork_id)>0:
