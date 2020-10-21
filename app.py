@@ -2436,34 +2436,27 @@ def create_response(type, data):
 
 	cv = client.get_collection_view(collection_url)
 	upwork_profile = data["Upwork profile"]
-	if "~" in upwork_profile:
-		upwork_id = upwork_profile[upwork_profile.find("~") + 1: upwork_profile.find("~") + 19]
-	else:
-		upwork_id = re.findall("(?<=fl\/)[\w]+", upwork_profile)
-		if len(upwork_id)>0:
-			upwork_id = upwork_id[0]
-		else:
-			print("unknown url type")
-			upwork_id = None
+	upwork_id = get_id_from_upwork_url(upwork_profile)
+	email = data["Email"]
 
 	records = cv.collection.get_rows()
 	row_exist = None
 	for record in records:
-		rec_profile = record.get_property("upwork_profile")
-		if rec_profile != "":
-			
-			if "~" in rec_profile:
-				uw_id = rec_profile[upwork_profile.find("~") + 1: rec_profile.find("~") + 19]
-			else:
-				uw_id = re.findall("(?<=fl\/)[\w]+", rec_profile)
-				if len(upwork_id)>0:
-					uw_id = uw_id[0]
-				else:
-					uw_id = None
-
-			if uw_id == upwork_id:
+		
+		if upwork_id == None:
+			rec_email = record.get_property("personal")
+			if email == rec_email:
 				row_exist = record
 				break
+		else:
+			rec_profile = record.get_property("upwork_profile")
+			if rec_profile != "":
+				
+				uw_id = get_id_from_upwork_url(rec_profile)
+
+				if uw_id == upwork_id:
+					row_exist = record
+					break
 
 	print(row_exist)
 	if not isinstance(row_exist, type(None)):
