@@ -968,7 +968,7 @@ def message_review():
 		except Exception as e:
 			print(str(e) + " 4")
 			print("		 " + str(rooms))
-			time.sleep(3.2)
+			time.sleep(3.2) 
 			continue
 		
 		time.sleep(1.6)
