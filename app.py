@@ -964,11 +964,11 @@ def message_review():
 
 
 		try:
-			rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": str(activeSince), "type":"all", "limit":"1000"})
+			rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": str(activeSince), "type":"all", "limit":"1000","includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})
 		except Exception as e:
 			print(str(e) + " 4")
 			print("		 " + str(rooms))
-			time.sleep(3.2) 
+			time.sleep(3.2)
 			continue
 		
 		time.sleep(1.6)
