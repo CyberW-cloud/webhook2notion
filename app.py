@@ -964,28 +964,26 @@ def message_review():
 
 
 		try:
-			rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": str(activeSince), "limit":"1000","includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})
+			rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": str(activeSince), "type":"all", "limit":"1000","includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})
 		except Exception as e:
 			print(str(e) + " 4")
 			print("		 " + str(rooms))
-			time.sleep(3.2)
-			continue
-		
+			
 		time.sleep(1.6)
 
-		# try:
-		# 	user_rooms = messages_api.get_rooms(user_id, {"activeSince": str(activeSince), "type":"all","includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})	
-		# except Exception as e:
-		# 	print(str(e) + " 5")
-		# 	print("		 " + str(user_rooms))
-		# 	time.sleep(3.2)
-		# 	continue
+		try:
+			user_rooms = messages_api.get_rooms(user_id, {"activeSince": str(activeSince), "type":"all", "limit":"1000", "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})	
+		except Exception as e:
+			print(str(e) + " 5")
+			print("		 " + str(user_rooms))
+			
 
-		# if "rooms" not in rooms.keys() or "rooms" not in user_rooms.keys():
-		# 	time.sleep(3.2)
-		# 	continue
-
-		rooms = rooms["rooms"] #+ user_rooms["rooms"]
+		if "rooms" not in rooms.keys():
+			rooms = {"rooms":[]}
+		if "rooms" not in user_rooms.keys():
+		 	user_rooms == {"rooms":[]}
+			
+		rooms = rooms["rooms"] + user_rooms["rooms"]
 		print(len(rooms))
 		for room in rooms:
 
