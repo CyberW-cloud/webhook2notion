@@ -964,20 +964,21 @@ def message_review():
 
 
 		try:
-			rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": str(activeSince), "type":"all", "limit":"1000","includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})
+			rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": str(activeSince),"limit":"1000","includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})
 		except Exception as e:
 			print(str(e) + " 4")
 			print("		 " + str(rooms))
 			
 		time.sleep(1.6)
 
-		try:
-			user_rooms = messages_api.get_rooms(user_id, {"activeSince": str(activeSince), "type":"all", "limit":"1000", "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})	
-		except Exception as e:
-			print(str(e) + " 5")
-			print("		 " + str(user_rooms))
+		# try:
+		# 	user_rooms = messages_api.get_rooms(user_id, {"activeSince": str(activeSince), "type":"all", "limit":"1000", "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})	
+		# except Exception as e:
+		# 	print(str(e) + " 5")
+		# 	print("		 " + str(user_rooms))
 			
-
+		user_rooms = {}
+		
 		if "rooms" not in rooms.keys():
 			rooms = {"rooms":[]}
 		if "rooms" not in user_rooms.keys():
