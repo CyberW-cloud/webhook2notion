@@ -978,14 +978,16 @@ def message_review():
 		# 	print("		 " + str(user_rooms))
 			
 		user_rooms = {}
-		
+
 		if "rooms" not in rooms.keys():
 			rooms = {"rooms":[]}
+
 		if "rooms" not in user_rooms.keys():
 		 	user_rooms == {"rooms":[]}
 			
-		rooms = rooms["rooms"] + user_rooms["rooms"]
+		rooms = rooms["rooms"]# + user_rooms["rooms"]
 		print(len(rooms))
+		
 		for room in rooms:
 
 			print(room["roomId"])
