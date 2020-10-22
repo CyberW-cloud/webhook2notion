@@ -593,6 +593,9 @@ def message_review():
         
         user_data = userApi.get_my_info()
         print(user_data)
+        if "user" not in user_data.keys():
+            continue
+            
         user_id = user_data["user"]["id"]
 
         if user_data["user"]["profile_key"] not in cache.keys():
