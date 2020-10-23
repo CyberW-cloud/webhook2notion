@@ -55,7 +55,7 @@ def update_clients():
 
 	date = str(datetime.datetime.now().day) + "." + str(datetime.datetime.now().month) + "." + str(datetime.datetime.now().year)
 
-	clients = notion_client.get_collection_view("https://www.notion.so/21a8e8245c9e4024848613cecdc8e88f")
+	clients = notion_client.get_collection_view("https://www.notion.so/0ce71695159145aa84ab4371cc1e094a?v=7daae214ec7e41f4a7130ea4d6313bc5")
 	failed = notion_client.get_block("https://www.notion.so/Failed-26abe549b6394242b5c6c148e822f166")
 
 	failed_day_page = None
