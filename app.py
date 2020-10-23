@@ -83,7 +83,7 @@ def update_clients():
 	filter_params = {
 		"filters": [
 			{
-				"filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": 2015-01-01, "operator": "date_is_on_or_after"},
+				"filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": "2015-01-01", "operator": "date_is_on_or_after"},
 				"property": "Added"
 			}
 		],
