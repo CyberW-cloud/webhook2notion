@@ -93,7 +93,7 @@ def update_clients():
 	
 
 	clients = clients.build_query(filter=filter_params, sort = sort_params)
-	result = clients.execute()  
+	result = clients.execute()[:1]
 
 	login_config = upwork.Config({\
 		'consumer_key': os.environ.get("ConsumerKey"),\
@@ -101,7 +101,7 @@ def update_clients():
 		'access_token': os.environ.get("AccessToken"),\
 		'access_token_secret': os.environ.get("AccessSecret")})
 
-	client = upwork.Client(login_config)[:1]
+	client = upwork.Client(login_config)
 	
 	company = companyAPI(client)
 	application = applicationAPI(client)
