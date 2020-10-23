@@ -170,8 +170,8 @@ def update_clients():
 			time.sleep(1.6)
 			try:
 				buyer = job_info.get_specific(openingCiphertext)
-				print(buyer)
 				buyer = buyer["profile"]["buyer"]
+				print(buyer)
 			except Exception as e:
 				print(e)
 				continue
