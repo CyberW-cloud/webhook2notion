@@ -180,7 +180,7 @@ def update_clients():
 					
 
 		if (buyer != None):
-
+			print(buyer)
 			if "op_country" in buyer.keys():
 				row.country = buyer["op_country"]
 
