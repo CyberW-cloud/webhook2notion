@@ -83,8 +83,8 @@ def update_clients():
 	filter_params = {
 		"filters": [
 			{
-				"filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": "2015-01-01", "operator": "date_is_on_or_after"},
-				"property": "Added"
+				"filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": '2015-01-01'}}, "operator": "date_is_on_or_after"},
+				"property": "Modified"
 			}
 		],
 		"operator": "and",		
@@ -101,7 +101,7 @@ def update_clients():
 		'access_token': os.environ.get("AccessToken"),\
 		'access_token_secret': os.environ.get("AccessSecret")})
 
-	client = upwork.Client(login_config)[:15]
+	client = upwork.Client(login_config)[:1]
 	
 	company = companyAPI(client)
 	application = applicationAPI(client)
