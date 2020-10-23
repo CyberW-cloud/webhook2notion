@@ -168,10 +168,12 @@ def update_clients():
 
 			time.sleep(1.6)
 			try:
-				buyer = job_info.get_specific(openingCiphertext)["profile"]["buyer"]
+				buyer = job_info.get_specific(openingCiphertext)
 				print(buyer)
+				buyer = buyer["profile"]["buyer"]
 			except Exception as e:
 				print(e)
+				continue
 
 			if "op_country" in buyer.keys():
 				row.country = buyer["op_country"]
