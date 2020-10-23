@@ -109,7 +109,7 @@ def update_clients():
 	engagements = engagementAPI(client)
 
 
-	print(len(result))
+	print([x.name for x in result])
 	for row in result:
 		openingCiphertext = None
 
