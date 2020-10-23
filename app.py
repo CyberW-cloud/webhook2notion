@@ -198,7 +198,11 @@ def update_clients():
 				row.member_since = datetime.datetime.strptime(buyer["op_contract_date"], '%B %d, %Y')
 
 			if "op_timezone" in buyer.keys():
-				row.time_zone = re.findall("(^UTC[+-][0-9][0-9])(?=:00)", buyer["op_timezone"])[0]
+				time_zone = re.findall("(^UTC[+-][0-9][0-9])(?=:00)", buyer["op_timezone"])
+				if len(time_zone)>0:
+					row.time_zone = time_zone[0]
+				elif "(Coordinated Universal Time)" in buyer["op_timezone"]:
+					row.time_zone = "UTC+00"
 		
 		else:
 			if isinstance(failed_day_page, type(None)):
