@@ -55,7 +55,7 @@ def update_clients():
 
 	date = str(datetime.datetime.now().day) + "." + str(datetime.datetime.now().month) + "." + str(datetime.datetime.now().year)
 
-	clients = notion_client.get_collection_view("https://www.notion.so/21a8e8245c9e4024848613cecdc8e88f?v=f658b865c0b842149cf4583bbff2dc28")
+	clients = notion_client.get_collection_view("https://www.notion.so/21a8e8245c9e4024848613cecdc8e88f")
 	failed = notion_client.get_block("https://www.notion.so/Failed-26abe549b6394242b5c6c148e822f166")
 
 	failed_day_page = None
@@ -111,7 +111,7 @@ def update_clients():
 
 	print([x.name for x in result])
 	for row in result:
-		openingCiphertext = None
+		bidder = None
 
 		if len(row.proposal_sent)>0 and openingCiphertext == None:
 			for proposal in row.proposal_sent: 
@@ -126,14 +126,19 @@ def update_clients():
 						openingCiphertext = client.get("/hr/v4/contractors/applications/"+ref)["data"]["openingCiphertext"]
 					
 					if openingCiphertext != None:
+						time.sleep(1.6)
+						buyer = job_info.get_specific(openingCiphertext)
+						buyer = buyer["profile"]["buyer"]
 						break			
 			
 				except Exception as e:
+					buyer = None
 					continue
 
 		if len(row.invites_and_jobs_posted)>0 and openingCiphertext == None:
 			for invite in row.invites_and_jobs_posted: 
 				try:
+
 					if invite.job_url != None and invite.job_url != "":
 						openingCiphertext = re.search("(~|(%7E))\w+",invite.job_url)
 						if openingCiphertext != None:
@@ -149,32 +154,32 @@ def update_clients():
 						openingCiphertext = client.get("/hr/v4/contractors/applications/"+ref)["data"]["openingCiphertext"]
 			
 					if openingCiphertext != None:
+						time.sleep(1.6)
+						buyer = job_info.get_specific(openingCiphertext)
+						buyer = buyer["profile"]["buyer"]
 						break
 
 				except Exception as e:
+					buyer = None
 					continue
 		if len(row.contracts)>0 and openingCiphertext == None:
 			for contract in row.contracts:
-				print(contract.contract_name)
+					
 				try:
-					openingCiphertext = engagements.get_specific(contract.contract_id)["engagement"]["job_ref_ciphertext"]	
-					break
-				except Exception as e:
 					time.sleep(1.6)
+					openingCiphertext = engagements.get_specific(contract.contract_id)["engagement"]["job_ref_ciphertext"]	
+					time.sleep(1.6)
+					buyer = job_info.get_specific(openingCiphertext)
+					buyer = buyer["profile"]["buyer"]
+					break
+					
+				except Exception as e:
+					buyer = None
 					continue
+					
+					
 
-		if (openingCiphertext != None):
-			print(openingCiphertext)
-
-
-			time.sleep(1.6)
-			try:
-				buyer = job_info.get_specific(openingCiphertext)
-				buyer = buyer["profile"]["buyer"]
-				print(buyer)
-			except Exception as e:
-				print(e)
-				continue
+		if (buyer != None):
 
 			if "op_country" in buyer.keys():
 				row.country = buyer["op_country"]
