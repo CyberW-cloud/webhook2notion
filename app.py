@@ -170,8 +170,8 @@ def update_clients():
 			try:
 				buyer = job_info.get_specific(openingCiphertext)["profile"]["buyer"]
 				print(buyer)
-			except:
-				continue
+			except Exception as e:
+				print(e)
 
 			if "op_country" in buyer.keys():
 				row.country = buyer["op_country"]
