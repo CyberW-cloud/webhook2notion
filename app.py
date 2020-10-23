@@ -191,7 +191,8 @@ def update_clients():
 				if row.location == "":
 					row.location = buyer["op_city"]
 				else:
-					row.location = row.location + ", " + buyer["op_city"]
+					if buyer["op_city"] not in row.location:
+						row.location = row.location + ", " + buyer["op_city"]
 				
 			
 			if "op_contract_date" in buyer.keys():
