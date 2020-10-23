@@ -113,7 +113,7 @@ def update_clients():
 	for row in result:
 		bidder = None
 
-		if len(row.proposal_sent)>0 and openingCiphertext == None:
+		if len(row.proposal_sent)>0 and bidder == None:
 			for proposal in row.proposal_sent: 
 				try:
 					if proposal.job_url != None and proposal.job_url != "":
@@ -135,7 +135,7 @@ def update_clients():
 					buyer = None
 					continue
 
-		if len(row.invites_and_jobs_posted)>0 and openingCiphertext == None:
+		if len(row.invites_and_jobs_posted)>0 and bidder == None:
 			for invite in row.invites_and_jobs_posted: 
 				try:
 
@@ -162,7 +162,7 @@ def update_clients():
 				except Exception as e:
 					buyer = None
 					continue
-		if len(row.contracts)>0 and openingCiphertext == None:
+		if len(row.contracts)>0 and bidder == None:
 			for contract in row.contracts:
 					
 				try:
