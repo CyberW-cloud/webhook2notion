@@ -69,16 +69,28 @@ def update_clients():
 		activeSince = int(activeSince.timestamp())
 
 
+	# filter_params = {
+	# 	"filters": [
+	# 		{
+	# 			"filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.fromtimestamp(activeSince).strftime('%Y-%m-%d')}}, "operator": "date_is_on_or_after"},
+	# 			"property": "Modified"
+	# 		}
+	# 	],
+	# 	"operator": "and",		
+	# }
+	# sort_params = [{"direction": "ascending", "property": "Modified"}]
+
 	filter_params = {
 		"filters": [
 			{
-				"filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.fromtimestamp(activeSince).strftime('%Y-%m-%d')}}, "operator": "date_is_on_or_after"},
+				"filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": 2015-01-01, "operator": "date_is_on_or_after"},
 				"property": "Modified"
 			}
 		],
 		"operator": "and",		
 	}
-	sort_params = [{"direction": "ascending", "property": "Modified"}]
+	sort_params = [{"direction": "ascending", "property": "Added"}]
+	
 
 	clients = clients.build_query(filter=filter_params, sort = sort_params)
 	result = clients.execute()  
