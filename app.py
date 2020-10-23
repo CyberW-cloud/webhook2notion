@@ -97,7 +97,7 @@ def update_clients():
 	engagements = engagementAPI(client)
 
 
-	result = [notion_client.get_block("https://www.notion.so/Max-Rubin-51b6356a2caa4e7f90bafa99d43878b7")]
+	result = [notion_client.get_block("https://www.notion.so/Carter-Grotta-Juice-Creative-Group-4c026840ac8249e4a63ed3b269415f3a")]
 	print(len(result))
 	for row in result:
 		openingCiphertext = None
