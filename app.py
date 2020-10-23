@@ -169,6 +169,7 @@ def update_clients():
 			time.sleep(1.6)
 			try:
 				buyer = job_info.get_specific(openingCiphertext)["profile"]["buyer"]
+				print(buyer)
 			except:
 				continue
 
