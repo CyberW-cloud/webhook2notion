@@ -155,6 +155,7 @@ def update_clients():
 					continue
 		if len(row.contracts)>0 and openingCiphertext == None:
 			for contract in row.contracts:
+				print(contract.contract_name)
 				try:
 					openingCiphertext = engagements.get_specific(contract.contract_id)["engagement"]["job_ref_ciphertext"]	
 					break
