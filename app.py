@@ -60,19 +60,6 @@ def update_clients():
 
 	failed_day_page = None
 
-	test_page = notion_client.get_block("https://www.notion.so/test-63e297723c924b6babc931d10f7b4740")
-	
-
-	test_page.children.add_new(CollectionViewPageBlock, title = "table")
-	page = test_page.children[-1]
-
-	schema = copy_schema("https://www.notion.so/21a8e8245c9e4024848613cecdc8e88f?v=f658b865c0b842149cf4583bbff2dc28", notion_client)
-
-	collection = notion_client.get_collection(notion_client.create_record("collection", parent=page, schema=schema))
-	page.collection = collection
-	page.views.add_new()
-
-
 	active_since_hours = request.args.get("activeSince", "24")
 
 	if active_since_hours == "all":
@@ -163,8 +150,6 @@ def update_clients():
 					continue
 
 		if (openingCiphertext != None):
-			test_row = page.collection.add_row()
-			copy_client(test_row, row)
 			print(openingCiphertext)
 
 
@@ -175,23 +160,23 @@ def update_clients():
 				continue
 
 			if "op_country" in buyer.keys():
-				test_row.country = buyer["op_country"]
+				row.country = buyer["op_country"]
 
 			if "op_state" in buyer.keys():
-				test_row.state = buyer["op_state"]
+				row.state = buyer["op_state"]
 
 			if "op_city" in buyer.keys():
-				if test_row.location == "":
-					test_row.location = buyer["op_city"]
+				if row.location == "":
+					row.location = buyer["op_city"]
 				else:
-					test_row.location = test_row.location + ", " + buyer["op_city"]
+					row.location = test_row.location + ", " + buyer["op_city"]
 				
 			
 			if "op_contract_date" in buyer.keys():
-				test_row.member_since = datetime.datetime.strptime(buyer["op_contract_date"], '%B %d, %Y')
+				row.member_since = datetime.datetime.strptime(buyer["op_contract_date"], '%B %d, %Y')
 
 			if "op_timezone" in buyer.keys():
-				test_row.time_zone = re.findall("(^UTC[+-][0-9][0-9])(?=:00)", buyer["op_timezone"])[0]
+				row.time_zone = re.findall("(^UTC[+-][0-9][0-9])(?=:00)", buyer["op_timezone"])[0]
 		
 		else:
 			if isinstance(failed_day_page, type(None)):
@@ -964,7 +949,7 @@ def message_review():
 
 
 		try:
-			rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": str(activeSince), "limit":100, "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})
+			rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": str(activeSince), "limit":1000, "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})
 		except Exception as e:
 			print(str(e) + " 4")
 			print("		 " + str(rooms))
