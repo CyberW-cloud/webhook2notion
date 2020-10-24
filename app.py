@@ -50,7 +50,7 @@ email_log = []
 @app.errorhandler(Exception)
 def before_request(error):
 	print(error)
-	email_report(request.path + " FAILED", datetime.datetime.now().strftime('%d, %b %Y')+"\n"+str(''.join(traceback.format_exception(None, e, e.__traceback__))))
+	email_report(request.path + " FAILED", datetime.datetime.now().strftime('%d, %b %Y')+"\n"+str(''.join(traceback.format_exception(None, error, error.__traceback__))))
 	raise error
 
 def email_report(subject, body):
