@@ -67,7 +67,7 @@ def email_report():
 	<html>
 	  <head></head>
 	  <body>
-		<h1>"""+email_log+"""</h1>
+		"""+email_log.replace("\n", "<br>")+"""
 	  </body>
 	</html>
 	"""
