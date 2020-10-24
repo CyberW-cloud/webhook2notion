@@ -47,7 +47,7 @@ token = ""
 loggable_endpoints = ["/test_scripts", "/update_clients", ]
 email_log = []
 
-
+@app.errorhandler(Exception)
 def before_request():
 	print(path)
 
@@ -2638,6 +2638,5 @@ def manychat():
 
 if __name__ == "__main__":
 	app.debug = True
-	app.handle_exception(before_request)
 	port = int(os.environ.get("PORT", 5000))
 	app.run(host="0.0.0.0", port=port)
