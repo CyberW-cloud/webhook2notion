@@ -1308,6 +1308,7 @@ def test_scripts():
 
 	except Exception as e:
 		TEST = False
+		log = "Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__)))
 		print( log + "\n" + "Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__))))
 
 	if log == "":
