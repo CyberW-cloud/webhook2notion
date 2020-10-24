@@ -43,11 +43,12 @@ cache = {}
 TEST = False
 test_page_url = "https://www.notion.so/TEST-68d7198ed4d3437b816386f6da196547"
 token = ""
+
+loggable_endpoints = ["/test_scripts", "/update_clients", ]
 email_log = []
 
 
 def before_request():
-	path = request.path
 	print(path)
 
 @app.route('/check_script_work', methods = ["GET"])
@@ -2637,6 +2638,6 @@ def manychat():
 
 if __name__ == "__main__":
 	app.debug = True
-	app.before_request(before_request)
+	app.handle_exception(before_request)
 	port = int(os.environ.get("PORT", 5000))
 	app.run(host="0.0.0.0", port=port)
