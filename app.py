@@ -66,7 +66,7 @@ def email_report():
 	<html>
 	  <head></head>
 	  <body>
-		<h1>{log}</h1>
+		<h1>"""+log+"""</h1>
 	  </body>
 	</html>
 	"""
