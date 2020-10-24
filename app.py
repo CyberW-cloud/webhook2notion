@@ -27,39 +27,77 @@ from upwork.routers.hr.jobs import Api as jobsAPI
 
 import psycopg2
 
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
 timezone = "Europe/Kiev"
 
 app = Flask(__name__)
 cache = {}
+
+
+@app.errorhandler(Exception)
+def before_request(error):
+    print(error)
+    email_report(request.path + " FAILED", datetime.datetime.now().strftime('%d, %b %Y')+"\n\n"+str(''.join(traceback.format_exception(None, error, error.__traceback__))))
+    raise error
+
+def email_report(subject, body):
+    global email_log
+
+    gmail_user = 'tech@etcetera.kiev.ua'
+    gmail_password = os.environ.get("GmailPassword")
+
+    target = "nocommas555@gmail.com"
+
+    # Create message container - the correct MIME type is multipart/alternative.
+    msg = MIMEMultipart('alternative')
+    msg['Subject'] = subject
+    msg['From'] = gmail_user
+    msg['To'] = target
+
+
+    # Create the body of the message (a plain-text and an HTML version).
+    text = ""
+    html = """\
+    <html>
+      <head></head>
+      <body>
+        """+body.replace("\n", "<br>")+"""
+      </body>
+    </html>
+    """
+
+    # Record the MIME types of both parts - text/plain and text/html.
+    part1 = MIMEText(text, 'plain')
+    part2 = MIMEText(html, 'html')
+
+    # Attach parts into message container.
+    # According to RFC 2046, the last part of a multipart message, in this case
+    # the HTML message, is best and preferred.
+    msg.attach(part1)
+    msg.attach(part2)
+    # Send the message via local SMTP server.
+    mail = smtplib.SMTP('smtp.gmail.com', 587)
+
+    mail.ehlo()
+
+    mail.starttls()
+
+    mail.login(gmail_user, gmail_password)
+    mail.sendmail(gmail_user, target, msg.as_string())
+    mail.quit()
+
+    email_log = ""
+
+
+
+
+
 @app.route('/tmp')
 def tmp():
-
-
-    token = os.environ.get("TOKEN")
-    client = NotionClient(token)
-
-    clients = client.get_collection_view("https://www.notion.so/21a8e8245c9e4024848613cecdc8e88f?v=f658b865c0b842149cf4583bbff2dc28")
-
-    filter_params = {
-        "filters": [
-            {
-                "filter": {"operator": "is_empty"},
-                "property": "proposal_sent_fix"
-            },
-            {
-                "filter": {"operator" : "is_not_empty"},
-                "property": "Proposal sent"
-            }
-        ],
-        "operator": "and",
-    }
-    sort_params = [{"direction": "ascending", "property": "Modified"}]
-
-    clients = clients.build_query(filter=filter_params, sort = sort_params)
-    result = clients.execute()
-
-    for row in result:
-        row.proposal_sent_fix = row.proposal_sent
+    i = 1/0
 
 
 def add_aliases_to_summary(aliases, page, parent_row):
@@ -1017,7 +1055,7 @@ def parse_staff(todo, table, obj, client_days_before):
         person = row["person_name"]
         if person not in todo:
             todo[person] = dict()
-            todo[person]["todo_url"] = row["person"].todo
+            todo[person]["todo_url"] = row["person"].todo.replace(" ", "")
             todo[person]["projects"] = set()
             todo[person]["contracts"] = set()
             todo[person]["clients"] = set()
