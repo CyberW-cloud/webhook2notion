@@ -29,6 +29,10 @@ from upwork.routers.hr.engagements import Api as engagementAPI
 
 import psycopg2
 
+import smtplib
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
 timezone = "Europe/Kiev"
  
 app = Flask(__name__)
@@ -39,6 +43,53 @@ cache = {}
 TEST = False
 test_page_url = "https://www.notion.so/TEST-68d7198ed4d3437b816386f6da196547"
 token = ""
+log = "TEST COMPLETED"
+
+@app.route('/email_report', methods = ["GET"])
+def email_report():
+	global log
+
+	gmail_user = 'tech@etcetera.kiev.ua'
+	gmail_password = os.environ.get("GmailPassword")
+
+	target = "nocommas555@gmail.com"
+
+	# Create message container - the correct MIME type is multipart/alternative.
+	msg = MIMEMultipart('alternative')
+	msg['Subject'] = "Test COMPLETED"
+	msg['From'] = gmail_user
+	msg['To'] = target
+
+	# Create the body of the message (a plain-text and an HTML version).
+	text = ""
+	html = """\
+	<html>
+	  <head></head>
+	  <body>
+		<h1>{log}</h1>
+	  </body>
+	</html>
+	"""
+
+	# Record the MIME types of both parts - text/plain and text/html.
+	part1 = MIMEText(text, 'plain')
+	part2 = MIMEText(html, 'html')
+
+	# Attach parts into message container.
+	# According to RFC 2046, the last part of a multipart message, in this case
+	# the HTML message, is best and preferred.
+	msg.attach(part1)
+	msg.attach(part2)
+	# Send the message via local SMTP server.
+	mail = smtplib.SMTP('smtp.gmail.com', 587)
+
+	mail.ehlo()
+
+	mail.starttls()
+
+	mail.login(gmail_user, gmail_password)
+	mail.sendmail(gmail_user, target, msg.as_string())
+	mail.quit()
 
 
 def copy_client(new_row, source):
