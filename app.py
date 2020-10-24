@@ -1331,7 +1331,7 @@ def create_test_page_from_todo(todo_url):
 	token = os.environ.get("TOKEN")
 	client = NotionClient(token)
 	
-	
+	print(todo_url)
 	title = client.get_block(todo_url).title
 	page = create_page(test_page_url, title)
 
