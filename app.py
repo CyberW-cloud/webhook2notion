@@ -50,6 +50,8 @@ email_log = []
 @app.errorhandler(Exception)
 def before_request(error):
 	print(request.path)
+	print(error)
+	raise error
 
 @app.route('/check_script_work', methods = ["GET"])
 def email_report():
