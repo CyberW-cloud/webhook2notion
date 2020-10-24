@@ -43,11 +43,11 @@ cache = {}
 TEST = False
 test_page_url = "https://www.notion.so/TEST-68d7198ed4d3437b816386f6da196547"
 token = ""
-log = "TEST COMPLETED"
+email_log = ""
 
 @app.route('/email_report', methods = ["GET"])
 def email_report():
-	global log
+	global email_log
 
 	gmail_user = 'tech@etcetera.kiev.ua'
 	gmail_password = os.environ.get("GmailPassword")
@@ -56,9 +56,10 @@ def email_report():
 
 	# Create message container - the correct MIME type is multipart/alternative.
 	msg = MIMEMultipart('alternative')
-	msg['Subject'] = "Test COMPLETED"
+	msg['Subject'] = "DevTest Report"
 	msg['From'] = gmail_user
 	msg['To'] = target
+
 
 	# Create the body of the message (a plain-text and an HTML version).
 	text = ""
@@ -66,7 +67,7 @@ def email_report():
 	<html>
 	  <head></head>
 	  <body>
-		<h1>"""+log+"""</h1>
+		<h1>"""+email_log+"""</h1>
 	  </body>
 	</html>
 	"""
@@ -91,6 +92,7 @@ def email_report():
 	mail.sendmail(gmail_user, target, msg.as_string())
 	mail.quit()
 
+	email_log = ""
 
 def copy_client(new_row, source):
 	new_row.name = source.name 
@@ -1224,8 +1226,8 @@ def message_review():
 	
 @app.route("/test_scripts", methods=["GET"])
 def test_scripts():
-	global TEST
-	global test_page_url
+	global TEST, test_page_url, email_log
+
 	parent_page_url = "https://www.notion.so/TEST-68d7198ed4d3437b816386f6da196547"
 	
 	if TEST:
@@ -1265,19 +1267,19 @@ def test_scripts():
 
 
 
-		# test_page_url = create_page(day_page.get_browseable_url(), "/kickstaff").get_browseable_url()
+		test_page_url = create_page(day_page.get_browseable_url(), "/kickstaff").get_browseable_url()
 
-		# kick_staff()
+		kick_staff()
 
-		# if not check_test_results(test_page_url):
-		# 	log += "TEST FAILED!: kick_staff didn't add todo's correctly!\n"
+		if not check_test_results(test_page_url):
+			log += "TEST FAILED!: kick_staff didn't add todo's correctly!\n"
 
-		# test_page_url = create_page(day_page.get_browseable_url(), "/proposals_check").get_browseable_url()
+		test_page_url = create_page(day_page.get_browseable_url(), "/proposals_check").get_browseable_url()
 
-		# proposals_check()
+		proposals_check()
 
-		# if not check_test_results(test_page_url):
-		# 	log += "TEST FAILED!: proposals_check didn't add todo's correctly!\n"
+		if not check_test_results(test_page_url):
+			log += "TEST FAILED!: proposals_check didn't add todo's correctly!\n"
 
 		test_page_url = create_page(day_page.get_browseable_url(), "/weekly_todo").get_browseable_url()
 
@@ -1293,14 +1295,14 @@ def test_scripts():
 		if not check_test_results(test_page_url):
 			log += "TEST FAILED!: friday_todo didn't add todo's correctly!\n"
 
-		# test_page_url = create_page(day_page.get_browseable_url(), "/todo_one").get_browseable_url()
+		test_page_url = create_page(day_page.get_browseable_url(), "/todo_one").get_browseable_url()
 
-		# todo_one()
+		todo_one()
 
-		# if not check_test_results(test_page_url):
-		# 	log += "TEST FAILED!: todo_one didn't add todo's correctly!\n"
+		if not check_test_results(test_page_url):
+			log += "TEST FAILED!: todo_one didn't add todo's correctly!\n"
 
-		# test_page_url = ""
+		test_page_url = ""
 
 		TEST = False
 		if(log==""):
@@ -1313,6 +1315,14 @@ def test_scripts():
 		TEST = False
 		print( log + "\n" + "Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__))))
 		return "Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__)))
+
+	if log == "":
+		email_log += "test_scripts completed sucsessfully\n"
+	else:
+		email_log += log
+
+
+	email_report()
 
 def create_page(parent_url, title):
 	token = os.environ.get("TOKEN")
