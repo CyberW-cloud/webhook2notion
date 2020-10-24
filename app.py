@@ -48,7 +48,7 @@ loggable_endpoints = ["/test_scripts", "/update_clients", ]
 email_log = []
 
 @app.errorhandler(Exception)
-def before_request():
+def before_request(error):
 	print(path)
 
 @app.route('/check_script_work', methods = ["GET"])
