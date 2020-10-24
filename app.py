@@ -111,6 +111,8 @@ def update_clients():
 
 	print([x.name for x in result])
 	for row in result:
+		print(row.name)
+		print(row.get_browseable_url())
 		bidder = None
 
 		if len(row.proposal_sent)>0 and bidder == None:
