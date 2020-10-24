@@ -1305,22 +1305,15 @@ def test_scripts():
 		test_page_url = ""
 
 		TEST = False
-		if(log==""):
-			return "Done"
-		else:
-			print(log)
-			return log
 
 	except Exception as e:
 		TEST = False
 		print( log + "\n" + "Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__))))
-		return "Test FAILED!: " + str(e) + "\n" + str(''.join(traceback.format_exception(None, e, e.__traceback__)))
 
 	if log == "":
 		email_log += "test_scripts completed sucsessfully\n"
 	else:
 		email_log += log
-
 
 	email_report()
 
