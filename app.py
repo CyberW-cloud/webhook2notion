@@ -1331,7 +1331,7 @@ def create_test_page_from_todo(todo_url):
 	token = os.environ.get("TOKEN")
 	client = NotionClient(token)
 	
-	todo_url.replace(" ", "")
+
 	title = client.get_block(todo_url).title
 	page = create_page(test_page_url, title)
 
@@ -1583,7 +1583,7 @@ def parse_staff(todo, table, obj, client_days_before):
 		person = row["person_name"]
 		if person not in todo:
 			todo[person] = dict()
-			todo[person]["todo_url"] = row["person"].todo
+			todo[person]["todo_url"] = row["person"].todo.replace(" ", "")
 			todo[person]["projects"] = set()
 			todo[person]["contracts"] = set()
 			todo[person]["clients"] = set()
