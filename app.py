@@ -1316,6 +1316,7 @@ def test_scripts():
 	else:
 		email_log += log
 
+	email_log += "\n" + day_page.get_browseable_url() + "\n"
 	email_report()
 
 def create_page(parent_url, title):
