@@ -49,7 +49,7 @@ email_log = []
 
 @app.errorhandler(Exception)
 def before_request(error):
-	print(path)
+	print(request.path)
 
 @app.route('/check_script_work', methods = ["GET"])
 def email_report():
