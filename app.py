@@ -63,7 +63,7 @@ def email_report(subject, body):
 
 	# Create message container - the correct MIME type is multipart/alternative.
 	msg = MIMEMultipart('alternative')
-	msg['Subject'] = "DevTest Report"
+	msg['Subject'] = subject
 	msg['From'] = gmail_user
 	msg['To'] = target
 
@@ -74,7 +74,7 @@ def email_report(subject, body):
 	<html>
 	  <head></head>
 	  <body>
-		"""+email_log.replace("\n", "<br>")+"""
+		"""+body.replace("\n", "<br>")+"""
 	  </body>
 	</html>
 	"""
