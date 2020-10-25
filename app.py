@@ -96,7 +96,7 @@ def email_report(subject, body):
 
 @app.route('/tmp')
 def tmp():
-	client = NotionClient(os.environ.get("TOKEN"))
+	norion_client = NotionClient(os.environ.get("TOKEN"))
 	i = 1/0
 
 
@@ -2020,19 +2020,16 @@ def get_client_from_invite(invite):
 	client = upwork.Client(login_config)
 
 
-	if len(re.findall( "(~|(%7E))[^?\]]*", invite.description))>0:
-		openingCiphertext = re.search( "(~|(%7E))[^?\]]*", invite.description).group().replace("%7E", "~")
-		
-	else:   
-		time.sleep(1.6)
-		openingCiphertext = client.get("/hr/v4/contractors/applications/"+invite.id)["data"]["openingCiphertext"]
+	
+	time.sleep(1.6)
+	openingCiphertext = client.get("/hr/v4/contractors/applications/"+invite)["data"]["openingCiphertext"]
 
 	print(openingCiphertext)
 
 	time.sleep(1.6)
 
 	application = applicationAPI(client)
-	buyer = application.get_specific(openingCiphertext[1:])
+	buyer = application.get_specific(openingCiphertext)
 
 	print(buyer)
 
