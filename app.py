@@ -92,12 +92,169 @@ def email_report(subject, body):
     email_log = ""
 
 
-
-
-
 @app.route('/tmp')
 def tmp():
     i = 1/0
+
+
+@app.route('/update_clients', methods = ["GET"])
+def update_clients():
+    token = os.environ.get("TOKEN")
+    notion_client = NotionClient(token)
+
+    date = str(datetime.datetime.now().day) + "." + str(datetime.datetime.now().month) + "." + str(datetime.datetime.now().year)
+
+    clients = notion_client.get_collection_view("https://www.notion.so/0ce71695159145aa84ab4371cc1e094a?v=7daae214ec7e41f4a7130ea4d6313bc5")
+    failed = notion_client.get_block("https://www.notion.so/Failed-26abe549b6394242b5c6c148e822f166")
+
+    failed_day_page = None
+
+    active_since_hours = request.args.get("activeSince", "24")
+
+    if active_since_hours == "all":
+        activeSince = 0
+    else:
+        activeSince = datetime.datetime.now() - datetime.timedelta(hours = int(active_since_hours))
+        activeSince = int(activeSince.timestamp())
+
+    filter_params = {
+        "filters": [
+            {
+                "filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.fromtimestamp(activeSince).strftime('%Y-%m-%d')}}, "operator": "date_is_on_or_after"},
+                "property": "Modified"
+            }
+        ],
+        "operator": "and",      
+    }
+    sort_params = [{"direction": "ascending", "property": "Modified"}]
+    
+    clients = clients.build_query(filter=filter_params, sort = sort_params)
+    result = clients.execute()
+
+    login_config = upwork.Config({\
+        'consumer_key': os.environ.get("ConsumerKey"),\
+        'consumer_secret': os.environ.get("ConsumerSecret"),\
+        'access_token': os.environ.get("AccessToken"),\
+        'access_token_secret': os.environ.get("AccessSecret")})
+
+    client = upwork.Client(login_config)
+    
+    company = companyAPI(client)
+    application = applicationAPI(client)
+    job_info = jobInfoAPI(client)
+    engagements = engagementAPI(client)
+
+
+    print([x.name for x in result])
+    for row in result:
+        print(row.name)
+        print(row.get_browseable_url())
+        bidder = None
+
+        if len(row.proposal_sent)>0 and bidder == None:
+            for proposal in row.proposal_sent: 
+                try:
+                    if proposal.job_url != None and proposal.job_url != "":
+                        openingCiphertext = re.search("(~|(%7E))\w+",proposal.job_url)
+                        if openingCiphertext != None:
+                            openingCiphertext = openingCiphertext.group()
+                    else:   
+                        time.sleep(1.6)
+                        ref = proposal.proposal_id
+                        openingCiphertext = client.get("/hr/v4/contractors/applications/"+ref)["data"]["openingCiphertext"]
+                    
+                    if openingCiphertext != None:
+                        time.sleep(1.6)
+                        buyer = job_info.get_specific(openingCiphertext)
+                        buyer = buyer["profile"]["buyer"]
+                        break           
+            
+                except Exception as e:
+                    buyer = None
+                    continue
+
+        if len(row.invites_and_jobs_posted)>0 and bidder == None:
+            for invite in row.invites_and_jobs_posted: 
+                try:
+
+                    if invite.job_url != None and invite.job_url != "":
+                        openingCiphertext = re.search("(~|(%7E))\w+",invite.job_url)
+                        if openingCiphertext != None:
+                            openingCiphertext = openingCiphertext.group()
+
+                    elif re.match("^[0-9]$", invite.id) == None:
+                        openingCiphertext = re.search( "(~|(%7E))[^?\]]*", invite.description).group().replace("%7E", "~")
+                        
+                    else:   
+                        time.sleep(1.6)
+                        ref = invite.id
+                        print(ref)
+                        openingCiphertext = client.get("/hr/v4/contractors/applications/"+ref)["data"]["openingCiphertext"]
+            
+                    if openingCiphertext != None:
+                        time.sleep(1.6)
+                        buyer = job_info.get_specific(openingCiphertext)
+                        buyer = buyer["profile"]["buyer"]
+                        break
+
+                except Exception as e:
+                    buyer = None
+                    continue
+        if len(row.contracts)>0 and bidder == None:
+            for contract in row.contracts:
+                    
+                try:
+                    time.sleep(1.6)
+                    openingCiphertext = engagements.get_specific(contract.contract_id)["engagement"]["job_ref_ciphertext"]  
+                    time.sleep(1.6)
+                    buyer = job_info.get_specific(openingCiphertext)
+                    buyer = buyer["profile"]["buyer"]
+                    break
+                    
+                except Exception as e:
+                    buyer = None
+                    continue
+                    
+                    
+
+        if (buyer != None):
+            print(buyer)
+            if "op_country" in buyer.keys():
+                row.country = buyer["op_country"]
+
+            if "op_state" in buyer.keys():
+                row.state = buyer["op_state"]
+
+            if "op_city" in buyer.keys():
+                if row.location == "":
+                    row.location = buyer["op_city"]
+                else:
+                    if buyer["op_city"] not in row.location:
+                        row.location = row.location + ", " + buyer["op_city"]
+                
+            
+            if "op_contract_date" in buyer.keys():
+                row.member_since = datetime.datetime.strptime(buyer["op_contract_date"], '%B %d, %Y')
+
+            if "op_timezone" in buyer.keys():
+                time_zone = re.findall("(^UTC[+-][0-9][0-9])(?=:00)", buyer["op_timezone"])
+                if len(time_zone)>0:
+                    row.time_zone = time_zone[0]
+                elif "(Coordinated Universal Time)" in buyer["op_timezone"]:
+                    row.time_zone = "UTC+00"
+        
+        else:
+            if isinstance(failed_day_page, type(None)):
+                failed_day_page = failed.children.add_new(PageBlock, title = date)
+            
+            time.sleep(1)
+
+            add_global_block(failed_day_page, row)
+
+
+            print("NO INFO FOR CLIENT")
+
+
 
 
 def add_aliases_to_summary(aliases, page, parent_row):
