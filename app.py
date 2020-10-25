@@ -2019,14 +2019,14 @@ def get_client_from_invite(invite):
 	client = upwork.Client(login_config)
 
 
-	if re.match( "(~|(%7E))[^?\]]*", invite.description) != None:
+	if len(re.findall( "(~|(%7E))[^?\]]*", invite.description))>0:
 		openingCiphertext = re.search( "(~|(%7E))[^?\]]*", invite.description).group().replace("%7E", "~")
 		
 	else:   
 		time.sleep(1.6)
 		openingCiphertext = client.get("/hr/v4/contractors/applications/"+invite.id)["data"]["openingCiphertext"]
 
-	openingCiphertext()
+	print(openingCiphertext)
 
 	time.sleep(1.6)
 
