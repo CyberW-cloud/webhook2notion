@@ -2520,7 +2520,7 @@ def create_response(applicant_type, data):
 	for record in records:
 		
 		if upwork_id == None:
-			rec_email = record.get_property("personal")
+			rec_email = record.get_property("email")
 			if email == rec_email:
 				row_exist = record
 				break
