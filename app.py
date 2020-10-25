@@ -2044,11 +2044,8 @@ def get_client_from_invite(invite):
 	contract_datetime = datetime.datetime.strptime(buyer["op_contract_date"], "%B %d, %Y")
 	filter_params = {
 		"filters": [
-			{
 				{"property":"Member since", "filter":{"operator":"date_is","value":{"type":"exact","value":{"type":"date","start_date":contract_datetime.strftime('%Y-%m-%d')}}}},
 				{"property":"Country","filter":{"operator":"enum_is","value":{"type":"exact","value":buyer["op_country"]}}}
-			
-			}
 		],
 		"operator": "and",
 	}
