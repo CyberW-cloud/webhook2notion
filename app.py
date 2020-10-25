@@ -2027,8 +2027,9 @@ def get_client_from_invite(invite):
 		'access_token_secret': os.environ.get("AccessSecret")})
 
 	client = upwork.Client(login_config)
+	notion_client = NotionClient(os.environ.get("TOKEN"))
 
-
+	client_db = notion_client.get_collection_view("https://www.notion.so/Clients-fb6f74955cbc45a299ec1016e8b59d71")
 	
 	time.sleep(3.2)
 
@@ -2039,6 +2040,19 @@ def get_client_from_invite(invite):
 	buyer = job_info.get_specific(buyer)["profile"]["buyer"]
 
 	print(buyer)
+
+	contract_datetime = datetime.datetime.strptime(buyer["op_contract_date"], "%B %d, %Y")
+	filter_params = {
+		"filters": [
+			{
+				{"property":"Member since", "filter":{"operator":"date_is","value":{"type":"exact","value":{"type":"date","start_date":contract_datetime.strftime('%Y-%m-%d')}}}},
+				{"property":"Country","filter":{"operator":"enum_is","value":{"type":"exact","value":buyer["op_country"]}}}
+			
+			}
+		],
+		"operator": "and",
+	}
+
 
 
 def create_invite(token, collection_url, subject, description, invite_to):
