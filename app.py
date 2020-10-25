@@ -2529,7 +2529,8 @@ def create_response(applicant_type, data):
 			if rec_profile != "":
 				
 				uw_id = get_id_from_upwork_url(rec_profile)
-
+				if uw_id == None:
+					print(record.name)
 				if uw_id == upwork_id:
 					row_exist = record
 					break
