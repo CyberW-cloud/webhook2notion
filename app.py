@@ -2497,10 +2497,10 @@ def get_id_from_upwork_url(url):
 		if len(upwork_id)>0:
 			return upwork_id[0]
 		else:
-			print("unknown url type")
+			print("unknown url type " + url)
 			return None
 
-def create_response(type, data):
+def create_response(applicant_type, data):
 	# Development
 	# collection_url = "https://www.notion.so/c8cc4837308c4b299a88d36d07bc2f4f?v=dd587a4640aa41bd9ff88ca268aff553"
 	# Production
@@ -2538,7 +2538,7 @@ def create_response(type, data):
 	if not isinstance(row_exist, type(None)):
 		print(row_exist.name)
 	# row = row_exist if row_exist is not None else cv.collection.add_row()
-	# row.set_property("Type", type)
+	# row.set_property("Type", applicant_type)
 	# for i in data:
 	# 	print(f"{i}: {data[i]}")
 	# 	if i == "timestamp":
