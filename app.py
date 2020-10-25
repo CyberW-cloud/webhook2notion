@@ -24,6 +24,8 @@ from upwork.routers.organization.users import Api as userAPI
 from upwork.routers.freelancers.profile import Api as profileAPI
 from upwork.routers.hr.freelancers.applications import Api as applicationAPI
 from upwork.routers.hr.jobs import Api as jobsAPI
+from upwork.routers.jobs.profile import Api as jobInfoAPI
+from upwork.routers.hr.engagements import Api as engagementAPI
 
 import psycopg2
 
