@@ -1891,8 +1891,19 @@ def invites():
 	invite = create_invite(token_v2, collection_url, subject, description, invite_to)
 	return f"added {subject} receipt to " + invite.get_browseable_url()
 
+def get_id_from_upwork_url(url):
 
-def create_response(type, data):
+    if "~" in url:
+        return url[url.find("~") + 1: url.find("~") + 19]
+    else:
+        upwork_id = re.findall("(?<=fl\/)[\w]+", url)
+        if len(upwork_id)>0:
+            return upwork_id[0]
+        else:
+            print("unknown url type " + url)
+            return None
+
+def create_response(applicant_type, data):
     # Development
     # collection_url = "https://www.notion.so/c8cc4837308c4b299a88d36d07bc2f4f?v=dd587a4640aa41bd9ff88ca268aff553"
     # Production
@@ -1900,20 +1911,38 @@ def create_response(type, data):
     token = os.environ.get("TOKEN")
     client = NotionClient(token)
 
+    print(data)
+
     cv = client.get_collection_view(collection_url)
     upwork_profile = data["Upwork profile"]
-    upwork_id = upwork_profile[upwork_profile.find("~") + 1: upwork_profile.find("~") + 19]
+    upwork_id = get_id_from_upwork_url(upwork_profile)
+    email = data["Email"]
+
     records = cv.collection.get_rows()
     row_exist = None
     for record in records:
-        rec_profile = record.get_property("upwork_profile")
-        if rec_profile != "":
-            uw_id = rec_profile[rec_profile.find("~") + 1: rec_profile.find("~") + 19]
-            if uw_id == upwork_id:
+        
+        if upwork_id == None:
+            rec_email = record.get_property("email")
+            if email == rec_email:
                 row_exist = record
                 break
+        else:
+            rec_profile = record.get_property("upwork_profile")
+            if rec_profile != "":
+                
+                uw_id = get_id_from_upwork_url(rec_profile)
+
+                if uw_id == upwork_id:
+                    row_exist = record
+                    break
+
+    print(row_exist)
+    if not isinstance(row_exist, type(None)):
+        print(row_exist.name)
+        
     row = row_exist if row_exist is not None else cv.collection.add_row()
-    row.set_property("Type", type)
+    row.set_property("Type", applicant_type)
     for i in data:
         print(f"{i}: {data[i]}")
         if i == "timestamp":
@@ -1946,7 +1975,6 @@ def responses():
         return f"type '{res_type}' is not supported yet"
     print(f'created new {res_type} response from {data["Name"]}')
     return f'created new {res_type} response from {data["Name"]}'
-
 
 
 
