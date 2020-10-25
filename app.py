@@ -43,7 +43,7 @@ cache = {}
 def before_request(error):
     print(error)
     email_report(request.path + " FAILED", datetime.datetime.now().strftime('%d, %b %Y')+"\n\n"+str(''.join(traceback.format_exception(None, error, error.__traceback__))))
-    raise error
+    raise error 
 
 def email_report(subject, body):
     global email_log
