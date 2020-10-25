@@ -2030,7 +2030,7 @@ def get_client_from_invite(invite):
 
 
 	
-	time.sleep(1.6)
+	time.sleep(3.2)
 
 	application = applicationAPI(client)
 	job_info = jobInfoAPI(client)
