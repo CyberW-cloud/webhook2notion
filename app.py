@@ -104,7 +104,7 @@ def tmp():
 		'access_token_secret': os.environ.get("AccessSecret")})
 
 	client = upwork.Client(login_config)
-	
+
 	notion_client = NotionClient(os.environ.get("TOKEN"))
 	i = 1/0
 
@@ -2031,14 +2031,12 @@ def get_client_from_invite(invite):
 
 	
 	time.sleep(1.6)
-	openingCiphertext = client.get("/hr/v4/contractors/applications/"+invite)["data"]["openingCiphertext"]
-
-	print(openingCiphertext)
-
-	time.sleep(1.6)
 
 	application = applicationAPI(client)
-	buyer = application.get_specific(openingCiphertext)
+	job_info = jobInfoAPI(client)
+
+	buyer = application.get_specific(invite)["data"]["openingCiphertext"]
+	buyer = job_info.get_specific(buyer)["profile"]["buyer"]
 
 	print(buyer)
 
