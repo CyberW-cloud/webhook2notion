@@ -2052,8 +2052,9 @@ def get_client_from_invite(invite):
 		],
 		"operator": "and",
 	}
-
-
+	client_db = clients.build_query(filter=filter_params)
+	result = clients.execute()
+	print([x.name for x in result])
 
 def create_invite(token, collection_url, subject, description, invite_to):
 	# notion
