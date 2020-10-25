@@ -96,6 +96,7 @@ def email_report(subject, body):
 
 @app.route('/tmp')
 def tmp():
+	client = NotionClient(os.environ.get("TOKEN"))
 	i = 1/0
 
 
