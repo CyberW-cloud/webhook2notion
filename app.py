@@ -2050,7 +2050,8 @@ def get_client_from_invite(invite):
 		"operator": "and",
 	}
 	client_db = client_db.build_query(filter=filter_params)
-	result = clients.execute()
+	result = client_db.execute()
+	
 	print([x.name for x in result])
 
 def create_invite(token, collection_url, subject, description, invite_to):
