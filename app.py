@@ -44,13 +44,10 @@ TEST = False
 test_page_url = "https://www.notion.so/TEST-68d7198ed4d3437b816386f6da196547"
 token = ""
 
-loggable_endpoints = ["/test_scripts", "/update_clients", ]
-email_log = []
-
 @app.errorhandler(Exception)
 def before_request(error):
 	print(error)
-	email_report(request.path + " FAILED", datetime.datetime.now().strftime('%d, %b %Y')+"\n"+str(''.join(traceback.format_exception(None, error, error.__traceback__))))
+	email_report(request.path + " FAILED", datetime.datetime.now().strftime('%d, %b %Y')+"\n\n"+str(''.join(traceback.format_exception(None, error, error.__traceback__))))
 	raise error
 
 def email_report(subject, body):
@@ -2510,6 +2507,8 @@ def create_response(type, data):
 	collection_url = "https://www.notion.so/1f4aabb8710f4c89a3411de53fc7222a?v=0e8184ceca384767917f928bb3d20e6f"
 	token = os.environ.get("TOKEN")
 	client = NotionClient(token)
+
+	print(data)
 
 	cv = client.get_collection_view(collection_url)
 	upwork_profile = data["Upwork profile"]
