@@ -2495,6 +2495,7 @@ def get_id_from_upwork_url(url):
 	else:
 		upwork_id = re.findall("(?<=fl\/)[\w]+", url)
 		if len(upwork_id)>0:
+			print(upwork_id[0])
 			return upwork_id[0]
 		else:
 			print("unknown url type " + url)
@@ -2530,7 +2531,7 @@ def create_response(applicant_type, data):
 				
 				uw_id = get_id_from_upwork_url(rec_profile)
 				if uw_id == None:
-					print(record.name)
+					print(record.get_browseable_url())
 				if uw_id == upwork_id:
 					row_exist = record
 					break
