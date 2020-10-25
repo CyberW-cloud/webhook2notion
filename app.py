@@ -2031,7 +2031,7 @@ def get_client_from_invite(invite):
 	time.sleep(1.6)
 
 	application = applicationAPI(client)
-	buyer = application.get_specific(openingCiphertext)
+	buyer = application.get_specific(openingCiphertext[1:])
 
 	print(buyer)
 
