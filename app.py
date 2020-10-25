@@ -2029,7 +2029,7 @@ def get_client_from_invite(invite):
 	client = upwork.Client(login_config)
 	notion_client = NotionClient(os.environ.get("TOKEN"))
 
-	client_db = notion_client.get_collection_view("https://www.notion.so/Clients-fb6f74955cbc45a299ec1016e8b59d71")
+	client_db = notion_client.get_collection_view("https://www.notion.so/21a8e8245c9e4024848613cecdc8e88f?v=ff14989e8f96401db5f7c3527a4cd8b7")
 	
 	time.sleep(3.2)
 
@@ -2052,7 +2052,7 @@ def get_client_from_invite(invite):
 		],
 		"operator": "and",
 	}
-	client_db = clients.build_query(filter=filter_params)
+	client_db = client_db.build_query(filter=filter_params)
 	result = clients.execute()
 	print([x.name for x in result])
 
