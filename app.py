@@ -1436,6 +1436,8 @@ def get_proposals(token, days_before):
 				proposal["person"] = person_stat[0]
 			else:
 				print(proposal["person_name"], "not found in stats")
+				continue
+
 		proposal["url"] = str(row.Proposal_ID).replace("\xa0", ""), row.get_browseable_url()
 		proposal["client"] = None
 		if proposal["person"] is None:
@@ -1796,7 +1798,9 @@ def get_todo_list_by_role(token, roles):
 
 			# if person:
 			# d["stats"] = person[0]
-			print(person["name"])
+			if person["todo"]=="":
+				continue
+
 			d["todo_url"] = person["todo"].split()[1]
 			#handle links
 			if "[" in d["todo_url"]:
