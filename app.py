@@ -107,7 +107,10 @@ def tmp():
 
 	notion_client = NotionClient(os.environ.get("TOKEN"))
 
-	get_todo_list_by_role(os.environ.get("TOKEN"), ["FL"])
+	#get_todo_list_by_role(os.environ.get("TOKEN"), ["FL"])
+	proposals = get_proposals(os.environ.get("TOKEN"), 7)
+	todo = dict()
+	todo = parse_staff(todo, proposals, "proposals", 0)
 	i = 1/0
 
 
