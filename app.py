@@ -106,6 +106,8 @@ def tmp():
 	client = upwork.Client(login_config)
 
 	notion_client = NotionClient(os.environ.get("TOKEN"))
+
+	get_todo_list_by_role(os.environ.get("TOKEN"), ["PA","CC","Bidder","FL"])
 	i = 1/0
 
 
@@ -1791,6 +1793,7 @@ def get_todo_list_by_role(token, roles):
 
 			# if person:
 			# d["stats"] = person[0]
+			person["todo"]
 			d["todo_url"] = person["todo"].split()[1]
 			#handle links
 			if "[" in d["todo_url"]:
