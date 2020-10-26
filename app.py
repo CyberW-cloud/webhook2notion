@@ -1793,7 +1793,7 @@ def get_todo_list_by_role(token, roles):
 
 			# if person:
 			# d["stats"] = person[0]
-			print(person["todo"])
+			print(person["name"])
 			d["todo_url"] = person["todo"].split()[1]
 			#handle links
 			if "[" in d["todo_url"]:
