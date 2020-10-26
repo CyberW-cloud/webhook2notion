@@ -1798,8 +1798,8 @@ def get_todo_list_by_role(token, roles):
 
 			# if person:
 			# d["stats"] = person[0]
-            if person["todo"]=="":
-                continue
+			if person["todo"]=="":
+				continue
 
 			d["todo_url"] = person["todo"].split()[1]
 			#handle links
