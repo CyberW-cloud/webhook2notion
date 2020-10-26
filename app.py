@@ -107,7 +107,7 @@ def tmp():
 
 	notion_client = NotionClient(os.environ.get("TOKEN"))
 
-	get_todo_list_by_role(os.environ.get("TOKEN"), ["PA","CC","Bidder","FL"])
+	get_todo_list_by_role(os.environ.get("TOKEN"), ["FL"])
 	i = 1/0
 
 
