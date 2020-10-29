@@ -138,12 +138,12 @@ def update_clients():
 		"filters": [
 			{
 				"filter": {"value":{"type": "exact", "value": {"type": "date", "start_date": datetime.datetime.fromtimestamp(activeSince).strftime('%Y-%m-%d')}}, "operator": "date_is_on_or_after"},
-				"property": "Modified"
+				"property": "Added"
 			}
 		],
 		"operator": "and",	  
 	}
-	sort_params = [{"direction": "ascending", "property": "Modified"}]
+	sort_params = [{"direction": "ascending", "property": "Added"}]
 	
 	clients = clients.build_query(filter=filter_params, sort = sort_params)
 	result = clients.execute()
@@ -2046,22 +2046,26 @@ def get_client_from_invite(invite):
 	application = applicationAPI(client)
 	job_info = jobInfoAPI(client)
 
-	buyer = application.get_specific(invite)["data"]["openingCiphertext"]
+	buyer = application.get_specific(invite.ID)["data"]["openingCiphertext"]
 	buyer = job_info.get_specific(buyer)["profile"]["buyer"]
 
 	print(buyer)
 
 	contract_datetime = datetime.datetime.strptime(buyer["op_contract_date"], "%B %d, %Y")
-	filter_params = {
-		"filters": [
-				{"property":"Member since", "filter":{"operator":"date_is","value":{"type":"exact","value":{"type":"date","start_date":contract_datetime.strftime('%Y-%m-%d')}}}},
-				{"property":"Country","filter":{"operator":"enum_is","value":{"type":"exact","value":buyer["op_country"]}}}
-		],
-		"operator": "and",
-	}
-	client_db = client_db.build_query(filter=filter_params)
-	result = client_db.execute()
-	
+
+	client_name = None
+	description = invite.description.split("\n")
+	for line, i in enumerate(description):
+		if line == "Please review the job post and apply if you're available." and len(description)>i+2:
+			client_name = description[i+2]
+			break
+
+	if client_name == None:
+		return None
+
+	print(client_name)
+	result = client_db.collection.get_rows(search = client_name)
+
 	print([x.name for x in result])
 
 def create_invite(token, collection_url, subject, description, invite_to):
