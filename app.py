@@ -2061,14 +2061,15 @@ def get_client_from_invite(invite):
 	client_name = None
 	description = invite.description.split("\n")
 	for line, i in enumerate(description):
-		if line == "Please review the job post and apply if you're available." and len(description)>i+2:
+		if "Please review the job post and apply if you're available." in line and len(description)>i+2:
 			client_name = description[i+2]
 			break
+
+	print(client_name)
 
 	if client_name == None:
 		return None
 
-	print(client_name)
 	result = client_db.collection.get_rows(search = client_name)
 
 	print([x.name for x in result])
