@@ -105,12 +105,84 @@ def tmp():
 
 	client = upwork.Client(login_config)
 
-	notion_client = NotionClient(os.environ.get("TOKEN"))
+	token = os.environ.get("TOKEN")
+	notion_client = NotionClient(token)
 
-	get_todo_list_by_role(os.environ.get("TOKEN"), ["CC","PA","FL","Bidder"])
-	proposals = get_proposals(os.environ.get("TOKEN"), 7)
+	print("starting copied kickstaff")
+	date = request.args.get("date", None)
+	contracts_day = request.args.get("contracts_day", 0, type=int)
+	projects_day = request.args.get("projects_day", contracts_day, type=int)
+	client_days_before = request.args.get("client_day", 7, type=int)
+	proposal_days = request.args.get("proposals_day", 3, type=int)
+	cc_tag = request.args.get("no_contracts", None)
+	pm_tag = request.args.get("no_projects", None)
+	prop_tag = request.args.get("no_proposals", None)
+	cc = True if cc_tag is None else False
+	pm = True if pm_tag is None else False
+	prop = True if prop_tag is None else False
+	
+	if cc:
+		contracts = get_contracts(token, contracts_day)
+		print("contracts done")
+	else:
+		contracts = []
+	if pm:
+		projects = get_projects(token, projects_day)
+		print("projects done")
+	else:
+		projects = []
+
+	if prop:
+		proposals = get_proposals(token, proposal_days)
+		print("proposals done")
+	else:
+		proposals = []
+
 	todo = dict()
-	todo = parse_staff(todo, proposals, "proposals", 0)
+	todo = parse_staff(todo, contracts, "contracts", client_days_before)
+	todo = parse_staff(todo, projects, "projects", client_days_before)
+	todo = parse_staff(todo, proposals, "proposals", proposal_days)
+	
+	flag_contracts = True
+	flag_proposals = True
+	flag_projects = True
+
+	rows = {"Contracts":"", "Interviews":"", "Projects":""}
+
+	for manager in todo.keys():
+		if len(todo[manager]["contracts"])>0:
+			if "Contracts" in rows.keys():
+				if(flag_contracts):
+					rows["Contracts"] += "**Not Updated in "+str(client_days_before)+" days:**\n"
+					flag_contracts = False
+
+				rows["Contracts"] += "["+manager+": ]("+todo[manager]["todo_url"]+")\n"
+				for i in todo[manager]["contracts"]:
+					rows["Contracts"] +=  "["+i[0]+"]("+i[1]+")\n"
+				print(todo[manager]["contracts"])		   
+
+		if len(todo[manager]["proposals"])>0:
+			if "Interviews" in rows.keys():
+				if (flag_proposals):
+					rows["Interviews"] += "**Not Updated in "+str(proposal_days)+" days:**\n"
+					flag_proposals = False
+
+				rows["Interviews"] += "["+manager+": ]("+todo[manager]["todo_url"]+")\n"
+				for i in todo[manager]["proposals"]:
+					rows["Interviews"] +=  "["+i[0]+"]("+i[1]+")\n"
+				print(todo[manager]["proposals"])   
+			
+		if len(todo[manager]["projects"])>0:
+			if "Projects" in rows.keys():
+				if (flag_projects):
+					rows["Projects"] += "**Not Updated in "+str(client_days_before)+" days:**\n"
+					flag_projects = False
+
+				rows["Projects"] += "["+manager+": ]("+todo[manager]["todo_url"]+")\n"
+				for i in todo[manager]["projects"]:
+					rows["Projects"] += "["+i[0]+"]("+i[1]+")\n"
+				print(todo[manager]["projects"])
+
 	i = 1/0
 
 
