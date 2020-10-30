@@ -2080,9 +2080,9 @@ def get_client_from_invite(invite):
 	checked_result = []
 	for x in result:
 		if client_name in x.name:
-			if buyer["op_country"] == x.country:
-				if buyer["op_city"] == x.location:
-					if buyer["op_state"] == x.state:
+			if buyer["op_country"] == x.country or x.country == "":
+				if buyer["op_city"] == x.location or x.location == "":
+					if buyer["op_state"] == x.state or x.state == "":
 						checked_result.append(x)
 
 	print([x.name for x in checked_result])
