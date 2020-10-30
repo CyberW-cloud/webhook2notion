@@ -108,84 +108,7 @@ def tmp():
 	token = os.environ.get("TOKEN")
 	notion_client = NotionClient(token)
 
-	print("starting copied kickstaff")
-	date = request.args.get("date", None)
-	contracts_day = request.args.get("contracts_day", 7, type=int)
-	projects_day = request.args.get("projects_day", contracts_day, type=int)
-	client_days_before = request.args.get("client_day", 7, type=int)
-	proposal_days = request.args.get("proposals_day", 3, type=int)
-	cc_tag = request.args.get("no_contracts", None)
-	pm_tag = request.args.get("no_projects", None)
-	prop_tag = request.args.get("no_proposals", None)
-	cc = True if cc_tag is None else False
-	pm = True if pm_tag is None else False
-	prop = True if prop_tag is None else False
-	
-	if cc:
-		contracts = get_contracts(token, contracts_day)
-		print("contracts done")
-	else:
-		contracts = []
-	if pm:
-		projects = get_projects(token, projects_day)
-		print("projects done")
-	else:
-		projects = []
-
-	if prop:
-		proposals = get_proposals(token, proposal_days)
-		print("proposals done")
-	else:
-		proposals = []
-
-	todo = dict()
-	todo = parse_staff(todo, contracts, "contracts", client_days_before)
-	todo = parse_staff(todo, projects, "projects", client_days_before)
-	todo = parse_staff(todo, proposals, "proposals", proposal_days)
-	
-	flag_contracts = True
-	flag_proposals = True
-	flag_projects = True
-
-	rows = {"Contracts":"", "Interviews":"", "Projects":""}
-
-	for manager in todo.keys():
-		if len(todo[manager]["contracts"])>0:
-			if "Contracts" in rows.keys():
-				if(flag_contracts):
-					rows["Contracts"] += "**Not Updated in "+str(client_days_before)+" days:**\n"
-					flag_contracts = False
-
-				rows["Contracts"] += "["+manager+": ]("+todo[manager]["todo_url"]+")\n"
-				for i in todo[manager]["contracts"]:
-					rows["Contracts"] +=  "["+i[0]+"]("+i[1]+")\n"
-				print(todo[manager]["contracts"])		   
-
-		if len(todo[manager]["proposals"])>0:
-			if "Interviews" in rows.keys():
-				if (flag_proposals):
-					rows["Interviews"] += "**Not Updated in "+str(proposal_days)+" days:**\n"
-					flag_proposals = False
-
-				rows["Interviews"] += "["+manager+": ]("+todo[manager]["todo_url"]+")\n"
-				for i in todo[manager]["proposals"]:
-					rows["Interviews"] +=  "["+i[0]+"]("+i[1]+")\n"
-				print(todo[manager]["proposals"])   
-			
-		if len(todo[manager]["projects"])>0:
-			if "Projects" in rows.keys():
-				if (flag_projects):
-					rows["Projects"] += "**Not Updated in "+str(client_days_before)+" days:**\n"
-					flag_projects = False
-
-				rows["Projects"] += "["+manager+": ]("+todo[manager]["todo_url"]+")\n"
-				for i in todo[manager]["projects"]:
-					rows["Projects"] += "["+i[0]+"]("+i[1]+")\n"
-				print(todo[manager]["projects"])
-
-	print(rows["Contracts"])
-	print(rows["Interviews"])
-	print(rows["Projects"])
+	get_client_from_invite(notion_client.get_block("https://www.notion.so/426262864-984fea3833924e61bbd4472e24883f75"))
 
 	i = 1/0
 
@@ -1040,7 +963,13 @@ def message_review():
 
 			try:
 				if i["userId"] not in cache.keys(): 
-					name = profileApi.get_specific(i["userId"])["profile"]["dev_short_name"][:-1]
+					
+					#simple retry
+					try:
+						name = profileApi.get_specific(i["userId"])["profile"]["dev_short_name"][:-1]
+					except:
+						name = profileApi.get_specific(i["userId"])["profile"]["dev_short_name"][:-1]
+					
 					cache[i["userId"]] = name
 				else:
 					name = cache[i["userId"]]
