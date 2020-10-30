@@ -2034,7 +2034,6 @@ def pcj():
 
 
 def get_client_from_invite(invite):
-	description_name_flags = ["Please review the job post and apply if you're available.", "Please submit a proposal if you're available and interested."]
 	#get upwork client
 	login_config = upwork.Config({\
 		'consumer_key': os.environ.get("ConsumerKey"),\
@@ -2063,8 +2062,8 @@ def get_client_from_invite(invite):
 	description = invite.description.split("\n")
 	print(description)
 	for i, line in enumerate(description):
-		if line.split(". ")[-1] in description_name_flags and len(description)>i+2:
-			client_name = description[i+2]
+		if ": https://upwork.com/applications/" in line:
+			client_name = description[i-2]
 			break
 
 	print(client_name)
