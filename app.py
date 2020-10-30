@@ -110,7 +110,7 @@ def tmp():
 
 	print("starting copied kickstaff")
 	date = request.args.get("date", None)
-	contracts_day = request.args.get("contracts_day", 0, type=int)
+	contracts_day = request.args.get("contracts_day", 7, type=int)
 	projects_day = request.args.get("projects_day", contracts_day, type=int)
 	client_days_before = request.args.get("client_day", 7, type=int)
 	proposal_days = request.args.get("proposals_day", 3, type=int)
