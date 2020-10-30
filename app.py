@@ -108,7 +108,7 @@ def tmp():
 	token = os.environ.get("TOKEN")
 	notion_client = NotionClient(token)
 
-	get_client_from_invite(notion_client.get_block("https://www.notion.so/426386106-0cd3834c51c54eb28a253544b6001fff"))
+	get_client_from_invite(notion_client.get_block("https://www.notion.so/426488646-7267619f62af458fb6fe36c51f667e0d"))
 
 	i = 1/0
 
