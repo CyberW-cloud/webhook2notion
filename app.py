@@ -183,6 +183,10 @@ def tmp():
 					rows["Projects"] += "["+i[0]+"]("+i[1]+")\n"
 				print(todo[manager]["projects"])
 
+	print(rows["Contracts"])
+	print(rows["Interviews"])
+	print(rows["Projects"])
+
 	i = 1/0
 
 
