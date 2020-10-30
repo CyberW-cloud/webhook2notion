@@ -2060,6 +2060,7 @@ def get_client_from_invite(invite):
 
 	client_name = None
 	description = invite.description.split("\n")
+	print(description)
 	for i, line in enumerate(description):
 		if "Please review the job post and apply if you're available." in line and len(description)>i+2:
 			client_name = description[i+2]
