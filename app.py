@@ -108,7 +108,7 @@ def tmp():
 	token = os.environ.get("TOKEN")
 	notion_client = NotionClient(token)
 
-	get_client_from_invite(notion_client.get_block("https://www.notion.so/426497741-f673a01a34d045d1a093b372e3bc90ad"))
+	print(get_client_from_invite(notion_client.get_block("https://www.notion.so/426497741-f673a01a34d045d1a093b372e3bc90ad")))
 
 	i = 1/0
 
@@ -2073,8 +2073,11 @@ def get_client_from_invite(invite):
 		return None
 
 	result = client_db.collection.get_rows(search = client_name)
+	result = [x for x in result if client_name in x.name]
 
 	print([x.name for x in result])
+	return result
+
 
 def create_invite(token, collection_url, subject, description, invite_to):
 	# notion
