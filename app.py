@@ -950,7 +950,12 @@ def message_review():
 
             try:
                 if i["userId"] not in cache.keys(): 
-                    name = profileApi.get_specific(i["userId"])["profile"]["dev_short_name"][:-1]
+                    
+                    try:
+                        name = profileApi.get_specific(i["userId"])["profile"]["dev_short_name"][:-1]
+                    except:
+                        name = profileApi.get_specific(i["userId"])["profile"]["dev_short_name"][:-1]
+
                     cache[i["userId"]] = name
                 else:
                     name = cache[i["userId"]]
