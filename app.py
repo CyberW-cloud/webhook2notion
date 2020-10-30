@@ -2084,7 +2084,7 @@ def get_client_from_invite(invite):
 				if buyer["op_city"] == x.location or x.location == "":
 					if buyer["op_state"] == x.state or x.state == "":
 						if buyer["op_timezone"][:6] in x.timezone or "(Coordinated Universal Time)" in buyer["op_timezone"] and "UTC+00" in x.timezone:
-						checked_result.append(x)
+							checked_result.append(x)
 
 	print([x.name for x in checked_result])
 	return checked_result
