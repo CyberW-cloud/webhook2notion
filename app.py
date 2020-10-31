@@ -2093,6 +2093,8 @@ def get_client_from_invite(invite):
 
 		buyer["skills"] = job_info["profile"]["op_required_skills"]["op_required_skill"]
 		buyer["ciphertext"] = ciphertext
+		buyer["questions"] = [x["question"] for x in job_info["op_additional_questions"]]
+		print(buyer["questions"])
 	except Exception as e:
 		print("Idk, some error while getting the client " + str(e))
 		return []
@@ -2127,7 +2129,7 @@ def get_client_from_invite(invite):
 
 	print([x.name for x in checked_result])
 
-	return (buyer,checked_result[0]) if len(checked_result)>0 else None
+	return (buyer,checked_result[0]) if len(checked_result)>0 else (buyer)
 
 
 def create_invite(token, collection_url, subject, description, invite_to):
@@ -2156,7 +2158,7 @@ def create_invite(token, collection_url, subject, description, invite_to):
 
 	client = get_client_from_invite(row, upwork_client)
 	if client != None:
-		row.client = client[1]
+		row.client = [client[1]]
 		row.job_url = "https://www.upwork.com/jobs/"+client[0]["ciphertext"]
 		row.country = client[0]["op_country"]
 		row.time_zone = client[0]["op_timezone"]
