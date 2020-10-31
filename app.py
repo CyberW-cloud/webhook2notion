@@ -2141,7 +2141,7 @@ def get_client_from_invite(invite):
 	to_team_dir = team_directory.collection.get_rows(search=invite.to[0].name)
 	print(to_team_dir[0].name)
 	if len(to_team_dir)>0:
-		print(to_team_dir[0].pa.name)
+		print(to_team_dir[0].pa[0].name)
 
 	return (buyer,checked_result[0]) if len(checked_result)>0 else (buyer)
 
