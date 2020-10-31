@@ -2093,8 +2093,8 @@ def get_client_from_invite(invite):
 
 		buyer["skills"] = job_info["profile"]["op_required_skills"]["op_required_skill"]
 		buyer["ciphertext"] = ciphertext
-		buyer["questions"] = [x["op_additional_question"] for x in job_info["profile"]["op_additional_questions"]]
-		print(buyer["questions"])
+		buyer["questions"] = [x for x in job_info["profile"]["op_additional_questions"]]
+		print(job_info["profile"]["op_additional_questions"])
 	except Exception as e:
 		print("Idk, some error while getting the client " + str(e))
 		return []
