@@ -2133,8 +2133,8 @@ def get_client_from_invite(invite, client):
 
 	print([x.name for x in checked_result])
 
-	print(invite.to.name)
-	print(get_upwork_client_by_name(invite.to.name))
+	print(invite.to[0].name)
+	print(get_upwork_client_by_name(invite.to[0].name))
 	return (buyer,checked_result[0]) if len(checked_result)>0 else None
 
 
@@ -2161,12 +2161,6 @@ def create_invite(token, collection_url, subject, description, invite_to):
 
 	row.link = url
 	row.id = item_id.group()
-
-	if row.to.name not in cache.values():
-		update_cache()
-	else:
-		upwork_client = ""
-
 
 	client = get_client_from_invite(row, upwork_client)
 	if client != None:
