@@ -2125,7 +2125,8 @@ def create_invite(token, collection_url, subject, description, invite_to):
 	if upwork_client != None:
 		row.client = upwork_client[1]
 		row.job_url = "https://www.upwork.com/jobs/"+upwork_client[0]["ciphertext"]
-#		row.
+		row.country = upwork_client[0]["op_country"]
+		row.time_zone = upwork_client[0]["op_timezone"]
 
 	return row
 
