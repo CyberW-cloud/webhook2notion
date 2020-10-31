@@ -108,7 +108,7 @@ def tmp():
 	token = os.environ.get("TOKEN")
 	notion_client = NotionClient(token)
 
-	print(get_client_from_invite(notion_client.get_block("https://www.notion.so/426501160-70feb5b5b9c54efe8f3dc38016dc9117")))
+	print(get_client_from_invite(notion_client.get_block("https://www.notion.so/425780244-d79ba930037541f6aafc3febe64abbb7")))
 
 	i = 1/0
 
@@ -2103,7 +2103,7 @@ def get_client_from_invite(invite):
 
 		buyer["skills"] = job_info["profile"]["op_required_skills"]["op_required_skill"]
 		buyer["ciphertext"] = ciphertext
-
+		print("https://www.upwork.com/jobs/"+buyer["ciphertext"])
 		# #for some reason, we need to reverse the list for positions to stay the same as in upwork
 		# job_info["profile"]["op_additional_questions"]["op_additional_question"].reverse()
 		# buyer["questions"] = "\n\n".join([x["position"] + ". " + x["question"] for x in job_info["profile"]["op_additional_questions"]["op_additional_question"]])
@@ -2122,8 +2122,12 @@ def get_client_from_invite(invite):
 	print(description)
 	for i, line in enumerate(description):
 		if ": https://upwork.com/applications/" in line:
-			client_name = description[i-2]
-			break
+			if description[i-1] == "":
+				client_name = description[i-2]
+				break
+			else
+				client_name = description[i-2]
+				break
 
 	print(client_name)
 
@@ -2152,7 +2156,6 @@ def get_client_from_invite(invite):
 	if len(to_team_dir)>0:
 		print(to_team_dir[0].pa[0].name)
 
-	print("https://www.upwork.com/jobs/"+buyer["ciphertext"])
 	return (buyer,checked_result[0]) if len(checked_result)>0 else (buyer)
 
 
