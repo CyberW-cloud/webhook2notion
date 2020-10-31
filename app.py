@@ -146,7 +146,7 @@ def get_upwork_client_by_name(name):
 
 		if "user" not in user_data.keys():
 			continue
-
+		print(user_data["user"]["id"])
 		if name in user_data["user"]["id"]:
 			return client
 
