@@ -2133,6 +2133,8 @@ def get_client_from_invite(invite):
 
 	print([x.name for x in checked_result])
 
+	print(invite.to.name)
+	print(get_upwork_client_by_name(invite.to.name))
 	return (buyer,checked_result[0]) if len(checked_result)>0 else None
 
 
