@@ -2168,9 +2168,9 @@ def create_invite(token, collection_url, subject, description, invite_to):
 	row.status = "New"
 	
 	row.to = invite_to
-	to_team_dir = team_directory.collection.get_rows(search=row.to.name)
+	to_team_dir = team_directory.collection.get_rows(search=row.to[0].name)
 	if len(to_team_dir)>0:
-		row.pa = to_team_dir[0].pa
+		row.pa = [to_team_dir[0].pa[0]]
 
 	row.link = url
 	row.id = item_id.group()
