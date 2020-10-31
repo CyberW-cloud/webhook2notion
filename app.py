@@ -2131,7 +2131,7 @@ def create_invite(token, collection_url, subject, description, invite_to):
 		row.job_url = "https://www.upwork.com/jobs/"+upwork_client[0]["ciphertext"]
 		row.country = upwork_client[0]["op_country"]
 		row.time_zone = upwork_client[0]["op_timezone"]
-		[row.skills := row.skills + x.values()[0] for x in upwork_client[0]["skills"]]
+		row.skills = " ".join([x.values()[0] for x in upwork_client[0]["skills"]])
 
 	return row
 
