@@ -2117,7 +2117,7 @@ def get_client_from_invite(invite):
 	if client_name == None:
 		return None
 
-	for i in range(4):
+	for i in range(len(client_name.split(" "))):
 		result = client_db.collection.get_rows(search = " ".join([x for j, x in enumerate(client_name.split(" ")) if j<5-i]))
 		
 		if result != []:
