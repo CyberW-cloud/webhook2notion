@@ -2170,9 +2170,8 @@ def create_invite(token, collection_url, subject, description, invite_to):
 		row.country = client[0]["op_country"]
 		row.time_zone = client[0]["op_timezone"]
 		row.skills = " ".join([x.values()[0] for x in client[0]["skills"]])
-		if row.questions == "":
-
-			row.questions = client[0]["questions"]
+		
+		row.children.add_new(TextBlock, "**Questions**").children.add_new(TextBlock, client[0]["questions"])
 
 		if len(client)>1:
 			row.client = [client[1]]
