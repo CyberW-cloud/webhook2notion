@@ -2136,7 +2136,7 @@ def get_client_from_invite(invite, client):
 	print([x.name for x in checked_result])
 
 	print(invite.to[0].name)
-	print(get_upwork_client_by_name(invite.to[0].name[:-1]))
+	print(get_upwork_client_by_name(re.findall("(?<=&ac_user=)(.*)(?=&)", invite.description)[0]))
 	return (buyer,checked_result[0]) if len(checked_result)>0 else None
 
 
