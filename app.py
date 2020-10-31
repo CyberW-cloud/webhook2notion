@@ -2143,6 +2143,7 @@ def get_client_from_invite(invite):
 	if len(to_team_dir)>0:
 		print(to_team_dir[0].pa[0].name)
 
+	print("https://www.upwork.com/jobs/"+buyer["ciphertext"])
 	return (buyer,checked_result[0]) if len(checked_result)>0 else (buyer)
 
 
