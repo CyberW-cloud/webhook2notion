@@ -2093,7 +2093,7 @@ def get_client_from_invite(invite):
 
 		buyer["skills"] = job_info["profile"]["op_required_skills"]["op_required_skill"]
 		buyer["ciphertext"] = ciphertext
-		buyer["questions"] = "\n\n".join([x["question"] for x in job_info["profile"]["op_additional_questions"]["op_additional_question"]])
+		buyer["questions"] = "\n\n".join([x["position"] + ". " + x["question"] for x in job_info["profile"]["op_additional_questions"]["op_additional_question"]])
 		print(buyer["questions"])
 	except Exception as e:
 		print("Idk, some error while getting the client " + str(e))
@@ -2168,6 +2168,7 @@ def create_invite(token, collection_url, subject, description, invite_to):
 		row.time_zone = client[0]["op_timezone"]
 		row.skills = " ".join([x.values()[0] for x in client[0]["skills"]])
 		if row.questions == "":
+
 			row.questions = client[0]["questions"]
 
 		if len(client)>1:
