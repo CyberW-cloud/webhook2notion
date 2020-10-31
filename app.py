@@ -2165,7 +2165,7 @@ def create_invite(token, collection_url, subject, description, invite_to):
 	if row.to.name not in cache.values():
 		update_cache()
 	else:
-		upwork_client = 
+		upwork_client = ""
 
 
 	upwork_client = get_client_from_invite(row, upwork_client)
