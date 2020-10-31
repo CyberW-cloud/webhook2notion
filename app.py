@@ -150,6 +150,15 @@ def get_upwork_client_by_name(name):
 		if name in user_data["user"]["id"]:
 			return client
 
+	login_config = upwork.Config({\
+			'consumer_key': os.environ.get("ConsumerKey"),\
+			'consumer_secret': os.environ.get("ConsumerSecret"),\
+			'access_token': os.environ.get("AccessToken"),\
+			'access_token_secret': os.environ.get("AccessSecret")})
+
+	client = upwork.Client(login_config)
+
+	return client
 
 @app.route('/update_clients', methods = ["GET"])
 def update_clients():
