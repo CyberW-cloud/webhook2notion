@@ -2078,7 +2078,7 @@ def get_client_from_invite(invite):
 	notion_client = NotionClient(os.environ.get("TOKEN"))
 
 	client_db = notion_client.get_collection_view("https://www.notion.so/21a8e8245c9e4024848613cecdc8e88f?v=ff14989e8f96401db5f7c3527a4cd8b7")
-	team_directory = client.get_collection_view("https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=536bcc489f93433ab19d697490b00525")
+	team_directory = notion_client.get_collection_view("https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=536bcc489f93433ab19d697490b00525")
 
 	time.sleep(3.2)
 
