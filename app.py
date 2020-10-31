@@ -114,7 +114,7 @@ def tmp():
 
 def get_upwork_client_by_name(name):
 	tokens = os.environ.get('TOKENS')
-	
+
 	login_config = upwork.Config({\
 			'consumer_key': os.environ.get("ConsumerKey"),\
 			'consumer_secret': os.environ.get("ConsumerSecret"),\
@@ -2135,7 +2135,7 @@ def get_client_from_invite(invite, client):
 	print([x.name for x in checked_result])
 
 	print(invite.to[0].name)
-	print(get_upwork_client_by_name(invite.to[0].name))
+	print(get_upwork_client_by_name(invite.to[0].name[:-1]))
 	return (buyer,checked_result[0]) if len(checked_result)>0 else None
 
 
