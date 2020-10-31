@@ -142,10 +142,10 @@ def get_upwork_client_by_name(name):
 		userApi = userAPI(client)
 
 		user_data = userApi.get_my_info()
+		print(user_data)
 		if "user" not in user_data.keys():
 			continue
 		
-		print(user_data["user"]["first_name"] + " " + user_data["user"]["last_name"])
 		if name in user_data["user"]["first_name"] + " " + user_data["user"]["last_name"]:
 			return client
 
