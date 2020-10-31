@@ -112,6 +112,41 @@ def tmp():
 
 	i = 1/0
 
+def get_upwork_client_by_name(name):
+
+	login_config = upwork.Config({\
+			'consumer_key': os.environ.get("ConsumerKey"),\
+			'consumer_secret': os.environ.get("ConsumerSecret"),\
+			'access_token': os.environ.get("AccessToken"),\
+			'access_token_secret': os.environ.get("AccessSecret")})
+
+	client = upwork.Client(login_config)
+
+	company = companyAPI(client)
+	messages = messageAPI(client)
+
+	
+	freelancer_ids = [x["public_url"].split("/")[-1] for x in company.get_users(os.environ.get("CompanyRef"))["users"]]
+	
+	tokens = parse_tokens(tokens, freelancer_ids)
+
+	for freelancer in tokens:
+		#log in as each freelancer
+		client = upwork.Client(upwork.Config({\
+			'consumer_key': os.environ.get("ConsumerKey"),\
+			'consumer_secret': os.environ.get("ConsumerSecret"),\
+			'access_token': freelancer["accessToken"],\
+			'access_token_secret': freelancer["accessSecret"]}))
+
+		userApi = userAPI(client)
+
+		user_data = userApi.get_my_info()
+		if "user" not in user_data.keys():
+			continue
+			
+		if name == user_data["user"]["first_name"] + " " + user_data["user"]["last_name"]:
+			return client
+
 
 @app.route('/update_clients', methods = ["GET"])
 def update_clients():
@@ -2125,7 +2160,13 @@ def create_invite(token, collection_url, subject, description, invite_to):
 	row.link = url
 	row.id = item_id.group()
 
-	upwork_client = get_client_from_invite(row)
+	if row.to.name not in cache.values():
+		update_cache()
+	else:
+		upwork_client = 
+
+
+	upwork_client = get_client_from_invite(row, upwork_client)
 	if upwork_client != None:
 		row.client = upwork_client[1]
 		row.job_url = "https://www.upwork.com/jobs/"+upwork_client[0]["ciphertext"]
