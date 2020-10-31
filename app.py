@@ -108,7 +108,7 @@ def tmp():
 	token = os.environ.get("TOKEN")
 	notion_client = NotionClient(token)
 
-	print(get_client_from_invite(notion_client.get_block("https://www.notion.so/427842658-4ccd8a28fd3249beb5d64f95f68adf50")))
+	print(get_client_from_invite(notion_client.get_block("https://www.notion.so/427842658-4ccd8a28fd3249beb5d64f95f68adf50"), client))
 
 	i = 1/0
 
@@ -2068,7 +2068,7 @@ def pcj():
 	return f"added {subject} receipt to " + pcj.get_browseable_url()
 
 
-def get_client_from_invite(invite):
+def get_client_from_invite(invite, client):
 	#get upwork client
 	login_config = upwork.Config({\
 		'consumer_key': os.environ.get("ConsumerKey"),\
