@@ -108,7 +108,7 @@ def tmp():
 	token = os.environ.get("TOKEN")
 	notion_client = NotionClient(token)
 
-	print(get_client_from_invite(notion_client.get_block("https://www.notion.so/427842658-4ccd8a28fd3249beb5d64f95f68adf50"), client))
+	print(get_client_from_invite(notion_client.get_block("https://www.notion.so/427842658-4ccd8a28fd3249beb5d64f95f68adf50")))
 
 	i = 1/0
 
@@ -2072,9 +2072,9 @@ def pcj():
 
 def get_client_from_invite(invite):
 
-	notion_client = NotionClient(os.environ.get("TOKEN"))
-
 	client = get_upwork_client_by_name(re.findall("(?<=&ac_user=)(.*)(?=&)", invite.description)[0])
+
+	notion_client = NotionClient(os.environ.get("TOKEN"))
 
 	client_db = notion_client.get_collection_view("https://www.notion.so/21a8e8245c9e4024848613cecdc8e88f?v=ff14989e8f96401db5f7c3527a4cd8b7")
 	
@@ -2157,7 +2157,7 @@ def create_invite(token, collection_url, subject, description, invite_to):
 	row.link = url
 	row.id = item_id.group()
 
-	client = get_upwork_client_by_name(re.findall("(?<=&ac_user=)(.*)(?=&)", invite.description)[0]
+	client = get_client_from_invite(row, upwork_client)
 	if client != None:
 		row.client = client[1]
 		row.job_url = "https://www.upwork.com/jobs/"+client[0]["ciphertext"]
