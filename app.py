@@ -2125,7 +2125,7 @@ def get_client_from_invite(invite):
 			if description[i-1] == "":
 				client_name = description[i-2]
 				break
-			else
+			else:
 				client_name = description[i-2]
 				break
 
