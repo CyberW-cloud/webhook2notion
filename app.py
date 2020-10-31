@@ -2117,7 +2117,9 @@ def create_invite(token, collection_url, subject, description, invite_to):
 	row.name = subject
 	row.description = description
 	row.status = "New"
+	
 	row.to = invite_to
+
 	row.link = url
 	row.id = item_id.group()
 
