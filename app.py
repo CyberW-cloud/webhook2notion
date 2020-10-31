@@ -2055,7 +2055,7 @@ def get_client_from_invite(invite):
 		buyer = application.get_specific(invite.ID)["data"]["openingCiphertext"]
 		buyer = job_info.get_specific(buyer)["profile"]["buyer"]
 	except Exception as e:
-		print("Idk, some error while getting the client")
+		print("Idk, some error while getting the client " + str(e))
 		return []
 
 
