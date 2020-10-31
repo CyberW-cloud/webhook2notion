@@ -2125,7 +2125,7 @@ def create_invite(token, collection_url, subject, description, invite_to):
 	if upwork_client != None:
 		row.client = upwork_client[1]
 		row.job_url = "https://www.upwork.com/jobs/"+upwork_client[0]["ciphertext"]
-		row.
+#		row.
 
 	return row
 
