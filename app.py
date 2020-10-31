@@ -2052,8 +2052,12 @@ def get_client_from_invite(invite):
 	job_info = jobInfoAPI(client)
 
 	try:
-		buyer = application.get_specific(invite.ID)["data"]["openingCiphertext"]
-		buyer = job_info.get_specific(buyer)["profile"]["buyer"]
+		application = application.get_specific(invite.ID)
+		print(application)
+
+		ciphertext = application["data"]["openingCiphertext"]
+		buyer = job_info.get_specific(ciphertext)["profile"]["buyer"]
+		buyer["ciphertext"] == ciphertext
 	except Exception as e:
 		print("Idk, some error while getting the client " + str(e))
 		return []
@@ -2118,6 +2122,10 @@ def create_invite(token, collection_url, subject, description, invite_to):
 	row.id = item_id.group()
 
 	upwork_client = get_client_from_invite(row)
+	if upwork_client != None:
+		row.client = upwork_client[1]
+		row.job_url = "https://www.upwork.com/jobs/"+upwork_client[0]["ciphertext"]
+		row.
 
 	return row
 
