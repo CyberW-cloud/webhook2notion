@@ -2148,6 +2148,8 @@ def create_invite(token, collection_url, subject, description, invite_to):
 	client = NotionClient(token)
 	cv = client.get_collection_view(collection_url)
 
+	team_directory = client.get_collection_view("https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=536bcc489f93433ab19d697490b00525")
+
 	try:
 		row = cv.collection.add_row()
 	except Exception as e:
@@ -2160,9 +2162,14 @@ def create_invite(token, collection_url, subject, description, invite_to):
 	row.status = "New"
 	
 	row.to = invite_to
+	to_team_dir = team_directory.collection.get_rows(search=row.to.name)
+	if len(to_team_dir)>0:
+		row.pa = to_team_dir[0].pa
 
 	row.link = url
 	row.id = item_id.group()
+
+
 
 	client = get_client_from_invite(row, upwork_client)
 	if len(client) > 0:
