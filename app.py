@@ -2070,16 +2070,11 @@ def pcj():
 	return f"added {subject} receipt to " + pcj.get_browseable_url()
 
 
-def get_client_from_invite(invite, client):
-	#get upwork client
-	login_config = upwork.Config({\
-		'consumer_key': os.environ.get("ConsumerKey"),\
-		'consumer_secret': os.environ.get("ConsumerSecret"),\
-		'access_token': os.environ.get("AccessToken"),\
-		'access_token_secret': os.environ.get("AccessSecret")})
+def get_client_from_invite(invite):
 
-	client = upwork.Client(login_config)
 	notion_client = NotionClient(os.environ.get("TOKEN"))
+
+	client = get_upwork_client_by_name(re.findall("(?<=&ac_user=)(.*)(?=&)", invite.description)[0])
 
 	client_db = notion_client.get_collection_view("https://www.notion.so/21a8e8245c9e4024848613cecdc8e88f?v=ff14989e8f96401db5f7c3527a4cd8b7")
 	
@@ -2135,8 +2130,6 @@ def get_client_from_invite(invite, client):
 
 	print([x.name for x in checked_result])
 
-	print(invite.to[0].name)
-	print(get_upwork_client_by_name(re.findall("(?<=&ac_user=)(.*)(?=&)", invite.description)[0]))
 	return (buyer,checked_result[0]) if len(checked_result)>0 else None
 
 
@@ -2164,7 +2157,7 @@ def create_invite(token, collection_url, subject, description, invite_to):
 	row.link = url
 	row.id = item_id.group()
 
-	client = get_client_from_invite(row, upwork_client)
+	client = get_upwork_client_by_name(re.findall("(?<=&ac_user=)(.*)(?=&)", invite.description)[0]
 	if client != None:
 		row.client = client[1]
 		row.job_url = "https://www.upwork.com/jobs/"+client[0]["ciphertext"]
