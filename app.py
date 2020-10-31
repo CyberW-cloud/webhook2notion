@@ -2168,13 +2168,13 @@ def create_invite(token, collection_url, subject, description, invite_to):
 		upwork_client = ""
 
 
-	upwork_client = get_client_from_invite(row, upwork_client)
-	if upwork_client != None:
-		row.client = upwork_client[1]
-		row.job_url = "https://www.upwork.com/jobs/"+upwork_client[0]["ciphertext"]
-		row.country = upwork_client[0]["op_country"]
-		row.time_zone = upwork_client[0]["op_timezone"]
-		row.skills = " ".join([x.values()[0] for x in upwork_client[0]["skills"]])
+	client = get_client_from_invite(row, upwork_client)
+	if client != None:
+		row.client = client[1]
+		row.job_url = "https://www.upwork.com/jobs/"+client[0]["ciphertext"]
+		row.country = client[0]["op_country"]
+		row.time_zone = client[0]["op_timezone"]
+		row.skills = " ".join([x.values()[0] for x in client[0]["skills"]])
 
 	return row
 
