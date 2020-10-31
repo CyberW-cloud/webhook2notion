@@ -2117,7 +2117,12 @@ def get_client_from_invite(invite):
 	if client_name == None:
 		return None
 
-	result = client_db.collection.get_rows(search = client_name)
+	for i in range(4):
+		result = client_db.collection.get_rows(search = " ".join([x for j, x in enumerate(client_name.split(" ")) if j<5-i]))
+		
+		if result != []:
+			break
+
 	checked_result = []
 	for x in result:
 		if client_name in x.name:
@@ -2157,12 +2162,16 @@ def create_invite(token, collection_url, subject, description, invite_to):
 	row.id = item_id.group()
 
 	client = get_client_from_invite(row, upwork_client)
-	if client != None:
-		row.client = [client[1]]
+	if len(client) > 0:
 		row.job_url = "https://www.upwork.com/jobs/"+client[0]["ciphertext"]
 		row.country = client[0]["op_country"]
 		row.time_zone = client[0]["op_timezone"]
 		row.skills = " ".join([x.values()[0] for x in client[0]["skills"]])
+		if row.questions == "":
+			row.questions = client[0]["questions"]
+
+		if len(client)>1:
+			row.client = [client[1]]
 
 	return row
 
