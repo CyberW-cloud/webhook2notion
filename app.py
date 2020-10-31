@@ -2093,7 +2093,10 @@ def get_client_from_invite(invite):
 
 		buyer["skills"] = job_info["profile"]["op_required_skills"]["op_required_skill"]
 		buyer["ciphertext"] = ciphertext
-		buyer["questions"] = "\n\n".join([x["position"] + ". " + x["question"] for x in job_info["profile"]["op_additional_questions"]["op_additional_question"].reverse()])
+
+		#for some reason, we need to reverse the list
+		job_info["profile"]["op_additional_questions"]["op_additional_question"].reverse()
+		buyer["questions"] = "\n\n".join([x["position"] + ". " + x["question"] for x in job_info["profile"]["op_additional_questions"]["op_additional_question"]])
 		print(buyer["questions"])
 	except Exception as e:
 		print("Idk, some error while getting the client " + str(e))
