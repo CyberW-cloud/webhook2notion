@@ -2058,7 +2058,7 @@ def get_client_from_invite(invite):
 		job_info = job_info.get_specific(ciphertext)
 		buyer = job_info["profile"]["buyer"]
 
-		print(job_info["profile"]["op_required_skills"])
+		print(job_info["profile"]["op_required_skills"]["op_required_skill"])
 		buyer["ciphertext"] = ciphertext
 	except Exception as e:
 		print("Idk, some error while getting the client " + str(e))
