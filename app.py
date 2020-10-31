@@ -2091,7 +2091,8 @@ def get_client_from_invite(invite):
 							checked_result.append(x)
 
 	print([x.name for x in checked_result])
-	return checked_result
+	
+	return checked_result[0] if len(checked_result)>0 else None
 
 
 def create_invite(token, collection_url, subject, description, invite_to):
