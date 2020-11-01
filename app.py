@@ -99,54 +99,6 @@ def tmp():
 
 	i = 1/0
 
-def get_upwork_client_by_name(name):
-	tokens = os.environ.get('TOKENS')
-
-	login_config = upwork.Config({\
-			'consumer_key': os.environ.get("ConsumerKey"),\
-			'consumer_secret': os.environ.get("ConsumerSecret"),\
-			'access_token': os.environ.get("AccessToken"),\
-			'access_token_secret': os.environ.get("AccessSecret")})
-
-	client = upwork.Client(login_config)
-
-	company = companyAPI(client)
-	messages = messageAPI(client)
-
-	
-	freelancer_ids = [x["public_url"].split("/")[-1] for x in company.get_users(os.environ.get("CompanyRef"))["users"]]
-	
-	tokens = parse_tokens(tokens, freelancer_ids)
-
-	for freelancer in tokens:
-		#log in as each freelancer
-		client = upwork.Client(upwork.Config({\
-			'consumer_key': os.environ.get("ConsumerKey"),\
-			'consumer_secret': os.environ.get("ConsumerSecret"),\
-			'access_token': freelancer["accessToken"],\
-			'access_token_secret': freelancer["accessSecret"]}))
-
-		userApi = userAPI(client)
-
-		time.sleep(1.6)
-		user_data = userApi.get_my_info()
-
-		if "user" not in user_data.keys():
-			continue
-		print(user_data["user"]["id"])
-		if name in user_data["user"]["id"]:
-			return client
-
-	login_config = upwork.Config({\
-			'consumer_key': os.environ.get("ConsumerKey"),\
-			'consumer_secret': os.environ.get("ConsumerSecret"),\
-			'access_token': os.environ.get("AccessToken"),\
-			'access_token_secret': os.environ.get("AccessSecret")})
-
-	client = upwork.Client(login_config)
-
-	return client
-
 @app.route('/update_clients', methods = ["GET"])
 def update_clients():
 	token = os.environ.get("TOKEN")
