@@ -2156,16 +2156,30 @@ def create_invite(token, collection_url, subject, description, invite_to):
 	url = match.group()
 	item_id = re.search("\d+", url)
 	client = NotionClient(token)
-	cv = client.get_collection_view(collection_url)
 
+	cv = client.get_collection_view()
 	team_directory = client.get_collection_view("https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=536bcc489f93433ab19d697490b00525")
 
+	#code for testing
+	test_page = notion_client.get_block("https://www.notion.so/test-63e297723c924b6babc931d10f7b4740")
+	
+
+	test_page.children.add_new(CollectionViewPageBlock, title = "table")
+	page = test_page.children[-1]
+
+	schema = copy_schema("https://www.notion.so/e38abf4425454efdadf1f38821dde765?v=3ee28557bd0c4dc49a8d1da90ffd58a9", client)
+
+	collection = notion_client.get_collection(notion_client.create_record("collection", parent=page, schema=schema))
+	page.collection = collection
+	page.views.add_new()
+
+
 	try:
-		row = cv.collection.add_row()
+		row = page.collection.add_row()
 	except Exception as e:
 		sort_params = [{"direction": "ascending", "property": "Date"}]
 		time.sleep(3)
-		row = cv.build_query(sort = sort_params).execute()[-1]
+		row = page.build_query(sort = sort_params).execute()[-1]
 
 	row.name = subject
 	row.description = description
