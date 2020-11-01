@@ -2169,7 +2169,7 @@ def create_invite(token, collection_url, subject, description, invite_to):
 	item_id = re.search("\d+", url)
 	client = NotionClient(token)
 
-	cv = client.get_collection_view()
+	cv = client.get_collection_view(collection_url)
 	team_directory = client.get_collection_view("https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=536bcc489f93433ab19d697490b00525")
 
 	try:
@@ -2182,11 +2182,12 @@ def create_invite(token, collection_url, subject, description, invite_to):
 	row.name = subject
 	row.description = description
 	row.status = "New"
-	
-	row.to = invite_to
-	to_team_dir = team_directory.collection.get_rows(search=row.to[0].name)
-	if len(to_team_dir)>0:
-		row.pa = [to_team_dir[0].pa[0]]
+
+	# no relations in our copy	
+	#row.to = invite_to
+	# to_team_dir = team_directory.collection.get_rows(search=invite_to.name)
+	# if len(to_team_dir)>0:
+	# 	row.pa = [to_team_dir[0].pa[0]]
 
 	row.link = url
 	row.id = item_id.group()
@@ -2215,13 +2216,13 @@ def create_invite(token, collection_url, subject, description, invite_to):
 # description = проперти decription етой строки
 # inviteto = кому пришел инвайт, ссылка на тим директори
 
-@app.route("/invites", methods=["POST"])
+@app.route("/invites", methods=["GET"])
 def invites():
-	collection_url = "https://www.notion.so/1af68894b4b9490d9a997cb403d96f95?v=1e9a61f71f5e4172935a606fa65a3d42"
-	description = request.form.get("description")
-	subject = request.form.get("subject")
+	collection_url = "https://www.notion.so/1af68894b4b9490d9a997cb403d96f95?v=1e9a61f71f5e4172935a606fa65a3d42
+	description = request.args.get("description")
+	subject = request.args.get("subject")
 	token_v2 = os.environ.get("TOKEN")
-	invite_to = request.form.get("inviteto")
+	invite_to = request.args.get("inviteto")
 	print(f"add {subject}")
 	invite = create_invite(token_v2, collection_url, subject, description, invite_to)
 	return f"added {subject} receipt to " + invite.get_browseable_url()
