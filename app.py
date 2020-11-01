@@ -2103,17 +2103,13 @@ def get_client_from_invite(invite):
 
 		buyer["skills"] = job_info["profile"]["op_required_skills"]["op_required_skill"]
 		buyer["ciphertext"] = ciphertext
-		print("https://www.upwork.com/jobs/"+buyer["ciphertext"])
-		# #for some reason, we need to reverse the list for positions to stay the same as in upwork
-		# job_info["profile"]["op_additional_questions"]["op_additional_question"].reverse()
-		# buyer["questions"] = "\n\n".join([x["position"] + ". " + x["question"] for x in job_info["profile"]["op_additional_questions"]["op_additional_question"]])
-		# print(buyer["questions"])
+		#for some reason, we need to reverse the list for positions to stay the same as in upwork
+		job_info["profile"]["op_additional_questions"]["op_additional_question"].reverse()
+		buyer["questions"] = "\n\n".join([x["position"] + ". " + x["question"] for x in job_info["profile"]["op_additional_questions"]["op_additional_question"]])
+		print(buyer["questions"])
 	except Exception as e:
 		print("Idk, some error while getting the client " + str(e))
 		return []
-
-
-	print(buyer)
 
 	contract_datetime = datetime.datetime.strptime(buyer["op_contract_date"], "%B %d, %Y")
 
@@ -2149,12 +2145,7 @@ def get_client_from_invite(invite):
 						if buyer["op_timezone"][:6] in x.time_zone or "(Coordinated Universal Time)" in buyer["op_timezone"] and "UTC+00" in x.time_zone:
 							checked_result.append(x)
 
-	print([x.name for x in checked_result])
-
 	to_team_dir = team_directory.collection.get_rows(search=invite.to[0].name)
-	print(to_team_dir[0].name)
-	if len(to_team_dir)>0:
-		print(to_team_dir[0].pa[0].name)
 
 	return (buyer,checked_result[0]) if len(checked_result)>0 else (buyer)
 
