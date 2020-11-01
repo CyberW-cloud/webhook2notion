@@ -2220,7 +2220,7 @@ def create_invite(token, collection_url, subject, description, invite_to):
 def invites():
 	collection_url = "https://www.notion.so/1af68894b4b9490d9a997cb403d96f95?v=1e9a61f71f5e4172935a606fa65a3d42
 	description = request.args.get("description")
-	subject = request.args.get("subject")
+	subject = "test"
 	token_v2 = os.environ.get("TOKEN")
 	invite_to = request.args.get("inviteto")
 	print(f"add {subject}")
