@@ -37,7 +37,7 @@ timezone = "Europe/Kiev"
 
 app = Flask(__name__)
 cache = {}
-
+token_clients = {}
 
 #@app.errorhandler(Exception)
 def before_request(error):
@@ -770,10 +770,10 @@ def update_db():
 
 	print("Proposals Done!")
 
-
-#accepted users should be an array of id's or "all" for accepting all users
-def parse_tokens(tokens, accepted_users = "all"):
+#runs right after the build, sets up token_clients for /invites and /message_review
+def parse_tokens(tokens):
 	
+	print("setting up token_clients")
 	tokens = [x.group() for x in re.finditer("({})*.+?(?=})", tokens)]
 
 	ret = []
@@ -783,11 +783,26 @@ def parse_tokens(tokens, accepted_users = "all"):
 
 			if strings[0] in accepted_users or accepted_users == "all":
 				ret.append({"id": strings[0], strings[1]:strings[2], strings[3]:strings[4]})
+				client = upwork.Client(upwork.Config({\
+					'consumer_key': os.environ.get("ConsumerKey"),\
+					'consumer_secret': os.environ.get("ConsumerSecret"),\
+					'access_token': freelancer["accessToken"],\
+					'access_token_secret': freelancer["accessSecret"]}))
+				userApi = userAPI(client)
+				
+				user_data = userApi.get_my_info()
+
+				if "user" not in user_data.keys():
+					continue
+					
+				user_id = user_data["user"]["id"]
+
+				token_clients[user_id] = client
 		
 		except Exception as e:
 			pass
 
-	return ret
+	print("finished token_clients setup")
 
 def update_parsed_rooms(parsed_rooms, update):
 
@@ -846,25 +861,23 @@ def message_review():
 	
 	freelancer_ids = [x["public_url"].split("/")[-1] for x in company.get_users(os.environ.get("CompanyRef"))["users"]]
 	
-	#skip owner to parse quicker
-	tokens = parse_tokens(tokens, freelancer_ids)
-
-	for freelancer in tokens:
+	
+	for client in token_clients.values():
+		
 		#log in as each freelancer
-		client = upwork.Client(upwork.Config({\
-			'consumer_key': os.environ.get("ConsumerKey"),\
-			'consumer_secret': os.environ.get("ConsumerSecret"),\
-			'access_token': freelancer["accessToken"],\
-			'access_token_secret': freelancer["accessSecret"]}))
-
 		userApi = userAPI(client)
+
 		messages_api = messageAPI(client)
 		
+		time.sleep(1.6)
 		user_data = userApi.get_my_info()
 		print(user_data)
 		if "user" not in user_data.keys():
 			continue
-			
+		
+		if user_data["user"]["profile_key"] not in freelancer_ids:
+			continue
+
 		user_id = user_data["user"]["id"]
 
 		if user_data["user"]["profile_key"] not in cache.keys():
@@ -2094,7 +2107,7 @@ def pcj():
 
 def get_client_from_invite(invite):
 
-	client = get_upwork_client_by_name(re.findall("(?<=&ac_user=)(.*)(?=&)", invite.description)[0])
+	client = token_clients[re.findall("(?<=&ac_user=)(.*)(?=&)", invite.description)[0]]
 
 	notion_client = NotionClient(os.environ.get("TOKEN"))
 
