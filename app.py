@@ -800,7 +800,7 @@ def parse_tokens():
 			token_clients[user_id] = client
 	
 		except Exception as e:
-			pass
+			raise e
 
 	print("finished token_clients setup")
 
