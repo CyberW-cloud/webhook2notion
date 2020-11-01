@@ -2071,7 +2071,7 @@ def get_client_from_invite(invite):
 	except Exception as e:
 		print("Idk, some error while getting the client " + str(e))
 		raise e 
-		return [] 
+		return []
 
 	contract_datetime = datetime.datetime.strptime(buyer["op_contract_date"], "%B %d, %Y")
 
