@@ -39,7 +39,7 @@ app = Flask(__name__)
 cache = {}
 token_clients = {}
 
-#@app.errorhandler(Exception)
+#@app.errorhandler(Exception) 
 def before_request(error):
 	print(error)
 	email_report(request.path + " FAILED", datetime.datetime.now().strftime('%d, %b %Y')+"\n\n"+str(''.join(traceback.format_exception(None, error, error.__traceback__))))
