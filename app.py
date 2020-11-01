@@ -2162,7 +2162,7 @@ def get_client_from_invite(invite):
 							checked_result.append(x)
 
 
-	return (buyer,checked_result[0]) if len(checked_result)>0 else (buyer)
+	return (buyer,checked_result[0]) if len(checked_result)>0 else [buyer]
 
 
 def create_invite(token, collection_url, subject, description, invite_to):
