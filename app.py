@@ -2201,7 +2201,7 @@ def create_invite(token, collection_url, subject, description, invite_to):
 	if len(client) > 0:
 		row.job_url = "https://www.upwork.com/jobs/"+client[0]["ciphertext"]
 		row.country = client[0]["op_country"]
-		row.time_zone = client[0]["op_timezone"]
+		row.timezone = client[0]["op_timezone"]
 		row.skills = " ".join([x.values()[0] for x in client[0]["skills"]])
 		
 		if client[0]["questions"]!="":
