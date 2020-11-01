@@ -761,8 +761,8 @@ def parse_tokens():
 			client = upwork.Client(upwork.Config({\
 				'consumer_key': os.environ.get("ConsumerKey"),\
 				'consumer_secret': os.environ.get("ConsumerSecret"),\
-				'access_token': freelancer["accessToken"],\
-				'access_token_secret': freelancer["accessSecret"]}))
+				'access_token': strings[2],\
+				'access_token_secret': strings[4]}))
 			userApi = userAPI(client)
 			
 			user_data = userApi.get_my_info()
