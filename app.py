@@ -96,32 +96,7 @@ def email_report(subject, body):
 
 @app.route('/tmp')
 def tmp():
-	#get upwork client
-	login_config = upwork.Config({\
-		'consumer_key': os.environ.get("ConsumerKey"),\
-		'consumer_secret': os.environ.get("ConsumerSecret"),\
-		'access_token': os.environ.get("AccessToken"),\
-		'access_token_secret': os.environ.get("AccessSecret")})
 
-	client = upwork.Client(login_config)
-
-	token = os.environ.get("TOKEN")
-	notion_client = NotionClient(token)
-
-	#code for testing
-	test_page = notion_client.get_block("https://www.notion.so/test-63e297723c924b6babc931d10f7b4740")
-	
-
-	test_page.children.add_new(CollectionViewPageBlock, title = "table")
-	page = test_page.children[-1]
-
-	schema = copy_schema("https://www.notion.so/e38abf4425454efdadf1f38821dde765?v=3ee28557bd0c4dc49a8d1da90ffd58a9", notion_client)
-
-	collection = notion_client.get_collection(notion_client.create_record("collection", parent=page, schema=schema))
-	page.collection = collection
-	page.views.add_new()
-
-	print(page.get_browseable_url())
 	i = 1/0
 
 def get_upwork_client_by_name(name):
