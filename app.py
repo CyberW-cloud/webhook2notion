@@ -776,7 +776,7 @@ def parse_tokens():
 			token_clients[user_id] = client
 	
 		except Exception as e:
-			raise e
+			pass
 
 	print("finished token_clients setup")
 
