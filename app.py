@@ -1897,7 +1897,7 @@ def friday_todo():
 		else:
 			return f"Can't find Function for role {role}"
 	print(f"Fiday todo for {roles} done")
-	return "Done!" 
+	return "Done!"
 
 
 def create_rss(token, collection_url, subject, link, description):
