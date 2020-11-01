@@ -771,8 +771,9 @@ def update_db():
 	print("Proposals Done!")
 
 #runs right after the build, sets up token_clients for /invites and /message_review
-def parse_tokens(tokens):
+def parse_tokens():
 	
+	tokens = os.environ.get("tokens")
 	print("setting up token_clients")
 	tokens = [x.group() for x in re.finditer("({})*.+?(?=})", tokens)]
 
