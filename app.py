@@ -2047,12 +2047,17 @@ def get_client_from_invite(invite):
 	application = applicationAPI(client)
 	job_info = jobInfoAPI(client)
 
+	expected_buyer_properties = ["op_country","op_timezone","skills","questions"]
+
 	try:
 		application = application.get_specific(invite.ID)
 		ciphertext = application["data"]["openingCiphertext"]
 		
 		job_info = job_info.get_specific(ciphertext)
 		buyer = job_info["profile"]["buyer"]
+		
+		for prop in expected_buyer_properties:
+			buyer[prop] = buyer[prop] if prop in buyer.keys else ""
 
 		buyer["skills"] = job_info["profile"]["op_required_skills"]["op_required_skill"]
 		buyer["ciphertext"] = ciphertext
