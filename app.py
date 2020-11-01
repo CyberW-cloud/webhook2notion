@@ -781,25 +781,24 @@ def parse_tokens():
 	for i in range(len(tokens)):
 		try:
 			strings = [x.group()[1:-1] for x in re.finditer('".+?(?=")+"', tokens[i])]
-
-			if strings[0] in accepted_users or accepted_users == "all":
-				ret.append({"id": strings[0], strings[1]:strings[2], strings[3]:strings[4]})
-				client = upwork.Client(upwork.Config({\
-					'consumer_key': os.environ.get("ConsumerKey"),\
-					'consumer_secret': os.environ.get("ConsumerSecret"),\
-					'access_token': freelancer["accessToken"],\
-					'access_token_secret': freelancer["accessSecret"]}))
-				userApi = userAPI(client)
-				
-				user_data = userApi.get_my_info()
-
-				if "user" not in user_data.keys():
-					continue
-					
-				user_id = user_data["user"]["id"]
-
-				token_clients[user_id] = client
 		
+			ret.append({"id": strings[0], strings[1]:strings[2], strings[3]:strings[4]})
+			client = upwork.Client(upwork.Config({\
+				'consumer_key': os.environ.get("ConsumerKey"),\
+				'consumer_secret': os.environ.get("ConsumerSecret"),\
+				'access_token': freelancer["accessToken"],\
+				'access_token_secret': freelancer["accessSecret"]}))
+			userApi = userAPI(client)
+			
+			user_data = userApi.get_my_info()
+
+			if "user" not in user_data.keys():
+				continue
+				
+			user_id = user_data["user"]["id"]
+
+			token_clients[user_id] = client
+	
 		except Exception as e:
 			pass
 
