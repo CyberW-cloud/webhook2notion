@@ -2047,7 +2047,7 @@ def get_client_from_invite(invite):
 	application = applicationAPI(client)
 	job_info = jobInfoAPI(client)
 
-	expected_buyer_properties = ["op_country","op_timezone","skills","questions"]
+	expected_buyer_properties = ["op_country","op_timezone","skills","questions","skills"]
 
 	try:
 		application = application.get_specific(invite.ID)
