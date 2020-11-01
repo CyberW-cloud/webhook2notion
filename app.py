@@ -2161,7 +2161,6 @@ def get_client_from_invite(invite):
 						if buyer["op_timezone"][:6] in x.time_zone or "(Coordinated Universal Time)" in buyer["op_timezone"] and "UTC+00" in x.time_zone:
 							checked_result.append(x)
 
-	to_team_dir = team_directory.collection.get_rows(search=invite.to[0].name)
 
 	return (buyer,checked_result[0]) if len(checked_result)>0 else (buyer)
 
