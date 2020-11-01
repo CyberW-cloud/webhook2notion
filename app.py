@@ -108,8 +108,20 @@ def tmp():
 	token = os.environ.get("TOKEN")
 	notion_client = NotionClient(token)
 
-	print(get_client_from_invite(notion_client.get_block("https://www.notion.so/438687855-0a0f6cf25a4646e78378899052a221f6")))
+	#code for testing
+	test_page = notion_client.get_block("https://www.notion.so/test-63e297723c924b6babc931d10f7b4740")
+	
 
+	test_page.children.add_new(CollectionViewPageBlock, title = "table")
+	page = test_page.children[-1]
+
+	schema = copy_schema("https://www.notion.so/21a8e8245c9e4024848613cecdc8e88f?v=f658b865c0b842149cf4583bbff2dc28", client)
+
+	collection = notion_client.get_collection(notion_client.create_record("collection", parent=page, schema=schema))
+	page.collection = collection
+	page.views.add_new()
+
+	print(page.get_browseable_url())
 	i = 1/0
 
 def get_upwork_client_by_name(name):
@@ -2160,26 +2172,12 @@ def create_invite(token, collection_url, subject, description, invite_to):
 	cv = client.get_collection_view()
 	team_directory = client.get_collection_view("https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=536bcc489f93433ab19d697490b00525")
 
-	#code for testing
-	test_page = notion_client.get_block("https://www.notion.so/test-63e297723c924b6babc931d10f7b4740")
-	
-
-	test_page.children.add_new(CollectionViewPageBlock, title = "table")
-	page = test_page.children[-1]
-
-	schema = copy_schema("https://www.notion.so/e38abf4425454efdadf1f38821dde765?v=3ee28557bd0c4dc49a8d1da90ffd58a9", client)
-
-	collection = notion_client.get_collection(notion_client.create_record("collection", parent=page, schema=schema))
-	page.collection = collection
-	page.views.add_new()
-
-
 	try:
-		row = page.collection.add_row()
+		row = cv.collection.add_row()
 	except Exception as e:
 		sort_params = [{"direction": "ascending", "property": "Date"}]
 		time.sleep(3)
-		row = page.build_query(sort = sort_params).execute()[-1]
+		row = cv.build_query(sort = sort_params).execute()[-1]
 
 	row.name = subject
 	row.description = description
