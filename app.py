@@ -2057,7 +2057,7 @@ def get_client_from_invite(invite):
 		buyer = job_info["profile"]["buyer"]
 		
 		for prop in expected_buyer_properties:
-			buyer[prop] = buyer[prop] if prop in buyer.keys else ""
+			buyer[prop] = buyer[prop] if prop in buyer.keys() else ""
 
 		buyer["skills"] = job_info["profile"]["op_required_skills"]["op_required_skill"]
 		buyer["ciphertext"] = ciphertext
