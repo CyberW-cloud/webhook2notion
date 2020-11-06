@@ -2140,7 +2140,7 @@ def create_invite(token, collection_url, subject, description, invite_to):
 	to_team_dir = team_directory.collection.get_rows(search=client.get_block(invite_to).name)
 	print(to_team_dir[0].get_browseable_url())
 	if len(to_team_dir)>0:
-		row.pa = team_directory.collection.get_rows(search=to_team_dir.PA[0].name).notion_user
+		row.pa = team_directory.collection.get_rows(search=to_team_dir[0].pa[0].name).notion_user
 
 	row.link = url
 	row.id = item_id.group()
