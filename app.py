@@ -98,8 +98,8 @@ def email_report(subject, body):
 def tmp():
 	client = NotionClient(os.environ.get("TOKEN"))
 
-	for i in client.get_space("0cf88286-10f7-495a-8e70-f8115c902ff6").users:
-		print(i.full_name)
+	for i in [permission["user_id"] for permission in client.current_space.get("permissions")]:
+		print(i)
 
 	i = 1/0
 
