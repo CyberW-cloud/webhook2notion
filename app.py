@@ -96,10 +96,6 @@ def email_report(subject, body):
 
 @app.route('/tmp')
 def tmp():
-	client = NotionClient(os.environ.get("TOKEN"))
-
-	for i in [permission["user_id"] for permission in client.current_space.get("permissions")]:
-		print(i)
 
 	i = 1/0
 
@@ -2141,11 +2137,9 @@ def create_invite(token, collection_url, subject, description, invite_to):
 
 
 	# row.to = invite_to
-	for i in client.current_space.users():
-		print(i.full_name())
-
+	to_team_dir = team_directory.collection.get_rows(search=invite_to.pa[0].name)
 	if len(to_team_dir)>0:
-		row.pa = [to_team_dir[0].pa[0]]
+		row.pa = [to_team_dir[0].notion_user]
 
 	row.link = url
 	row.id = item_id.group()
