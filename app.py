@@ -96,7 +96,10 @@ def email_report(subject, body):
 
 @app.route('/tmp')
 def tmp():
+	client = NotionClient(os.environ.get("TOKEN"))
 
+	page = client.get("https://www.notion.so/437686548-14074d8d8aff43b489c9dec09aa6b0a3")
+	page.pa = client.current_user
 	i = 1/0
 
 @app.route('/update_clients', methods = ["GET"])
