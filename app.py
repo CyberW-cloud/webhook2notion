@@ -814,10 +814,9 @@ def message_review():
             cache[user_data["user"]["profile_key"]] = user_data["user"]["first_name"] + " " + user_data["user"]["last_name"]
 
         profileApi = profileAPI(client)
-        
 
         try:
-            rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": str(activeSince), "limit":1000, "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})["rooms"]
+            rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": str(activeSince), "limit":200, "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})["rooms"]
         except Exception as e:
             print(str(e) + " 4")
             rooms = []
@@ -825,7 +824,7 @@ def message_review():
         time.sleep(1.6)
         
         try:
-            user_rooms = messages_api.get_rooms(user_id, {"activeSince": str(activeSince), "limit":1000, "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})["rooms"]
+            user_rooms = messages_api.get_rooms(user_id, {"activeSince": str(activeSince), "limit":200, "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})["rooms"]
         except Exception as e:
             print(str(e) + " 5")
             user_rooms = []
