@@ -699,23 +699,40 @@ def update_db():
     print("Proposals Done!")
 
 
-#accepted users should be an array of id's or "all" for accepting all users
-def parse_tokens(tokens, accepted_users = "all"):
+#runs right after the build, sets up token_clients for /invites and /message_review
+def parse_tokens():
     
+    tokens = os.environ.get("TOKENS")
+    print("setting up token_clients")
     tokens = [x.group() for x in re.finditer("({})*.+?(?=})", tokens)]
 
     ret = []
     for i in range(len(tokens)):
         try:
             strings = [x.group()[1:-1] for x in re.finditer('".+?(?=")+"', tokens[i])]
-
-            if strings[0] in accepted_users or accepted_users == "all":
-                ret.append({"id": strings[0], strings[1]:strings[2], strings[3]:strings[4]})
         
+            ret.append({"id": strings[0], strings[1]:strings[2], strings[3]:strings[4]})
+            client = upwork.Client(upwork.Config({\
+                'consumer_key': os.environ.get("ConsumerKey"),\
+                'consumer_secret': os.environ.get("ConsumerSecret"),\
+                'access_token': strings[2],\
+                'access_token_secret': strings[4]}))
+            userApi = userAPI(client)
+            
+            time.sleep(1.6)
+            user_data = userApi.get_my_info()
+
+            if "user" not in user_data.keys():
+                continue
+                
+            user_id = user_data["user"]["id"]
+
+            token_clients[user_id] = client
+    
         except Exception as e:
             pass
 
-    return ret
+    print("finished token_clients setup")
 
 def update_parsed_rooms(parsed_rooms, update):
 
@@ -774,25 +791,23 @@ def message_review():
     
     freelancer_ids = [x["public_url"].split("/")[-1] for x in company.get_users(os.environ.get("CompanyRef"))["users"]]
     
-    #skip owner to parse quicker
-    tokens = parse_tokens(tokens, freelancer_ids)
-
-    for freelancer in tokens:
+    
+    for client in token_clients.values():
+        
         #log in as each freelancer
-        client = upwork.Client(upwork.Config({\
-            'consumer_key': os.environ.get("ConsumerKey"),\
-            'consumer_secret': os.environ.get("ConsumerSecret"),\
-            'access_token': freelancer["accessToken"],\
-            'access_token_secret': freelancer["accessSecret"]}))
-
         userApi = userAPI(client)
+
         messages_api = messageAPI(client)
         
+        time.sleep(1.6)
         user_data = userApi.get_my_info()
         print(user_data)
         if "user" not in user_data.keys():
             continue
-            
+        
+        if user_data["user"]["profile_key"] not in freelancer_ids:
+            continue
+
         user_id = user_data["user"]["id"]
 
         if user_data["user"]["profile_key"] not in cache.keys():
@@ -800,7 +815,6 @@ def message_review():
 
         profileApi = profileAPI(client)
         
-
 
         try:
             rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": str(activeSince), "limit":1000, "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})["rooms"]
@@ -2042,6 +2056,136 @@ def create_invite(token, collection_url, subject, description, invite_to):
 	row.id = item_id.group()
 	return row
 
+def get_client_from_invite(invite):
+
+    client = token_clients[re.findall("(?<=&ac_user=)(.*)(?=&)", invite.description)[0]]
+
+    notion_client = NotionClient(os.environ.get("TOKEN"))
+
+    client_db = notion_client.get_collection_view("https://www.notion.so/21a8e8245c9e4024848613cecdc8e88f?v=ff14989e8f96401db5f7c3527a4cd8b7")
+    team_directory = notion_client.get_collection_view("https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=536bcc489f93433ab19d697490b00525")
+
+    time.sleep(3.2)
+
+    application = applicationAPI(client)
+    job_info = jobInfoAPI(client)
+
+    expected_buyer_properties = ["op_country","op_timezone","skills","questions","skills"]
+
+    try:
+        application = application.get_specific(invite.ID)
+        ciphertext = application["data"]["openingCiphertext"]
+        
+        job_info = job_info.get_specific(ciphertext)
+        buyer = job_info["profile"]["buyer"]
+        
+        for prop in expected_buyer_properties:
+            buyer[prop] = buyer[prop] if prop in buyer.keys() else ""
+
+        buyer["skills"] = job_info["profile"]["op_required_skills"]["op_required_skill"]
+        buyer["ciphertext"] = ciphertext
+        #for some reason, we need to reverse the list for positions to stay the same as in upwork
+        if job_info["profile"]["op_additional_questions"]!="":
+            job_info["profile"]["op_additional_questions"]["op_additional_question"].reverse()
+            buyer["questions"] = "\n\n".join([x["position"] + ". " + x["question"] for x in job_info["profile"]["op_additional_questions"]["op_additional_question"]])
+            print(buyer["questions"])
+        else:
+            buyer["questions"] = ""
+    except Exception as e:
+        print("Idk, some error while getting the client " + str(e))
+        raise e 
+        return [] 
+
+    contract_datetime = datetime.datetime.strptime(buyer["op_contract_date"], "%B %d, %Y")
+
+    client_name = None
+    description = invite.description.split("\n")
+    print(description)
+    for i, line in enumerate(description):
+        if ": https://upwork.com/applications/" in line:
+            if description[i-1] == "":
+                client_name = description[i-2]
+                break
+            else:
+                client_name = description[i-2]
+                break
+
+    print(client_name)
+
+    if client_name == None:
+        return None
+
+    client_name=client_name.replace(".", "")
+
+    for i in range(len(client_name.split(" "))):
+        result = client_db.collection.get_rows(search = " ".join([x for j, x in enumerate(client_name.split(" ")) if j<5-i]))
+        
+        if result != []:
+            break
+
+    checked_result = []
+    for x in result:
+        if client_name in x.name:
+            if buyer["op_country"] == x.country or x.country == "":
+                if buyer["op_city"] == x.location or x.location == "":
+                    if buyer["op_state"] == x.state or x.state == "":
+                        if buyer["op_timezone"][:6] in x.time_zone or "(Coordinated Universal Time)" in buyer["op_timezone"] and "UTC+00" in x.time_zone:
+                            checked_result.append(x)
+
+
+    return (buyer,checked_result[0]) if len(checked_result)>0 else [buyer]
+
+
+def create_invite(token, collection_url, subject, description, invite_to):
+    # notion
+    match = re.search("https://upwork.com/applications/\d+", description)
+    url = match.group()
+    item_id = re.search("\d+", url)
+    client = NotionClient(token)
+
+    cv = client.get_collection_view(collection_url)
+    team_directory = client.get_collection_view("https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=536bcc489f93433ab19d697490b00525")
+
+    try:
+        row = cv.collection.add_row()
+    except Exception as e:
+        sort_params = [{"direction": "ascending", "property": "Date"}]
+        time.sleep(3)
+        row = cv.build_query(sort = sort_params).execute()[-1]
+
+    row.name = subject
+    row.description = description
+    row.status = "New"
+
+
+    row.to = invite_to
+    to_team_dir = team_directory.collection.get_rows(search=client.get_block(invite_to).name)
+    print(to_team_dir[0].get_browseable_url())
+    
+    if len(to_team_dir)>0:
+        row.pa = team_directory.collection.get_rows(search=to_team_dir[0].pa[0].name)[0].notion_user[0]
+
+    row.link = url
+    row.id = item_id.group()
+
+
+
+    client = get_client_from_invite(row)
+    if len(client) > 0:
+        row.job_url = "https://www.upwork.com/jobs/"+client[0]["ciphertext"]
+        row.country = client[0]["op_country"]
+        row.timezone = client[0]["op_timezone"]
+        row.skills = ", ".join([list(x.values())[0] for x in client[0]["skills"]])
+        
+        if client[0]["questions"]!="":
+            parent = row.children.add_new(TextBlock, "**Questions**")
+            parent.children.add_new(TextBlock, client[0]["questions"])
+
+        if len(client)>1:
+            row.client = client[1].name
+
+    return row
+
 
 #PROPERTIES:
 # collectionURL = таблица, в которую добавить строку
@@ -2059,6 +2203,7 @@ def invites():
 	print(f"add {subject}")
 	invite = create_invite(token_v2, collection_url, subject, description, invite_to)
 	return f"added {subject} receipt to " + invite.get_browseable_url()
+
 
 def get_id_from_upwork_url(url):
 
@@ -2211,4 +2356,5 @@ def manychat():
 if __name__ == "__main__":
     app.debug = True
     port = int(os.environ.get("PORT", 5000))
+    app.before_first_request(parse_tokens)
     app.run(host="0.0.0.0", port=port)
