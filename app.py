@@ -96,6 +96,10 @@ def email_report(subject, body):
 
 @app.route('/tmp')
 def tmp():
+	client = NotionClient(os.environ.get("TOKEN"))
+
+	for i in client.current_space.users():
+		print(i.full_name())
 
 	i = 1/0
 
@@ -816,7 +820,7 @@ def message_review():
 
 
 		try:
-			rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": str(activeSince), "limit":1000, "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})["rooms"]
+			rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": str(activeSince), "limit":200, "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})["rooms"]
 		except Exception as e:
 			print(str(e) + " 4")
 			rooms = []
@@ -824,7 +828,7 @@ def message_review():
 		time.sleep(1.6)
 		
 		try:
-			user_rooms = messages_api.get_rooms(user_id, {"activeSince": str(activeSince), "limit":1000, "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})["rooms"]
+			user_rooms = messages_api.get_rooms(user_id, {"activeSince": str(activeSince), "limit":200, "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})["rooms"]
 		except Exception as e:
 			print(str(e) + " 5")
 			user_rooms = []
@@ -921,16 +925,17 @@ def message_review():
 
 		target_row = rows[room["type"]]
 
-		if room["room"]["roomName"] == None:
-			room["room"]["roomName"] == "None"
-		if room["room"]["topic"] == None:
-			room["room"]["topic"] == "None"
+		if not isinstance(room["room"]["roomName"],str):
+			room["room"]["roomName"] == ""
+		
+		if not isinstance(room["room"]["topic"],str):
+			room["room"]["topic"] == ""
 
 		try:
 			title = room["room"]["roomName"]+", **"+room["room"]["topic"] + "**"
 		except Exception:
-			print(room)
-			continue
+			title = "ERROR: Couldn't get the name"
+
 
 		parent_text_block = auto_retry_lambda(target_row.children.add_new,TextBlock, title = title)
 		text_block = auto_retry_lambda(parent_text_block.children.add_new,TextBlock, title =type_text+" , "+link_text)
@@ -2134,11 +2139,13 @@ def create_invite(token, collection_url, subject, description, invite_to):
 	row.description = description
 	row.status = "New"
 
-	# no relations in our copy	
-	#row.to = invite_to
-	# to_team_dir = team_directory.collection.get_rows(search=invite_to.name)
-	# if len(to_team_dir)>0:
-	# 	row.pa = [to_team_dir[0].pa[0]]
+
+	# row.to = invite_to
+	for i in client.current_space.users():
+		print(i.full_name())
+
+	if len(to_team_dir)>0:
+		row.pa = [to_team_dir[0].pa[0]]
 
 	row.link = url
 	row.id = item_id.group()
