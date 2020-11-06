@@ -908,16 +908,16 @@ def message_review():
 
         target_row = rows[room["type"]]
 
-        if room["room"]["roomName"] == None:
-            room["room"]["roomName"] == "None"
-        if room["room"]["topic"] == None:
-            room["room"]["topic"] == "None"
+        if not isinstance(room["room"]["roomName"],str):
+            room["room"]["roomName"] == ""
+        
+        if not isinstance(room["room"]["topic"],str):
+            room["room"]["topic"] == ""
 
         try:
             title = room["room"]["roomName"]+", **"+room["room"]["topic"] + "**"
         except Exception:
-            print(room)
-            continue
+            title = "ERROR: Couldn't get the name"
 
         parent_text_block = auto_retry_lambda(target_row.children.add_new,TextBlock, title = title)
         text_block = auto_retry_lambda(parent_text_block.children.add_new,TextBlock, title =type_text+" , "+link_text)
