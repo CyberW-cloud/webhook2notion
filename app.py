@@ -37,7 +37,7 @@ timezone = "Europe/Kiev"
 
 app = Flask(__name__)
 cache = {}
-
+token_clients = {}
 
 @app.errorhandler(Exception)
 def before_request(error):
