@@ -2155,7 +2155,7 @@ def create_invite(token, collection_url, subject, description, invite_to):
 		row.job_url = "https://www.upwork.com/jobs/"+client[0]["ciphertext"]
 		row.country = client[0]["op_country"]
 		row.timezone = client[0]["op_timezone"]
-		row.skills = "\n".join([list(x.values())[0] for x in client[0]["skills"]])
+		row.skills = ", ".join([list(x.values())[0] for x in client[0]["skills"]])
 		
 		if client[0]["questions"]!="":
 			parent = row.children.add_new(TextBlock, "**Questions**")
