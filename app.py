@@ -98,7 +98,7 @@ def email_report(subject, body):
 def tmp():
 	client = NotionClient(os.environ.get("TOKEN"))
 
-	for i in client.get_space("1ced0604-d477-49ab-b524-365de5e1069a").users:
+	for i in client.get_space("0cf88286-10f7-495a-8e70-f8115c902ff6").users:
 		print(i.full_name)
 
 	i = 1/0
