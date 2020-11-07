@@ -2370,7 +2370,9 @@ def start_runner():
     thread = threading.Thread(target=start_loop)
     thread.start()
 
-
+@app.route("/", methods=["GET"])
+def a():
+    return "nothing here"
 
 if __name__ == "__main__":
     start_runner()
