@@ -136,7 +136,7 @@ def get_room_messages():
 
 	messages = messages_api.get_room_messages(os.environ.get("TeamID"), room_id, {"limit":200})
 	if "stories_list" not in messages.keys():
-		messages = messages_api.get_room_messages(, room_id, {"limit":200})
+		messages = messages_api.get_room_messages(user_id, room_id, {"limit":200})
 
 	messages = messages["stories_list"]["stories"]
 	ret = []
