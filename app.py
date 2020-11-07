@@ -2346,19 +2346,10 @@ def manychat():
 #workaround to do before_first_request right after build
 def start_runner():
     def start_loop():
-        not_started = True
-        while not_started:
-            print('In start loop')
-            try:
-                r = requests.get('https://dev-etc-to-notion.herokuapp.com/tmp')
-                if r.status_code == 200:
-                    print('Server started, quiting start_loop')
-                    return
-                print(r.status_code)
-            except:
-                print('Server not yet started')
-            time.sleep(2)
+        time.sleep(5)
+        requests.get("https://dev-etc-to-notion.herokuapp.com/tmp")
 
+        
     print('Started runner')
     thread = threading.Thread(target=start_loop)
     thread.start()
