@@ -27,6 +27,7 @@ from upwork.routers.hr.jobs import Api as jobsAPI
 from upwork.routers.jobs.profile import Api as jobInfoAPI
 from upwork.routers.hr.engagements import Api as engagementAPI
 
+import threading
 import psycopg2
 
 import smtplib
@@ -2342,8 +2343,31 @@ def manychat():
 	return {'version': 'v2', 'content': {}, 'data': result}
 
 
+#workaround to do before_first_request right after build
+def start_runner():
+    def start_loop():
+        not_started = True
+        while not_started:
+            print('In start loop')
+            try:
+                r = requests.get('http://127.0.0.1:5000/')
+                if r.status_code == 200:
+                    print('Server started, quiting start_loop')
+                    not_started = False
+                print(r.status_code)
+            except:
+                print('Server not yet started')
+            time.sleep(2)
+
+    print('Started runner')
+    thread = threading.Thread(target=start_loop)
+    thread.start()
+
+
+
 if __name__ == "__main__":
 	app.debug = True
 	port = int(os.environ.get("PORT", 5000))
 	app.before_first_request(parse_tokens)
+	start_runner()
 	app.run(host="0.0.0.0", port=port)
