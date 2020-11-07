@@ -1556,30 +1556,30 @@ def get_todo_url_by_name(token, name):
 
 
 def create_todo(token, date, link, todo, text):
-	# notion
-	if date is not None:  # if date not provided use now()
-		if isinstance(date, str):
-			date = datetime.datetime.strptime(urllib.parse.unquote("{}".format(date)), "%Y-%m-%dT%H:%M:%S.%fZ").date()
-	else:
-		date = datetime.datetime.now().date()
+    # notion
+    if date is not None:  # if date not provided use now()
+        if isinstance(date, str):
+            date = datetime.datetime.strptime(urllib.parse.unquote("{}".format(date)), "%Y-%m-%dT%H:%M:%S.%fZ").date()
+    else:
+        date = datetime.datetime.now().date()
 
-	client = NotionClient(token)
-	print(link)
-	page = client.get_block(link)
-	tasks = todo
+    client = NotionClient(token)
+    print(link)
+    page = client.get_block(link)
+    tasks = todo
 
-	timeout = time.time()+10 #timeout after 10 seconds 
-	added = False
-	while time.time()<timeout:
-		try:
-			create_new_task(page, "", text=text, date=date, timezone=timezone, tasks=tasks)	
-			added = True
-			break
-		except Exception as e:
-			print("retrying due to: " + str(e))
-		
-	if not added:
-		raise IOError("Notion is most likely down. F")
+    timeout = time.time()+10 #timeout after 10 seconds 
+    added = False
+    while time.time()<timeout:
+        try:
+            create_new_task(page, "", text=text, date=date, timezone=timezone, tasks=tasks)    
+            added = True
+            break
+        except Exception as e:
+            print("retrying due to: " + str(e))
+        
+    if not added:
+        raise IOError("Notion is most likely down. F")
 
 
 #PROPERTIES:
@@ -1988,28 +1988,28 @@ def message():
 
 
 def create_pcj(token, collection_url, subject, description, invite_to, link):
-	# notion
-	client = NotionClient(token)
-	cv = client.get_collection_view(collection_url)
-	
-	try:
-		row = cv.collection.add_row()
-	except Exception as e:
-		sort_params = [{"direction": "ascending", "property": "Date"}]
-		time.sleep(3)
-		row = cv.build_query(sort = sort_params).execute()[-1]
-	
-	row.name = subject[:-9]
-	row.description = description
-	row.status = "New"
-	row.to = invite_to
-	row.link = "https://www.upwork.com/ab/jobs/search/?previous_clients=all&q={}&sort=recency".format(
-		urllib.parse.quote(subject[:-9])
-	)
-	
-	item_id = re.search("%7E[0-9][\w]+", link)
-	row.id = item_id.group()[3:]
-	return row
+    # notion
+    client = NotionClient(token)
+    cv = client.get_collection_view(collection_url)
+    
+    try:
+        row = cv.collection.add_row()
+    except Exception as e:
+        sort_params = [{"direction": "ascending", "property": "Date"}]
+        time.sleep(3)
+        row = cv.build_query(sort = sort_params).execute()[-1]
+    
+    row.name = subject[:-9]
+    row.description = description
+    row.status = "New"
+    row.to = invite_to
+    row.link = "https://www.upwork.com/ab/jobs/search/?previous_clients=all&q={}&sort=recency".format(
+        urllib.parse.quote(subject[:-9])
+    )
+    
+    item_id = re.search("%7E[0-9][\w]+", link)
+    row.id = item_id.group()[3:]
+    return row
 
 
 #PROPERTIES:
@@ -2021,43 +2021,46 @@ def create_pcj(token, collection_url, subject, description, invite_to, link):
 
 @app.route("/pcj", methods=["POST"])
 def pcj():
-	collection_url = request.form.get("collectionURL")
-	description = request.form.get("description")
-	subject = request.form.get("subject")
-	token_v2 = os.environ.get("TOKEN")
-	invite_to = request.form.get("inviteto")
-	link = request.form.get("link")
-	print(f"add {subject} {link}")
-	pcj = create_pcj(token_v2, collection_url, subject, description, invite_to, link)
-	return f"added {subject} receipt to " + pcj.get_browseable_url()
+    collection_url = request.form.get("collectionURL")
+    description = request.form.get("description")
+    subject = request.form.get("subject")
+    token_v2 = os.environ.get("TOKEN")
+    invite_to = request.form.get("inviteto")
+    link = request.form.get("link")
+    print(f"add {subject} {link}")
+    pcj = create_pcj(token_v2, collection_url, subject, description, invite_to, link)
+    return f"added {subject} receipt to " + pcj.get_browseable_url()
 
 
 
 def create_invite(token, collection_url, subject, description, invite_to):
-	# notion
-	match = re.search("https://upwork.com/applications/\d+", description)
-	url = match.group()
-	item_id = re.search("\d+", url)
-	client = NotionClient(token)
-	cv = client.get_collection_view(collection_url)
-	try:
-		row = cv.collection.add_row()
-	except Exception as e:
-		sort_params = [{"direction": "ascending", "property": "Date"}]
-		time.sleep(3)
-		row = cv.build_query(sort = sort_params).execute()[-1]
+    # notion
+    match = re.search("https://upwork.com/applications/\d+", description)
+    url = match.group()
+    item_id = re.search("\d+", url)
+    client = NotionClient(token)
+    cv = client.get_collection_view(collection_url)
+    try:
+        row = cv.collection.add_row()
+    except Exception as e:
+        sort_params = [{"direction": "ascending", "property": "Date"}]
+        time.sleep(3)
+        row = cv.build_query(sort = sort_params).execute()[-1]
 
-	row.name = subject
-	row.description = description
-	row.status = "New"
-	row.to = invite_to
-	row.link = url
-	row.id = item_id.group()
-	return row
+    row.name = subject
+    row.description = description
+    row.status = "New"
+    row.to = invite_to
+    row.link = url
+    row.id = item_id.group()
+    return row
 
 def get_client_from_invite(invite):
 
-    client = token_clients[re.findall("(?<=&ac_user=)(.*)(?=&)", invite.description)[0]]
+    if "&ac_user=" in invite.description: 
+        client = token_clients[re.findall("(?<=&ac_user=)(.*)(?=&)", invite.description)[0]]
+    else:
+        client = token_clients["safonov"]
 
     notion_client = NotionClient(os.environ.get("TOKEN"))
 
@@ -2092,7 +2095,6 @@ def get_client_from_invite(invite):
             buyer["questions"] = ""
     except Exception as e:
         print("Idk, some error while getting the client " + str(e))
-        raise e 
         return [] 
 
     contract_datetime = datetime.datetime.strptime(buyer["op_contract_date"], "%B %d, %Y")
@@ -2136,11 +2138,12 @@ def get_client_from_invite(invite):
 
 
 def create_invite(token, collection_url, subject, description, invite_to):
-    # notion
     match = re.search("https://upwork.com/applications/\d+", description)
-    url = match.group()
+
+    url = match.group() if match != None else ""
     item_id = re.search("\d+", url)
     client = NotionClient(token)
+
 
     cv = client.get_collection_view(collection_url)
     team_directory = client.get_collection_view("https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=536bcc489f93433ab19d697490b00525")
@@ -2152,20 +2155,26 @@ def create_invite(token, collection_url, subject, description, invite_to):
         time.sleep(3)
         row = cv.build_query(sort = sort_params).execute()[-1]
 
+
     row.name = subject
     row.description = description
     row.status = "New"
 
-
-    row.to = invite_to
-    to_team_dir = team_directory.collection.get_rows(search=client.get_block(invite_to).name)
-    print(to_team_dir[0].get_browseable_url())
-    
-    if len(to_team_dir)>0:
-        row.pa = team_directory.collection.get_rows(search=to_team_dir[0].pa[0].name)[0].notion_user[0]
-
     row.link = url
-    row.id = item_id.group()
+    row.id = item_id.group() if item_id != None else ""
+
+    try:
+        row.to = invite_to
+        to_team_dir = team_directory.collection.get_rows(search=client.get_block(invite_to).name)
+        print(to_team_dir[0].get_browseable_url())
+        
+        if len(to_team_dir)>0:
+            row.pa = team_directory.collection.get_rows(search=to_team_dir[0].pa[0].name)[0].notion_user[0]
+    
+    except Exception as e:
+        print("failed to get pa, skip")
+
+
 
 
 
@@ -2177,14 +2186,13 @@ def create_invite(token, collection_url, subject, description, invite_to):
         row.skills = ", ".join([list(x.values())[0] for x in client[0]["skills"]])
         
         if client[0]["questions"]!="":
-            parent = row.children.add_new(TextBlock, "**Questions**")
-            parent.children.add_new(TextBlock, client[0]["questions"])
+            parent = row.children.add_new(TextBlock, title = "**Questions**")
+            parent.children.add_new(TextBlock, title = client[0]["questions"])
 
         if len(client)>1:
             row.client = client[1].name
 
     return row
-
 
 #PROPERTIES:
 # collectionURL = таблица, в которую добавить строку
@@ -2194,14 +2202,14 @@ def create_invite(token, collection_url, subject, description, invite_to):
 
 @app.route("/invites", methods=["POST"])
 def invites():
-	collection_url = request.form.get("collectionURL")
-	description = request.form.get("description")
-	subject = request.form.get("subject")
-	token_v2 = os.environ.get("TOKEN")
-	invite_to = request.form.get("inviteto")
-	print(f"add {subject}")
-	invite = create_invite(token_v2, collection_url, subject, description, invite_to)
-	return f"added {subject} receipt to " + invite.get_browseable_url()
+    collection_url = request.form.get("collectionURL")
+    description = request.form.get("description")
+    subject = request.form.get("subject")
+    token_v2 = os.environ.get("TOKEN")
+    invite_to = request.form.get("inviteto")
+    print(f"add {subject}")
+    invite = create_invite(token_v2, collection_url, subject, description, invite_to)
+    return f"added {subject} receipt to " + invite.get_browseable_url()
 
 
 def get_id_from_upwork_url(url):
