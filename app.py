@@ -120,7 +120,7 @@ def get_room_messages():
 	if ac_user == None or ac_user not in token_clients.keys():
 		client = token_clients["safonov"]
 	else:
-		client = token_clients["ac_user"]
+		client = token_clients[ac_user]
 
 	messages_api = messageAPI(client) 	
 	user_api = userAPI(client)
