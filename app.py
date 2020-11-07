@@ -103,6 +103,10 @@ def tmp():
 	page.pa = client.current_user
 	i = 1/0
 
+@app.route('/view_room', methods = ["GET"])
+def view_room()
+	return flask.render_template("view_room_page.html")
+
 @app.route('/update_clients', methods = ["GET"])
 def update_clients():
 	token = os.environ.get("TOKEN")
@@ -2357,7 +2361,9 @@ def start_runner():
 
 
 if __name__ == "__main__":
-	start_runner()
+	if not len(token_clients.keys())>0:
+		start_runner()
+		
 	app.debug = True
 	port = int(os.environ.get("PORT", 5000))
 	app.before_first_request(parse_tokens)

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style type="text/css" media="screen">
+    body { background-color: #333333}
+    table,td,th {border: 1px Grey solid;}
+    table {border-collapse: collapse;width:90%;margin: auto;}
+    th, td {padding: 3px;text-align: center; color: white}
+    .first-row {background-color: #505050;}
+    .table-row {background-color: #444444;}
+    .table-row:hover td {background-color: #808080; color: black; border: 1px black solid}
+  </style>
+</head>
+
+<body onload="main()">
+
+  <h1 style="color:white;text-align: center;">Message history</h1>
+
+  <table class="main-table">
+    <tr class="first-row">
+      <th>User</th>
+      <th>Message</th> 
+      <th>Time</th>
+    </tr>
+    <!-- JS will fill this table later -->
+  </table>
+
+<script type="text/javascript">
+  function strip(text)
+  {
+    // Remove style tags and content
+    text.replace(/<style[^>]*>.*<\/style>/gm, '')
+        // Remove script tags and content
+        .replace(/<script[^>]*>.*<\/script>/gm, '')
+        // Remove all opening, closing and orphan HTML tags
+        .replace(/<[^>]+>/gm, '')
+        // Remove leading spaces and repeated CR/LF
+        .replace(/([\r\n]+ +)+/gm, '');
+     return text;
+  }
+  function main() {  
+    var table = document.getElementsByClassName('main-table')[0]  
+
+    //autofilled by python on creation
+    var messages = [{"message": "lmaoooo", "user": "HAHA U DUMB", "time": "why are we storing this as text?"},{"message": "12341456", "user": "IDIOT", "time": "why are we storing this as text?"}]
+
+    for (var i = messages.length - 1; i >= 0; i--) {
+      row = table.insertRow(-1)
+      row.className = "table-row"
+      
+      user = row.insertCell(0)
+      user.innerHTML = strip(messages[i]["user"]).replace("\n", "<br>")
+      user.className = "user"
+
+      message = row.insertCell(1)
+      message.innerHTML = strip(messages[i]["message"]).replace("\n", "<br>")
+      message.className = "message"
+
+      time = row.insertCell(2)
+      time.innerHTML = strip(messages[i]["time"]).replace("\n", "<br>")
+      time.className = "time"
+    }  
+  }
+</script>
+</body>
+
+</html>
