@@ -2120,7 +2120,7 @@ def get_client_from_invite(invite):
 def create_invite(token, collection_url, subject, description, invite_to):
 	# notion
 	match = re.search("https://upwork.com/applications/\d+", description)
-	url = match.group()
+
 	item_id = re.search("\d+", url)
 	client = NotionClient(token)
 
@@ -2140,6 +2140,7 @@ def create_invite(token, collection_url, subject, description, invite_to):
 	row.description = description
 	row.status = "New"
 
+	url = match.group()
 	row.link = url
 	row.id = item_id.group()
 
