@@ -2121,7 +2121,6 @@ def create_invite(token, collection_url, subject, description, invite_to):
 	match = re.search("https://upwork.com/applications/\d+", description)
 
 	url = match.group() if match != None else ""
-
 	item_id = re.search("\d+", url)
 	client = NotionClient(token)
 
@@ -2142,7 +2141,7 @@ def create_invite(token, collection_url, subject, description, invite_to):
 	row.status = "New"
 
 	row.link = url
-	row.id = item_id.group()
+	row.id = item_id.group() if item_id != None else ""
 
 	try:
 		row.to = invite_to
