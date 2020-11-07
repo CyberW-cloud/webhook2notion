@@ -2363,7 +2363,7 @@ def manychat():
 def start_runner():
     def start_loop():
         time.sleep(10)
-        requests.get("https://dev-etc-to-notion.herokuapp.com/")
+        requests.get("https://etc-to-notion.herokuapp.com/")
 
 
     print('Started runner')
