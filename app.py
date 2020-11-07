@@ -6,7 +6,7 @@ import pytz
 import math
 import traceback
 import uuid
-from flask import Flask, request, url_for, render_template
+from flask import Flask, request, url_for, send_file
 
 import notion
 from notion.block import *
@@ -105,7 +105,7 @@ def tmp():
 
 @app.route('/view_room', methods = ["GET"])
 def view_room():
-	return render_template("view_room_page.html")
+	return send_file("pages/view_room_page.html")
 
 @app.route('/update_clients', methods = ["GET"])
 def update_clients():
