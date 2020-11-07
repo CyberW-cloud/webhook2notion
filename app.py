@@ -141,7 +141,6 @@ def get_room_messages():
 
 		try:
 			if i["userId"] not in cache.keys(): 
-				
 				#simple retry
 				try:
 					name = profileApi.get_specific(i["userId"])["profile"]["dev_short_name"][:-1]
@@ -154,6 +153,7 @@ def get_room_messages():
 
 		except Exception as e:
 			print(i)
+			print(e)
 			print(i["userId"])
 			name = "ERROR"
 
