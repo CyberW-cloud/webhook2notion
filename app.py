@@ -2140,7 +2140,7 @@ def create_invite(token, collection_url, subject, description, invite_to):
 	row.description = description
 	row.status = "New"
 
-	url = match.group()
+	url = match.group() if match != None else ""
 	row.link = url
 	row.id = item_id.group()
 
