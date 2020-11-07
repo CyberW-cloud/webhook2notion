@@ -27,7 +27,7 @@ from upwork.routers.hr.jobs import Api as jobsAPI
 from upwork.routers.jobs.profile import Api as jobInfoAPI
 from upwork.routers.hr.engagements import Api as engagementAPI
 
-import psycopg2
+import psycopg2, threading
 
 import smtplib
 from email.mime.multipart import MIMEMultipart
