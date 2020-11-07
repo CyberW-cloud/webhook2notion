@@ -2360,7 +2360,20 @@ def manychat():
     return {'version': 'v2', 'content': {}, 'data': result}
 
 
+def start_runner():
+    def start_loop():
+        time.sleep(5)
+        requests.get("https://dev-etc-to-notion.herokuapp.com/")
+
+
+    print('Started runner')
+    thread = threading.Thread(target=start_loop)
+    thread.start()
+
+
+
 if __name__ == "__main__":
+    start_runner()
     app.debug = True
     port = int(os.environ.get("PORT", 5000))
     app.before_first_request(parse_tokens)
