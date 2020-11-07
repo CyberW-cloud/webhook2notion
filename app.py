@@ -121,7 +121,7 @@ def get_room_messages():
 		client = token_clients["safonov"]
 
 	messages_api = messageAPI(client) 	
-	user_api = userApi(client)
+	user_api = userAPI(client)
 
 	time.sleep(3.2)
 	
