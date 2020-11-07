@@ -2366,8 +2366,8 @@ def start_runner():
 
 
 if __name__ == "__main__":
+	start_runner()
 	app.debug = True
 	port = int(os.environ.get("PORT", 5000))
 	app.before_first_request(parse_tokens)
-	start_runner()
 	app.run(host="0.0.0.0", port=port)
