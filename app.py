@@ -2039,7 +2039,10 @@ def pcj():
 
 def get_client_from_invite(invite):
 
-	client = token_clients[re.findall("(?<=&ac_user=)(.*)(?=&)", invite.description)[0]]
+	if "&ac_user=" in invite.description: 
+		client = token_clients[re.findall("(?<=&ac_user=)(.*)(?=&)", invite.description)[0]]
+	else:
+		client = token_clients["safonov"]
 
 	notion_client = NotionClient(os.environ.get("TOKEN"))
 
