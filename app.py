@@ -6,6 +6,7 @@ import pytz
 import math
 import traceback
 import uuid
+import json
 from flask import Flask, request, url_for, send_file
 
 import notion
@@ -106,6 +107,59 @@ def tmp():
 @app.route('/view_room', methods = ["GET"])
 def view_room():
 	return send_file("pages/view_room_page.html")
+
+@app.route('/get_room_messages', methods = ["GET"])
+def get_room_messages():
+	ac_user = request.args.get("ac_user", None)
+	room_id = request.args.get("room_id", None)
+	pagination_id = None # TODO add support for pagination
+
+	if room_id == None:
+		return ""
+
+	if ac_user == None or ac_user not in token_clients.keys():
+		client = token_clients["safonov"]
+
+	messages_api = messageAPI(client) 	
+	user_api = userApi(client)
+
+	time.sleep(3.2)
+	
+	messages = messages_api.get_room_messages(os.environ.get("TeamID"), room["roomId"], {"limit":200})
+	if "stories_list" not in messages.keys():
+		messages = messages_api.get_room_messages(user_id, room["roomId"], {"limit":200})
+
+	messages = messages["stories_list"]["stories"]
+	ret = []
+	for i in messages:
+		if not isinstance(i["message"],str) or i["message"] == "" or i["userId"] == None or i["isSystemStory"]:
+			print(i)
+			continue
+
+		message_time = datetime.datetime.fromtimestamp(i["updated"]/1000).strftime('%Y-%m-%d %H:%M:%S')
+		text = "["+message_time+"]\n"
+
+		try:
+			if i["userId"] not in cache.keys(): 
+				
+				#simple retry
+				try:
+					name = profileApi.get_specific(i["userId"])["profile"]["dev_short_name"][:-1]
+				except:
+					name = profileApi.get_specific(i["userId"])["profile"]["dev_short_name"][:-1]
+				
+				cache[i["userId"]] = name
+			else:
+				name = cache[i["userId"]]
+
+		except Exception as e:
+			print(i)
+			print(i["userId"])
+			name = "ERROR"
+
+		ret.append({"date":message_time, "name": name, "message": i["message"]})
+
+	return json.dumps(ret)
 
 @app.route('/update_clients', methods = ["GET"])
 def update_clients():

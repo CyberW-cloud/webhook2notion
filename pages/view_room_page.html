@@ -38,11 +38,30 @@
         .replace(/([\r\n]+ +)+/gm, '');
      return text;
   }
-  function main() {  
-    var table = document.getElementsByClassName('main-table')[0]  
 
+  function main() {  
+    var urlParams = new URLSearchParams(window.location.search);
+  
+    if (!urlParams.has("ac_user")){
+      alert("ERROR: no user!")
+      return
+    }
+    if (!urlParams.has("room_id"))
+    {
+      alert("ERROR: no room id!")
+      return      
+    }
+    
+    fetch("https://dev-etc-to-notion.herokuapp.com/get_room_messages?ac_user="+urlParams.get("ac_user")+"&room_id="+urlParams.get("room_id"))
+       .then(async r=> update_table(JSON.parse(await r.text())))
+       .catch(e=>console.error('Boo...' + e));
+  }
+
+
+  function update_table(messages){
+
+    var table = document.getElementsByClassName('main-table')[0]  
     //autofilled by python on creation
-    var messages = [{"message": "lmaoooo", "user": "HAHA U DUMB", "time": "why are we storing this as text?"},{"message": "12341456", "user": "IDIOT", "time": "why are we storing this as text?"}]
 
     for (var i = messages.length - 1; i >= 0; i--) {
       row = table.insertRow(-1)
