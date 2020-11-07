@@ -520,7 +520,7 @@ def head_summary():
 
 	print("starting copied kickstaff")
 	date = request.args.get("date", None)
-	contracts_day = request.args.get("contracts_day", 0, type=int)
+	contracts_day = request.args.get("contracts_day", 7, type=int)
 	projects_day = request.args.get("projects_day", contracts_day, type=int)
 	client_days_before = request.args.get("client_day", 7, type=int)
 	proposal_days = request.args.get("proposals_day", 3, type=int)
@@ -2138,12 +2138,16 @@ def create_invite(token, collection_url, subject, description, invite_to):
 	row.description = description
 	row.status = "New"
 
-
-	# row.to = invite_to
-	to_team_dir = team_directory.collection.get_rows(search=client.get_block(invite_to).name)
-	print(to_team_dir[0].get_browseable_url())
-	if len(to_team_dir)>0:
-		row.pa = team_directory.collection.get_rows(search=to_team_dir[0].pa[0].name)[0].notion_user[0]
+	try:
+		row.to = invite_to
+		to_team_dir = team_directory.collection.get_rows(search=client.get_block(invite_to).name)
+		print(to_team_dir[0].get_browseable_url())
+		
+		if len(to_team_dir)>0:
+			row.pa = team_directory.collection.get_rows(search=to_team_dir[0].pa[0].name)[0].notion_user[0]
+	
+	except Exception as e:
+		print("failed to get pa, skip")
 
 	row.link = url
 	row.id = item_id.group()
@@ -2158,8 +2162,8 @@ def create_invite(token, collection_url, subject, description, invite_to):
 		row.skills = ", ".join([list(x.values())[0] for x in client[0]["skills"]])
 		
 		if client[0]["questions"]!="":
-			parent = row.children.add_new(TextBlock, "**Questions**")
-			parent.children.add_new(TextBlock, client[0]["questions"])
+			parent = row.children.add_new(TextBlock, title = "**Questions**")
+			parent.children.add_new(TextBlock, title = client[0]["questions"])
 
 		if len(client)>1:
 			row.client = client[1].name
