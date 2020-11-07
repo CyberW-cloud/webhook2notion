@@ -122,6 +122,7 @@ def get_room_messages():
 
 	messages_api = messageAPI(client) 	
 	user_api = userAPI(client)
+	profileApi = profileAPI(client)
 
 	time.sleep(3.2)
 	
