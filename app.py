@@ -2124,6 +2124,7 @@ def create_invite(token, collection_url, subject, description, invite_to):
 	item_id = re.search("\d+", url)
 	client = NotionClient(token)
 
+
 	cv = client.get_collection_view(collection_url)
 	team_directory = client.get_collection_view("https://www.notion.so/7113e573923e4c578d788cd94a7bddfa?v=536bcc489f93433ab19d697490b00525")
 
@@ -2134,9 +2135,13 @@ def create_invite(token, collection_url, subject, description, invite_to):
 		time.sleep(3)
 		row = cv.build_query(sort = sort_params).execute()[-1]
 
+
 	row.name = subject
 	row.description = description
 	row.status = "New"
+
+	row.link = url
+	row.id = item_id.group()
 
 	try:
 		row.to = invite_to
@@ -2149,8 +2154,7 @@ def create_invite(token, collection_url, subject, description, invite_to):
 	except Exception as e:
 		print("failed to get pa, skip")
 
-	row.link = url
-	row.id = item_id.group()
+
 
 
 
