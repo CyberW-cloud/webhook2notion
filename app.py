@@ -128,6 +128,8 @@ def get_room_messages():
 
 	time.sleep(4.8)
 	
+	user_data = userApi.get_my_info()
+	
 	user_id = user_data["user"]["id"]
 
 	if user_data["user"]["profile_key"] not in cache.keys():
