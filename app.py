@@ -2353,7 +2353,7 @@ def start_runner():
                 r = requests.get('https://dev-etc-to-notion.herokuapp.com/tmp')
                 if r.status_code == 200:
                     print('Server started, quiting start_loop')
-                    not_started = False
+                    return
                 print(r.status_code)
             except:
                 print('Server not yet started')
