@@ -104,7 +104,7 @@ def tmp():
 	i = 1/0
 
 @app.route('/view_room', methods = ["GET"])
-def view_room()
+def view_room():
 	return flask.render_template("view_room_page.html")
 
 @app.route('/update_clients', methods = ["GET"])
