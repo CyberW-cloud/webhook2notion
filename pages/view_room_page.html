@@ -39,6 +39,14 @@
      return text;
   }
 
+  function httpGet(theUrl)
+  {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+    xmlHttp.send( null );
+    return xmlHttp.responseText;
+  }
+
   function main() {  
     var urlParams = new URLSearchParams(window.location.search);
   
@@ -52,9 +60,9 @@
       return      
     }
     
-    fetch("https://dev-etc-to-notion.herokuapp.com/get_room_messages?ac_user="+urlParams.get("ac_user")+"&room_id="+urlParams.get("room_id"))
-       .then(async r=> update_table(JSON.parse(await r.text())))
-       .catch(e=>console.error('Boo...' + e));
+    messages = httpGet("https://dev-etc-to-notion.herokuapp.com/get_room_messages?ac_user="+urlParams.get("ac_user")+"&room_id="+urlParams.get("room_id"))
+    
+    update_table(JSON.parse(messages))
   }
 
 
