@@ -126,11 +126,17 @@ def get_room_messages():
 	user_api = userAPI(client)
 	profileApi = profileAPI(client)
 
-	time.sleep(3.2)
+	time.sleep(4.8)
 	
+	user_id = user_data["user"]["id"]
+
+	if user_data["user"]["profile_key"] not in cache.keys():
+		cache[user_data["user"]["profile_key"]] = user_data["user"]["first_name"] + " " + user_data["user"]["last_name"]
+
+
 	messages = messages_api.get_room_messages(os.environ.get("TeamID"), room_id, {"limit":200})
 	if "stories_list" not in messages.keys():
-		messages = messages_api.get_room_messages(user_id, room_id, {"limit":200})
+		messages = messages_api.get_room_messages(, room_id, {"limit":200})
 
 	messages = messages["stories_list"]["stories"]
 	ret = []
