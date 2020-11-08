@@ -115,9 +115,9 @@ def get_room_messages():
 		return ""
 
 	if ac_user == None or ac_user not in token_clients.keys():
-		client = token_clients["safonov"]
+		client = token_clients["safonov"]["client"]
 	else:
-		client = token_clients[ac_user]
+		client = token_clients[ac_user]["client"]
 
 	messages_api = messageAPI(client) 	
 	user_api = userAPI(client)
@@ -844,8 +844,9 @@ def message_review():
 	freelancer_ids = [x["public_url"].split("/")[-1] for x in company.get_users(os.environ.get("CompanyRef"))["users"]]
 	
 	
-	for client in token_clients.values():
+	for token in token_clients.values():
 		
+		client = user["client"]
 		#log in as each freelancer
 		userApi = userAPI(client)
 
