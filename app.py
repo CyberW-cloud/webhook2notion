@@ -122,10 +122,10 @@ def get_rooms():
 
 	
 	try:
-		user_rooms = messages_api.get_rooms(user_id, {"activeSince": str(activeSince), "limit":200, "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})["rooms"]
+		rooms = messages_api.get_rooms(user_id, {"activeSince": str(activeSince), "limit":200, "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})["rooms"]
 	except Exception as e:
 		print(str(e) + " 5")
-		user_rooms = []
+		rooms = []
 
 	for i in rooms:
 		print(i)
