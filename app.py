@@ -127,7 +127,6 @@ def get_rooms():
 		print(str(e) + " 5")
 		user_rooms = []
 
-	rooms += user_rooms
 	for i in rooms:
 		print(i)
 		ret.append({"url":"https://www.upwork.com/messages/rooms/"+i["roomId"]})
