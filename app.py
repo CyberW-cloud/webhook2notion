@@ -98,10 +98,11 @@ def email_report(subject, body):
 
 @app.route('/tmp')
 def tmp():
-	client = NotionClient(os.environ.get("TOKEN"))
 
-	page = client.get_block("https://www.notion.so/437686548-14074d8d8aff43b489c9dec09aa6b0a3")
-	page.pa = client.current_user
+	for ac_user, client in token_clients:
+		print(ac_user)
+
+
 	i = 1/0
 
 @app.route('/view_room', methods = ["GET"])
@@ -790,7 +791,6 @@ def parse_tokens():
 				'access_token_secret': strings[4]}))
 			userApi = userAPI(client)
 			
-			time.sleep(1.6)
 			user_data = userApi.get_my_info()
 
 			if "user" not in user_data.keys():
@@ -2239,7 +2239,7 @@ def create_invite(token, collection_url, subject, description, invite_to):
 		row.country = client[0]["op_country"]
 		row.timezone = client[0]["op_timezone"]
 
-		if "skills" in client[0].keys and isinstance(client[0]["skills"], list):
+		if "skills" in client[0].keys() and isinstance(client[0]["skills"], list):
 			row.skills = ", ".join([list(x.values())[0] for x in client[0]["skills"]])
 		
 		if client[0]["questions"]!="":
