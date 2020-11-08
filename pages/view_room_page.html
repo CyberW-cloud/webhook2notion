@@ -68,7 +68,8 @@
 
     let prev_username = ""
     for (var i = messages.length - 1; i >= 0; i--) {
-      
+      container.innerHTML += "<div class=\"message-container\">"
+
       if (prev_username !== messages[i]["name"]){
         name = strip(messages[i]["name"]).replace("\n", "<br>")
         container.innerHTML += "<div class=\"message-name\">" + name + ":<div/>"
@@ -80,7 +81,7 @@
       message = strip(messages[i]["message"]).replace("\n", "<br>")
 
       container.innerHTML += "<div class=\"message\"><b>" + time + "<b/><br>" +  message + "<div/>"
-
+      container.innerHTML += "<div/>"
       
     }  
   }
