@@ -846,25 +846,27 @@ def message_review():
 	
 	for token in token_clients.values():
 		
-		client = user["client"]
+		client = token["client"]
 		#log in as each freelancer
 		userApi = userAPI(client)
 
 		messages_api = messageAPI(client)
 		
 		time.sleep(1.6)
+		
 		user_data = userApi.get_my_info()
 		print(user_data)
+		
 		if "user" not in user_data.keys():
 			continue
 		
-		if user_data["user"]["profile_key"] not in freelancer_ids:
+		if user["ciphertext"] not in freelancer_ids:
 			continue
 
 		user_id = user_data["user"]["id"]
 
-		if user_data["user"]["profile_key"] not in cache.keys():
-			cache[user_data["user"]["profile_key"]] = user_data["user"]["first_name"] + " " + user_data["user"]["last_name"]
+		if user["ciphertext"] not in cache.keys():
+			cache[user["ciphertext"]] = user["name"]
 
 		profileApi = profileAPI(client)
 		
