@@ -719,7 +719,6 @@ def parse_tokens():
                 'access_token_secret': strings[4]}))
             userApi = userAPI(client)
             
-            time.sleep(1.6)
             user_data = userApi.get_my_info()
 
             if "user" not in user_data.keys():
