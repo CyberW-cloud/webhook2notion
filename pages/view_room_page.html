@@ -71,7 +71,7 @@
     for (var i = messages.length - 1; i >= 0; i--) {
 
       message_container = document.createElement("div");
-      message_container.class = "message-container"
+      message_container.className = "message-container"
       container.appendChild(message_container)
 
       if (prev_username !== messages[i]["name"]){
@@ -79,7 +79,7 @@
         message_container.appendChild(document.createElement("br"))
         
         message_name = document.createElement("div")
-        message_name.class = "message-name"
+        message_name.className = "message-name"
         message_name.innerHTML += name + ":"
       
         message_container.appendChild(message_name)
@@ -90,10 +90,10 @@
       time_text = strip(messages[i]["date"]).replace("\n", "<br>")
 
       message = document.createElement("div")
-      message.class = "message"
+      message.className = "message"
 
       msg = document.createElement("div")
-      msg.class = "msg"
+      msg.className = "msg"
       message.appendChild(msg)
 
       time = document.createElement("b")
