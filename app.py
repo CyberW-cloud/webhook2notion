@@ -110,6 +110,7 @@ def tmp():
 		print(user_data)
 
 
+	print(json.dumps(token_clients))
 	i = 1/0
 
 @app.route('/view_room', methods = ["GET"])
