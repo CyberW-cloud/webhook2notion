@@ -782,7 +782,7 @@ def parse_tokens():
 				'access_token': tokens[ac_user]["ciphertext"],\
 				'access_token_secret': tokens[ac_user]["secret"]}))
 		except Exception as e:
-			pass
+			raise e
 
 	print("finished token_clients setup")
 
