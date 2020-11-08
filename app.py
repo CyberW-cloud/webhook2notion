@@ -119,7 +119,7 @@ def get_rooms():
 		client = token_clients[ac_user]["client"]
 		
 
-
+	messages_api = messageAPI(client)
 	
 	try:
 		rooms = messages_api.get_rooms(user_id, {"activeSince": str(activeSince), "limit":200, "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})["rooms"]
