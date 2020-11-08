@@ -800,7 +800,7 @@ def parse_tokens():
 		except Exception as e:
 			pass
 
-	json.dumps(token_clients)
+	print(json.dumps(token_clients))
 
 	print("finished token_clients setup")
 
