@@ -2084,7 +2084,11 @@ def get_client_from_invite(invite):
         for prop in expected_buyer_properties:
             buyer[prop] = buyer[prop] if prop in buyer.keys() else ""
 
-        buyer["skills"] = job_info["profile"]["op_required_skills"]["op_required_skill"]
+        if "op_required_skills" in job_info["profile"].keys() and "op_required_skill" in job_info["profile"]["op_required_skills"].keys():
+            buyer["skills"] = job_info["profile"]["op_required_skills"]["op_required_skill"]
+        else:
+            buyer["skills"] = []
+            
         buyer["ciphertext"] = ciphertext
         #for some reason, we need to reverse the list for positions to stay the same as in upwork
         if job_info["profile"]["op_additional_questions"]!="":
@@ -2183,7 +2187,9 @@ def create_invite(token, collection_url, subject, description, invite_to):
         row.job_url = "https://www.upwork.com/jobs/"+client[0]["ciphertext"]
         row.country = client[0]["op_country"]
         row.timezone = client[0]["op_timezone"]
-        row.skills = ", ".join([list(x.values())[0] for x in client[0]["skills"]])
+
+        if "skills" in client[0].keys and isinstance(client[0]["skills"], list):
+            row.skills = ", ".join([list(x.values())[0] for x in client[0]["skills"]])        
         
         if client[0]["questions"]!="":
             parent = row.children.add_new(TextBlock, title = "**Questions**")
