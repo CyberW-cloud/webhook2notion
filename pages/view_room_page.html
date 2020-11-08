@@ -5,9 +5,10 @@
     body { background-color: #333333}
     
     .main-container {width:90%;margin: auto;background-color: #505050;}
-    .message {padding: 3px;text-align: center; color: white;
+    .message {padding: 3px;text-align: left; color: white;
         border-radius: 25px;background-color: #444444;}
     .message:hover {background-color: #808080; color: black;}
+    .message-name {color: white;}
   </style>
 </head>
 
@@ -71,7 +72,7 @@
 
       if (prev_username !== messages[i]["name"]){
         name = strip(messages[i]["name"]).replace("\n", "<br>")
-        container.innerHTML += "<div class=\"message-name\">" + name + ":<div/>"
+        container.innerHTML += "<br><div class=\"message-name\">" + name + ":<div/>"
       }
 
 
