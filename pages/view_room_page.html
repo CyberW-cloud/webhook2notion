@@ -16,14 +16,9 @@
 
   <h1 style="color:white;text-align: center;">Message history</h1>
 
-  <table class="main-table">
-    <tr class="first-row">
-      <th>User</th>
-      <th>Message</th> 
-      <th>Time</th>
-    </tr>
-    <!-- JS will fill this table later -->
-  </table>
+  <div class="main-container">
+    <!-- JS will fill this container later -->
+  </div>
 
 <script type="text/javascript">
   function strip(text)
@@ -68,24 +63,25 @@
 
   function update_table(messages){
 
-    var table = document.getElementsByClassName('main-table')[0]  
+    var container = document.getElementsByClassName('main-container')[0]  
     //autofilled by python on creation
 
+    let prev_username = ""
     for (var i = messages.length - 1; i >= 0; i--) {
-      row = table.insertRow(-1)
-      row.className = "table-row"
       
-      user = row.insertCell(0)
-      user.innerHTML = strip(messages[i]["name"]).replace("\n", "<br>")
-      user.className = "user"
+      if (prev_username !== messages[i]["name"]){
+        name = strip(messages[i]["name"]).replace("\n", "<br>")
+        container.innerHTML += "<div class=\"message-name\">" + name + ":<div/>"
+      }
 
-      message = row.insertCell(1)
-      message.innerHTML = strip(messages[i]["message"]).replace("\n", "<br>")
-      message.className = "message"
 
-      time = row.insertCell(2)
-      time.innerHTML = strip(messages[i]["date"]).replace("\n", "<br>")
-      time.className = "time"
+      time = strip(messages[i]["date"]).replace("\n", "<br>")
+
+      message = strip(messages[i]["message"]).replace("\n", "<br>")
+
+      container.innerHTML += "<div class=\"message\"><b>" + time + "<b/><br>" +  message + "<div/>"
+
+      
     }  
   }
 </script>
