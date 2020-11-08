@@ -138,7 +138,7 @@ def get_ac_users():
 	
 	ret = []
 	for ac_user in token_clients.keys():
-		{"ac_user":ac_user,"name":token_clients[ac_user]["name"]}
+		ret.append({"ac_user":ac_user,"name":token_clients[ac_user]["name"]})
 
 	
 	return json.dumps(ret)
