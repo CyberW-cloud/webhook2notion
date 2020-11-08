@@ -779,8 +779,8 @@ def parse_tokens():
 			token_clients[ac_user]["client"] = upwork.Client(upwork.Config({\
 				'consumer_key': os.environ.get("ConsumerKey"),\
 				'consumer_secret': os.environ.get("ConsumerSecret"),\
-				'access_token': tokens[ac_user]["ciphertext"],\
-				'access_token_secret': tokens[ac_user]["secret"]}))
+				'access_token': token_clients[ac_user]["ciphertext"],\
+				'access_token_secret': token_clients[ac_user]["secret"]}))
 		except Exception as e:
 			raise e
 
