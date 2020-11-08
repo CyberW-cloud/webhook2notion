@@ -774,7 +774,7 @@ def parse_tokens():
 	print("setting up token_clients")
 	token_clients = json.loads(tokens)
 
-	for ac_user in tokens.keys():
+	for ac_user in token_clients.keys():
 		try:			
 			token_clients[ac_user]["client"] = upwork.Client(upwork.Config({\
 				'consumer_key': os.environ.get("ConsumerKey"),\
