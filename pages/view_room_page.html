@@ -69,23 +69,38 @@
 
     let prev_username = ""
     for (var i = messages.length - 1; i >= 0; i--) {
-      container.innerHTML += "<div class=\"message-container\">"
+
+      message_container = document.createElement("div");
+      message_container.class = "message-container"
+      container.appendChild(message_container)
 
       if (prev_username !== messages[i]["name"]){
         name = strip(messages[i]["name"]).replace("\n", "<br>")
-        container.innerHTML += "<br><div class=\"message-name\">" + name + ":<div/>"
+        message_container.appendChild(document.createElement("br"))
+        
+        message_name = document.createElement("div")
+        message_name.class = "message-name"
+        message_name.innerHTML += name + ":"
+      
+        message_container.appendChild(message_name)
       }
 
 
-      time = strip(messages[i]["date"]).replace("\n", "<br>")
+      message_text = strip(messages[i]["message"]).replace("\n", "<br>")
+      time_text = strip(messages[i]["date"]).replace("\n", "<br>")
 
-      message = strip(messages[i]["message"]).replace("\n", "<br>")
+      message = document.createElement("div")
+      message.class = "message"
 
-      container.innerHTML += "<div class=\"message\">\
-          <div class=\"msg\"><b>" + time + "<b/><br>" +  message + "<div/>\
-        <div/>";
-      container.innerHTML += "<div/>"
+      msg = document.createElement("div")
+      msg.class = "msg"
+
+      time = document.createElement("b")
       
+      time.innerHTML += time_text
+      msg.innerHTML +=  message_text
+
+
     }  
   }
 </script>
