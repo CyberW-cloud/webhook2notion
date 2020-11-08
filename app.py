@@ -99,18 +99,6 @@ def email_report(subject, body):
 @app.route('/tmp')
 def tmp():
 
-	for ac_user, client in list(token_clients):
-		print(ac_user)
-
-		userApi = userAPI(client)
-		
-		time.sleep(1.6)
-		user_data = userApi.get_my_info()
-
-		print(user_data)
-
-
-	print(json.dumps(token_clients))
 	i = 1/0
 
 @app.route('/view_room', methods = ["GET"])
@@ -806,11 +794,13 @@ def parse_tokens():
 				continue
 				
 			user_id = user_data["user"]["id"]
-
-			token_clients[user_id] = client
+			name = user_data["user"]["first_name"] + " " + user_data["user"]["last_name"]
+			token_clients[user_id] = {"ciphertext": strings[2], "secret": strings[4], "name": name}
 	
 		except Exception as e:
 			pass
+
+	json.dumps(token_clients)
 
 	print("finished token_clients setup")
 
