@@ -102,6 +102,13 @@ def tmp():
 	for ac_user, client in token_clients:
 		print(ac_user)
 
+		userApi = userAPI(client)
+		
+		time.sleep(1.6)
+		user_data = userApi.get_my_info()
+
+		print(user_data)
+
 
 	i = 1/0
 
@@ -791,6 +798,7 @@ def parse_tokens():
 				'access_token_secret': strings[4]}))
 			userApi = userAPI(client)
 			
+			time.sleep(1.6)
 			user_data = userApi.get_my_info()
 
 			if "user" not in user_data.keys():
