@@ -105,6 +105,36 @@ def tmp():
 def view_room():
 	return send_file("pages/view_room_page.html")
 
+@app.route('/get_rooms', methods = ["GET"])
+def get_rooms():
+	ret = []
+	token = os.environ.get("TOKEN")
+	notion_client = NotionClient(token)
+	
+	ac_user = request.args.get("ac_user", None)
+	if ac_user == None:
+		client = token_clients["safonov"]["client"]
+		ac_user = os.environ.get("TeamID")
+	else:
+		client = token_clients[ac_user]["client"]
+		
+
+
+	
+	try:
+		user_rooms = messages_api.get_rooms(user_id, {"activeSince": str(activeSince), "limit":200, "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})["rooms"]
+	except Exception as e:
+		print(str(e) + " 5")
+		user_rooms = []
+
+	rooms += user_rooms
+	for i in rooms:
+		print(i)
+		ret.append({"url":"https://www.upwork.com/messages/rooms/"+i["roomId"]})
+
+	return json.dumps(ret)
+
+
 @app.route('/get_room_messages', methods = ["GET"])
 def get_room_messages():
 	ac_user = request.args.get("ac_user", None)
