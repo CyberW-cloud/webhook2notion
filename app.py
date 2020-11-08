@@ -860,13 +860,13 @@ def message_review():
 		if "user" not in user_data.keys():
 			continue
 		
-		if user["ciphertext"] not in freelancer_ids:
+		if token["ciphertext"] not in freelancer_ids:
 			continue
 
 		user_id = user_data["user"]["id"]
 
-		if user["ciphertext"] not in cache.keys():
-			cache[user["ciphertext"]] = user["name"]
+		if token["ciphertext"] not in cache.keys():
+			cache[user["ciphertext"]] = token["name"]
 
 		profileApi = profileAPI(client)
 		
