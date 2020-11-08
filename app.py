@@ -2371,11 +2371,13 @@ def start_runner():
     thread.start()
 
 @app.route("/", methods=["GET"])
-def a():
+def index():
     return "nothing here"
 
 if __name__ == "__main__":
-    start_runner()
+    if not len(token_clients.keys())>0:
+        start_runner()
+    
     app.debug = True
     port = int(os.environ.get("PORT", 5000))
     app.before_first_request(parse_tokens)
