@@ -772,11 +772,11 @@ def parse_tokens():
 	
 	tokens = os.environ.get("TOKENS_JSON")
 	print("setting up token_clients")
-	tokens = json.loads(tokens)
+	token_clients = json.loads(tokens)
 
 	for ac_user in tokens.keys():
 		try:			
-			tokens[ac_user]["client"] = upwork.Client(upwork.Config({\
+			token_clients[ac_user]["client"] = upwork.Client(upwork.Config({\
 				'consumer_key': os.environ.get("ConsumerKey"),\
 				'consumer_secret': os.environ.get("ConsumerSecret"),\
 				'access_token': tokens[ac_user]["ciphertext"],\
