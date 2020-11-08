@@ -702,32 +702,17 @@ def update_db():
 #runs right after the build, sets up token_clients for /invites and /message_review
 def parse_tokens():
     
-    tokens = os.environ.get("TOKENS")
+    tokens = os.environ.get("TOKENS_JSON")
     print("setting up token_clients")
-    tokens = [x.group() for x in re.finditer("({})*.+?(?=})", tokens)]
+    tokens = json.loads(tokens)
 
-    ret = []
-    for i in range(len(tokens)):
-        try:
-            strings = [x.group()[1:-1] for x in re.finditer('".+?(?=")+"', tokens[i])]
-        
-            ret.append({"id": strings[0], strings[1]:strings[2], strings[3]:strings[4]})
-            client = upwork.Client(upwork.Config({\
+    for ac_user in tokens.keys():
+        try:            
+            tokens[ac_user]["client"] = upwork.Client(upwork.Config({\
                 'consumer_key': os.environ.get("ConsumerKey"),\
                 'consumer_secret': os.environ.get("ConsumerSecret"),\
-                'access_token': strings[2],\
-                'access_token_secret': strings[4]}))
-            userApi = userAPI(client)
-            
-            user_data = userApi.get_my_info()
-
-            if "user" not in user_data.keys():
-                continue
-                
-            user_id = user_data["user"]["id"]
-
-            token_clients[user_id] = client
-    
+                'access_token': tokens[ac_user]["ciphertext"],\
+                'access_token_secret': tokens[ac_user]["secret"]}))
         except Exception as e:
             pass
 
@@ -791,26 +776,29 @@ def message_review():
     freelancer_ids = [x["public_url"].split("/")[-1] for x in company.get_users(os.environ.get("CompanyRef"))["users"]]
     
     
-    for client in token_clients.values():
+    for token in token_clients.values():
         
+        client = token["client"]
         #log in as each freelancer
         userApi = userAPI(client)
 
         messages_api = messageAPI(client)
         
         time.sleep(1.6)
+        
         user_data = userApi.get_my_info()
         print(user_data)
+        
         if "user" not in user_data.keys():
             continue
         
-        if user_data["user"]["profile_key"] not in freelancer_ids:
+        if token["ciphertext"] not in freelancer_ids:
             continue
 
         user_id = user_data["user"]["id"]
 
-        if user_data["user"]["profile_key"] not in cache.keys():
-            cache[user_data["user"]["profile_key"]] = user_data["user"]["first_name"] + " " + user_data["user"]["last_name"]
+        if token["ciphertext"] not in cache.keys():
+            cache[token["ciphertext"]] = token["name"]
 
         profileApi = profileAPI(client)
 
@@ -2057,9 +2045,9 @@ def create_invite(token, collection_url, subject, description, invite_to):
 def get_client_from_invite(invite):
 
     if "&ac_user=" in invite.description: 
-        client = token_clients[re.findall("(?<=&ac_user=)(.*)(?=&)", invite.description)[0]]
+        client = token_clients[re.findall("(?<=&ac_user=)(.*)(?=&)", invite.description)[0]]["client"]
     else:
-        client = token_clients["safonov"]
+        client = token_clients["safonov"]["client"]
 
     notion_client = NotionClient(os.environ.get("TOKEN"))
 
