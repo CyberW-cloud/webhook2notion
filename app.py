@@ -129,7 +129,7 @@ def get_rooms():
 
 	for i in rooms:
 		print(i)
-		ret.append({"url":"https://www.upwork.com/messages/rooms/"+i["roomId"]})
+		ret.append({"url":"https://www.upwork.com/messages/rooms/"+i["roomId"], "name": i["topic"]})
 
 	return json.dumps(ret)
 
