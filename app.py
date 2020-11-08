@@ -769,7 +769,7 @@ def update_db():
 
 #runs right after the build, sets up token_clients for /invites and /message_review
 def parse_tokens():
-	
+	global token_clients
 	tokens = os.environ.get("TOKENS_JSON")
 	print("setting up token_clients")
 	token_clients = json.loads(tokens)
