@@ -99,7 +99,7 @@ def email_report(subject, body):
 @app.route('/tmp')
 def tmp():
 
-	for ac_user, client in token_clients:
+	for ac_user, client in list(token_clients):
 		print(ac_user)
 
 		userApi = userAPI(client)
