@@ -134,7 +134,7 @@ def get_rooms():
 	return json.dumps(ret)
 
 @app.route('/get_ac_users', methods = ["GET"])
-def get_ac_users()
+def get_ac_users():
 	
 	ret = []
 	for ac_user in token_clients.keys():
