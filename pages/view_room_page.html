@@ -94,13 +94,15 @@
 
       msg = document.createElement("div")
       msg.class = "msg"
+      message.appendChild(msg)
 
       time = document.createElement("b")
-      
+      msg.appendChild(time)
+
       time.innerHTML += time_text
       msg.innerHTML +=  message_text
 
-
+      message_container.appendChild(message)
     }  
   }
 </script>
