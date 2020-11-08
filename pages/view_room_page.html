@@ -81,7 +81,9 @@
 
       message = strip(messages[i]["message"]).replace("\n", "<br>")
 
-      container.innerHTML += "<div class=\"message\"><b>" + time + "<b/><br>" +  message + "<div/>"
+      container.innerHTML += "<div class=\"message\">\
+          <div class=\"msg\"><b>" + time + "<b/><br>" +  message + "<div/>\
+        <div/>";
       container.innerHTML += "<div/>"
       
     }  
