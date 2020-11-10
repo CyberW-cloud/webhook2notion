@@ -775,8 +775,7 @@ def message_review():
 
     
     freelancer_ids = [x["public_url"].split("/")[-1] for x in company.get_users(os.environ.get("CompanyRef"))["users"]]
-    
-    
+    print(freelancer_ids)
     for token in token_clients.values():
         
         client = token["client"]
@@ -789,19 +788,27 @@ def message_review():
         
         user_data = userApi.get_my_info()
         print(user_data)
-        
-        if "user" not in user_data.keys():
-            continue
-        
-        if token["ciphertext"] not in freelancer_ids:
-            continue
-
         user_id = user_data["user"]["id"]
+        ciphertext = user_data["user"]["profile_key"]
 
-        if token["ciphertext"] not in cache.keys():
-            cache[token["ciphertext"]] = token["name"]
+        if "user" not in user_data.keys():
+            print(1) 
+            continue
+
+
+        
+        if ciphertext not in freelancer_ids:
+            print(2)
+            continue
+
+        
+
+        if ciphertext not in cache.keys():
+            cache[ciphertext] = token["name"]
 
         profileApi = profileAPI(client)
+        
+
 
         try:
             rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": str(activeSince), "limit":200, "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})["rooms"]
@@ -819,6 +826,7 @@ def message_review():
 
 
         rooms = rooms + user_rooms
+        print(len(rooms))
         
 
 
