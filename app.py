@@ -898,7 +898,7 @@ def message_review():
 		ciphertext = user_data["user"]["profile_key"]
 
 		if "user" not in user_data.keys():
-			print(1)
+			print(1) 
 			continue
 
 
