@@ -881,7 +881,7 @@ def message_review():
 
 	
 	freelancer_ids = [x["public_url"].split("/")[-1] for x in company.get_users(os.environ.get("CompanyRef"))["users"]]
-	
+	print(freelancer_ids)
 	for token in token_clients.values():
 		
 		client = token["client"]
@@ -898,6 +898,8 @@ def message_review():
 		if "user" not in user_data.keys():
 			print(1)
 			continue
+
+		print(token["ciphertext"])
 		
 		if token["ciphertext"] not in freelancer_ids:
 			print(2)
