@@ -2129,7 +2129,7 @@ def get_client_from_invite(invite):
             if "op_country" not in buyer or buyer["op_country"] == x.country or x.country == "":
                 if "op_city" not in buyer or buyer["op_city"] == x.location or x.location == "":
                     if "op_state" not in buyer or buyer["op_state"] == x.state or x.state == "":
-                        if "op_timezone" not in buyer or buyer["op_timezone"][:6] in x.time_zone or "(Coordinated Universal Time)" in buyer["op_timezone"] and "UTC+00" in x.time_zone:
+                        if "op_timezone" not in buyer or x.time_zone == None or buyer["op_timezone"][:6] in x.time_zone or "(Coordinated Universal Time)" in buyer["op_timezone"] and "UTC+00" in x.time_zone:
                             checked_result.append(x)
 
 
