@@ -837,101 +837,101 @@ def update_parsed_rooms(parsed_rooms, update):
 
 @app.route('/message_review', methods=["GET"])
 def message_review():
-    #download updates to the database we are using
-    update_db()
+	#download updates to the database we are using
+	update_db()
 
-    DATABASE_URL = os.environ['DATABASE_URL']
-    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-    db = conn.cursor()
+	DATABASE_URL = os.environ['DATABASE_URL']
+	conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+	db = conn.cursor()
 
-    token = os.environ.get("TOKEN")
-    notion_client = NotionClient(token)
-    
-    contracts = notion_client.get_collection_view("https://www.notion.so/5a95fb63129242a5b5b48f18e16ef19a?v=81afe49071ef41bba4c85922ff134407")
-    proposals = notion_client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
-    message_review = auto_retry_lambda(notion_client.get_block,"https://www.notion.so/d134162fbfb14449a7ae426487f56127?v=159b522f95fc460f9171dfdca6d1f6d8")
+	token = os.environ.get("TOKEN")
+	notion_client = NotionClient(token)
+	
+	contracts = notion_client.get_collection_view("https://www.notion.so/5a95fb63129242a5b5b48f18e16ef19a?v=81afe49071ef41bba4c85922ff134407")
+	proposals = notion_client.get_collection_view("https://www.notion.so/99055a1ffb094e0a8e79d1576b7e68c2?v=bc7d781fa5c8472699f2d0c1764aa553")
+	message_review = auto_retry_lambda(notion_client.get_block,"https://www.notion.so/d134162fbfb14449a7ae426487f56127?v=159b522f95fc460f9171dfdca6d1f6d8")
 
-    tokens = os.environ.get('TOKENS')
+	tokens = os.environ.get('TOKENS')
 
-    parsed_rooms = []
-    
-    
-    active_since_hours =  int(request.args.get("activeSince", "24"))
-    activeSince = datetime.datetime.now() - datetime.timedelta(hours = active_since_hours)
-    activeSince = int(activeSince.timestamp())*1000
+	parsed_rooms = []
+	
+	
+	active_since_hours =  int(request.args.get("activeSince", "24"))
+	activeSince = datetime.datetime.now() - datetime.timedelta(hours = active_since_hours)
+	activeSince = int(activeSince.timestamp())*1000
 
-    print(activeSince)
+	print(activeSince)
 
-    date = str(datetime.datetime.now().day) + "." + str(datetime.datetime.now().month) + "." + str(datetime.datetime.now().year)
-    row_name = request.args.get("row_name", "")
-    row_name = row_name + " " + date + " - " + str(active_since_hours)+"h"
+	date = str(datetime.datetime.now().day) + "." + str(datetime.datetime.now().month) + "." + str(datetime.datetime.now().year)
+	row_name = request.args.get("row_name", "")
+	row_name = row_name + " " + date + " - " + str(active_since_hours)+"h"
 
-    rows = {}
+	rows = {}
 
-    login_config = upwork.Config({\
-            'consumer_key': os.environ.get("ConsumerKey"),\
-            'consumer_secret': os.environ.get("ConsumerSecret"),\
-            'access_token': os.environ.get("AccessToken"),\
-            'access_token_secret': os.environ.get("AccessSecret")})
+	login_config = upwork.Config({\
+			'consumer_key': os.environ.get("ConsumerKey"),\
+			'consumer_secret': os.environ.get("ConsumerSecret"),\
+			'access_token': os.environ.get("AccessToken"),\
+			'access_token_secret': os.environ.get("AccessSecret")})
 
-    client = upwork.Client(login_config)
+	client = upwork.Client(login_config)
 
-    company = companyAPI(client)
-    messages = messageAPI(client)
+	company = companyAPI(client)
+	messages = messageAPI(client)
 
-    
-    freelancer_ids = [x["public_url"].split("/")[-1] for x in company.get_users(os.environ.get("CompanyRef"))["users"]]
-    print(freelancer_ids)
-    for token in token_clients.values():
-        
-        client = token["client"]
-        #log in as each freelancer
-        userApi = userAPI(client)
+	
+	freelancer_ids = [x["public_url"].split("/")[-1] for x in company.get_users(os.environ.get("CompanyRef"))["users"]]
+	print(freelancer_ids)
+	for token in token_clients.values():
+		
+		client = token["client"]
+		#log in as each freelancer
+		userApi = userAPI(client)
 
-        messages_api = messageAPI(client)
-        
-        time.sleep(1.6)
-        
-        user_data = userApi.get_my_info()
-        print(user_data)
-        user_id = user_data["user"]["id"]
-        ciphertext = user_data["user"]["profile_key"]
+		messages_api = messageAPI(client)
+		
+		time.sleep(1.6)
+		
+		user_data = userApi.get_my_info()
+		print(user_data)
+		user_id = user_data["user"]["id"]
+		ciphertext = user_data["user"]["profile_key"]
 
-        if "user" not in user_data.keys():
-            print(1) 
-            continue
-
-
-        
-        if ciphertext not in freelancer_ids:
-            print(2)
-            continue
-
-        
-
-        if ciphertext not in cache.keys():
-            cache[ciphertext] = token["name"]
-
-        profileApi = profileAPI(client)
-        
+		if "user" not in user_data.keys():
+			print(1) 
+			continue
 
 
-        try:
-            rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": str(activeSince), "limit":200, "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})["rooms"]
-        except Exception as e:
-            print(str(e) + " 4")
-            rooms = []
-        
-        time.sleep(1.6)
-        
-        try:
-            user_rooms = messages_api.get_rooms(user_id, {"activeSince": str(activeSince), "limit":200, "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})["rooms"]
-        except Exception as e:
-            print(str(e) + " 5")
-            user_rooms = []
+		
+		if ciphertext not in freelancer_ids:
+			print(2)
+			continue
+
+		
+
+		if ciphertext not in cache.keys():
+			cache[ciphertext] = token["name"]
+
+		profileApi = profileAPI(client)
+		
 
 
-        rooms = rooms + user_rooms
+		try:
+			rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": str(activeSince), "limit":200, "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})["rooms"]
+		except Exception as e:
+			print(str(e) + " 4")
+			rooms = []
+		
+		time.sleep(1.6)
+		
+		try:
+			user_rooms = messages_api.get_rooms(user_id, {"activeSince": str(activeSince), "limit":200, "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})["rooms"]
+		except Exception as e:
+			print(str(e) + " 5")
+			user_rooms = []
+
+
+		rooms = rooms + user_rooms
 
 		for room in rooms:
 			# double check activeSince
@@ -2447,14 +2447,14 @@ def manychat():
 
 #workaround to do before_first_request right after build
 def start_runner():
-    def start_loop():
-        time.sleep(5)
-        requests.get("https://dev-etc-to-notion.herokuapp.com/")
+	def start_loop():
+		time.sleep(5)
+		requests.get("https://dev-etc-to-notion.herokuapp.com/")
 
 
-    print('Started runner')
-    thread = threading.Thread(target=start_loop)
-    thread.start()
+	print('Started runner')
+	thread = threading.Thread(target=start_loop)
+	thread.start()
 
 
 
