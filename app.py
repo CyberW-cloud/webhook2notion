@@ -881,7 +881,7 @@ def message_review():
 
 	
 	freelancer_ids = [x["public_url"].split("/")[-1] for x in company.get_users(os.environ.get("CompanyRef"))["users"]]
-	
+	print(freelancer_ids)
 	
 	for token in token_clients.values():
 		
@@ -927,7 +927,7 @@ def message_review():
 
 
 		rooms = rooms + user_rooms
-		
+		print(len(rooms))
 
 
 		for room in rooms:
