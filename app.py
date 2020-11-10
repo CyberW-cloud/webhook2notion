@@ -935,7 +935,8 @@ def message_review():
 
 		for room in rooms:
 			# double check activeSince
-			print(room["latestStory"]["updated"])
+			print(room["roomId"])
+			print(room)
 			if int(room["latestStory"]["updated"])>1602309600000:
 				print("ERROR: activeSince did not filter a room")
 				continue
