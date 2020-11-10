@@ -826,7 +826,6 @@ def message_review():
 
 
         rooms = rooms + user_rooms
-        print(len(rooms))
         
 
 
@@ -2127,9 +2126,9 @@ def get_client_from_invite(invite):
     checked_result = []
     for x in result:
         if client_name in x.name:
-            if buyer["op_country"] == x.country or x.country == "":
-                if buyer["op_city"] == x.location or x.location == "":
-                    if buyer["op_state"] == x.state or x.state == "":
+            if "op_country" not in buyer or buyer["op_country"] == x.country or x.country == "":
+                if "op_city" not in buyer or buyer["op_city"] == x.location or x.location == "":
+                    if "op_state" not in buyer or buyer["op_state"] == x.state or x.state == "":
                         if buyer["op_timezone"][:6] in x.time_zone or "(Coordinated Universal Time)" in buyer["op_timezone"] and "UTC+00" in x.time_zone:
                             checked_result.append(x)
 
