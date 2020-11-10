@@ -2191,7 +2191,7 @@ def create_invite(token, collection_url, subject, description, invite_to):
             parent.children.add_new(TextBlock, title = client[0]["questions"])
 
         if len(client)>1:
-            row.client = client[1].name
+            row.client = client[1]
 
     return row
 
