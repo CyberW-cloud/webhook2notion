@@ -235,9 +235,12 @@ def update_clients():
                     if buyer["op_city"] not in row.location:
                         row.location = row.location + ", " + buyer["op_city"]
                 
-            
             if "op_contract_date" in buyer.keys():
-                row.member_since = datetime.datetime.strptime(buyer["op_contract_date"], '%B %d, %Y')
+                try:
+                    row.member_since = datetime.datetime.strptime(buyer["op_contract_date"], '%B %d, %Y')
+                except Exception as e:
+                    print(e)
+                    print(buyer["op_contract_date"])
 
             if "op_timezone" in buyer.keys():
                 time_zone = re.findall("(^UTC[+-][0-9][0-9])(?=:00)", buyer["op_timezone"])
