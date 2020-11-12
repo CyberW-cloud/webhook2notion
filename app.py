@@ -112,7 +112,7 @@ def get_rooms():
 	notion_client = NotionClient(token)
 	
 	ac_user = request.args.get("ac_user", None)
-	if ac_user == None:
+	if ac_user == None or ac_user == "None":
 		client = token_clients["safonov"]["client"]
 		ac_user = os.environ.get("TeamID")
 	else:
@@ -136,7 +136,7 @@ def get_rooms():
 @app.route('/get_ac_users', methods = ["GET"])
 def get_ac_users():
 	
-	ret = []
+	ret = [{"ac_user": "None", "name": "Agency"}]
 	for ac_user in token_clients.keys():
 		ret.append({"ac_user":ac_user,"name":token_clients[ac_user]["name"]})
 
