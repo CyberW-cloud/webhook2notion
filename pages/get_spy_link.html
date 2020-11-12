@@ -37,7 +37,7 @@
     }
 
     /* Links inside the dropdown */
-    .dropdown-content a {
+    .dropdown-content p {
       color: black;
       padding: 12px 16px;
       text-decoration: none;
@@ -45,23 +45,24 @@
     }
 
     /* Change color of dropdown links on hover */
-    .dropdown-content a:hover {background-color: #ddd}
+    .dropdown-content p:hover {background-color: #ddd}
 
     /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
     .show {display:block;}
   </style>
 </head>
 
-<body onload="main()">
+<body>
 
   <h1 style="color:black;text-align: center;">Message history</h1>
   
     <div class="dropdown">
       <button onclick="dropdown()" class="dropbtn">Dropdown</button>
       <div id="myDropdown" class="dropdown-content">
-        <a href="?ac_user=a">Link 1</a>
-        <a href="?ac_user=b">Link 2</a>
-        <a href="?ac_user=c">Link 3</a>
+        <!--filled with ac_users and their names in js dynamically-->
+        <p onclick="dropdown_callback(0)">test</p>
+        <p onclick="dropdown_callback(1)">test2</p>
+        <p onclick="dropdown_callback(2)">test3</p>
       </div>
     </div>
   
@@ -70,6 +71,8 @@
   </div>
 
 <script type="text/javascript">
+  let users = [];
+
   function strip(text)
   {
     // Remove style tags and content
@@ -90,8 +93,24 @@
     xmlHttp.send( null );
     return xmlHttp.responseText;
   }
+  
+  function main()
+  {
+    users = JSON.parse(httpGet("https://dev-etc-to-notion.herokuapp.com/get_ac_users"))
 
-  function main() {  
+    container = document.getElementsByClassName('dropdown-content')[0]
+
+    for (var i = 0; i < users.length; i++) {
+      
+      user = document.createElement("p")
+      user.onclick = function(){dropdown_callback(i)}
+      user.innerHTML = users[i]['name']
+    }
+  }
+
+  function dropdown_callback(caller) 
+  {  
+    alert(caller)
     
 
   }
@@ -102,6 +121,7 @@
 
   // Close the dropdown menu if the user clicks outside of it
   window.onclick = function(event) {
+
     if (!event.target.matches('.dropbtn')) {
       var dropdowns = document.getElementsByClassName("dropdown-content");
       var i;
@@ -109,7 +129,6 @@
         var openDropdown = dropdowns[i];
         if (openDropdown.classList.contains('show')) {
           openDropdown.classList.remove('show');
-          alert(i)
         }
       }
     }
