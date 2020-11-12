@@ -100,7 +100,7 @@
     for (var i = 0; i < users.length; i++) {
       
       user = document.createElement("p")
-      user.setAttribute("onclick","\"dropdown_callback("+i+")\"")
+      user.setAttribute("onclick","dropdown_callback("+i+")")
       user.innerHTML = users[i]['name']
 
       container.appendChild(user)
