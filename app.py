@@ -835,7 +835,7 @@ def message_review():
             	print("Room is None. WTF? (skip)")
             	continue
 
-            if "latestStory" not in room or int(room["latestStory"]["updated"])<activeSince:
+            if room["latestStory"]==None or int(room["latestStory"]["updated"])<activeSince:
                 print("ERROR: activeSince did not filter a room")
                 continue
 
