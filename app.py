@@ -798,7 +798,7 @@ def message_review():
 
         
         if ciphertext not in freelancer_ids:
-            print(2)
+            print("token not in company!!!")
             continue
 
         
@@ -831,6 +831,10 @@ def message_review():
 
         for room in rooms:
             # double check activeSince
+            if room == None:
+            	print("Room is None. WTF? (skip)")
+            	continue
+
             if "latestStory" not in room or int(room["latestStory"]["updated"])<activeSince:
                 print("ERROR: activeSince did not filter a room")
                 continue
