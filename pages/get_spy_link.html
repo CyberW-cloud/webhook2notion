@@ -136,9 +136,16 @@
     rooms = JSON.parse(httpGet("https://dev-etc-to-notion.herokuapp.com\
       /get_rooms?ac_user="+users[caller]["ac_user"]))
     
+    table = document.getElementsByClassName('main-container')[0]
+
     for (var i = 0; i < rooms.length; i++) {
-          rooms[i]
-        }    
+      row = table.insertRow(-1)
+      url = row.insertCell(-1)
+      url.innerHTML = rooms[i]["url"]
+
+      name = row.insertCell(-1)
+      name.innerHTML = rooms[i]["name"]
+    }    
 
   }
 
