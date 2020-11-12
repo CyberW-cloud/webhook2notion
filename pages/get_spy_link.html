@@ -60,9 +60,6 @@
       <button onclick="dropdown()" class="dropbtn">Dropdown</button>
       <div id="myDropdown" class="dropdown-content">
         <!--filled with ac_users and their names in js dynamically-->
-        <p onclick="dropdown_callback(0)">test</p>
-        <p onclick="dropdown_callback(1)">test2</p>
-        <p onclick="dropdown_callback(2)">test3</p>
       </div>
     </div>
   
@@ -112,7 +109,7 @@
 
   function dropdown_callback(caller) 
   {  
-    alert(caller)
+    alert(users[caller]["name"])
     
 
   }
