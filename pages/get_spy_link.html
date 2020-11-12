@@ -63,9 +63,25 @@
       </div>
     </div>
   
-  <div class="main-container">
+  <table class="main-container">
     <!-- JS will fill this container later -->
-  </div>
+    <tr>
+      <th>test</th>
+      <th>test</th>
+      <th>test</th>
+    </tr>    
+    <tr>
+      <th>test</th>
+      <th>test</th>
+      <th>test</th>
+    </tr>    
+    <tr>
+      <th>test</th>
+      <th>test</th>
+      <th>test</th>
+    </tr>    
+      
+  </table>
 
 <script type="text/javascript">
   let users = [];
@@ -109,8 +125,12 @@
 
   function dropdown_callback(caller) 
   {  
-    alert(users[caller]["name"])
+    rooms = JSON.parse(httpGet("https://dev-etc-to-notion.herokuapp.com\
+      /get_rooms?ac_user="+users[caller]["ac_user"]))
     
+    for (var i = 0; i < rooms.length; i++) {
+          rooms[i]
+        }    
 
   }
 
