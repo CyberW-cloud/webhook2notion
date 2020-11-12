@@ -105,6 +105,8 @@
       user = document.createElement("p")
       user.onclick = function(){dropdown_callback(i)}
       user.innerHTML = users[i]['name']
+
+      container.appendChild(user)
     }
   }
 
