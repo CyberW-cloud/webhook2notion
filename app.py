@@ -831,7 +831,7 @@ def message_review():
 
         for room in rooms:
             # double check activeSince
-            if "latestStory" in room or int(room["latestStory"]["updated"])<activeSince:
+            if "latestStory" not in room or int(room["latestStory"]["updated"])<activeSince:
                 print("ERROR: activeSince did not filter a room")
                 continue
 
