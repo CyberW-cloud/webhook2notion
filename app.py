@@ -2262,9 +2262,16 @@ def create_invite(token, collection_url, subject, description, invite_to):
 	except Exception as e:
 		print("failed to get pa, skip")
 
+	thread = threading.Thread(target=lambda: requests.get("https://dev-etc-to-notion.herokuapp.com/invites_pt2?row="+row.get_browseable_url()+))
+	thread.start()
 
+	return row
 
+@app.route("/invites_pt2", methods=["GET"])
+def invites_pt2():
 
+	notion_client = NotionClient(os.environ.get("TOKEN"))
+	row = notion_client.get_block(request.args.get("row", None))
 
 	client = get_client_from_invite(row)
 	if len(client) > 0:
@@ -2282,7 +2289,7 @@ def create_invite(token, collection_url, subject, description, invite_to):
 		if len(client)>1:
 			row.client = client[1].name
 
-	return row
+
 
 
 #PROPERTIES:
