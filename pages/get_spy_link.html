@@ -135,7 +135,6 @@
   {  
     rooms = JSON.parse(httpGet("https://dev-etc-to-notion.herokuapp.com/get_rooms?ac_user="+users[caller]["ac_user"]))
     
-    alert(rooms[0]["name"])
 
     table = document.getElementsByClassName('main-container')[0]
 
@@ -146,7 +145,7 @@
       url.innerHTML = rooms[i]["url"]
 
       name = row.insertCell(-1)
-      name.innerHTML = rooms[i]["name"]
+      name.innerHTML = "aaaaaaaaaaa"
     }    
 
   }
