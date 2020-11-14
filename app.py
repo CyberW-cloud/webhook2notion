@@ -2262,7 +2262,7 @@ def create_invite(token, collection_url, subject, description, invite_to):
 	except Exception as e:
 		print("failed to get pa, skip")
 
-	thread = threading.Thread(target=lambda a: requests.get("https://dev-etc-to-notion.herokuapp.com/invites_pt2?row="+row.get_browseable_url()+))
+	thread = threading.Thread(target=lambda a=row: requests.get("https://dev-etc-to-notion.herokuapp.com/invites_pt2?row="+a.get_browseable_url()+))
 	thread.start()
 
 	return row
