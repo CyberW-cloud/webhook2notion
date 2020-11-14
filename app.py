@@ -98,7 +98,8 @@ def email_report(subject, body):
 
 @app.route('/tmp')
 def tmp():
-	return send_file("pages/get_spy_link.html")
+	parse_tokens_to_json()
+	# return send_file("pages/get_spy_link.html")
 	i = 1/0
 
 @app.route('/view_room', methods = ["GET"])
@@ -127,7 +128,7 @@ def get_rooms():
 
 	for i in rooms:
 		print(i)
-		ret.append({"url":"https://www.upwork.com/messages/rooms/"+i["roomId"], "name": i["topic"]})
+		ret.append({"url":"https://www.upwork.com/messages/rooms/"+i["roomId"], "name": i["topic"], "client": i["roomName"],})
 
 	return json.dumps(ret)
 
@@ -807,6 +808,44 @@ def update_db():
 	conn.commit()
 
 	print("Proposals Done!")
+
+def parse_tokens_to_json():
+	print(json.dumps(token_clients))
+	tokens = os.environ.get("TOKENS")
+	print("setting up token_clients")
+	tokens = [x.group() for x in re.finditer("({})*.+?(?=})", tokens)]
+
+	ret = []
+	for i in range(len(tokens)):
+		try:
+			strings = [x.group()[1:-1] for x in re.finditer('".+?(?=")+"', tokens[i])]
+		
+			ret.append({"id": strings[0], strings[1]:strings[2], strings[3]:strings[4]})
+			client = upwork.Client(upwork.Config({\
+				'consumer_key': os.environ.get("ConsumerKey"),\
+				'consumer_secret': os.environ.get("ConsumerSecret"),\
+				'access_token': strings[2],\
+				'access_token_secret': strings[4]}))
+			userApi = userAPI(client)
+			
+			user_data = userApi.get_my_info()
+
+			if "user" not in user_data.keys():
+				continue
+				
+			user_id = user_data["user"]["id"]
+
+			token_clients[user_id]["name"] = user_data["user"]["first_name"] + " " + user_data["user"]["last_name"]
+			token_clients[user_id]["ciphertext"] = strings[0]
+			token_clients[user_id]["client"] = client
+	
+		except Exception as e:
+			raise e
+
+	print("finished token_clients setup")
+	print(json.dumps(token_clients))
+
+
 
 #runs right after the build, sets up token_clients for /invites and /message_review
 def parse_tokens():
@@ -2155,7 +2194,7 @@ def get_client_from_invite(invite):
 	application = applicationAPI(client)
 	job_info = jobInfoAPI(client)
 
-
+	expected_buyer_properties = ["op_country","op_timezone","skills","questions","skills"]
 	try:
 		application = application.get_specific(invite.ID)
 		ciphertext = application["data"]["openingCiphertext"]
