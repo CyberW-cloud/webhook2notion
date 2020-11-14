@@ -837,6 +837,8 @@ def parse_tokens_to_json():
 			ret[user_id] = {}
 			ret[user_id]["name"] = user_data["user"]["first_name"] + " " + user_data["user"]["last_name"]
 			ret[user_id]["ciphertext"] = strings[0]
+			ret[user_id]["token"] = strings[2]
+			ret[user_id]["secret"] = strings[4]
 			#token_clients[user_id]["client"] = client
 	
 		except Exception as e:
