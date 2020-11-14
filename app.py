@@ -108,7 +108,6 @@ def view_room():
 @app.route('/get_rooms', methods = ["GET"])
 def get_rooms():
 	ret = []
-	token = os.environ.get("TOKEN")
 	
 	ac_user = request.args.get("ac_user", None)
 	if ac_user == None or ac_user == "None":
