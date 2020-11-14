@@ -820,7 +820,7 @@ def parse_tokens_to_json():
 		try:
 			strings = [x.group()[1:-1] for x in re.finditer('".+?(?=")+"', tokens[i])]
 		
-			ret.append({"id": strings[0], strings[1]:strings[2], strings[3]:strings[4]})
+			#ret.append({"id": strings[0], strings[1]:strings[2], strings[3]:strings[4]})
 			client = upwork.Client(upwork.Config({\
 				'consumer_key': os.environ.get("ConsumerKey"),\
 				'consumer_secret': os.environ.get("ConsumerSecret"),\
