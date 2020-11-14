@@ -810,7 +810,7 @@ def update_db():
 	print("Proposals Done!")
 
 def parse_tokens_to_json():
-	print(json.dumps(token_clients))
+
 	tokens = os.environ.get("TOKENS")
 	print("setting up token_clients")
 	tokens = [x.group() for x in re.finditer("({})*.+?(?=})", tokens)]
@@ -837,7 +837,7 @@ def parse_tokens_to_json():
 
 			token_clients[user_id]["name"] = user_data["user"]["first_name"] + " " + user_data["user"]["last_name"]
 			token_clients[user_id]["ciphertext"] = strings[0]
-			token_clients[user_id]["client"] = client
+			#token_clients[user_id]["client"] = client
 	
 		except Exception as e:
 			raise e
