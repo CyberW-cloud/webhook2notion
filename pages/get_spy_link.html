@@ -139,13 +139,18 @@
     table = document.getElementsByClassName('main-container')[0]
 
     for (var i = 0; i < rooms.length; i++) {
-      row = table.insertRow(-1)
 
-      url = row.insertCell(-1)
+      row = document.createElement("tr")
+      table.appendChild(row)
+
+      url = document.createElement("td")
       url.innerHTML = rooms[i]["url"]
+      row.appendChild(url)
 
-      name = row.insertCell(-1)
-      name.innerHTML = "aaaaaaaaaaa"
+      name = document.createElement("td")
+      name.innerHTML = rooms[i]["name"]
+      row.appendChild(name)
+
     }    
 
   }
