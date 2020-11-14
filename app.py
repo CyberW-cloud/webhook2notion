@@ -834,16 +834,16 @@ def parse_tokens_to_json():
 				continue
 				
 			user_id = user_data["user"]["id"]
-
-			token_clients[user_id]["name"] = user_data["user"]["first_name"] + " " + user_data["user"]["last_name"]
-			token_clients[user_id]["ciphertext"] = strings[0]
+			ret[user_id] = {}
+			ret[user_id]["name"] = user_data["user"]["first_name"] + " " + user_data["user"]["last_name"]
+			ret[user_id]["ciphertext"] = strings[0]
 			#token_clients[user_id]["client"] = client
 	
 		except Exception as e:
 			raise e
 
 	print("finished token_clients setup")
-	print(json.dumps(token_clients))
+	print(json.dumps(ret))
 
 
 
