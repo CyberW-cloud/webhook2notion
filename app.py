@@ -109,7 +109,6 @@ def view_room():
 def get_rooms():
 	ret = []
 	token = os.environ.get("TOKEN")
-	notion_client = NotionClient(token)
 	
 	ac_user = request.args.get("ac_user", None)
 	if ac_user == None or ac_user == "None":
