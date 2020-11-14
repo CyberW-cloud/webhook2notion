@@ -2267,6 +2267,7 @@ def create_invite(token, collection_url, subject, description, invite_to):
 
 	return row
 
+
 @app.route("/invites_pt2", methods=["GET"])
 def invites_pt2():
 
