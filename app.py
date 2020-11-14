@@ -815,7 +815,7 @@ def parse_tokens_to_json():
 	print("setting up token_clients")
 	tokens = [x.group() for x in re.finditer("({})*.+?(?=})", tokens)]
 
-	ret = []
+	ret = {}
 	for i in range(len(tokens)):
 		try:
 			strings = [x.group()[1:-1] for x in re.finditer('".+?(?=")+"', tokens[i])]
