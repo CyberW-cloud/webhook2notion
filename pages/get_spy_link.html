@@ -133,9 +133,10 @@
 
   function dropdown_callback(caller) 
   {  
-    alert(caller)
     rooms = JSON.parse(httpGet("https://dev-etc-to-notion.herokuapp.com/get_rooms?ac_user="+users[caller]["ac_user"]))
     
+    alert(rooms)
+
     table = document.getElementsByClassName('main-container')[0]
 
     for (var i = 0; i < rooms.length; i++) {
