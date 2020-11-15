@@ -964,13 +964,13 @@ def message_review():
 
 
 		
-		# if ciphertext not in freelancer_ids:
+		# if ciphertext not in freelancer_ids: # skips denys safonov for whatever reason.
 		# 	print(2)
 		# 	continue
 
 		
 
-		if ciphertext not in cache.keys():
+		if ciphertext not in cache.keys(): 
 			cache[ciphertext] = token["name"]
 
 		profileApi = profileAPI(client) 
