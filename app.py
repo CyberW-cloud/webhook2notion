@@ -873,7 +873,7 @@ def parse_tokens():
 	if check_tokens_changed():
 		parse_tokens_to_json()
 		cur.execute("""UPDATE config_vars SET value='"""+os.environ.get("TOKENS")+"""' WHERE name='tokens'""")
-		conn.commit
+		conn.commit()
 
 	cur.execute("""SELECT value FROM config_vars WHERE name = 'tokens_json'""")
 	tokens = cur.fetchone()[0]
