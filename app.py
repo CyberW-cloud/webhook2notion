@@ -868,7 +868,7 @@ def parse_tokens():
 
 	DATABASE_URL = os.environ['DATABASE_URL']
 	conn = psycopg2.connect(DATABASE_URL, sslmode='require')
-	cur = conn.cursor()
+	cur = conn.cursor() 
 
 	if check_tokens_changed():
 		parse_tokens_to_json()
