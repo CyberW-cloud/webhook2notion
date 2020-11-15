@@ -125,6 +125,7 @@
 
 <script type="text/javascript">
   let users = [];
+  let selected_row = none;
 
   function strip(text)
   {
@@ -191,6 +192,18 @@
 
     }    
 
+  }
+  function row_select(row_id){
+    table = document.getElementsByClassName('main-container')[0]
+
+    row = table.childNodes[row_id]
+    row.className = "selected_row"
+
+    if (selected_row !== none)
+    {
+      selected_row.className = "";
+    }
+    selected_row = row
   }
 
   function dropdown() {
