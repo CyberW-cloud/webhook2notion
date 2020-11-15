@@ -99,10 +99,12 @@ def email_report(subject, body):
 @app.route('/tmp')
 def tmp():
 	client = NotionClient(os.environ.get("TOKEN"))
+	target = client.get_block("https://www.notion.so/3218c97773e641dfac74a38c9fd2398a")
+	user = client.current_user
 	operation = {
-		"args":[["‣", [["u", "1ced0604-d477-49ab-b524-365de5e1069a"]]], [" "]],
+		"args":[["‣", [["u", client.current_user.id]]], [" "]],
 		"command":"set",
-		"id":"3218c977-73e6-41df-ac74-a38c9fd2398a",
+		"id":target.id,
 		"path":["properties", "y||x"],
 		"table":"block" 
 	}
