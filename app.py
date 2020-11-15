@@ -2151,7 +2151,7 @@ def create_pcj(token, collection_url, subject, description, invite_to, link):
 	# notion
 	client = NotionClient(token)
 	cv = client.get_collection_view(collection_url)
-	item_id = re.search("%7E[0-9][\w]+", link)
+	item_id = re.search("(%7E|~)[0-9][\w]+", link)
 	try:
 		row = cv.collection.add_row()
 	except Exception as e:
