@@ -134,7 +134,9 @@
   </div>
   
   <div class="link-popup" style="visibility: hidden;">
-    <h3 style="text-align: center;">Your Link</h3><p></p>
+    <h3 style="text-align: center;">Your Link</h3>
+    <button></button>
+    <p></p>
   </div>
   
   <br>
@@ -257,7 +259,7 @@
     
     link_popup = document.getElementsByClassName("link-popup")[0]
     link_popup.style = "visibility:visible"
-    link_popup.childNodes[0].innerHTML = "https://dev-etc-to-notion.herokuapp.com/view_room?room_id="+room_id+"&ac_user="+ac_user
+    link_popup.childNodes[2].innerHTML = "https://dev-etc-to-notion.herokuapp.com/view_room?room_id="+room_id+"&ac_user="+ac_user
   }
   function copy_link(){
     room_id = selected_row.childNodes[2].innerHTML.split("/")[5]
