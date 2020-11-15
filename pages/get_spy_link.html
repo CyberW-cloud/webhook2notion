@@ -164,19 +164,19 @@
 
     for (var i = 0; i < rooms.length; i++) {
 
-      row = document.createElement("tr")
+      let row = document.createElement("tr")
       table.appendChild(row)
 
-      client = document.createElement("td")
+      let client = document.createElement("td")
       client.innerHTML = rooms[i]["client"]
       row.appendChild(client)
 
 
-      name = document.createElement("td")
+      let name = document.createElement("td")
       name.innerHTML = rooms[i]["name"]
       row.appendChild(name)
 
-      url = document.createElement("td")
+      let url = document.createElement("td")
       url.innerHTML = rooms[i]["url"]
       row.appendChild(url)
 
