@@ -2169,6 +2169,10 @@ def create_pcj(token, collection_url, subject, description, invite_to, link):
 	
 	item_id = re.search("%7E[0-9][\w]+", link)
 	row.id = item_id.group()[3:]
+
+	thead = threading.Thread(target=lambda a=row.get_browseable_url(): requests.get("https://dev-etc-to-notion.herokuapp.com/invites_pt2?row="+a+"&pcj=true"))
+	thread.start()
+	
 	return row
 
 
@@ -2192,12 +2196,13 @@ def pcj():
 	return f"added {subject} receipt to " + pcj.get_browseable_url()
 
 
-def get_client_from_invite(invite):
+def get_client_from_invite(invite, pcj=False):
 
 	if "&ac_user=" in invite.description: 
 		client = token_clients[re.findall("(?<=&ac_user=)(.*)(?=&)", invite.description)[0]]["client"]
 	else:
 		client = token_clients["safonov"]["client"]
+
 
 	notion_client = NotionClient(os.environ.get("TOKEN"))
 
@@ -2211,9 +2216,12 @@ def get_client_from_invite(invite):
 
 	expected_buyer_properties = ["op_country","op_timezone","skills","questions","skills"]
 	try:
-		application = application.get_specific(invite.ID)
-		ciphertext = application["data"]["openingCiphertext"]
-		
+		if not pcj:
+			application = application.get_specific(invite.ID)
+			ciphertext = application["data"]["openingCiphertext"]
+		else:
+			ciphertext = invite.id
+
 		job_info = job_info.get_specific(ciphertext)
 		buyer = job_info["profile"]["buyer"]
 		
@@ -2325,8 +2333,9 @@ def invites_pt2():
 
 	notion_client = NotionClient(os.environ.get("TOKEN"))
 	row = notion_client.get_block(request.args.get("row", None))
+	pcj = not request.args.get("pcj","false")=="false"
 
-	client = get_client_from_invite(row)
+	client = get_client_from_invite(row, pcj)
 	if len(client) > 0:
 		row.job_url = "https://www.upwork.com/jobs/"+client[0]["ciphertext"]
 		row.country = client[0]["op_country"]
