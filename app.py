@@ -1087,7 +1087,7 @@ def message_review():
 		try:
 			title = room["room"]["roomName"]+", **"+room["room"]["topic"] + "**"
 		except Exception:
-			title = "ONE ON ONE: "+room["room"]["roomName"]+" with "
+			title = "ONE ON ONE: "+room["room"]["roomName"]
 
 
 
