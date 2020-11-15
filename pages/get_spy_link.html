@@ -104,8 +104,8 @@
 </head>
 
 <body onload="main()">
-  <button class="button makelinkbtn">Make Spy Link</button>
-  <button class="button copylinkbtn">Copy Spy Link</button>
+  <button class="button makelinkbtn" onclick="make_link()">Make Spy Link</button>
+  <button class="button copylinkbtn" onclick="copy_link()">Copy Spy Link</button>
 
   <h1 style="color:black;text-align: center;width: 90%">Message history</h1>
   
@@ -129,6 +129,7 @@
 
 <script type="text/javascript">
   let users = [];
+  let active_user = 0;
   let selected_row = null;
 
   function strip(text)
@@ -170,6 +171,8 @@
 
   function dropdown_callback(caller) 
   {  
+    
+    active_user = caller
     rooms = JSON.parse(httpGet("https://dev-etc-to-notion.herokuapp.com/get_rooms?ac_user="+users[caller]["ac_user"]))
     
 
@@ -209,6 +212,12 @@
     }
     row.className = "selected-row"
     selected_row = row
+  }
+  function make_link(){
+
+    room_id = selected_row.childNodes[2].innerHTML.split("/")[1]
+    ac_user = users[active_user]["ac_user"]
+    alert("link:\nhttps://dev-etc-to-notion.herokuapp.com/view_room?room_id="+room_id+"&ac_user"=ac_user)
   }
 
   function dropdown() {
