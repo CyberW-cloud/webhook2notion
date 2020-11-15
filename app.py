@@ -103,7 +103,7 @@ def tmp():
 
 @app.route('/view_room', methods = ["GET"])
 def view_room():
-	if request.args.get("room_id", None) == None:
+	if request.args.get("room_id", None) != None:
 		return send_file("pages/view_room_page.html")
 	else:
 		return send_file("pages/get_spy_link.html") 
