@@ -995,6 +995,7 @@ def message_review():
 		rooms = rooms + user_rooms
 
 		for room in rooms:
+			print(room)
 			# double check activeSince
 			print(room["roomId"])
 			print(room)
@@ -1093,7 +1094,8 @@ def message_review():
 		try:
 			title = room["room"]["roomName"]+", **"+room["room"]["topic"] + "**"
 		except Exception:
-			title = "ERROR: Couldn't get the name"
+			title = "ONE ON ONE: "+room["room"]["roomName"]+" with "
+
 
 
 		parent_text_block = auto_retry_lambda(target_row.children.add_new,TextBlock, title = title)
