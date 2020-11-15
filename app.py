@@ -98,7 +98,16 @@ def email_report(subject, body):
 
 @app.route('/tmp')
 def tmp():
-	
+	client = NotionClient(os.environ.get("TOKEN"))
+	operation = {
+		"args":[["‣", [["u", "1ced0604-d477-49ab-b524-365de5e1069a"]]], [" "]],
+		"command":"set",
+		"id":"3218c977-73e6-41df-ac74-a38c9fd2398a",
+		"path":["properties", "y||x"],
+		"table":"block" 
+	}
+	client.submit_transaction(operation):
+
 	i = 1/0
 
 @app.route('/view_room', methods = ["GET"])
