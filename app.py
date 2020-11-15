@@ -2151,7 +2151,7 @@ def create_pcj(token, collection_url, subject, description, invite_to, link):
 	# notion
 	client = NotionClient(token)
 	cv = client.get_collection_view(collection_url)
-	
+	item_id = re.search("%7E[0-9][\w]+", link)
 	try:
 		row = cv.collection.add_row()
 	except Exception as e:
@@ -2167,7 +2167,7 @@ def create_pcj(token, collection_url, subject, description, invite_to, link):
 		urllib.parse.quote(subject[:-9])
 	)
 	
-	item_id = re.search("%7E[0-9][\w]+", link)
+
 	row.id = item_id.group()[3:]
 
 	thread = threading.Thread(target=lambda a=row.get_browseable_url(): requests.get("https://dev-etc-to-notion.herokuapp.com/invites_pt2?row="+a+"&pcj=true"))
