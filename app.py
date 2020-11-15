@@ -101,11 +101,12 @@ def tmp():
 	client = NotionClient(os.environ.get("TOKEN"))
 	target = client.get_block("https://www.notion.so/3218c97773e641dfac74a38c9fd2398a")
 	user = client.current_user
+	target_text = target.children.add_new(TextBlock, title = "tmp")
 	operation = {
 		"args":[["‣", [["u", client.current_user.id]]], [" "]],
 		"command":"set",
-		"id":target.id,
-		"path":["properties", "y||x"],
+		"id":target_text.id,
+		"path":["properties", "title"],
 		"table":"block" 
 	}
 	client.submit_transaction(operation)
