@@ -2263,7 +2263,7 @@ def get_client_from_invite(invite, pcj=False):
 	print(client_name)
 
 	if client_name == None:
-		return None
+		return [buyer]
 
 	client_name=client_name.replace(".", "")
 
