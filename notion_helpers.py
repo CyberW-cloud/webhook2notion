@@ -36,6 +36,16 @@ def copy_schema(link, client):
 
 	return schema_copy
 
+def add_user_tag(target,name,property="title"):
+	operation = {
+		"args":[["‣", [["u", client.current_user.id]]], [" "]],
+		"command":"set",
+		"id":target.id,
+		"path":["properties", property],
+		"table":"block" 
+	}
+	client.submit_transaction(operation)
+
 def get_block_edit_date(client, block):
 	return int(auto_retry_lambda(client.get_record_data, "block", block.id, True)["last_edited_time"])
 
