@@ -2170,7 +2170,7 @@ def create_pcj(token, collection_url, subject, description, invite_to, link):
 
 	row.id = item_id.group()[1:]
 
-	thread = threading.Thread(target=lambda a=row.get_browseable_url(): requests.get("https://dev-etc-to-notion.herokuapp.com/invites_pt2?row="+a+"&pcj=true"))
+	thread = threading.Thread(target=lambda a=row.get_browseable_url(): requests.get("https://dev-etc-to-notion.herokuapp.com/invites_pt2?row="+a+"&pcj=true&invite_to="+invite_to))
 	thread.start()
 	
 	return row
@@ -2312,18 +2312,8 @@ def create_invite(token, collection_url, subject, description, invite_to):
 	row.link = url
 	row.id = item_id.group() if item_id != None else ""
 
-	try:
-		row.to = invite_to
-		to_team_dir = team_directory.collection.get_rows(search=client.get_block(invite_to).name)
-		print(to_team_dir[0].get_browseable_url())
-		
-		if len(to_team_dir)>0:
-			row.pa = team_directory.collection.get_rows(search=to_team_dir[0].pa[0].name)[0].notion_user[0]
-	
-	except Exception as e:
-		print("failed to get pa, skip")
 
-	thread = threading.Thread(target=lambda a=row.get_browseable_url(): requests.get("https://dev-etc-to-notion.herokuapp.com/invites_pt2?row="+a))
+	thread = threading.Thread(target=lambda a=row.get_browseable_url(): requests.get("https://dev-etc-to-notion.herokuapp.com/invites_pt2?row="+a+"&invite_to="+invite_to))
 	thread.start()
 
 	return row
@@ -2335,6 +2325,18 @@ def invites_pt2():
 	notion_client = NotionClient(os.environ.get("TOKEN"))
 	row = notion_client.get_block(request.args.get("row", None))
 	pcj = not request.args.get("pcj","false")=="false"
+	invite_to = request.args.get("invite_to",  "")
+
+	try:
+		#row.to = invite_to
+		to_team_dir = team_directory.collection.get_rows(search=client.get_block(invite_to).name)
+		print(to_team_dir[0].get_browseable_url())
+		
+		if len(to_team_dir)>0:
+			row.pa = team_directory.collection.get_rows(search=to_team_dir[0].pa[0].name)[0].notion_user[0]
+	
+	except Exception as e:
+		print("failed to get pa, skip")
 
 	client = get_client_from_invite(row, pcj)
 	if len(client) > 0:
