@@ -246,7 +246,10 @@
   function make_link(){
     room_id = selected_row.childNodes[2].innerHTML.split("/")[5]
     ac_user = users[active_user]["ac_user"]
-    alert("link:\nhttps://dev-etc-to-notion.herokuapp.com/view_room?room_id="+room_id+"&ac_user="+ac_user)
+    
+    link_popup = document.getElementsByClassName("link-popup")[0]
+    link_popup.style = "visibility:visible"
+    link_popup.childNodes[0].innerHTML = "link:\nhttps://dev-etc-to-notion.herokuapp.com/view_room?room_id="+room_id+"&ac_user="+ac_user
   }
   function copy_link(){
     room_id = selected_row.childNodes[2].innerHTML.split("/")[5]
