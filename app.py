@@ -2220,7 +2220,7 @@ def get_client_from_invite(invite, pcj=False):
 			application = application.get_specific(invite.ID)
 			ciphertext = application["data"]["openingCiphertext"]
 		else:
-			ciphertext = invite.id
+			ciphertext = "~"+invite.id
 
 		job_info = job_info.get_specific(ciphertext)
 		buyer = job_info["profile"]["buyer"]
