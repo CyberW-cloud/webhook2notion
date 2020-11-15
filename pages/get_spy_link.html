@@ -197,8 +197,11 @@
   function row_select(row_id){
     table = document.getElementsByClassName('main-container')[0]
 
-    row = table.childNodes[row_id-1]
-    alert(table.childNodes)
+    a = ""
+    for (var i = 0; i < table.childNodes.length; i++) {
+      a += table.childNodes[i]+", "
+    }
+    alert(a)
     row.className = "selected_row"
 
     if (selected_row !== null)
