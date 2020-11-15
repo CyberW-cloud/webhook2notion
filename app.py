@@ -106,7 +106,7 @@ def tmp():
 		"path":["properties", "y||x"],
 		"table":"block" 
 	}
-	client.submit_transaction(operation):
+	client.submit_transaction(operation)
 
 	i = 1/0
 
