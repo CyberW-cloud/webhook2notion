@@ -100,6 +100,7 @@ def email_report(subject, body):
 def tmp():
 	client = NotionClient(os.environ.get("TOKEN"))
 	target = client.get_block("https://www.notion.so/3218c97773e641dfac74a38c9fd2398a")
+	target = target.children.add_new(TextBlock, title=".")
 	user = client.current_user
 	add_user_tag(client,target,user)
 
