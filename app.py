@@ -98,12 +98,15 @@ def email_report(subject, body):
 
 @app.route('/tmp')
 def tmp():
-	return send_file("pages/get_spy_link.html")
+	
 	i = 1/0
 
 @app.route('/view_room', methods = ["GET"])
 def view_room():
-	return send_file("pages/view_room_page.html")
+	if request.args.get("room_id", None) == None:
+		return send_file("pages/view_room_page.html")
+	else:
+		return send_file("pages/get_spy_link.html")
 
 @app.route('/get_rooms', methods = ["GET"])
 def get_rooms():

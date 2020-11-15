@@ -48,8 +48,7 @@
     var urlParams = new URLSearchParams(window.location.search);
   
     if (!urlParams.has("ac_user")){
-      alert("ERROR: no user!")
-      return
+      urlParams.set("ac_user", "None")
     }
     if (!urlParams.has("room_id"))
     {
