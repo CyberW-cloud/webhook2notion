@@ -144,7 +144,22 @@
         .replace(/([\r\n]+ +)+/gm, '');
      return text;
   }
-
+  function copyStringToClipboard (str) {
+    // Create new element
+    var el = document.createElement('textarea');
+    // Set value (string to be copied)
+    el.value = str;
+    // Set non-editable to avoid focus and move outside of view
+    el.setAttribute('readonly', '');
+    el.style = {position: 'absolute', left: '-9999px'};
+    document.body.appendChild(el);
+    // Select text inside element
+    el.select();
+    // Copy text to clipboard
+    document.execCommand('copy');
+    // Remove temporary element
+    document.body.removeChild(el);
+  }
   function httpGet(theUrl)
   {
     var xmlHttp = new XMLHttpRequest();
@@ -219,7 +234,9 @@
     alert("link:\nhttps://dev-etc-to-notion.herokuapp.com/view_room?room_id="+room_id+"&ac_user="+ac_user)
   }
   function copy_link(){
-    return;
+    room_id = selected_row.childNodes[2].innerHTML.split("/")[5]
+    ac_user = users[active_user]["ac_user"]
+    copyStringToClipboard("https://dev-etc-to-notion.herokuapp.com/view_room?room_id="+room_id+"&ac_user="+ac_user)
   }
 
   function dropdown() {
