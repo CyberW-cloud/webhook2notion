@@ -854,6 +854,13 @@ def parse_tokens_to_json():
 	cur.execute("""UPDATE config_vars SET value='"""+json.dumps(ret)+"""' WHERE name = 'tokens_json'""")
 	conn.commit()
 
+def check_tokens_changed():
+	DATABASE_URL = os.environ['DATABASE_URL']
+	conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+	cur = conn.cursor()
+
+	cur.execute("""SELECT value FROM config_vars WHERE name='tokens'""")
+	return cur.fetchone()[0]!=os.environ.get('TOKENS')
 
 #runs right after the build, sets up token_clients for /invites and /message_review
 def parse_tokens():
@@ -863,9 +870,12 @@ def parse_tokens():
 	conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 	cur = conn.cursor()
 
+	if check_tokens_changed():
+		parse_tokens_to_json()
+		cur.execute("""UPDATE config_vars SET value='"""+os.environ.get("TOKENS")+"""' WHERE name='tokens'""")
+
 	cur.execute("""SELECT value FROM config_vars WHERE name = 'tokens_json'""")
 	tokens = cur.fetchone()[0]
-	print(tokens)
 
 	print("setting up token_clients")
 	token_clients = json.loads(tokens)
