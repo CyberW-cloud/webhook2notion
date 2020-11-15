@@ -39,7 +39,7 @@ def copy_schema(link, client):
 def add_user_tag(client,target,user,property="title"):
 
 	operation = {
-		"args":[["‣", [["u", user.id]]], [" "]],
+		"args":[["‣", [["u", user.id]]], [" helo"]],
 		"command":"set",
 		"id":target.id,
 		"path":["properties", property],
