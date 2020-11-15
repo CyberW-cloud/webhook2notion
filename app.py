@@ -995,7 +995,7 @@ def message_review():
 		rooms = rooms + user_rooms
 
 		for room in rooms:
-			print(room) 
+			print(room["users"]) 
 			# double check activeSince
 
 
