@@ -174,7 +174,7 @@
     for (var i = 0; i < rooms.length; i++) {
 
       let row = document.createElement("tr")
-      user.setAttribute("onclick","row_select("+(i+1)+")")
+      row.setAttribute("onclick","row_select("+(i+1)+")")
       table.appendChild(row)
 
       let client = document.createElement("td")
