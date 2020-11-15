@@ -197,16 +197,13 @@
   function row_select(row_id){
     table = document.getElementsByClassName('main-container')[0]
 
-
-
     row = table.childNodes[row_id+4]
-    alert(row.innerHTML)
 
     if (selected_row !== null)
     {
       selected_row.className = "";
     }
-    row.className = "selected_row"
+    row.className = "selected-row"
     selected_row = row
   }
 
