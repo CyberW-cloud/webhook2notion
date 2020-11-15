@@ -976,23 +976,23 @@ def message_review():
 		profileApi = profileAPI(client) 
 		
 
-
 		try:
-			rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": str(activeSince), "returnUsers": "true","limit":200, "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})["rooms"]
+			rooms = messages_api.get_rooms(user_id, {"activeSince": str(activeSince), "returnUsers": "true", "limit":200, "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})["rooms"]
 		except Exception as e:
-			print(str(e) + " 4")
+			print(str(e) + " 5")
 			rooms = []
 		
 		time.sleep(1.6)
 		
 		try:
-			user_rooms = messages_api.get_rooms(user_id, {"activeSince": str(activeSince), "returnUsers": "true", "limit":200, "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})["rooms"]
+			team_rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": str(activeSince), "returnUsers": "true","limit":200, "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})["rooms"]
 		except Exception as e:
-			print(str(e) + " 5")
-			user_rooms = []
+			print(str(e) + " 4")
+			team_rooms = []
+		
 
 
-		rooms = rooms + user_rooms
+		rooms = rooms + team_rooms
 
 		for room in rooms:
 			print(room["users"])
