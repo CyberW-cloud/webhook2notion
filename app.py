@@ -700,10 +700,75 @@ def update_db():
     print("Proposals Done!")
 
 
+def parse_tokens_to_json():
+
+    tokens = os.environ.get("TOKENS")
+    print("setting up tokens_json")
+
+    DATABASE_URL = os.environ['DATABASE_URL']
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    cur = conn.cursor()
+
+    tokens = [x.group() for x in re.finditer("({})*.+?(?=})", tokens)]
+
+    ret = {}
+    for i in range(len(tokens)):
+        try:
+            strings = [x.group()[1:-1] for x in re.finditer('".+?(?=")+"', tokens[i])]
+        
+            #ret.append({"id": strings[0], strings[1]:strings[2], strings[3]:strings[4]})
+            client = upwork.Client(upwork.Config({\
+                'consumer_key': os.environ.get("ConsumerKey"),\
+                'consumer_secret': os.environ.get("ConsumerSecret"),\
+                'access_token': strings[2],\
+                'access_token_secret': strings[4]}))
+            userApi = userAPI(client)
+            
+            user_data = userApi.get_my_info()
+
+            if "user" not in user_data.keys():
+                continue
+                
+            user_id = user_data["user"]["id"]
+            ret[user_id] = {}
+            ret[user_id]["name"] = user_data["user"]["first_name"] + " " + user_data["user"]["last_name"]
+            ret[user_id]["ciphertext"] = strings[0]
+            ret[user_id]["token"] = strings[2]
+            ret[user_id]["secret"] = strings[4]
+            #token_clients[user_id]["client"] = client
+    
+        except Exception as e:
+            pass
+
+    print("finished tokens_json setup")
+
+    cur.execute("""UPDATE config_vars SET value='"""+json.dumps(ret)+"""' WHERE name = 'tokens_json'""")
+    conn.commit()
+
+def check_tokens_changed():
+    DATABASE_URL = os.environ['DATABASE_URL']
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    cur = conn.cursor()
+
+    cur.execute("""SELECT value FROM config_vars WHERE name='tokens'""")
+    return cur.fetchone()[0]!=os.environ.get('TOKENS')
+
 #runs right after the build, sets up token_clients for /invites and /message_review
 def parse_tokens():
     global token_clients
-    tokens = os.environ.get("TOKENS_JSON")
+
+    DATABASE_URL = os.environ['DATABASE_URL']
+    conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+    cur = conn.cursor()
+
+    if check_tokens_changed():
+        parse_tokens_to_json()
+        cur.execute("""UPDATE config_vars SET value='"""+os.environ.get("TOKENS")+"""' WHERE name='tokens'""")
+        conn.commit()
+
+    cur.execute("""SELECT value FROM config_vars WHERE name = 'tokens_json'""")
+    tokens = cur.fetchone()[0]
+
     print("setting up token_clients")
     token_clients = json.loads(tokens)
 
@@ -715,10 +780,9 @@ def parse_tokens():
                 'access_token': token_clients[ac_user]["token"],\
                 'access_token_secret': token_clients[ac_user]["secret"]}))
         except Exception as e:
-            pass
+            raise e
 
     print("finished token_clients setup")
-
 def update_parsed_rooms(parsed_rooms, update):
 
     #check if the record doesn't exist
@@ -832,8 +896,8 @@ def message_review():
         for room in rooms:
             # double check activeSince
             if room == None:
-            	print("Room is None. WTF? (skip)")
-            	continue
+                print("Room is None. WTF? (skip)")
+                continue
 
             if room["latestStory"]==None or int(room["latestStory"]["updated"])<activeSince:
                 print("ERROR: activeSince did not filter a room")
@@ -2031,29 +2095,6 @@ def pcj():
     return f"added {subject} receipt to " + pcj.get_browseable_url()
 
 
-
-def create_invite(token, collection_url, subject, description, invite_to):
-    # notion
-    match = re.search("https://upwork.com/applications/\d+", description)
-    url = match.group()
-    item_id = re.search("\d+", url)
-    client = NotionClient(token)
-    cv = client.get_collection_view(collection_url)
-    try:
-        row = cv.collection.add_row()
-    except Exception as e:
-        sort_params = [{"direction": "ascending", "property": "Date"}]
-        time.sleep(3)
-        row = cv.build_query(sort = sort_params).execute()[-1]
-
-    row.name = subject
-    row.description = description
-    row.status = "New"
-    row.to = invite_to
-    row.link = url
-    row.id = item_id.group()
-    return row
-
 def get_client_from_invite(invite):
 
     if "&ac_user=" in invite.description: 
@@ -2072,7 +2113,6 @@ def get_client_from_invite(invite):
     job_info = jobInfoAPI(client)
 
     expected_buyer_properties = ["op_country","op_timezone","skills","questions","skills"]
-
     try:
         application = application.get_specific(invite.ID)
         ciphertext = application["data"]["openingCiphertext"]
@@ -2100,12 +2140,7 @@ def get_client_from_invite(invite):
         print("Idk, some error while getting the client " + str(e))
         return [] 
 
-    if "op_contract_date" in buyer.keys():
-        try:
-            contract_datetime = datetime.datetime.strptime(buyer["op_contract_date"], "%B %d, %Y")
-        except Exception as e:
-            print(e)
-            print(buyer["op_contract_date"])
+    contract_datetime = datetime.datetime.strptime(buyer["op_contract_date"], "%B %d, %Y")
 
     client_name = None
     description = invite.description.split("\n")
@@ -2135,10 +2170,10 @@ def get_client_from_invite(invite):
     checked_result = []
     for x in result:
         if client_name in x.name:
-            if "op_country" not in buyer or buyer["op_country"] == x.country or x.country == "":
-                if "op_city" not in buyer or buyer["op_city"] == x.location or x.location == "":
-                    if "op_state" not in buyer or buyer["op_state"] == x.state or x.state == "":
-                        if "op_timezone" not in buyer or x.time_zone == None or buyer["op_timezone"][:6] in x.time_zone or "(Coordinated Universal Time)" in buyer["op_timezone"] and "UTC+00" in x.time_zone:
+            if buyer["op_country"] == x.country or x.country == "":
+                if buyer["op_city"] == x.location or x.location == "":
+                    if buyer["op_state"] == x.state or x.state == "":
+                        if "op_timezone" not in buyer or buyer["op_timezone"][:6] in x.time_zone or "(Coordinated Universal Time)" in buyer["op_timezone"] and "UTC+00" in x.time_zone:
                             checked_result.append(x)
 
 
@@ -2182,9 +2217,17 @@ def create_invite(token, collection_url, subject, description, invite_to):
     except Exception as e:
         print("failed to get pa, skip")
 
+    thread = threading.Thread(target=lambda a=row.get_browseable_url(): requests.get("https://dev-etc-to-notion.herokuapp.com/invites_pt2?row="+a))
+    thread.start()
+
+    return row
 
 
+@app.route("/invites_pt2", methods=["GET"])
+def invites_pt2():
 
+    notion_client = NotionClient(os.environ.get("TOKEN"))
+    row = notion_client.get_block(request.args.get("row", None))
 
     client = get_client_from_invite(row)
     if len(client) > 0:
@@ -2193,16 +2236,14 @@ def create_invite(token, collection_url, subject, description, invite_to):
         row.timezone = client[0]["op_timezone"]
 
         if "skills" in client[0].keys() and isinstance(client[0]["skills"], list):
-            row.skills = ", ".join([list(x.values())[0] for x in client[0]["skills"]])        
+            row.skills = ", ".join([list(x.values())[0] for x in client[0]["skills"]])
         
         if client[0]["questions"]!="":
             parent = row.children.add_new(TextBlock, title = "**Questions**")
             parent.children.add_new(TextBlock, title = client[0]["questions"])
 
         if len(client)>1:
-            row.client = client[1]
-
-    return row
+            row.client = client[1].name
 
 #PROPERTIES:
 # collectionURL = таблица, в которую добавить строку
