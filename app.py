@@ -812,7 +812,7 @@ def update_db():
 def parse_tokens_to_json():
 
 	tokens = os.environ.get("TOKENS")
-	print("setting up token_clients")
+	print("setting up tokens_json")
 	tokens = [x.group() for x in re.finditer("({})*.+?(?=})", tokens)]
 
 	ret = {}
@@ -844,8 +844,12 @@ def parse_tokens_to_json():
 		except Exception as e:
 			pass
 
-	print("finished token_clients setup")
-	print(json.dumps(ret))
+	print("finished tokens_json setup")
+	DATABASE_URL = os.environ['DATABASE_URL']
+	conn = psycopg2.connect(DATABASE_URL, sslmode='require')
+	cur = conn.cursor()
+
+	cur.execute("""UPDATE config_vars SET value='"""+json.dumps(ret)+"""' WHERE name = 'tokens_json'""")
 
 
 
