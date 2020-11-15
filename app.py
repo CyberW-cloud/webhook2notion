@@ -850,7 +850,7 @@ def parse_tokens_to_json():
 	cur = conn.cursor()
 
 	cur.execute("""UPDATE config_vars SET value='"""+json.dumps(ret)+"""' WHERE name = 'tokens_json'""")
-
+	cur.commit()
 
 
 #runs right after the build, sets up token_clients for /invites and /message_review
