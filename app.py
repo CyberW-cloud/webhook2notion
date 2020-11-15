@@ -953,7 +953,7 @@ def message_review():
 		
 		time.sleep(1.6)
 		
-		user_data = userApi.get_my_info()
+		user_data = userApi.get_my_info() 
 		print(user_data)
 		user_id = user_data["user"]["id"]
 		ciphertext = user_data["user"]["profile_key"]
