@@ -156,14 +156,13 @@ def get_room_messages():
 		user_id = os.environ.get("TeamID")
 	else:
 		client = token_clients[ac_user]["client"]
-		time.sleep(3.2)
 		user_id = ac_user
 
 	messages_api = messageAPI(client) 	
 	user_api = userAPI(client)
 	profileApi = profileAPI(client)
 
-
+	time.sleep(1.6)
 	messages = messages_api.get_room_messages(user_id, room_id, {"limit":200})
 
 	messages = messages["stories_list"]["stories"]
