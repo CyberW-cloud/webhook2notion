@@ -100,13 +100,26 @@
     {
       background-color: white;
     }
+    .link-popup
+    {
+      position: fixed;
+      background-color: #e0e0e0;
+      align-self: center;
+      width: 60%;
+      height: 60%;
+    }
+    .link-popup *
+    {
+      visibility: inherit;
+    }
+
   </style>
 </head>
 
 <body onload="main()">
   <button class="button makelinkbtn" onclick="make_link()">Make Spy Link</button>
   <button class="button copylinkbtn" onclick="copy_link()">Copy Spy Link</button>
-
+  <div class="link-popup"></div>
   <h1 style="color:black;text-align: center;width: 90%">Message history</h1>
   
   <div class="dropdown">
