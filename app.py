@@ -123,7 +123,7 @@ def get_rooms():
 	messages_api = messageAPI(client)
 	
 	try:
-		rooms = messages_api.get_rooms(ac_user, {"limit":200, "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})["rooms"]
+		rooms = messages_api.get_rooms(ac_user, {"limit":200,"sortOrder":"recentTimestamp", "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})["rooms"]
 	except Exception as e:
 		print(str(e) + " 5")
 		rooms = []
@@ -978,7 +978,7 @@ def message_review():
 
 
 		try:
-			rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": str(activeSince), "limit":200, "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})["rooms"]
+			rooms = messages_api.get_rooms(os.environ.get("TeamID"), {"activeSince": str(activeSince), "returnUsers": "true","limit":200, "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})["rooms"]
 		except Exception as e:
 			print(str(e) + " 4")
 			rooms = []
@@ -986,7 +986,7 @@ def message_review():
 		time.sleep(1.6)
 		
 		try:
-			user_rooms = messages_api.get_rooms(user_id, {"activeSince": str(activeSince), "limit":200, "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})["rooms"]
+			user_rooms = messages_api.get_rooms(user_id, {"activeSince": str(activeSince), "returnUsers": "true", "limit":200, "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})["rooms"]
 		except Exception as e:
 			print(str(e) + " 5")
 			user_rooms = []
