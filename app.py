@@ -864,7 +864,7 @@ def parse_tokens():
 	cur = conn.cursor()
 
 	cur.execute("""SELECT value FROM config_vars WHERE name = 'tokens_json'""")
-	tokens = cur.fetchone()
+	tokens = cur.fetchone()[0]
 	
 	print("setting up token_clients")
 	token_clients = json.loads(tokens)
