@@ -2162,7 +2162,7 @@ def create_pcj(token, collection_url, subject, description, invite_to, link):
 	row.name = subject[:-9]
 	row.description = description
 	row.status = "New"
-	row.to = invite_to
+	#row.to = invite_to
 	row.link = "https://www.upwork.com/ab/jobs/search/?previous_clients=all&q={}&sort=recency".format(
 		urllib.parse.quote(subject[:-9])
 	)
@@ -2170,7 +2170,7 @@ def create_pcj(token, collection_url, subject, description, invite_to, link):
 	item_id = re.search("%7E[0-9][\w]+", link)
 	row.id = item_id.group()[3:]
 
-	thead = threading.Thread(target=lambda a=row.get_browseable_url(): requests.get("https://dev-etc-to-notion.herokuapp.com/invites_pt2?row="+a+"&pcj=true"))
+	thread = threading.Thread(target=lambda a=row.get_browseable_url(): requests.get("https://dev-etc-to-notion.herokuapp.com/invites_pt2?row="+a+"&pcj=true"))
 	thread.start()
 	
 	return row
