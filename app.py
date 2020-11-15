@@ -2168,7 +2168,7 @@ def create_pcj(token, collection_url, subject, description, invite_to, link):
 	)
 	
 
-	row.id = item_id.group()[3:]
+	row.id = item_id.group()[1:]
 
 	thread = threading.Thread(target=lambda a=row.get_browseable_url(): requests.get("https://dev-etc-to-notion.herokuapp.com/invites_pt2?row="+a+"&pcj=true"))
 	thread.start()
