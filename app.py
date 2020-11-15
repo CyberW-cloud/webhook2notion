@@ -964,9 +964,9 @@ def message_review():
 
 
 		
-		if ciphertext not in freelancer_ids:
-			print(2)
-			continue
+		# if ciphertext not in freelancer_ids:
+		# 	print(2)
+		# 	continue
 
 		
 
