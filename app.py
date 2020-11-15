@@ -2183,14 +2183,14 @@ def create_pcj(token, collection_url, subject, description, invite_to, link):
 # description = проперти decription етой строки
 # inviteto = кому пришел инвайт, ссылка на тим директори
 
-@app.route("/pcj", methods=["POST"])
+@app.route("/pcj", methods=["GET"])
 def pcj():
-	collection_url = request.form.get("collectionURL")
-	description = request.form.get("description")
-	subject = request.form.get("subject")
+	collection_url = "https://www.notion.so/8690714adca7458b84fc490301ec006e?v=8bf47bd597654947bf81f2f7f5f29ee0"
+	description = request.args.get("description", "").replace("\\n","\n")
+	subject = "test"
 	token_v2 = os.environ.get("TOKEN")
-	invite_to = request.form.get("inviteto")
-	link = request.form.get("link")
+	invite_to = request.args.get("inviteto")
+	link = request.args.get("link", "")
 	print(f"add {subject} {link}")
 	pcj = create_pcj(token_v2, collection_url, subject, description, invite_to, link)
 	return f"added {subject} receipt to " + pcj.get_browseable_url()
