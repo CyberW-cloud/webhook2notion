@@ -98,8 +98,7 @@ def email_report(subject, body):
 
 @app.route('/tmp')
 def tmp():
-	parse_tokens_to_json()
-	# return send_file("pages/get_spy_link.html")
+	return send_file("pages/get_spy_link.html")
 	i = 1/0
 
 @app.route('/view_room', methods = ["GET"])
