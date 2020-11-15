@@ -103,7 +103,7 @@ def tmp():
 	target = target.children.add_new(TextBlock, title=".")
 	user = client.current_user
 	add_user_tag(client,target,user)
-	target.title+=helo
+	target.title+=" helo"
 
 	i = 1/0
 
