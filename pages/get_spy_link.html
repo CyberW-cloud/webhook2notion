@@ -205,7 +205,13 @@
   {  
     active_user = caller
     
-    document.getElementsByClassName('dropbtn')[0].innerHTML=users[active_user]["name"]+" ▼"
+    dropbtn = document.getElementsByClassName('dropbtn')[0]
+    dropbtn.innerHTML=users[active_user]["name"]
+
+    icon = document.createElement("div")
+    icon.style="display: inline-block; text-align: right;"
+    icon.innerHTML="▼"
+    dropbtn.appendChild(icon)
   }
   function make_link(){
     room_id = document.getElementsByClassName('input')[0].value.split("/")[5]
