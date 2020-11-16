@@ -204,7 +204,7 @@
     document.getElementsByClassName('dropbtn')[0].innerHTML=users[active_user]["name"]
   }
   function make_link(){
-    room_id = document.getElementsByClassName('input')[0].innerHTML.split("/")[5]
+    room_id = document.getElementsByClassName('input')[0].value.split("/")[5]
     ac_user = users[active_user]["ac_user"]
     
     link_popup = document.getElementsByClassName("link-popup")[0]
@@ -212,7 +212,7 @@
     document.getElementsByClassName("link-popup-content")[0].innerHTML="https://dev-etc-to-notion.herokuapp.com/view_room?room_id="+room_id+"&ac_user="+ac_user
   }
   function copy_link(){
-    room_id = selected_row.childNodes[2].innerHTML.split("/")[5]
+    room_id = document.getElementsByClassName('input')[0].value.split("/")[5]
     ac_user = users[active_user]["ac_user"]
     copyStringToClipboard("https://dev-etc-to-notion.herokuapp.com/view_room?room_id="+room_id+"&ac_user="+ac_user)
   }
