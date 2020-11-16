@@ -946,7 +946,7 @@ def message_review():
 	messages = messageAPI(client)
 
 	
-	freelancer_ids = [x["public_url"].split("/")[-1] for x in company.get_users(os.environ.get("CompanyRef"))["users"]]
+	freelancer_ids = [x["profile_key"] for x in company.get_users(os.environ.get("CompanyRef"))["users"]]
 	print(freelancer_ids)
 	for token in token_clients.values():
 		
