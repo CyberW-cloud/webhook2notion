@@ -98,7 +98,10 @@
 
       time = document.createElement("b")
       msg.appendChild(time)
-      msg.appendChild(document.createElement("br"))
+      
+      divider = document.createElement("div")
+      divider = "width: 100%; height: 1px; visibility: visible; border-bottom: 1px solid rgba(55, 53, 47, 0.09);"
+      msg.appendChild(divider)
 
       time.innerHTML += time_text
       msg.innerHTML +=  message_text

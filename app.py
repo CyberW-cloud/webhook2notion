@@ -946,7 +946,7 @@ def message_review():
 	messages = messageAPI(client)
 
 	
-	freelancer_ids = [x["profile_key"] for x in company.get_users(os.environ.get("CompanyRef"))["users"]]
+	freelancer_ids = [x["id"] for x in company.get_users(os.environ.get("CompanyRef"))["users"]]
 	print(freelancer_ids)
 	for token in token_clients.values():
 		
@@ -969,9 +969,9 @@ def message_review():
 
 
 		
-		# if ciphertext not in freelancer_ids: # skips denys safonov for whatever reason.
-		# 	print(2)
-		# 	continue
+		if user_id not in freelancer_ids: # skips denys safonov for whatever reason.
+			print(2)
+			continue
 
 		
 
@@ -1022,7 +1022,7 @@ def message_review():
 			time.sleep(1.6)
 			try:
 				messages = {}
-				messages = messages_api.get_room_messages(os.environ.get("TeamID"), room["roomId"], {"limit":15})
+				messages = messages_api.get_room_messages(os.environ.get("TeamID"), room["roomId"], {"limit":15, "returnUsers": "true"})
 				if "stories_list" not in messages.keys():
 					messages = messages_api.get_room_messages(user_id, room["roomId"], {"limit":15})
 			except Exception as e:
