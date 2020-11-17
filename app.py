@@ -838,7 +838,7 @@ def message_review():
     messages = messageAPI(client)
 
     
-    freelancer_ids = [x["profile_key"] for x in company.get_users(os.environ.get("CompanyRef"))["users"]]
+    freelancer_ids = [x["id"] for x in company.get_users(os.environ.get("CompanyRef"))["users"]]
     print(freelancer_ids)
     for token in token_clients.values():
         
@@ -861,7 +861,7 @@ def message_review():
 
 
         
-        if ciphertext not in freelancer_ids:
+        if user_id not in freelancer_ids:
             print("token not in company!!!")
             continue
 
