@@ -1107,7 +1107,7 @@ def message_review():
 			continue
 
 		#if the message ends in a sinature like [Line Start][Capital][* amount of lowercase][space][Capital][Dot][EOF] 
-		if isinstance(stories[0]["message"], str) and re.findall("^[A-Z][a-z]* [A-Z]\.\Z", stories[0]["message"], re.M) and room["type"] == "Interview":
+		if isinstance(stories[0]["message"], str) and re.findall("^[A-Z][a-z]* [A-Z]\.\Z", stories[0]["message"], re.M) and room["type"] == "Interviews":
 			auto_retry_lambda(parent_text_block.remove,permanently = True)
 			print("bot detected, skipped")
 			continue
