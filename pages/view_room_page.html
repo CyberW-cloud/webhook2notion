@@ -83,7 +83,7 @@
         name = strip(messages[i]["name"]).replace("\n", "<br>")
         message_container.appendChild(document.createElement("br"))
         
-        message_name = document.createElement("div")
+        message_name = document.createElement("b")
         message_name.className = "message-name"
         message_name.innerHTML += name + ":"
       
