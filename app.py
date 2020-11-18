@@ -173,15 +173,15 @@ def get_room_messages():
 	time.sleep(3.2)
 	messages = messages_api.get_room_messages(user_id, room_id, {"limit":200})
 	
-	room = messages_api.get_room_details(user_id,  room_id)
+	room = messages_api.get_room_details(user_id,  room_id)["room"]
 	print(room)
-	if "roomName" not in messages.keys() or messages["roomName"] == None:
-		messages["roomName"] = ""
+	if "roomName" not in room.keys() or room["roomName"] == None:
+		room["roomName"] = ""
 
-	if "topic" not in messages.keys() or messages["topic"] == None:
-		messages["topic"] = ""
+	if "topic" not in room.keys() or room["topic"] == None:
+		room["topic"] = ""
 
-	ret = {"room_info":{"client":messages["roomName"], "topic":messages["topic"]}, "messages":[]}
+	ret = {"room_info":{"client":room["roomName"], "topic":room["topic"]}, "messages":[]}
 
 	messages = messages["stories_list"]["stories"]
 	for i in messages:
