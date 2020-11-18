@@ -4,7 +4,7 @@
   <style type="text/css" media="screen">
     body { background-color: #FFFFFF}
     
-    .main-container {width:90%;background-color: #F0F0F0; margin-left: 1%; border-radius: 15px;}
+    .main-container {width:90%;background-color: #FFFFFF; margin-left: 1%; border-radius: 15px;}
     .message {padding: 3px;text-align: left; color: black; margin-top: 2px;
         border-radius: 25px;background-color: #FFFFFF; margin-left: 3%; margin-right: 1%}
     .message .msg {margin-left: 1%}
@@ -15,7 +15,8 @@
 <body onload="main()">
 
   <h1 style="color:black;text-align: center; width: 90%">Message history</h1>
-
+  <h3 style="color:black;text-align: left; width: 90%" class="client-name"></h3>
+  <h5 style="color:black;text-align: left; width: 90%" class="room-name"></h5>
   <div class="main-container">
     <!-- JS will fill this container later -->
   </div>
@@ -59,8 +60,8 @@
     
     messages = JSON.parse(messages)
 
-    document.getElementsByClassName('main-container')[0].innerHTML = messages["room_info"]["client"]
-    document.getElementsByClassName('main-container')[0].innerHTML = messages["room_info"]["topic"]
+    document.getElementsByClassName('client-name')[0].innerHTML = messages["room_info"]["client"]
+    document.getElementsByClassName('room-name')[0].innerHTML = messages["room_info"]["topic"]
 
     update_table(messages["messages"])
   }
