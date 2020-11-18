@@ -173,6 +173,7 @@ def get_room_messages():
 	time.sleep(1.6)
 	messages = messages_api.get_room_messages(user_id, room_id, {"limit":200})
 	
+	print(messages)
 	if "roomName" not in messages.keys() or messages["roomName"] == None:
 		messages["roomName"] = ""
 
