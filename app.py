@@ -99,6 +99,115 @@ def email_report(subject, body):
 def tmp():
     i = 1/0
 
+@app.route('/view_room', methods = ["GET"])
+def view_room():
+    if request.args.get("room_id", None) != None:
+        return send_file("pages/view_room_page.html")
+    else:
+        return send_file("pages/get_spy_link.html") 
+
+@app.route('/get_rooms', methods = ["GET"])
+def get_rooms():
+    ret = []
+    
+    ac_user = request.args.get("ac_user", None)
+    if ac_user == None or ac_user == "None":
+        client = token_clients["safonov"]["client"]
+        ac_user = os.environ.get("TeamID")
+    else:
+        client = token_clients[ac_user]["client"]
+        
+
+    messages_api = messageAPI(client)
+    
+    try:
+        rooms = messages_api.get_rooms(ac_user, {"limit":200,"sortOrder":"recentTimestamp", "includeFavoritesIfActiveSinceSet": "false", "includeUnreadIfActiveSinceSet": "false"})["rooms"]
+    except Exception as e:
+        print(str(e) + " 5")
+        rooms = []
+
+    for i in rooms:
+        print(i)
+        ret.append({"url":"https://www.upwork.com/messages/rooms/"+i["roomId"], "name": i["topic"], "client": i["roomName"],})
+
+    return json.dumps(ret)
+
+@app.route('/get_ac_users', methods = ["GET"])
+def get_ac_users():
+    
+    ret = [{"ac_user": "None", "name": "Agency"}]
+    for ac_user in token_clients.keys():
+        ret.append({"ac_user":ac_user,"name":token_clients[ac_user]["name"]})
+
+    
+    return json.dumps(ret)
+
+
+@app.route('/get_room_messages', methods = ["GET"])
+def get_room_messages():
+    ac_user = request.args.get("ac_user", None)
+    room_id = request.args.get("room_id", None)
+    pagination_id = None # TODO add support for pagination
+
+    if room_id == None:
+        return ""
+
+    if ac_user == None or ac_user not in token_clients.keys():
+        client = token_clients["safonov"]["client"]
+        user_id = os.environ.get("TeamID")
+    else:
+        client = token_clients[ac_user]["client"]
+        user_id = ac_user
+
+    messages_api = messageAPI(client)     
+    user_api = userAPI(client)
+    profileApi = profileAPI(client)
+
+    time.sleep(3.2)
+    messages = messages_api.get_room_messages(user_id, room_id, {"limit":200})
+    
+    room = messages_api.get_room_details(user_id,  room_id)["room"]
+    print(room)
+    if "roomName" not in room.keys() or room["roomName"] == None:
+        room["roomName"] = ""
+
+    if "topic" not in room.keys() or room["topic"] == None:
+        room["topic"] = ""
+
+    ret = {"room_info":{"client":room["roomName"], "topic":room["topic"]}, "messages":[]}
+
+    messages = messages["stories_list"]["stories"]
+    for i in messages:
+        if not isinstance(i["message"],str) or i["message"] == "" or i["userId"] == None or i["isSystemStory"]:
+            print(i)
+            continue
+
+        message_time = datetime.datetime.fromtimestamp(i["updated"]/1000).strftime('%Y-%m-%d %H:%M:%S')
+        text = "["+message_time+"]\n"
+
+        try:
+            if i["userId"] not in cache.keys(): 
+                #simple retry
+                try:
+                    name = profileApi.get_specific(i["userId"])["profile"]["dev_short_name"][:-1]
+                except:
+                    name = profileApi.get_specific(i["userId"])["profile"]["dev_short_name"][:-1]
+                
+                cache[i["userId"]] = name
+            else:
+                name = cache[i["userId"]]
+
+        except Exception as e:
+            print(i)
+            print(e)
+            print(i["userId"])
+            name = "ERROR"
+
+        ret["messages"].append({"date":message_time, "name": name, "message": i["message"]})
+
+
+
+    return json.dumps(ret)
 
 @app.route('/update_clients', methods = ["GET"])
 def update_clients():
