@@ -179,8 +179,9 @@ def get_room_messages():
 	if "topic" not in messages.keys() or messages["topic"] == None:
 		messages["topic"] = ""
 
-	messages = messages["stories_list"]["stories"]
 	ret = {"room_info":{"client":messages["roomName"], "topic":messages["topic"]}, "messages":[]}
+
+	messages = messages["stories_list"]["stories"]
 	for i in messages:
 		if not isinstance(i["message"],str) or i["message"] == "" or i["userId"] == None or i["isSystemStory"]:
 			print(i)
