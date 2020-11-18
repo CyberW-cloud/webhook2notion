@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style type="text/css" media="screen">
+    body { background-color: #FFFFFF}
+    
+    .main-container {width:90%;background-color: #FFFFFF; margin-left: 1%; border-radius: 15px;}
+    .message {padding: 3px;text-align: left; color: black; margin-top: 2px;
+        border-radius: 25px;background-color: #FFFFFF; margin-left: 3%; margin-right: 1%}
+    .message .msg {margin-left: 1%}
+    .message-name {color: black; margin-left: 1%}
+  </style>
+</head>
+
+<body onload="main()">
+
+  <h1 style="color:black;text-align: center; width: 90%">Message history</h1>
+  <h3 style="margin-left: 1%;text-align: left;font-weight: 600;font-size: 1.875em;" class="client-name"></h3>
+  <h5 style="margin-left: 1%;text-align: left;font-weight: 600;font-size: 1.5em;" class="room-name"></h5>
+  <div class="main-container">
+    <!-- JS will fill this container later -->
+  </div>
+  <br>
+
+<script type="text/javascript">
+  function strip(text)
+  {
+    // Remove style tags and content
+    text.replace(/<style[^>]*>.*<\/style>/gm, '')
+        // Remove script tags and content
+        .replace(/<script[^>]*>.*<\/script>/gm, '')
+        // Remove all opening, closing and orphan HTML tags
+        .replace(/<[^>]+>/gm, '')
+        // Remove leading spaces and repeated CR/LF
+        .replace(/([\r\n]+ +)+/gm, '');
+     return text;
+  }
+
+  function httpGet(theUrl)
+  {
+    var xmlHttp = new XMLHttpRequest();
+    xmlHttp.open( "GET", theUrl, false ); // false for synchronous request
+    xmlHttp.send( null );
+    return xmlHttp.responseText;
+  }
+
+  function main() {  
+    var urlParams = new URLSearchParams(window.location.search);
+  
+    if (!urlParams.has("ac_user")){
+      urlParams.set("ac_user", "None")
+    }
+    if (!urlParams.has("room_id"))
+    {
+      alert("ERROR: no room id!")
+      return      
+    }
+    
+    messages = httpGet("https://etc-to-notion.herokuapp.com/get_room_messages?ac_user="+urlParams.get("ac_user")+"&room_id="+urlParams.get("room_id"))
+    
+    messages = JSON.parse(messages)
+
+    document.getElementsByClassName('client-name')[0].innerHTML = messages["room_info"]["client"]
+    document.getElementsByClassName('room-name')[0].innerHTML = messages["room_info"]["topic"]
+
+    update_table(messages["messages"])
+  }
+
+
+  function update_table(messages){
+
+    var container = document.getElementsByClassName('main-container')[0]  
+    //autofilled by python on creation
+
+    let prev_username = ""
+    for (var i = messages.length - 1; i >= 0; i--) {
+
+      message_container = document.createElement("div");
+      message_container.className = "message-container"
+      container.appendChild(message_container)
+
+      if (prev_username !== messages[i]["name"]){
+        name = strip(messages[i]["name"]).replace("\n", "<br>")
+        message_container.appendChild(document.createElement("br"))
+        
+        message_name = document.createElement("b")
+        message_name.className = "message-name"
+        message_name.innerHTML += name + ":"
+      
+        message_container.appendChild(message_name)
+        prev_username = name
+      }
+
+
+      message_text = strip(messages[i]["message"]).replace("\n", "<br>")
+      time_text = strip(messages[i]["date"]).replace("\n", "<br>")
+
+      message = document.createElement("div")
+      message.className = "message"
+
+      msg = document.createElement("div")
+      msg.className = "msg"
+      message.appendChild(msg)
+
+      time = document.createElement("b")
+      msg.appendChild(time)
+      
+      divider = document.createElement("div")
+      divider.style = "width: 100%; height: 1px; visibility: visible; border-bottom: 1px solid rgba(55, 53, 47, 0.09);"
+      msg.appendChild(divider)
+
+      time.innerHTML += "["+time_text+"]"
+      msg.innerHTML +=  message_text
+
+      message_container.appendChild(message)
+    }  
+    end = document.createElement("br")
+    container.appendChild(end)
+  }
+</script>
+</body>
+
+</html>
