@@ -170,7 +170,7 @@ def get_room_messages():
 	user_api = userAPI(client)
 	profileApi = profileAPI(client)
 
-	time.sleep(1.6)
+	time.sleep(3.2)
 	messages = messages_api.get_room_messages(user_id, room_id, {"limit":200})
 	
 	room = messages_api.get_room_details(user_id,  room_id)
