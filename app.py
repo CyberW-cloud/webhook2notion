@@ -1689,8 +1689,7 @@ def weekly_todo_pa(token, staff, calendar):
                 f"(https://www.notion.so/Workload-ef6a6d4e3bbb41d8b4286b339f603aba) по "
                 f"{freelancers}"
             )
-            todo.append(f"Собрать Stats из Upwork и Загрузить на pCLoud по {freelancers}")
-            todo.append(f"Заполнить цифры по Who vieved and discovered в [Profile Stats](https://www.notion.so/501c314abddb45bfb35d91a217d709d8?v=f22acd6b1b1f4697bdab81734f86301a) по {freelancers}")
+        todo.append("Проверить заливку рабочих материалов на pCloud/Github по активным контрактам ")
             
         create_todo(token, calendar["mon"], pa["todo_url"], todo, text="")
 
@@ -1698,7 +1697,8 @@ def weekly_todo_pa(token, staff, calendar):
         todo = list()
         for f in map(lambda c: "[{}]({})".format(c[0], c[1]), pa["pa_for"]):
             todo.append(f"Обновить профиль {f}")
-        todo.append("Проверить заливку рабочих материалов на pCloud/Github по активным контрактам ")
+        todo.append(f"Собрать Stats из Upwork и Загрузить на pCLoud по {freelancers}")
+        todo.append(f"Заполнить цифры по Who vieved and discovered в [Profile Stats](https://www.notion.so/501c314abddb45bfb35d91a217d709d8?v=f22acd6b1b1f4697bdab81734f86301a) по {freelancers}")
         create_todo(token, calendar["tue"], pa["todo_url"], todo, text="")
 
         # Wednesday
