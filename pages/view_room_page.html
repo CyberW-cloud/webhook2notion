@@ -57,7 +57,12 @@
     
     messages = httpGet("https://dev-etc-to-notion.herokuapp.com/get_room_messages?ac_user="+urlParams.get("ac_user")+"&room_id="+urlParams.get("room_id"))
     
-    update_table(JSON.parse(messages))
+    messages = JSON.parse(messages)
+
+    document.getElementsByClassName('main-container')[0].innerHTML = messages["room_info"]["client"]
+    document.getElementsByClassName('main-container')[0].innerHTML = messages["room_info"]["topic"]
+
+    update_table(messages["messages"])
   }
 
 

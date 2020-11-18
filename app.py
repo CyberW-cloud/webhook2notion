@@ -172,9 +172,15 @@ def get_room_messages():
 
 	time.sleep(1.6)
 	messages = messages_api.get_room_messages(user_id, room_id, {"limit":200})
+	
+	if "roomName" not in messages.keys() or messages["roomName"] == None:
+		messages["roomName"] = ""
+
+	if "topic" not in messages.keys() or messages["topic"] == None:
+		messages["topic"] = ""
 
 	messages = messages["stories_list"]["stories"]
-	ret = []
+	ret = {"room_info":{"client":messages["roomName"], "topic":messages["topic"]}, "messages":[]}
 	for i in messages:
 		if not isinstance(i["message"],str) or i["message"] == "" or i["userId"] == None or i["isSystemStory"]:
 			print(i)
@@ -201,7 +207,9 @@ def get_room_messages():
 			print(i["userId"])
 			name = "ERROR"
 
-		ret.append({"date":message_time, "name": name, "message": i["message"]})
+		ret["messages"].append({"date":message_time, "name": name, "message": i["message"]})
+
+
 
 	return json.dumps(ret)
 
