@@ -834,6 +834,7 @@ def parse_tokens_to_json():
 		'access_token_secret': os.environ.get("AccessSecret")})
 
 	client = upwork.Client(login_config)
+	company = companyAPI(client)
 
 	tokens = [x.group() for x in re.finditer("({})*.+?(?=})", tokens)]
 
