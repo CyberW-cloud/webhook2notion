@@ -827,9 +827,20 @@ def parse_tokens_to_json():
 	conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 	cur = conn.cursor()
 
+	login_config = upwork.Config({\
+		'consumer_key': os.environ.get("ConsumerKey"),\
+		'consumer_secret': os.environ.get("ConsumerSecret"),\
+		'access_token': os.environ.get("AccessToken"),\
+		'access_token_secret': os.environ.get("AccessSecret")})
+
+	client = upwork.Client(login_config)
+
 	tokens = [x.group() for x in re.finditer("({})*.+?(?=})", tokens)]
 
+
 	ret = {}
+	freelancer_ids = [x["id"] for x in company.get_users(os.environ.get("CompanyRef"))["users"]]
+
 	for i in range(len(tokens)):
 		try:
 			strings = [x.group()[1:-1] for x in re.finditer('".+?(?=")+"', tokens[i])]
@@ -841,12 +852,18 @@ def parse_tokens_to_json():
 				'access_token': strings[2],\
 				'access_token_secret': strings[4]}))
 			userApi = userAPI(client)
-			
+
+
+
+
 			user_data = userApi.get_my_info()
 
 			if "user" not in user_data.keys():
 				continue
-				
+			
+			if user_id not in freelancer_ids:
+				print(user_id + " not in company, skip")
+
 			user_id = user_data["user"]["id"]
 			ret[user_id] = {}
 			ret[user_id]["name"] = user_data["user"]["first_name"] + " " + user_data["user"]["last_name"]
