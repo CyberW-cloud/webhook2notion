@@ -96,7 +96,7 @@
       if (message_text.includes("<http"))
       {
 
-        message_text = message_text.replace(/<http[^>]*>/g, function (x){return "\n<a href=\""+x+"\">"+x+"</a>\n"})
+        message_text = message_text.replace(/<http[^>]*>/g, function (x){return "\n<a href=\""+x+"\">"+x.replace(/(^<)|(>$)/g, "")+"</a>\n"})
         console.log(message_text)
 
       }
