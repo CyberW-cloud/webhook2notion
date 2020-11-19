@@ -817,10 +817,22 @@ def parse_tokens_to_json():
     DATABASE_URL = os.environ['DATABASE_URL']
     conn = psycopg2.connect(DATABASE_URL, sslmode='require')
     cur = conn.cursor()
+ 
+    login_config = upwork.Config({\
+        'consumer_key': os.environ.get("ConsumerKey"),\
+        'consumer_secret': os.environ.get("ConsumerSecret"),\
+        'access_token': os.environ.get("AccessToken"),\
+        'access_token_secret': os.environ.get("AccessSecret")})
+
+    client = upwork.Client(login_config)
+    company = companyAPI(client)
 
     tokens = [x.group() for x in re.finditer("({})*.+?(?=})", tokens)]
 
+
     ret = {}
+    freelancer_ids = [x["id"] for x in company.get_users(os.environ.get("CompanyRef"))["users"]]
+
     for i in range(len(tokens)):
         try:
             strings = [x.group()[1:-1] for x in re.finditer('".+?(?=")+"', tokens[i])]
@@ -831,14 +843,22 @@ def parse_tokens_to_json():
                 'consumer_secret': os.environ.get("ConsumerSecret"),\
                 'access_token': strings[2],\
                 'access_token_secret': strings[4]}))
-            userApi = userAPI(client)
-            
+            userApi = userAPI(client) 
+
+
+
+
             user_data = userApi.get_my_info()
 
             if "user" not in user_data.keys():
                 continue
-                
+            
             user_id = user_data["user"]["id"]
+            
+            if user_id not in freelancer_ids:
+                print(user_id + " not in company, skip")
+                continue
+
             ret[user_id] = {}
             ret[user_id]["name"] = user_data["user"]["first_name"] + " " + user_data["user"]["last_name"]
             ret[user_id]["ciphertext"] = strings[0]
@@ -847,10 +867,11 @@ def parse_tokens_to_json():
             #token_clients[user_id]["client"] = client
     
         except Exception as e:
+            print(e)
             pass
 
     print("finished tokens_json setup")
-
+    print(json.dumps(ret))
     cur.execute("""UPDATE config_vars SET value='"""+json.dumps(ret)+"""' WHERE name = 'tokens_json'""")
     conn.commit()
 
