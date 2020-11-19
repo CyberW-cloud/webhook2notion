@@ -1001,7 +1001,7 @@ def message_review():
 
 
 		
-		if user_id not in freelancer_ids: # skips denys safonov for whatever reason.
+		if user_id not in freelancer_ids: 
 			print(2)
 			continue
 
@@ -1066,18 +1066,18 @@ def message_review():
 			
 			if len(contracts_found)>0:
 				if not contracts_found[0][4]:
-					update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Contracts", "messages":messages, "link":contracts_found[0][3]})
+					update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Contracts", "messages":messages, "link":contracts_found[0][3], "fl_name": token["name"]})
 					print("ACTIVE CONTRACT: " + str(room))
 				else:
-					update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Ended contracts", "messages":messages, "link":contracts_found[0][3]})
+					update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Ended contracts", "messages":messages, "link":contracts_found[0][3], "fl_name": token["name"]})
 					print("ENDED CONTRACT: " + str(room))
 		
 			elif len(proposals_found)>0:		
-				update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Interviews", "messages":messages, "link":proposals_found[0][3]})
+				update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "Interviews", "messages":messages, "link":proposals_found[0][3], "fl_name": token["name"]})
 				print("PROPOSAL: " + str(room))
 
 			else:
-				update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "No info", "link":"", "messages":messages})
+				update_parsed_rooms(parsed_rooms, {"id": room["roomId"], "room":room, "type": "No info", "link":"", "messages":messages, "fl_name": token["name"]})
 				print("NO DATA " + str(room))
 
 	time.sleep(3.2)
@@ -1124,7 +1124,7 @@ def message_review():
 		try:
 			title = room["room"]["roomName"]+", **"+room["room"]["topic"] + "**"
 		except Exception:
-			title = "ONE ON ONE: "+room["room"]["roomName"]
+			title = "ONE ON ONE: "+room["room"]["roomName"]+ " with our fl " +room["fl_name"]
 
 
 
