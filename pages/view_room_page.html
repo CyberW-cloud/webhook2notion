@@ -95,11 +95,9 @@
       message_text = strip(messages[i]["message"]).replace("\n", "<br>")
       if (message_text.includes("<http"))
       {
-        links = /<http[^>]*>/g.exec(message_text)
-        for (var i = 0; i < links.length; i++) {
-          console.log(links[i])
-          message_text.replace(links[i], "\n<a href=\""+links[i]+"\">"+links[i]+"</a>\n")
-          console.log(message_text)
+
+        message_text.replace(/<http[^>]*>/g, function (x){"\n<a href=\""+x+"\">"+x+"</a>\n"})
+        console.log(message_text)
         }
       }
       
