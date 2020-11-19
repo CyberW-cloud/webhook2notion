@@ -94,7 +94,7 @@
 
       message_text = strip(messages[i]["message"])
 
-      message_text = message_text.replace("\n", "<br>")
+      message_text = message_text.replace(/(?:\r\n|\r|\n)/g, '<br>\n');
       
       if (message_text.includes("<http"))
       {
