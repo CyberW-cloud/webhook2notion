@@ -1032,8 +1032,6 @@ def message_review():
 		rooms = rooms + team_rooms
 
 		for room in rooms:
-			print(room["users"])
-			# double check activeSince
 
 
 			#sometimes throws an error, just default to no info
@@ -1124,7 +1122,7 @@ def message_review():
 		try:
 			title = room["room"]["roomName"]+", **"+room["room"]["topic"] + "**"
 		except Exception:
-			title = "ONE ON ONE: "+room["room"]["roomName"]+ " with our fl " +room["fl_name"]
+			title = "ONE ON ONE: "+room["room"]["roomName"]+ " to " +room["fl_name"]
 
 
 
