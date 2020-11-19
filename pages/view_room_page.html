@@ -93,6 +93,12 @@
 
 
       message_text = strip(messages[i]["message"]).replace("\n", "<br>")
+      if ("<http" in message_text)
+      {
+        links = /(?<=)http.*(?=>)/g.exec(message_text)
+        alert(links)
+      }
+      
       time_text = strip(messages[i]["date"]).replace("\n", "<br>")
 
       message = document.createElement("div")
