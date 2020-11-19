@@ -878,7 +878,7 @@ def parse_tokens_to_json():
 			pass
 
 	print("finished tokens_json setup")
-
+	print(json.dumps(ret))
 	cur.execute("""UPDATE config_vars SET value='"""+json.dumps(ret)+"""' WHERE name = 'tokens_json'""")
 	conn.commit()
 
