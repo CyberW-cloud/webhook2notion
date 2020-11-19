@@ -900,7 +900,7 @@ def parse_tokens():
 	conn = psycopg2.connect(DATABASE_URL, sslmode='require')
 	cur = conn.cursor()
 
-	if True or check_tokens_changed():
+	if check_tokens_changed():
 		parse_tokens_to_json()
 		cur.execute("""UPDATE config_vars SET value='"""+os.environ.get("TOKENS")+"""' WHERE name='tokens'""")
 		conn.commit()
