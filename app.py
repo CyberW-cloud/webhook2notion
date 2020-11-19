@@ -864,6 +864,7 @@ def parse_tokens_to_json():
 			
 			if user_id not in freelancer_ids:
 				print(user_id + " not in company, skip")
+				continue
 
 			user_id = user_data["user"]["id"]
 			ret[user_id] = {}
