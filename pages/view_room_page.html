@@ -93,7 +93,7 @@
 
 
       message_text = strip(messages[i]["message"]).replace("\n", "<br>")
-      if ("<http" in message_text)
+      if (message_text.contains("<http"))
       {
         links = /(?<=)http.*(?=>)/g.exec(message_text)
         alert(links)
