@@ -875,6 +875,7 @@ def parse_tokens_to_json():
 			#token_clients[user_id]["client"] = client
 	
 		except Exception as e:
+			print(e)
 			pass
 
 	print("finished tokens_json setup")
