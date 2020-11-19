@@ -862,11 +862,12 @@ def parse_tokens_to_json():
 			if "user" not in user_data.keys():
 				continue
 			
+			user_id = user_data["user"]["id"]
+			
 			if user_id not in freelancer_ids:
 				print(user_id + " not in company, skip")
 				continue
 
-			user_id = user_data["user"]["id"]
 			ret[user_id] = {}
 			ret[user_id]["name"] = user_data["user"]["first_name"] + " " + user_data["user"]["last_name"]
 			ret[user_id]["ciphertext"] = strings[0]
