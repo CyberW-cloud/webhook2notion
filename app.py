@@ -2557,6 +2557,13 @@ def manychat():
 	return {'version': 'v2', 'content': {}, 'data': result}
 
 
+@app.route("/manychat", methods=["POST"])
+def pr():
+	data = request.get_json()
+	result = parse_data_from_manychat(data)
+	return {'version': 'v2', 'content': {}, 'data': result}
+
+
 #workaround to do before_first_request right after build
 def start_runner():
 	def start_loop():
@@ -2568,6 +2575,102 @@ def start_runner():
 	thread = threading.Thread(target=start_loop)
 	thread.start()
 
+
+@app.route("/periodic", methods=["GET"])
+def periodic_tasks_update():
+	"""
+	Changes cards' properties set_date, due_date, status
+	according to periodicity property.
+	"""
+	token_v2 = os.environ.get("TOKEN")
+	# TODO: change url to actual board!!!
+	url = "https://www.notion.so/0aead28cb9f34ec2b41a9af19b96817a?v=1266d9ce8cbd4c968d29b4b877bed345"
+
+	client = NotionClient(token_v2)
+	cv = client.get_collection_view(url)
+
+	filter_params = {
+		"filters": [
+			{
+				"filter": {"value": {"type": "exact", "value": "DONE"},
+						   "operator": "enum_is"},
+				"property": "Status",
+			}
+		],
+		"operator": "and",
+	}
+
+	done_tasks = cv.build_query(filter=filter_params).execute()
+	today = datetime.date.today()
+
+	# 1 week = 7 days long, 1 day advance;
+	# 1 month = 30 days, 7 days advance;
+	period_table = {
+		'w': (7, 1),
+		'm': (30, 7),
+	}
+
+	dates_changed = 0
+	moved = 0
+	for card in done_tasks:
+		# In case set_date is empty - skip
+		if not card.get_property('set_date'):
+			continue
+
+		set_date = card.get_property('set_date').start
+		if set_date > today:
+			continue
+
+		elif set_date < today:
+			if card.get_property('periodicity'):
+				periodicity = sorted(card.get_property('periodicity'))
+				frequency = periodicity[0].split('t/')
+				frequency.sort()
+
+				if frequency[0] == 'On demand':
+					continue
+
+				if frequency[0] == 'Daily':
+					# Fills due_date if in was empty
+					try:
+						due_date = card.due_date + timedelta(1)
+					except TypeError:
+						due_date = today + timedelta(1)
+
+					set_date = card.due_date
+
+				# Could add regex pattern to match "1t/w", "1t/3m", etc.
+				else:
+					times = int(frequency[0])
+					try:
+						period = period_table[frequency[1][-1]][0]\
+								 * int(frequency[1][:-1])
+					except ValueError:
+						period = period_table[frequency[1][-1]][0]
+					finally:
+						advance = period_table.get(frequency[1])
+						advance = 14 if not advance else advance[1]
+
+					delta = timedelta(period // times)
+
+					# Fills due_date if in was empty to specified weekday
+					try:
+						due_date = card.due_date + delta
+					except TypeError:
+						due_date = today + get_offset_to_closest_weekday(today,[periodicity[1]])
+					set_date = due_date - timedelta(advance)
+
+					# Commit changes
+					card.set_property("due_date", due_date)
+					card.set_property("set_date", set_date)
+					dates_changed += 1
+		else:
+			card.set_property("status", "TO DO")
+			moved += 1
+
+		card.refresh()
+	return f"{moved} card(s) moved to 'TO DO'\n" \
+		   f"{dates_changed} card(s) dates update\n"
 
 
 if __name__ == "__main__":
